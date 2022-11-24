@@ -1,0 +1,114 @@
+.react-grid-layout {
+  --padding-container: 7px;
+}
+
+.react-grid-layout {
+  position: relative;
+  height: 100% !important;
+  transition: height 200ms ease;
+  background: var(--mui-palette-grey-100);
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: var(--padding-container);
+}
+
+.react-grid-item:not(.react-grid-placeholder):hover {
+  border: 1px solid var(--mui-palette-primary-light);
+  cursor: pointer;
+}
+
+.react-grid-item-focused:not(.react-grid-placeholder) {
+  border: 1px solid var(--mui-palette-primary-dark);
+}
+
+.react-grid-item > *:first-child {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  flex: 1;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+
+.react-grid-item.resizing > *:first-child {
+  z-index: 1;
+  display: none;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+  display: none;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: var(--mui-palette-grey-600);
+  opacity: 0.1;
+  transition-duration: 100ms;
+  z-index: 2;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+/* Resizeable Handles */
+.react-grid-item-focused > .react-resizable-handle {
+  display: block;
+}
+
+.react-grid-item:not(.react-grid-item-focused) > .react-resizable-handle {
+  display: none;
+}
+
+.react-resizable-handle-se {
+  position: absolute;
+  width: var(--padding-container);
+  height: var(--padding-container);
+  border-radius: 100%;
+  outline: 1px solid var(--mui-palette-common-black);
+  background: var(--mui-palette-grey-100);
+  box-sizing: border-box;
+  bottom: 0;
+  right: 0;
+  transform: translate(50%, 50%);
+  cursor: se-resize;
+}
+
+.react-resizable-handle-se:hover,
+.react-resizable-handle-se:focus {
+  background: var(--mui-palette-primary-dark);
+}
+
+.react-resizable-handle-s {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--padding-container);
+  transform: translate(0, 50%);
+  cursor: s-resize;
+}
+
+.react-resizable-handle-e {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--padding-container);
+  transform: translate(50%, 0);
+  cursor: e-resize;
+}
