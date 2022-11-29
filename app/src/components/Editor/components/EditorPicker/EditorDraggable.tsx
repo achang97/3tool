@@ -1,7 +1,9 @@
 import React, { DragEvent, memo, ReactNode, useCallback } from 'react';
 import { Box, Typography } from '@mui/material';
-import { useNewComponentDrag } from 'components/Editor/hooks/useNewComponentDrag';
 import { ComponentType } from 'types';
+import { useAppSelector, useAppDispatch } from 'redux/hooks';
+import { RootState } from 'redux/store';
+import { startCreate, stopCreate } from 'redux/features/canvasSlice';
 
 type EditorDraggableProps = {
   componentType: ComponentType;
@@ -17,35 +19,30 @@ const HIDDEN_IMG = (() => {
 
 export const EditorDraggable = memo(
   ({ children, componentType }: EditorDraggableProps) => {
-    const {
-      isDraggingNew,
-      setIsDraggingNew,
-      setComponentType,
-      componentType: currComponentType,
-    } = useNewComponentDrag();
+    const { isCreating, newComponentType } = useAppSelector(
+      (state: RootState) => state.canvas
+    );
+    const dispatch = useAppDispatch();
 
     const handleDragStart = useCallback(
       (e: DragEvent) => {
         e.dataTransfer.setDragImage(HIDDEN_IMG, 0, 0);
         e.dataTransfer.setData('text/plain', '');
-        setIsDraggingNew(true);
-        setComponentType(componentType);
+        dispatch(startCreate(componentType));
       },
-      [componentType, setComponentType, setIsDraggingNew]
+      [componentType, dispatch]
     );
 
     const handleDragEnd = useCallback(() => {
-      setIsDraggingNew(false);
-      setComponentType(undefined);
-    }, [setComponentType, setIsDraggingNew]);
+      dispatch(stopCreate());
+    }, [dispatch]);
 
     return (
       <Box
         sx={{
           margin: 2,
           cursor: 'pointer',
-          opacity:
-            isDraggingNew && componentType === currComponentType ? 0.5 : 1,
+          opacity: isCreating && componentType === newComponentType ? 0.5 : 1,
         }}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}

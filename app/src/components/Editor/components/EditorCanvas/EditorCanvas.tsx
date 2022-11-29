@@ -1,7 +1,8 @@
 import React, { memo, useCallback, useMemo, useState } from 'react';
-import { useNewComponentDrag } from 'components/Editor/hooks/useNewComponentDrag';
 import { Layout, Responsive, WidthProvider } from 'react-grid-layout';
 import { ComponentType } from 'types';
+import { useAppSelector } from 'redux/hooks';
+import { RootState } from 'redux/store';
 import { EditorComponent } from './EditorComponent';
 import { useLastClickedLocation } from '../../hooks/useLastClickedLocation';
 
@@ -18,7 +19,9 @@ export const EditorCanvas = memo(() => {
   );
   const [draggingComponent, setDraggingComponent] = useState<string>();
 
-  const { isDraggingNew, componentType } = useNewComponentDrag();
+  const { isCreating, newComponentType } = useAppSelector(
+    (state: RootState) => state.canvas
+  );
   const lastClickedLocation = useLastClickedLocation();
 
   const updateLayoutData = useCallback((layout: Layout[]) => {
@@ -31,31 +34,31 @@ export const EditorCanvas = memo(() => {
       setComponents((prevComponents) => {
         const newComponents = {
           ...prevComponents,
-          [id]: componentType!,
+          [id]: newComponentType!,
         };
         localStorage.setItem('components', JSON.stringify(newComponents));
         return newComponents;
       });
     },
-    [componentType]
+    [newComponentType]
   );
 
   const handleLayoutChange = useCallback(
     (layout: Layout[]) => {
-      if (!isDraggingNew) {
+      if (!isCreating) {
         updateLayoutData(layout);
       }
     },
-    [isDraggingNew, updateLayoutData]
+    [isCreating, updateLayoutData]
   );
 
   const handleDrag = useCallback(
     (_layout: Layout[], _oldComponent: Layout, newComponent: Layout) => {
-      if (!isDraggingNew) {
+      if (!isCreating) {
         setDraggingComponent(newComponent.i);
       }
     },
-    [isDraggingNew]
+    [isCreating]
   );
 
   const handleDragStop = useCallback(() => {
@@ -72,7 +75,7 @@ export const EditorCanvas = memo(() => {
 
   const droppingItem = useMemo(() => {
     const baseItem = { i: Math.floor(Math.random() * 100_000_000).toString() };
-    switch (componentType) {
+    switch (newComponentType) {
       case ComponentType.Button:
         return { ...baseItem, w: 8, h: 4 };
       case ComponentType.Select:
@@ -83,7 +86,7 @@ export const EditorCanvas = memo(() => {
       default:
         return { ...baseItem, w: 8, h: 4 };
     }
-  }, [componentType]);
+  }, [newComponentType]);
 
   const layout = useMemo(() => {
     return layoutData.map((element) => (
