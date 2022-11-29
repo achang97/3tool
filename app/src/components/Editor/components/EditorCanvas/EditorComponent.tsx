@@ -22,9 +22,10 @@ import { ComponentType } from 'types';
 type EditorComponentProps = {
   /* eslint-disable react/no-unused-prop-types */
   componentType: ComponentType;
+  isDragging: boolean;
   lastClickedLocation?: [number, number];
-  children?: ReactNode;
   className?: string;
+  children?: ReactNode;
   /* eslint-enable react/no-unused-prop-types */
 };
 
@@ -34,6 +35,7 @@ export const EditorComponent = memo(
       /* eslint-disable react/prop-types */
       {
         componentType,
+        isDragging,
         lastClickedLocation,
         children,
         className,
@@ -54,7 +56,7 @@ export const EditorComponent = memo(
             return <Button variant="outlined">Button</Button>;
           case ComponentType.Select:
             return (
-              <Select placeholder="Select">
+              <Select>
                 <MenuItem value="option-1">Option 1</MenuItem>
               </Select>
             );
@@ -93,13 +95,18 @@ export const EditorComponent = memo(
         return top <= y && y <= bottom && left <= x && x <= right;
       }, [lastClickedLocation, boundingClientRect]);
 
+      const isFocused = useMemo(
+        () => isClickFocused || isRefFocused,
+        [isClickFocused, isRefFocused]
+      );
+
       return (
         /* eslint-disable react/jsx-props-no-spreading, jsx-a11y/no-noninteractive-tabindex */
         <div
           ref={ref}
           tabIndex={0}
-          className={`${
-            isClickFocused || isRefFocused ? 'react-grid-item-focused' : ''
+          className={`${isFocused ? 'react-grid-item-focused' : ''} ${
+            isDragging ? 'react-grid-item-dragging' : ''
           } ${className}`}
           {...rest}
         >
