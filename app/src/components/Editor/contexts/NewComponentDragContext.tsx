@@ -8,8 +8,8 @@ import React, {
 import { ComponentType } from 'types';
 
 export type NewComponentDrag = {
-  isDragging: boolean;
-  setIsDragging: (isDragging: boolean) => void;
+  isDraggingNew: boolean;
+  setIsDraggingNew: (isDraggingNew: boolean) => void;
   componentType?: ComponentType;
   setComponentType: (componentType?: ComponentType) => void;
 };
@@ -19,8 +19,8 @@ type NewComponentDragProviderProps = {
 };
 
 const DEFAULT_VALUE: NewComponentDrag = {
-  isDragging: false,
-  setIsDragging: () => {},
+  isDraggingNew: false,
+  setIsDraggingNew: () => {},
   setComponentType: () => {},
 };
 
@@ -29,16 +29,16 @@ const NewComponentDragContext = createContext<NewComponentDrag>(DEFAULT_VALUE);
 const NewComponentDragProvider = memo(
   ({ children }: NewComponentDragProviderProps) => {
     const [componentType, setComponentType] = useState<ComponentType>();
-    const [isDragging, setIsDragging] = useState(false);
+    const [isDraggingNew, setIsDraggingNew] = useState(false);
 
     const value = useMemo(
       () => ({
         componentType,
         setComponentType,
-        isDragging,
-        setIsDragging,
+        isDraggingNew,
+        setIsDraggingNew,
       }),
-      [componentType, setComponentType, isDragging, setIsDragging]
+      [componentType, setComponentType, isDraggingNew, setIsDraggingNew]
     );
 
     return (

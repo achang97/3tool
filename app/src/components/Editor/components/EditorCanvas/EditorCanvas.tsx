@@ -16,8 +16,9 @@ export const EditorCanvas = memo(() => {
   const [components, setComponents] = useState<Record<string, ComponentType>>(
     JSON.parse(localStorage.getItem('components') ?? '{}')
   );
+  const [draggingComponent, setDraggingComponent] = useState<string>();
 
-  const { isDragging, componentType } = useNewComponentDrag();
+  const { isDraggingNew, componentType } = useNewComponentDrag();
   const lastClickedLocation = useLastClickedLocation();
 
   const updateLayoutData = useCallback((layout: Layout[]) => {
@@ -41,12 +42,25 @@ export const EditorCanvas = memo(() => {
 
   const handleLayoutChange = useCallback(
     (layout: Layout[]) => {
-      if (!isDragging) {
+      if (!isDraggingNew) {
         updateLayoutData(layout);
       }
     },
-    [isDragging, updateLayoutData]
+    [isDraggingNew, updateLayoutData]
   );
+
+  const handleDrag = useCallback(
+    (_layout: Layout[], _oldComponent: Layout, newComponent: Layout) => {
+      if (!isDraggingNew) {
+        setDraggingComponent(newComponent.i);
+      }
+    },
+    [isDraggingNew]
+  );
+
+  const handleDragStop = useCallback(() => {
+    setDraggingComponent(undefined);
+  }, []);
 
   const handleDrop = useCallback(
     (layout: Layout[], item: Layout) => {
@@ -60,14 +74,14 @@ export const EditorCanvas = memo(() => {
     const baseItem = { i: Math.floor(Math.random() * 100_000_000).toString() };
     switch (componentType) {
       case ComponentType.Button:
-        return { ...baseItem, w: 2, h: 2 };
+        return { ...baseItem, w: 8, h: 4 };
       case ComponentType.Select:
       case ComponentType.TextInput:
-        return { ...baseItem, w: 4, h: 2 };
+        return { ...baseItem, w: 8, h: 4 };
       case ComponentType.Table:
         return { ...baseItem, w: 8, h: 8 };
       default:
-        return { ...baseItem, w: 4, h: 2 };
+        return { ...baseItem, w: 8, h: 4 };
     }
   }, [componentType]);
 
@@ -77,9 +91,10 @@ export const EditorCanvas = memo(() => {
         key={element.i}
         componentType={components[element.i]}
         lastClickedLocation={lastClickedLocation}
+        isDragging={draggingComponent === element.i}
       />
     ));
-  }, [layoutData, components, lastClickedLocation]);
+  }, [layoutData, components, lastClickedLocation, draggingComponent]);
 
   return (
     <ResponsiveReactGridLayout
@@ -94,8 +109,9 @@ export const EditorCanvas = memo(() => {
       resizeHandles={['s', 'e', 'se']}
       layouts={{ lg: layoutData }}
       onLayoutChange={handleLayoutChange}
+      onDrag={handleDrag}
+      onDragStop={handleDragStop}
       onDrop={handleDrop}
-      measureBeforeMount
       compactType={null}
       preventCollision={false}
       droppingItem={droppingItem}

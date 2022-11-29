@@ -18,8 +18,8 @@ const HIDDEN_IMG = (() => {
 export const EditorDraggable = memo(
   ({ children, componentType }: EditorDraggableProps) => {
     const {
-      isDragging,
-      setIsDragging,
+      isDraggingNew,
+      setIsDraggingNew,
       setComponentType,
       componentType: currComponentType,
     } = useNewComponentDrag();
@@ -28,23 +28,24 @@ export const EditorDraggable = memo(
       (e: DragEvent) => {
         e.dataTransfer.setDragImage(HIDDEN_IMG, 0, 0);
         e.dataTransfer.setData('text/plain', '');
-        setIsDragging(true);
+        setIsDraggingNew(true);
         setComponentType(componentType);
       },
-      [componentType, setComponentType, setIsDragging]
+      [componentType, setComponentType, setIsDraggingNew]
     );
 
     const handleDragEnd = useCallback(() => {
-      setIsDragging(false);
+      setIsDraggingNew(false);
       setComponentType(undefined);
-    }, [setComponentType, setIsDragging]);
+    }, [setComponentType, setIsDraggingNew]);
 
     return (
       <Box
         sx={{
           margin: 2,
           cursor: 'pointer',
-          opacity: isDragging && componentType === currComponentType ? 0.5 : 1,
+          opacity:
+            isDraggingNew && componentType === currComponentType ? 0.5 : 1,
         }}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}

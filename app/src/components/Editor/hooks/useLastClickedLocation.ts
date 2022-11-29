@@ -8,10 +8,10 @@ export const useLastClickedLocation = () => {
       setLocation([e.clientX, e.clientY]);
     }) as EventListenerOrEventListenerObject;
 
-    window.addEventListener('click', handler);
+    window.addEventListener('mouseup', handler);
 
     return () => {
-      window.removeEventListener('click', handler);
+      window.removeEventListener('mouseup', handler);
     };
   }, []);
 
