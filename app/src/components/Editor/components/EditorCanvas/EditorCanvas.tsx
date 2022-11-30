@@ -1,8 +1,14 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { Layout, Responsive, WidthProvider } from 'react-grid-layout';
 import { ComponentType } from 'types';
-import { useAppSelector } from 'redux/hooks';
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { RootState } from 'redux/store';
+import {
+  createComponent,
+  endMoveComponent,
+  startMoveComponent,
+  updateLayout,
+} from 'redux/features/canvasSlice';
 import { EditorComponent } from './EditorComponent';
 import { useLastClickedLocation } from '../../hooks/useLastClickedLocation';
 
@@ -11,71 +17,49 @@ import './editor-canvas.css';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 export const EditorCanvas = memo(() => {
-  const [layoutData, setLayoutData] = useState<Layout[]>(
-    JSON.parse(localStorage.getItem('layout') ?? '[]')
-  );
-  const [components, setComponents] = useState<Record<string, ComponentType>>(
-    JSON.parse(localStorage.getItem('components') ?? '{}')
-  );
-  const [draggingComponent, setDraggingComponent] = useState<string>();
-
-  const { isCreating, newComponentType } = useAppSelector(
+  const { layout, components, newComponent, movedComponentId } = useAppSelector(
     (state: RootState) => state.canvas
   );
+  const dispatch = useAppDispatch();
   const lastClickedLocation = useLastClickedLocation();
 
-  const updateLayoutData = useCallback((layout: Layout[]) => {
-    localStorage.setItem('layout', JSON.stringify(layout));
-    setLayoutData(layout);
-  }, []);
-
-  const updateComponents = useCallback(
-    (id: string) => {
-      setComponents((prevComponents) => {
-        const newComponents = {
-          ...prevComponents,
-          [id]: newComponentType!,
-        };
-        localStorage.setItem('components', JSON.stringify(newComponents));
-        return newComponents;
-      });
-    },
-    [newComponentType]
-  );
-
   const handleLayoutChange = useCallback(
-    (layout: Layout[]) => {
-      if (!isCreating) {
-        updateLayoutData(layout);
+    (newLayout: Layout[]) => {
+      if (!newComponent) {
+        dispatch(updateLayout(newLayout));
       }
     },
-    [isCreating, updateLayoutData]
+    [newComponent, dispatch]
   );
 
   const handleDrag = useCallback(
-    (_layout: Layout[], _oldComponent: Layout, newComponent: Layout) => {
-      if (!isCreating) {
-        setDraggingComponent(newComponent.i);
+    (_layout: Layout[], _oldComponent: Layout, component: Layout) => {
+      if (!newComponent) {
+        dispatch(startMoveComponent(component.i));
       }
     },
-    [isCreating]
+    [dispatch, newComponent]
   );
 
   const handleDragStop = useCallback(() => {
-    setDraggingComponent(undefined);
-  }, []);
+    dispatch(endMoveComponent());
+  }, [dispatch]);
 
   const handleDrop = useCallback(
-    (layout: Layout[], item: Layout) => {
-      updateLayoutData(layout);
-      updateComponents(item.i);
+    (newLayout: Layout[]) => {
+      dispatch(updateLayout(newLayout));
+      dispatch(createComponent());
     },
-    [updateLayoutData, updateComponents]
+    [dispatch]
   );
 
   const droppingItem = useMemo(() => {
-    const baseItem = { i: Math.floor(Math.random() * 100_000_000).toString() };
-    switch (newComponentType) {
+    if (!newComponent?.id) {
+      return undefined;
+    }
+
+    const baseItem = { i: newComponent.id };
+    switch (newComponent?.type) {
       case ComponentType.Button:
         return { ...baseItem, w: 8, h: 4 };
       case ComponentType.Select:
@@ -86,18 +70,18 @@ export const EditorCanvas = memo(() => {
       default:
         return { ...baseItem, w: 8, h: 4 };
     }
-  }, [newComponentType]);
+  }, [newComponent]);
 
-  const layout = useMemo(() => {
-    return layoutData.map((element) => (
+  const gridComponents = useMemo(() => {
+    return layout.map((element) => (
       <EditorComponent
         key={element.i}
         componentType={components[element.i]}
         lastClickedLocation={lastClickedLocation}
-        isDragging={draggingComponent === element.i}
+        isDragging={movedComponentId === element.i}
       />
     ));
-  }, [layoutData, components, lastClickedLocation, draggingComponent]);
+  }, [layout, components, lastClickedLocation, movedComponentId]);
 
   return (
     <ResponsiveReactGridLayout
@@ -110,7 +94,7 @@ export const EditorCanvas = memo(() => {
         xxs: 8,
       }}
       resizeHandles={['s', 'e', 'se']}
-      layouts={{ lg: layoutData }}
+      layouts={{ lg: layout }}
       onLayoutChange={handleLayoutChange}
       onDrag={handleDrag}
       onDragStop={handleDragStop}
@@ -120,7 +104,7 @@ export const EditorCanvas = memo(() => {
       droppingItem={droppingItem}
       isDroppable
     >
-      {layout}
+      {gridComponents}
     </ResponsiveReactGridLayout>
   );
 });
