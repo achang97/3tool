@@ -13,7 +13,7 @@ export const EditorSidebar = memo(() => {
   );
   const dispatch = useAppDispatch();
 
-  const handleChangeTab = useCallback(
+  const handleTabChange = useCallback(
     (e: React.SyntheticEvent, newSidebarView: SidebarViewType) => {
       dispatch(updateSidebarView(newSidebarView));
     },
@@ -31,7 +31,7 @@ export const EditorSidebar = memo(() => {
   return (
     <Box>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={sidebarView} onChange={handleChangeTab}>
+        <Tabs value={sidebarView} onChange={handleTabChange}>
           <Tab label="Inspect" value={SidebarViewType.Inspect} />
           <Tab label="Create" value={SidebarViewType.Create} />
         </Tabs>

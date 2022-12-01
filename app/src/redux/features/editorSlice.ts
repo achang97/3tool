@@ -44,7 +44,6 @@ export const editorSlice = createSlice({
     createComponent: (state) => {
       const { newComponent } = state;
       state.components[newComponent!.id] = newComponent!.type;
-      state.focusedComponentId = newComponent!.id;
     },
     endCreateComponentDrag: (state) => {
       state.newComponent = undefined;
@@ -55,6 +54,11 @@ export const editorSlice = createSlice({
     },
     endMoveComponent: (state) => {
       state.movingComponentId = undefined;
+    },
+
+    deleteComponent: (state, action: PayloadAction<string>) => {
+      state.layout = state.layout.filter(({ i }) => i !== action.payload);
+      delete state.components[action.payload];
     },
 
     focusComponent: (state, action: PayloadAction<string>) => {
@@ -80,6 +84,7 @@ export const {
   endCreateComponentDrag,
   startMoveComponent,
   endMoveComponent,
+  deleteComponent,
   focusComponent,
   blurFocus,
   updateLayout,

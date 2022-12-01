@@ -12,6 +12,7 @@ import {
   createComponent,
   endCreateComponentDrag,
   endMoveComponent,
+  focusComponent,
   startMoveComponent,
   updateLayout,
 } from 'redux/features/editorSlice';
@@ -66,8 +67,9 @@ export const EditorCanvas = memo(() => {
       dispatch(updateLayout(newLayout));
       dispatch(createComponent());
       dispatch(endCreateComponentDrag());
+      dispatch(focusComponent(newComponent!.id));
     },
-    [dispatch]
+    [dispatch, newComponent]
   );
 
   const droppingItem = useMemo(() => {
