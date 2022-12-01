@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Box } from '@mui/material';
 import { EditorCanvas } from './components/EditorCanvas/EditorCanvas';
-import { EditorPicker } from './components/EditorPicker/EditorPicker';
+import { EditorSidebar } from './components/EditorSidebar/EditorSidebar';
 
 export const Editor = memo(() => {
   return (
@@ -10,7 +10,7 @@ export const Editor = memo(() => {
         <EditorCanvas />
       </Box>
       <Box sx={{ flex: 1 }}>
-        <EditorPicker />
+        <EditorSidebar />
       </Box>
     </Box>
   );

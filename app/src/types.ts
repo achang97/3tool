@@ -4,3 +4,8 @@ export enum ComponentType {
   Select = 'select',
   Table = 'table',
 }
+
+export enum SidebarViewType {
+  Inspect = 'inspect',
+  Create = 'create',
+}

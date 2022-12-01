@@ -4,7 +4,6 @@ import React, {
   useCallback,
   ForwardedRef,
   ReactNode,
-  useMemo,
 } from 'react';
 import {
   Button,
@@ -21,9 +20,10 @@ import { ComponentType } from 'types';
 
 type EditorComponentProps = {
   /* eslint-disable react/no-unused-prop-types */
+  componentId: string;
   componentType: ComponentType;
   isDragging: boolean;
-  lastClickedLocation?: [number, number];
+  isFocused: boolean;
   className?: string;
   children?: ReactNode;
   /* eslint-enable react/no-unused-prop-types */
@@ -34,9 +34,10 @@ export const EditorComponent = memo(
     (
       /* eslint-disable react/prop-types */
       {
+        componentId,
         componentType,
         isDragging,
-        lastClickedLocation,
+        isFocused,
         children,
         className,
         ...rest
@@ -44,19 +45,13 @@ export const EditorComponent = memo(
       /* eslint-enable react/prop-types */
       ref: ForwardedRef<HTMLDivElement>
     ) => {
-      // @ts-ignore current should be defined
-      const boundingClientRect = ref?.current?.getBoundingClientRect();
-
-      // @ts-ignore current should be defined
-      const isRefFocused = document.activeElement === ref.current;
-
       const getComponent = useCallback(() => {
         switch (componentType) {
           case ComponentType.Button:
             return <Button variant="outlined">Button</Button>;
           case ComponentType.Select:
             return (
-              <Select>
+              <Select MenuProps={{ sx: { display: isDragging ? 'none' : '' } }}>
                 <MenuItem value="option-1">Option 1</MenuItem>
               </Select>
             );
@@ -82,38 +77,23 @@ export const EditorComponent = memo(
           default:
             return <div>Test</div>;
         }
-      }, [componentType]);
-
-      const isClickFocused = useMemo(() => {
-        if (!lastClickedLocation || !boundingClientRect) {
-          return false;
-        }
-
-        const [x, y] = lastClickedLocation;
-        const { top, bottom, left, right } = boundingClientRect as DOMRect;
-
-        return top <= y && y <= bottom && left <= x && x <= right;
-      }, [lastClickedLocation, boundingClientRect]);
-
-      const isFocused = useMemo(
-        () => isClickFocused || isRefFocused,
-        [isClickFocused, isRefFocused]
-      );
+      }, [componentType, isDragging]);
 
       return (
-        /* eslint-disable react/jsx-props-no-spreading, jsx-a11y/no-noninteractive-tabindex */
         <div
           ref={ref}
+          id={componentId}
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
           tabIndex={0}
           className={`${isFocused ? 'react-grid-item-focused' : ''} ${
             isDragging ? 'react-grid-item-dragging' : ''
           } ${className}`}
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...rest}
         >
           {getComponent()}
           {children}
         </div>
-        /* eslint-disable react/jsx-props-no-spreading, jsx-a11y/no-noninteractive-tabindex */
       );
     }
   )

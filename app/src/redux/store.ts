@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import canvasReducer from './features/canvasSlice';
+import editorReducer from './features/editorSlice';
 
 const persistConfig = {
   key: 'root',
@@ -9,7 +9,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  canvas: canvasReducer,
+  editor: editorReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

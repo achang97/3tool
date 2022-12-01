@@ -2,11 +2,10 @@ import React, { DragEvent, memo, ReactNode, useCallback, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 import { ComponentType } from 'types';
 import { useAppSelector, useAppDispatch } from 'redux/hooks';
-import { RootState } from 'redux/store';
 import {
   startCreateComponentDrag,
   endCreateComponentDrag,
-} from 'redux/features/canvasSlice';
+} from 'redux/features/editorSlice';
 
 type EditorDraggableProps = {
   componentType: ComponentType;
@@ -22,7 +21,7 @@ const HIDDEN_IMG = (() => {
 
 export const EditorDraggable = memo(
   ({ children, componentType }: EditorDraggableProps) => {
-    const { newComponent } = useAppSelector((state: RootState) => state.canvas);
+    const { newComponent } = useAppSelector((state) => state.editor);
     const dispatch = useAppDispatch();
 
     const handleDragStart = useCallback(

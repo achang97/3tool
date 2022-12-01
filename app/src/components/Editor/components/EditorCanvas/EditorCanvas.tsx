@@ -1,27 +1,43 @@
-import React, { memo, useCallback, useMemo } from 'react';
-import { Layout, Responsive, WidthProvider } from 'react-grid-layout';
+import React, { Component, memo, useCallback, useMemo, useRef } from 'react';
+import {
+  Layout,
+  Responsive,
+  ResponsiveProps,
+  WidthProvider,
+  WidthProviderProps,
+} from 'react-grid-layout';
 import { ComponentType } from 'types';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { RootState } from 'redux/store';
 import {
   createComponent,
+  endCreateComponentDrag,
   endMoveComponent,
   startMoveComponent,
   updateLayout,
-} from 'redux/features/canvasSlice';
+} from 'redux/features/editorSlice';
 import { EditorComponent } from './EditorComponent';
-import { useLastClickedLocation } from '../../hooks/useLastClickedLocation';
+import { useFocusClickedComponent } from '../../hooks/useFocusClickedComponent';
 
 import './editor-canvas.css';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 export const EditorCanvas = memo(() => {
-  const { layout, components, newComponent, movedComponentId } = useAppSelector(
-    (state: RootState) => state.canvas
-  );
+  const {
+    layout,
+    components,
+    newComponent,
+    movingComponentId,
+    focusedComponentId,
+  } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
-  const lastClickedLocation = useLastClickedLocation();
+
+  const gridRef = useRef<Component<ResponsiveProps & WidthProviderProps>>(null);
+
+  useFocusClickedComponent(
+    // @ts-ignore elementRef should be defined on WidthProvider
+    gridRef.current?.elementRef
+  );
 
   const handleLayoutChange = useCallback(
     (newLayout: Layout[]) => {
@@ -49,6 +65,7 @@ export const EditorCanvas = memo(() => {
     (newLayout: Layout[]) => {
       dispatch(updateLayout(newLayout));
       dispatch(createComponent());
+      dispatch(endCreateComponentDrag());
     },
     [dispatch]
   );
@@ -76,12 +93,13 @@ export const EditorCanvas = memo(() => {
     return layout.map((element) => (
       <EditorComponent
         key={element.i}
+        componentId={element.i}
         componentType={components[element.i]}
-        lastClickedLocation={lastClickedLocation}
-        isDragging={movedComponentId === element.i}
+        isDragging={element.i === movingComponentId}
+        isFocused={element.i === focusedComponentId}
       />
     ));
-  }, [layout, components, lastClickedLocation, movedComponentId]);
+  }, [layout, components, movingComponentId, focusedComponentId]);
 
   return (
     <ResponsiveReactGridLayout
@@ -103,6 +121,7 @@ export const EditorCanvas = memo(() => {
       preventCollision={false}
       droppingItem={droppingItem}
       isDroppable
+      ref={gridRef}
     >
       {gridComponents}
     </ResponsiveReactGridLayout>
