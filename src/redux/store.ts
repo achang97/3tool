@@ -1,13 +1,8 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import editorReducer from './features/editorSlice';
 import contractsReducer from './features/contractsSlice';
-
-const persistConfig = {
-  key: 'root',
-  storage,
-};
 
 const editorPersistConfig = {
   key: 'editor',
@@ -15,21 +10,11 @@ const editorPersistConfig = {
   whitelist: ['layout', 'components'],
 };
 
-const contractsPersistConfig = {
-  key: 'contracts',
-  storage,
-  whitelist: ['configs'],
-};
-
-const rootReducer = combineReducers({
-  editor: persistReducer(editorPersistConfig, editorReducer),
-  contracts: persistReducer(contractsPersistConfig, contractsReducer),
-});
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: {
+    editor: persistReducer(editorPersistConfig, editorReducer),
+    contracts: contractsReducer,
+  },
 });
 
 export const persistor = persistStore(store);

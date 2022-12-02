@@ -2,16 +2,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { ContractConfig } from 'types';
-import { ethers } from 'ethers';
 
 type ContractsState = {
   configs: ContractConfig[];
-  contracts: ethers.Contract[];
 };
 
 const initialState: ContractsState = {
   configs: [],
-  contracts: [],
 };
 
 export const contractsSlice = createSlice({
@@ -24,6 +21,7 @@ export const contractsSlice = createSlice({
       );
 
       if (!isExistingAddress) {
+        // @ts-ignore Invalid type incompatibility
         state.configs.push(action.payload);
       }
     },
@@ -31,18 +29,10 @@ export const contractsSlice = createSlice({
       state.configs = state.configs.filter(
         (config) => config.address !== action.payload
       );
-      state.contracts = state.contracts.filter(
-        (contract) => contract.address !== action.payload
-      );
-    },
-    updateContracts: (state, action: PayloadAction<ethers.Contract[]>) => {
-      // @ts-ignore Invalid type incompatibility
-      state.contracts = action.payload;
     },
   },
 });
 
-export const { addContract, deleteContract, updateContracts } =
-  contractsSlice.actions;
+export const { addContract, deleteContract } = contractsSlice.actions;
 
 export default contractsSlice.reducer;

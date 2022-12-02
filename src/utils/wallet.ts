@@ -3,20 +3,10 @@ import {
   modalConnectors,
   walletConnectProvider,
 } from '@web3modal/ethereum';
-import { chain, configureChains, createClient } from 'wagmi';
+import { configureChains, createClient } from 'wagmi';
+import { CHAINS } from './constants';
 
 export const WALLETCONNECT_PROJECT_ID = '3ec3435dbc431754e7edbe6563c48a4d';
-
-export const CHAINS = [
-  chain.mainnet,
-  chain.goerli,
-  chain.polygon,
-  chain.polygonMumbai,
-  chain.optimism,
-  chain.optimismGoerli,
-  chain.arbitrum,
-  chain.arbitrumGoerli,
-];
 
 // Wagmi client
 const { provider } = configureChains(CHAINS, [

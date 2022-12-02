@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^7.0.0-alpha.3",
     "@mui/lab": "^5.0.0-alpha.110",
     "@mui/material": "^5.10.15",
     "@reduxjs/toolkit": "^1.8.6",
@@ -11,6 +10,7 @@
     "@walletconnect/web3-provider": "^1.8.0",
     "@web3modal/ethereum": "^2.0.0-beta.7",
     "@web3modal/react": "^2.0.0-beta.7",
+    "abitype": "^0.2.5",
     "axios": "^1.2.0",
     "eth-hooks": "^4.6.2",
     "ethers": "^5.7.2",
@@ -41,6 +41,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@craco/craco": "^7.0.0-alpha.3",
     "@types/jest": "^29.2.1",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.24",

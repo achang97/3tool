@@ -8,24 +8,23 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { NETWORKS } from 'utils/constants';
-import { NetworkType } from 'types';
+import { CHAINS } from 'utils/constants';
 import { useAppDispatch } from 'redux/hooks';
 import { addContract } from 'redux/features/contractsSlice';
+import { chain } from 'wagmi';
+import { getContract } from '@wagmi/core';
+import { getContractAbi } from 'utils/contracts';
 
 export const ContractSubmitter = memo(() => {
-  const [network, setNetwork] = useState<NetworkType>(NetworkType.Mainnet);
+  const [chainId, setChainId] = useState<number>(chain.mainnet.id);
   const [address, setAddress] = useState('');
   const [abi, setAbi] = useState('');
 
   const dispatch = useAppDispatch();
 
-  const handleNetworkChange = useCallback(
-    (e: SelectChangeEvent<NetworkType>) => {
-      setNetwork(e.target.value as NetworkType);
-    },
-    []
-  );
+  const handleNetworkChange = useCallback((e: SelectChangeEvent<number>) => {
+    setChainId(e.target.value as number);
+  }, []);
 
   const handleAddressChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -39,17 +38,26 @@ export const ContractSubmitter = memo(() => {
   }, []);
 
   const handleAddContract = useCallback(async () => {
-    // TODO: We need to try to load the contract here, or at least check its validity before
-    // adding it to the configs array
-    dispatch(addContract({ network, address, abi }));
-  }, [network, address, abi, dispatch]);
+    try {
+      const contractAbi = abi
+        ? JSON.parse(abi)
+        : await getContractAbi(address, chainId);
+
+      const contractConfig = { chainId, address, abi: contractAbi };
+
+      getContract(contractConfig);
+      dispatch(addContract(contractConfig));
+    } catch (e) {
+      alert(e);
+    }
+  }, [chainId, address, abi, dispatch]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Typography>Add Contract</Typography>
-      <Select required value={network} onChange={handleNetworkChange}>
-        {Object.values(NETWORKS).map(({ name }) => (
-          <MenuItem key={name} value={name}>
+      <Select required value={chainId} onChange={handleNetworkChange}>
+        {CHAINS.map(({ id, name }) => (
+          <MenuItem key={id} value={id}>
             {name}
           </MenuItem>
         ))}

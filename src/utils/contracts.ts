@@ -1,47 +1,41 @@
-import { ethers } from 'ethers';
 import axios from 'axios';
 // @ts-ignore No typings for etherscan-api
 import { init as etherscanInit } from 'etherscan-api';
-import { NetworkType } from 'types';
-import { NETWORKS } from './constants';
+import { Abi } from 'abitype';
+import { chain } from 'wagmi';
+import { CHAINS_BY_ID, ETHERSCAN_API_KEY } from './constants';
 
-const ETHERSCAN_TIMEOUT = 10_000;
+const TIMEOUT = 10_000;
 
-export const validateAbi = (abi: unknown): boolean =>
-  Array.isArray(abi) && abi.length > 0;
-
-export const validateAddress = (address: string): boolean =>
-  ethers.utils.isAddress(address);
-
-export const validateContract = async (
-  address: string,
-  provider: ethers.providers.Provider
-): Promise<boolean> => {
-  const bytecode = await provider.getCode(address);
-  return bytecode !== '0x';
+const ETHERSCAN_CONFIGS = {
+  [chain.mainnet.id]: {
+    etherscanEndpoint: 'https://api.etherscan.io',
+    apiKey: ETHERSCAN_API_KEY,
+  },
+  [chain.goerli.id]: {
+    etherscanEndpoint: 'https://api-goerli.etherscan.io',
+    apiKey: ETHERSCAN_API_KEY,
+  },
 };
 
-export const loadContractEtherscan = async (
+export const getContractAbi = async (
   address: string,
-  network: NetworkType,
-  userSignerOrProvider: ethers.Signer | ethers.providers.Provider
-): Promise<ethers.Contract> => {
-  if (!ethers.utils.isAddress(address)) {
-    throw new Error('Invalid Contract Address');
-  }
+  chainId: number
+): Promise<Abi> => {
+  const config = ETHERSCAN_CONFIGS[chainId];
 
-  if (!NETWORKS[network]?.etherscanEndpoint) {
-    throw new Error('Invalid Network');
+  if (!config) {
+    throw new Error(`Invalid chainId ${chainId}`);
   }
 
   const client = axios.create({
-    baseURL: NETWORKS[network]?.etherscanEndpoint,
-    timeout: ETHERSCAN_TIMEOUT,
+    baseURL: config.etherscanEndpoint,
+    timeout: TIMEOUT,
   });
   const etherscanClient = etherscanInit(
-    NETWORKS[network].apiKey,
-    network,
-    ETHERSCAN_TIMEOUT,
+    config.apiKey,
+    CHAINS_BY_ID[chainId].network,
+    TIMEOUT,
     client
   );
 
@@ -52,46 +46,5 @@ export const loadContractEtherscan = async (
     throw new Error(`Etherscan API: ${e}`);
   }
 
-  if (response.status !== '1') {
-    throw new Error(
-      "Can't fetch data from Etherscan. Ensure the contract is verified."
-    );
-  }
-
-  const abi = response.result;
-
-  return new ethers.Contract(address, abi, userSignerOrProvider);
-};
-
-export const loadContractRaw = async (
-  address: string,
-  abi: string,
-  network: NetworkType,
-  userSignerOrProvider: ethers.Signer | ethers.providers.Provider
-): Promise<ethers.Contract> => {
-  if (!validateAddress(address)) {
-    throw new Error('Invalid Contract Address');
-  }
-
-  const provider =
-    userSignerOrProvider instanceof ethers.Signer
-      ? userSignerOrProvider.provider
-      : userSignerOrProvider;
-  const bytecode = await provider?.getCode(address);
-  if (!bytecode || bytecode === '0x') {
-    throw new Error(
-      `There is no Contract Deployed at that address on ${network}`
-    );
-  }
-
-  try {
-    if (!validateAbi(JSON.parse(abi))) {
-      throw new Error('Invalid Contract ABI');
-    }
-  } catch (e) {
-    // JSON parse error
-    throw new Error('Invalid Contract ABI');
-  }
-
-  return new ethers.Contract(address, abi, userSignerOrProvider);
+  return response.result;
 };
