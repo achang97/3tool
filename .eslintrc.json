@@ -19,6 +19,10 @@
     "comma-dangle": "off",
     "@typescript-eslint/comma-dangle": "off",
     "operator-linebreak": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "indent": "off",
+    "@typescript-eslint/indent": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "function-paren-newline": "off"
   }
 }

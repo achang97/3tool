@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from 'react';
 import {
+  Box,
   Button,
   Input,
   MenuItem,
@@ -15,6 +16,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import { ComponentType } from 'types';
 
@@ -75,12 +77,12 @@ export const EditorComponent = memo(
               </Table>
             );
           default:
-            return <div>Test</div>;
+            return <Typography>Test</Typography>;
         }
       }, [componentType, isDragging]);
 
       return (
-        <div
+        <Box
           ref={ref}
           id={componentId}
           // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
@@ -93,7 +95,7 @@ export const EditorComponent = memo(
         >
           {getComponent()}
           {children}
-        </div>
+        </Box>
       );
     }
   )

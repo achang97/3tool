@@ -1,5 +1,6 @@
 {
   "prettier.jsxSingleQuote": false,
   "prettier.singleQuote": true,
-  "diffEditor.wordWrap": "inherit"
+  "diffEditor.wordWrap": "inherit",
+  "editor.autoIndent": "full"
 }
