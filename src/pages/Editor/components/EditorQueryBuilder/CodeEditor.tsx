@@ -1,6 +1,10 @@
 import React, { memo, useCallback, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import {
+  javascript,
+  javascriptLanguage,
+  scopeCompletionSource,
+} from '@codemirror/lang-javascript';
 import { Box, Button } from '@mui/material';
 
 type CodeEditorProps = {
@@ -22,10 +26,18 @@ export const CodeEditor = memo(({ height = '200px' }: CodeEditorProps) => {
   return (
     <Box>
       <CodeMirror
-        value={value}
         height={height}
-        extensions={[javascript({ jsx: false })]}
+        value={value}
         onChange={handleCodeChange}
+        extensions={[
+          javascript({ jsx: false }),
+          javascriptLanguage.data.of({
+            autocomplete: scopeCompletionSource({
+              ...globalThis,
+              gibberish: 5,
+            }),
+          }),
+        ]}
       />
       <Button onClick={handleExecuteClick}>Execute</Button>
     </Box>
