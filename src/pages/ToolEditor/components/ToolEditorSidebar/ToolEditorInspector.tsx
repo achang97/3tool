@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { blurFocus, deleteComponent } from 'redux/features/editorSlice';
 
-export const EditorInspector = memo(() => {
+export const ToolEditorInspector = memo(() => {
   const { focusedComponentId } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 

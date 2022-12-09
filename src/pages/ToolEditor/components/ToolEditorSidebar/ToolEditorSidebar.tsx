@@ -4,10 +4,10 @@ import { TabContext, TabPanel } from '@mui/lab';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { SidebarViewType } from 'types';
 import { updateSidebarView } from 'redux/features/editorSlice';
-import { EditorPicker } from './EditorPicker';
-import { EditorInspector } from './EditorInspector';
+import { ToolEditorPicker } from './ToolEditorPicker';
+import { ToolEditorInspector } from './ToolEditorInspector';
 
-export const EditorSidebar = memo(() => {
+export const ToolEditorSidebar = memo(() => {
   const { sidebarView, focusedComponentId } = useAppSelector(
     (state) => state.editor
   );
@@ -38,10 +38,10 @@ export const EditorSidebar = memo(() => {
       </Box>
       <TabContext value={sidebarView}>
         <TabPanel value={SidebarViewType.Inspect}>
-          <EditorInspector />
+          <ToolEditorInspector />
         </TabPanel>
         <TabPanel value={SidebarViewType.Create}>
-          <EditorPicker />
+          <ToolEditorPicker />
         </TabPanel>
       </TabContext>
     </Box>

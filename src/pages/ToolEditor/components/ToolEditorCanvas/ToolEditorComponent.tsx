@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { ComponentType } from 'types';
 
-type EditorComponentProps = {
+type ToolEditorComponentProps = {
   /* eslint-disable react/no-unused-prop-types */
   componentId: string;
   componentType: ComponentType;
@@ -31,7 +31,7 @@ type EditorComponentProps = {
   /* eslint-enable react/no-unused-prop-types */
 };
 
-export const EditorComponent = memo(
+export const ToolEditorComponent = memo(
   forwardRef(
     (
       /* eslint-disable react/prop-types */
@@ -43,7 +43,7 @@ export const EditorComponent = memo(
         children,
         className,
         ...rest
-      }: EditorComponentProps,
+      }: ToolEditorComponentProps,
       /* eslint-enable react/prop-types */
       ref: ForwardedRef<HTMLDivElement>
     ) => {

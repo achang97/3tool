@@ -7,7 +7,7 @@ import {
   endCreateComponentDrag,
 } from 'redux/features/editorSlice';
 
-type EditorDraggableProps = {
+type ToolEditorDraggableProps = {
   componentType: ComponentType;
   children: ReactNode;
 };
@@ -19,8 +19,8 @@ const HIDDEN_IMG = (() => {
   return img;
 })();
 
-export const EditorDraggable = memo(
-  ({ children, componentType }: EditorDraggableProps) => {
+export const ToolEditorDraggable = memo(
+  ({ children, componentType }: ToolEditorDraggableProps) => {
     const { newComponent } = useAppSelector((state) => state.editor);
     const dispatch = useAppDispatch();
 

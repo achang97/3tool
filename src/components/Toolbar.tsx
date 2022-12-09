@@ -1,22 +1,43 @@
 import React, { memo } from 'react';
-import { Box, Link } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Link } from 'react-router-dom';
 import { Routes } from 'routing/routes';
-import { ConnectWallet } from './ConnectWallet';
+import logo from 'resources/images/logo.png';
+import { LogoutButton } from './LogoutButton';
 
-const LINKS = [
-  { href: Routes.Root, text: 'Editor' },
-  { href: Routes.ContractLibrary, text: 'Contract Library' },
+const AUTHENTICATED_LINKS = [
+  { to: Routes.Root, text: 'Tools' },
+  { to: Routes.Resources, text: 'Resources' },
 ];
 
 export const Toolbar = memo(() => {
+  const { isAuthenticated } = useAuth0();
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
-    <Box sx={{ display: 'flex' }}>
-      {LINKS.map(({ href, text }) => (
-        <Link key={href} href={href} sx={{ mx: 1, p: 1 }}>
-          {text}
-        </Link>
-      ))}
-      <ConnectWallet />
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        p: 2,
+      }}
+    >
+      <Box sx={{ display: 'flex' }}>
+        <img src={logo} alt="ACA Labs logo" />
+        {AUTHENTICATED_LINKS.map(({ to, text }) => (
+          <Link key={to} to={to}>
+            <Typography sx={{ mx: 1 }}>{text}</Typography>
+          </Link>
+        ))}
+      </Box>
+      <Box sx={{ display: 'flex' }}>
+        <LogoutButton />
+      </Box>
     </Box>
   );
 });

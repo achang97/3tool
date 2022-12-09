@@ -16,14 +16,14 @@ import {
   startMoveComponent,
   updateLayout,
 } from 'redux/features/editorSlice';
-import { EditorComponent } from './EditorComponent';
+import { ToolEditorComponent } from './ToolEditorComponent';
 import { useFocusClickedComponent } from '../../hooks/useFocusClickedComponent';
 
-import './editor-canvas.css';
+import './tool-editor-canvas.css';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-export const EditorCanvas = memo(() => {
+export const ToolEditorCanvas = memo(() => {
   const {
     layout,
     components,
@@ -93,7 +93,7 @@ export const EditorCanvas = memo(() => {
 
   const gridComponents = useMemo(() => {
     return layout.map((element) => (
-      <EditorComponent
+      <ToolEditorComponent
         key={element.i}
         componentId={element.i}
         componentType={components[element.i]}

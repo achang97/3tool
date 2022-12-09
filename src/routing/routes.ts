@@ -1,4 +1,8 @@
 export enum Routes {
-  Root = '/',
-  ContractLibrary = 'contract-library',
+  Tools = '/',
+  Resources = '/resources',
+  ResourceSettings = '/resources/:resourceId',
+  ToolEditor = '/editor/:toolId',
+  ToolViewer = '/tools/:toolId',
+  Settings = '/settings/:sectionId',
 }
