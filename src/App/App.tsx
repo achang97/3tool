@@ -14,25 +14,33 @@ import {
   WALLETCONNECT_PROJECT_ID,
 } from 'utils/wallet';
 import { Web3Modal } from '@web3modal/react';
+import { Auth0Provider } from '@auth0/auth0-react';
+import { AUTH0_CLIENT_ID, AUTH0_DOMAIN } from 'utils/constants';
 
 export const App = memo(() => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <CssVarsProvider theme={theme}>
-          <WagmiConfig client={wagmiClient}>
-            <Box sx={{ bgcolor: 'background.paper', height: '100%' }}>
-              <Toolbar />
-              <Box sx={{ height: '100%' }}>
-                <Router />
+        <Auth0Provider
+          domain={AUTH0_DOMAIN}
+          clientId={AUTH0_CLIENT_ID}
+          redirectUri={window.location.origin}
+        >
+          <CssVarsProvider theme={theme}>
+            <WagmiConfig client={wagmiClient}>
+              <Box sx={{ bgcolor: 'background.paper', height: '100%' }}>
+                <Toolbar />
+                <Box sx={{ height: '100%' }}>
+                  <Router />
+                </Box>
               </Box>
-            </Box>
-            <Web3Modal
-              projectId={WALLETCONNECT_PROJECT_ID}
-              ethereumClient={ethereumClient}
-            />
-          </WagmiConfig>
-        </CssVarsProvider>
+              <Web3Modal
+                projectId={WALLETCONNECT_PROJECT_ID}
+                ethereumClient={ethereumClient}
+              />
+            </WagmiConfig>
+          </CssVarsProvider>
+        </Auth0Provider>
       </PersistGate>
     </Provider>
   );

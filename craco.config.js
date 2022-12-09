@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   webpack: {
@@ -7,6 +8,7 @@ module.exports = {
         new webpack.ProvidePlugin({
           Buffer: ['buffer', 'Buffer'],
         }),
+        new Dotenv({ path: `./.env.${process.env.ENV}` }),
       ],
     },
     configure: {
