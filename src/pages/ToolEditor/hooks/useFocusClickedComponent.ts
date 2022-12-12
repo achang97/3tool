@@ -3,7 +3,9 @@ import { blurFocus, focusComponent } from 'redux/features/editorSlice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { isInBounds } from 'utils/window';
 
-export const useFocusClickedComponent = (gridRef?: Ref<HTMLDivElement>) => {
+export const useFocusClickedComponent = (
+  containerRef?: Ref<HTMLDivElement>
+) => {
   const [location, setLocation] = useState<[number, number]>();
 
   const { layout } = useAppSelector((state) => state.editor);
@@ -12,7 +14,7 @@ export const useFocusClickedComponent = (gridRef?: Ref<HTMLDivElement>) => {
   useEffect(() => {
     const handler = ((e: PointerEvent) => {
       // @ts-ignore getBoundingClientRect is defined
-      const boundingClientRect = gridRef?.current?.getBoundingClientRect();
+      const boundingClientRect = containerRef?.current?.getBoundingClientRect();
 
       if (!boundingClientRect) {
         return;
@@ -43,7 +45,7 @@ export const useFocusClickedComponent = (gridRef?: Ref<HTMLDivElement>) => {
     return () => {
       window.removeEventListener('mousedown', handler);
     };
-  }, [gridRef, layout, dispatch]);
+  }, [containerRef, layout, dispatch]);
 
   return location;
 };

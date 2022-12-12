@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { initGlobal } from 'utils/initGlobal';
+import { initGlobal } from 'utils/global';
 import { App } from './App/App';
 
 import './index.css';

@@ -2,7 +2,7 @@ import React, { memo, useEffect, useMemo } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ToolEditor } from 'pages/ToolEditor/ToolEditor';
-import { FullscreenLoader } from 'components/FullscreenLoader';
+import { FullscreenLoader } from 'components/common/FullscreenLoader';
 import { ToolViewer } from 'pages/ToolViewer/ToolViewer';
 import { Tools } from 'pages/Tools/Tools';
 import { ResourceSettings } from 'pages/ResourceSettings/ResourceSettings';
