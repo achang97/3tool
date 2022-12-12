@@ -13,11 +13,10 @@
 
 # misc
 .DS_Store
-.env
 .env.local
-.env.test
 .env.development
 .env.staging
+.env.test
 .env.production
 
 npm-debug.log*

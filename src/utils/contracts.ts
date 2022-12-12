@@ -1,18 +1,17 @@
 import axios from 'axios';
-// @ts-ignore No typings for etherscan-api
 import { init as etherscanInit } from 'etherscan-api';
 import { Abi } from 'abitype';
-import { chain } from 'wagmi';
+import { mainnet, goerli } from 'wagmi';
 import { CHAINS_BY_ID, ETHERSCAN_API_KEY } from './constants';
 
 const TIMEOUT = 10_000;
 
-const ETHERSCAN_CONFIGS = {
-  [chain.mainnet.id]: {
+export const ETHERSCAN_CONFIGS = {
+  [mainnet.id]: {
     etherscanEndpoint: 'https://api.etherscan.io',
     apiKey: ETHERSCAN_API_KEY,
   },
-  [chain.goerli.id]: {
+  [goerli.id]: {
     etherscanEndpoint: 'https://api-goerli.etherscan.io',
     apiKey: ETHERSCAN_API_KEY,
   },

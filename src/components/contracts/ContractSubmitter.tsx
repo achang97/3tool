@@ -11,12 +11,12 @@ import {
 import { CHAINS } from 'utils/constants';
 import { useAppDispatch } from 'redux/hooks';
 import { addContract } from 'redux/features/contractsSlice';
-import { chain } from 'wagmi';
+import { mainnet } from 'wagmi';
 import { getContract } from '@wagmi/core';
 import { getContractAbi } from 'utils/contracts';
 
 export const ContractSubmitter = memo(() => {
-  const [chainId, setChainId] = useState<number>(chain.mainnet.id);
+  const [chainId, setChainId] = useState<number>(mainnet.id);
   const [address, setAddress] = useState('');
   const [abi, setAbi] = useState('');
 
