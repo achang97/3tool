@@ -12,7 +12,7 @@ export const FullscreenLoader = memo(() => {
         justifyContent: 'center',
       }}
     >
-      <CircularProgress />
+      <CircularProgress data-testid="fullscreen-loader" />
     </Box>
   );
 });

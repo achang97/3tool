@@ -1,5 +1,9 @@
 import React, { memo, useEffect, useMemo } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  redirect,
+  RouterProvider,
+} from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ToolEditor } from 'pages/ToolEditor/ToolEditor';
 import { FullscreenLoader } from 'components/common/FullscreenLoader';
@@ -62,6 +66,13 @@ export const Router = memo(() => {
           {
             path: Routes.Settings,
             element: <Settings />,
+          },
+          {
+            path: '*',
+            element: <FullscreenLoader />,
+            loader: () => {
+              return redirect(Routes.Tools);
+            },
           },
         ],
       },

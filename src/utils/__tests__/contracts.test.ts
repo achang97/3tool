@@ -14,6 +14,10 @@ jest.mock('etherscan-api');
 jest.mock('axios');
 
 describe('contracts', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('getContractAbi', () => {
     beforeEach(() => {
       (etherscanInit as jest.Mock).mockImplementation(

@@ -1,14 +1,11 @@
-import React, { memo } from 'react';
-import { Box, Typography } from '@mui/material';
-import { ToolbarLogo } from './ToolbarLogo';
+import React, { memo, useMemo } from 'react';
+import { Typography } from '@mui/material';
+import { ToolbarTemplate } from './ToolbarTemplate';
 
 export const ToolViewerToolbar = memo(() => {
-  return (
-    <Box
-      sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}
-    >
-      <ToolbarLogo />
-      <Typography>Tool Viewer</Typography>
-    </Box>
-  );
+  const middle = useMemo(() => {
+    return <Typography>Tool Viewer</Typography>;
+  }, []);
+
+  return <ToolbarTemplate middle={middle} />;
 });

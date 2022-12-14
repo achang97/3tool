@@ -1,8 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
+import { AnyAction, configureStore, Reducer } from '@reduxjs/toolkit';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import editorReducer from './features/editorSlice';
 import contractsReducer from './features/contractsSlice';
+
+type PersistedReducer = Reducer<unknown, AnyAction>;
 
 const editorPersistConfig = {
   key: 'editor',
@@ -12,8 +23,18 @@ const editorPersistConfig = {
 
 export const store = configureStore({
   reducer: {
-    editor: persistReducer(editorPersistConfig, editorReducer),
+    editor: persistReducer(
+      editorPersistConfig,
+      editorReducer
+    ) as PersistedReducer,
     contracts: contractsReducer,
+  },
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    });
   },
 });
 

@@ -6,7 +6,10 @@ import { ToolEditorQueryBuilder } from './components/ToolEditorQueryBuilder/Tool
 
 export const ToolEditor = memo(() => {
   return (
-    <Box sx={{ width: '100%', height: '100%', display: 'flex' }}>
+    <Box
+      data-testid="tool-editor"
+      sx={{ width: '100%', height: '100%', display: 'flex' }}
+    >
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: 3 }}>
         <Box sx={{ flex: 3 }}>
           <ToolEditorCanvas />
