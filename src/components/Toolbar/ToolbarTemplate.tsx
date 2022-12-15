@@ -1,5 +1,5 @@
 import React, { memo, ReactNode } from 'react';
-import { Box } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import { Link } from 'react-router-dom';
 import logo from 'resources/images/logo.svg';
 import { Routes } from 'routing/routes';
@@ -8,10 +8,24 @@ type ToolbarTemplateProps = {
   left?: ReactNode;
   middle?: ReactNode;
   right?: ReactNode;
+  testId?: string;
 };
 
+type ToolbarSectionProps = {
+  sx?: BoxProps['sx'];
+  children: ReactNode;
+};
+
+const ToolbarSection = memo(({ sx, children }: ToolbarSectionProps) => {
+  return (
+    <Box sx={{ display: 'flex', flex: 1, alignItems: 'center', ...sx }}>
+      {children}
+    </Box>
+  );
+});
+
 export const ToolbarTemplate = memo(
-  ({ left, middle, right }: ToolbarTemplateProps) => {
+  ({ left, middle, right, testId }: ToolbarTemplateProps) => {
     return (
       <Box
         sx={{
@@ -20,19 +34,22 @@ export const ToolbarTemplate = memo(
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
+        data-testid={testId}
       >
-        <Box sx={{ display: 'flex', flex: 1, justifyContent: 'flex-start' }}>
-          <Link to={Routes.Tools}>
-            <img src={logo} alt="ACA Labs logo" />
-          </Link>
+        <ToolbarSection sx={{ justifyContent: 'flex-start' }}>
+          <Box sx={{ mr: 1 }}>
+            <Link to={Routes.Tools}>
+              <img src={logo} alt="ACA Labs logo" data-testid="toolbar-logo" />
+            </Link>
+          </Box>
           {left}
-        </Box>
-        <Box sx={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+        </ToolbarSection>
+        <ToolbarSection sx={{ justifyContent: 'center' }}>
           {middle}
-        </Box>
-        <Box sx={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+        </ToolbarSection>
+        <ToolbarSection sx={{ justifyContent: 'flex-end' }}>
           {right}
-        </Box>
+        </ToolbarSection>
       </Box>
     );
   }

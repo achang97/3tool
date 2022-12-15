@@ -23,7 +23,7 @@ describe('Layout', () => {
 
     const result = render(<Layout />);
 
-    expect(result.findByText(mockToolbar)).toBeDefined();
+    expect(result.getByText(mockToolbar)).toBeDefined();
   });
 
   it('renders the current outlet', () => {
@@ -32,6 +32,6 @@ describe('Layout', () => {
 
     const result = render(<Layout />);
 
-    expect(result.findByText(mockOutlet)).toBeDefined();
+    expect(result.getByText(mockOutlet)).toBeDefined();
   });
 });

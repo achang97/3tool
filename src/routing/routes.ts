@@ -4,5 +4,11 @@ export enum Routes {
   ResourceSettings = '/resources/:resourceId',
   ToolEditor = '/editor/:toolId',
   ToolViewer = '/tools/:toolId',
-  Settings = '/settings/:sectionId',
+  Settings = '/settings',
+}
+
+export enum BaseRoutes {
+  ResourceSettings = '/resources',
+  ToolEditor = '/editor',
+  ToolViewer = '/tools',
 }

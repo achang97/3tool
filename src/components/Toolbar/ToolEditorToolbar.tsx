@@ -7,5 +7,5 @@ export const ToolEditorToolbar = memo(() => {
     return <Typography>Tool Editor</Typography>;
   }, []);
 
-  return <ToolbarTemplate middle={middle} />;
+  return <ToolbarTemplate middle={middle} testId="tool-editor-toolbar" />;
 });

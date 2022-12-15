@@ -17,4 +17,11 @@ export const theme = extendTheme({
       'sans-serif',
     ].join(','),
   },
+  components: {
+    MuiButtonBase: {
+      styleOverrides: {
+        root: 'text-transform: none !important;',
+      },
+    },
+  },
 });

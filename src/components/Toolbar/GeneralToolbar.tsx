@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Routes } from 'routing/routes';
-import { Avatar, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Avatar, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ToolbarTemplate } from './ToolbarTemplate';
 
@@ -37,9 +37,9 @@ export const GeneralToolbar = memo(() => {
     return (
       <>
         {AUTHENTICATED_LINKS.map(({ to, text }) => (
-          <Link key={to} to={to}>
-            <Typography sx={{ mx: 1 }}>{text}</Typography>
-          </Link>
+          <Button component={Link} key={to} to={to} sx={{ mx: 1 }}>
+            {text}
+          </Button>
         ))}
       </>
     );
@@ -48,7 +48,10 @@ export const GeneralToolbar = memo(() => {
   const right = useMemo(() => {
     return (
       <>
-        <IconButton onClick={handleMenuOpen}>
+        <IconButton
+          onClick={handleMenuOpen}
+          data-testid="general-toolbar-avatar"
+        >
           <Avatar sx={{ width: 32, height: 32 }}>{user?.name?.[0]}</Avatar>
         </IconButton>
         <Menu
@@ -56,9 +59,10 @@ export const GeneralToolbar = memo(() => {
           open={menuOpen}
           onClose={handleMenuClose}
           onClick={handleMenuClose}
+          data-testid="general-toolbar-menu"
         >
-          <MenuItem>
-            <Link to={Routes.Settings}>Settings</Link>
+          <MenuItem component={Link} to={Routes.Settings}>
+            Settings
           </MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
@@ -73,5 +77,5 @@ export const GeneralToolbar = memo(() => {
     menuAnchor,
   ]);
 
-  return <ToolbarTemplate left={left} right={right} />;
+  return <ToolbarTemplate left={left} right={right} testId="general-toolbar" />;
 });

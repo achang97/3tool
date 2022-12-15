@@ -8,8 +8,6 @@ jest.mock('@auth0/auth0-react');
 const mockLoginWithRedirect = jest.fn();
 
 describe('Router', () => {
-  const loaderId = 'fullscreen-loader';
-
   beforeEach(() => {
     jest.clearAllMocks();
     (useAuth0 as jest.Mock).mockImplementation(() => ({
@@ -25,73 +23,73 @@ describe('Router', () => {
       }));
     });
 
-    it('renders the Tools page for the / route', async () => {
+    it('renders the Tools page for the / route', () => {
       window.history.pushState('', '', '/');
 
-      const result = render(<Router />);
+      const result = render(<Router />, { router: false });
 
-      expect(result.findByTestId('tools')).toBeDefined();
+      expect(result.getByTestId('tools')).toBeDefined();
     });
 
-    it('renders the Resources page for the /resources route', async () => {
+    it('renders the Resources page for the /resources route', () => {
       window.history.pushState('', '', '/resources');
 
-      const result = render(<Router />);
+      const result = render(<Router />, { router: false });
 
-      expect(result.findByTestId('resources')).toBeDefined();
+      expect(result.getByTestId('resources')).toBeDefined();
     });
 
-    it('renders the Resource Settings page for the /resources/:resourceId route', async () => {
+    it('renders the Resource Settings page for the /resources/:resourceId route', () => {
       window.history.pushState('', '', '/resources/123');
 
-      const result = render(<Router />);
+      const result = render(<Router />, { router: false });
 
-      expect(result.findByTestId('resource-settings')).toBeDefined();
+      expect(result.getByTestId('resource-settings')).toBeDefined();
     });
 
-    it('renders the Tool Editor page for the /editor/:toolId route', async () => {
+    it('renders the Tool Editor page for the /editor/:toolId route', () => {
       window.history.pushState('', '', '/editor/123');
 
-      const result = render(<Router />);
+      const result = render(<Router />, { router: false });
 
-      expect(result.findByTestId('tool-editor')).toBeDefined();
+      expect(result.getByTestId('tool-editor')).toBeDefined();
     });
 
-    it('renders the Tool viewer page for the /tools/:toolId route', async () => {
+    it('renders the Tool viewer page for the /tools/:toolId route', () => {
       window.history.pushState('', '', '/tools/123');
 
-      const result = render(<Router />);
+      const result = render(<Router />, { router: false });
 
-      expect(result.findByTestId('tool-viewer')).toBeDefined();
+      expect(result.getByTestId('tool-viewer')).toBeDefined();
     });
 
-    it('renders the Settings page for the /settings/:sectionId route', async () => {
-      window.history.pushState('', '', '/settings/123');
+    it('renders the Settings page for the /settings route', () => {
+      window.history.pushState('', '', '/settings');
 
-      const result = render(<Router />);
+      const result = render(<Router />, { router: false });
 
-      expect(result.findByTestId('settings')).toBeDefined();
+      expect(result.getByTestId('settings')).toBeDefined();
     });
 
-    it('redirects to the Tools page for unsupported route', async () => {
+    it('renders Error 404 page for unsupported route', async () => {
       window.history.pushState('', '', '/asdf');
 
-      const result = render(<Router />);
+      const result = render(<Router />, { router: false });
 
-      expect(result.findByTestId('settings')).toBeDefined();
+      expect(await result.findByTestId('error-404')).toBeDefined();
     });
   });
 
   describe('Unauthenticated', () => {
-    it('displays a loader for all routes', async () => {
+    it('displays a loader for all routes', () => {
       (useAuth0 as jest.Mock).mockImplementation(() => ({
         isAuthenticated: false,
         loginWithRedirect: mockLoginWithRedirect,
       }));
 
-      const result = render(<Router />);
+      const result = render(<Router />, { router: false });
 
-      expect(result.findByTestId(loaderId)).toBeDefined();
+      expect(result.getByTestId('fullscreen-loader')).toBeDefined();
     });
   });
 
@@ -103,7 +101,7 @@ describe('Router', () => {
         loginWithRedirect: mockLoginWithRedirect,
       }));
 
-      render(<Router />);
+      render(<Router />, { router: false });
 
       expect(mockLoginWithRedirect).not.toHaveBeenCalled();
     });
@@ -115,7 +113,7 @@ describe('Router', () => {
         loginWithRedirect: mockLoginWithRedirect,
       }));
 
-      render(<Router />);
+      render(<Router />, { router: false });
 
       expect(mockLoginWithRedirect).not.toHaveBeenCalled();
     });
@@ -127,7 +125,7 @@ describe('Router', () => {
         loginWithRedirect: mockLoginWithRedirect,
       }));
 
-      render(<Router />);
+      render(<Router />, { router: false });
 
       expect(mockLoginWithRedirect).toHaveBeenCalledTimes(1);
     });
