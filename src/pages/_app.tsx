@@ -35,7 +35,7 @@ const Auth0RedirectWrapper = ({ children }: Auth0RedirectWrapperProps) => {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect]);
 
-  if (isLoading) {
+  if (isLoading || !isAuthenticated) {
     return <FullscreenLoader />;
   }
 
