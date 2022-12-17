@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import { Box } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
-import { Toolbar } from '@app/components/Toolbar/Toolbar';
+import { Toolbar } from '@app/components/toolbar/Toolbar';
 import { theme } from '@app/utils/theme';
 import { store, persistor } from '@app/redux/store';
 import { wagmiClient, ethereumClient } from '@app/utils/wallet';

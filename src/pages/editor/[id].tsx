@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { Web3Button } from '@web3modal/react';
 import Head from 'next/head';
-import { ToolEditorCanvas } from './components/ToolEditorCanvas/ToolEditorCanvas';
-import { ToolEditorSidebar } from './components/ToolEditorSidebar/ToolEditorSidebar';
-import { ToolEditorQueryBuilder } from './components/ToolEditorQueryBuilder/ToolEditorQueryBuilder';
+import { ToolEditorCanvas } from '@app/components/editor/ToolEditorCanvas/ToolEditorCanvas';
+import { ToolEditorSidebar } from '@app/components/editor/ToolEditorSidebar/ToolEditorSidebar';
+import { ToolEditorQueryBuilder } from '@app/components/editor/ToolEditorQueryBuilder/ToolEditorQueryBuilder';
 
 const ToolEditor = () => {
   return (
