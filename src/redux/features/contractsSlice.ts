@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { ContractConfig } from 'types';
+import { ContractConfig } from '@app/types';
 
 type ContractsState = {
   configs: ContractConfig[];

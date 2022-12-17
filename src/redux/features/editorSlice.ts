@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { ComponentType, SidebarViewType } from 'types';
+import { ComponentType, SidebarViewType } from '@app/types';
 import { Layout } from 'react-grid-layout';
 
 type EditorState = {
