@@ -1,9 +1,15 @@
-import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { render } from 'tests/utils/renderWithContext';
+import { useRouter } from 'next/router';
+import { render } from '@tests/utils/renderWithContext';
 import { Toolbar } from '../Toolbar';
 
 jest.mock('@auth0/auth0-react');
+
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(() => ({
+    pathname: '',
+  })),
+}));
 
 describe('Toolbar', () => {
   const generalToolbarId = 'general-toolbar';
@@ -21,21 +27,25 @@ describe('Toolbar', () => {
     expect(result.queryByTestId(toolEditorToolbarId)).toBeNull();
   });
 
-  it('renders Tool Viewer toolbar if on /tools route', () => {
+  it('renders Tool Viewer toolbar if on /tools/[id] route', () => {
     (useAuth0 as jest.Mock).mockImplementation(() => ({
       isAuthenticated: true,
     }));
-    window.history.pushState('', '', '/tools/123');
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      pathname: '/tools/[id]',
+    }));
 
     const result = render(<Toolbar />);
     expect(result.getByTestId(toolViewerToolbarId)).toBeDefined();
   });
 
-  it('renders Tool Editor toolbar if on /editor route', () => {
+  it('renders Tool Editor toolbar if on /editor/[id] route', () => {
     (useAuth0 as jest.Mock).mockImplementation(() => ({
       isAuthenticated: true,
     }));
-    window.history.pushState('', '', '/editor/123');
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      pathname: '/editor/[id]',
+    }));
 
     const result = render(<Toolbar />);
     expect(result.getByTestId(toolEditorToolbarId)).toBeDefined();
@@ -45,8 +55,10 @@ describe('Toolbar', () => {
     (useAuth0 as jest.Mock).mockImplementation(() => ({
       isAuthenticated: true,
     }));
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      pathname: '/',
+    }));
 
-    window.history.pushState('', '', '/');
     const result = render(<Toolbar />);
     expect(result.getByTestId(generalToolbarId)).toBeDefined();
   });

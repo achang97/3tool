@@ -1,11 +1,11 @@
-import React, { memo, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Typography } from '@mui/material';
 import { ToolbarTemplate } from './ToolbarTemplate';
 
-export const ToolViewerToolbar = memo(() => {
+export const ToolViewerToolbar = () => {
   const middle = useMemo(() => {
     return <Typography>Tool Viewer</Typography>;
   }, []);
 
   return <ToolbarTemplate middle={middle} testId="tool-viewer-toolbar" />;
-});
+};

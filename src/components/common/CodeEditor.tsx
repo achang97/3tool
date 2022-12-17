@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import {
   javascript,
@@ -11,7 +11,7 @@ type CodeEditorProps = {
   height?: string;
 };
 
-export const CodeEditor = memo(({ height = '200px' }: CodeEditorProps) => {
+export const CodeEditor = ({ height = '200px' }: CodeEditorProps) => {
   const [value, setValue] = useState("console.log('hello world!');");
 
   const handleCodeChange = useCallback((newValue: string) => {
@@ -42,4 +42,4 @@ export const CodeEditor = memo(({ height = '200px' }: CodeEditorProps) => {
       <Button onClick={handleExecuteClick}>Execute</Button>
     </Box>
   );
-});
+};

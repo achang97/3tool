@@ -1,20 +1,12 @@
-import React from 'react';
-import userEvent from '@testing-library/user-event';
-import { render } from 'tests/utils/renderWithContext';
+import { render } from '@tests/utils/renderWithContext';
 import { ToolbarTemplate } from '../ToolbarTemplate';
 
 describe('ToolbarTemplate', () => {
-  it('renders logo as a link to /tools', () => {
-    window.history.pushState('', '', '/settings');
-
+  it('renders logo as a link to /', () => {
     const result = render(<ToolbarTemplate />);
 
     const logo = result.getByTestId('toolbar-logo');
-    expect(logo).toBeDefined();
-
-    expect(window.location.pathname).toEqual('/settings');
-    userEvent.click(logo);
-    expect(window.location.pathname).toEqual('/');
+    expect(logo.getAttribute('href')).toEqual('/');
   });
 
   it('renders left component', () => {

@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { initGlobal } from 'utils/global';
+import { initGlobal } from '../global';
 
 describe('global', () => {
   describe('initGlobal', () => {

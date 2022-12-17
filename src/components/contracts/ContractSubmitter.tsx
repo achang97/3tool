@@ -1,4 +1,4 @@
-import React, { ChangeEvent, memo, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import {
   Box,
   Button,
@@ -8,14 +8,14 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { CHAINS } from 'utils/constants';
-import { useAppDispatch } from 'redux/hooks';
-import { addContract } from 'redux/features/contractsSlice';
+import { CHAINS } from '@app/utils/constants';
+import { useAppDispatch } from '@app/redux/hooks';
+import { addContract } from '@app/redux/features/contractsSlice';
+import { getContractAbi } from '@app/utils/contracts';
 import { mainnet } from 'wagmi';
 import { getContract } from '@wagmi/core';
-import { getContractAbi } from 'utils/contracts';
 
-export const ContractSubmitter = memo(() => {
+export const ContractSubmitter = () => {
   const [chainId, setChainId] = useState<number>(mainnet.id);
   const [address, setAddress] = useState('');
   const [abi, setAbi] = useState('');
@@ -82,4 +82,4 @@ export const ContractSubmitter = memo(() => {
       </Button>
     </Box>
   );
-});
+};

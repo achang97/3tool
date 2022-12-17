@@ -1,7 +1,7 @@
-import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { waitFor } from '@testing-library/dom';
-import { render } from 'tests/utils/renderWithContext';
+import { act, waitFor } from '@testing-library/react';
+import { render } from '@tests/utils/renderWithContext';
+import { silenceConsoleError } from '@tests/utils/silenceConsoleError';
 import { GeneralToolbar } from '../GeneralToolbar';
 
 const mockLogout = jest.fn();
@@ -21,7 +21,7 @@ describe('GeneralToolbar', () => {
     jest.clearAllMocks();
   });
 
-  it('displays user avatar to open the menu', async () => {
+  it('renders user avatar to open the menu', async () => {
     const result = render(<GeneralToolbar />);
 
     const avatar = result.getByTestId(avatarId);
@@ -31,39 +31,39 @@ describe('GeneralToolbar', () => {
     expect(await result.findByTestId('general-toolbar-menu')).toBeDefined();
   });
 
-  it('navigates to Tools page', () => {
+  it('renders link to Tools page', () => {
     const result = render(<GeneralToolbar />);
 
     const toolsNav = result.getByText('Tools');
-    userEvent.click(toolsNav);
-
-    expect(window.location.pathname).toEqual('/');
+    expect(toolsNav.getAttribute('href')).toEqual('/');
   });
 
-  it('navigates to Resources page', () => {
+  it('renders link to Resources page', () => {
     const result = render(<GeneralToolbar />);
 
     const resourcesNav = result.getByText('Resources');
-    userEvent.click(resourcesNav);
-
-    expect(window.location.pathname).toEqual('/resources');
+    expect(resourcesNav.getAttribute('href')).toEqual('/resources');
   });
 
-  it('navigates to Settings page and toggles dropdown menu', async () => {
+  it('renders link to Settings page', async () => {
+    Object.defineProperty(window, 'location', {
+      value: new URL('http://example.com'),
+      configurable: true,
+    });
+
+    silenceConsoleError('inside a test was not wrapped in act(...)');
+
     const result = render(<GeneralToolbar />);
 
     userEvent.click(result.getByTestId(avatarId));
 
     const settingsNav = await result.findByText('Settings');
-    userEvent.click(settingsNav);
-
-    expect(window.location.pathname).toEqual('/settings');
-    await waitFor(() => {
-      expect(result.queryByText('Settings')).toBeNull();
-    });
+    expect(settingsNav.getAttribute('href')).toEqual('/settings');
   });
 
   it('logs out the user and toggles dropdown menu', async () => {
+    silenceConsoleError('inside a test was not wrapped in act(...)');
+
     const result = render(<GeneralToolbar />);
 
     userEvent.click(result.getByTestId(avatarId));
@@ -71,9 +71,8 @@ describe('GeneralToolbar', () => {
     const logoutButton = await result.findByText('Logout');
     userEvent.click(logoutButton);
 
-    expect(mockLogout).toHaveBeenCalledTimes(1);
-
     await waitFor(() => {
+      expect(mockLogout).toHaveBeenCalledTimes(1);
       expect(result.queryByText('Logout')).toBeNull();
     });
   });

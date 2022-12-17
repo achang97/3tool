@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { init as etherscanInit } from 'etherscan-api';
-import { CHAINS_BY_ID } from 'utils/constants';
-import { ETHERSCAN_CONFIGS, getContractAbi } from 'utils/contracts';
+import { CHAINS_BY_ID } from '@app/utils/constants';
 import { mainnet } from 'wagmi';
+import { ETHERSCAN_CONFIGS, getContractAbi } from '../contracts';
 
 const mockEtherscanClient = {
   contract: {

@@ -1,12 +1,12 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
-import { useAppSelector } from 'redux/hooks';
 import { useContract, useProvider, useSigner } from 'wagmi';
-import { ContractConfig } from 'types';
-import { CHAINS_BY_ID } from 'utils/constants';
+import { useAppSelector } from '@app/redux/hooks';
+import { ContractConfig } from '@app/types';
+import { CHAINS_BY_ID } from '@app/utils/constants';
 import { Contract } from './Contract';
 
-export const ContractExplorer = memo(() => {
+export const ContractExplorer = () => {
   const { configs } = useAppSelector((state) => state.contracts);
 
   const [selectedConfig, setSelectedConfig] = useState<ContractConfig>(
@@ -62,4 +62,4 @@ export const ContractExplorer = memo(() => {
       </Box>
     </Box>
   );
-});
+};

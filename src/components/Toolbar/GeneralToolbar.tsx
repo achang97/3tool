@@ -1,18 +1,17 @@
-import React, { memo, useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Routes } from 'routing/routes';
 import { Avatar, Button, IconButton, Menu, MenuItem } from '@mui/material';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ToolbarTemplate } from './ToolbarTemplate';
 
 const AUTHENTICATED_LINKS = [
-  { to: Routes.Tools, text: 'Tools' },
-  { to: Routes.Resources, text: 'Resources' },
+  { to: '/', text: 'Tools' },
+  { to: '/resources', text: 'Resources' },
 ];
 
-export const GeneralToolbar = memo(() => {
+export const GeneralToolbar = () => {
   const { logout, user } = useAuth0();
-  const [menuAnchor, setMenuAnchor] = React.useState<null | HTMLElement>(null);
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
   const menuOpen = useMemo(() => {
     return Boolean(menuAnchor);
@@ -30,14 +29,14 @@ export const GeneralToolbar = memo(() => {
   }, []);
 
   const handleLogout = useCallback(() => {
-    logout({ returnTo: window.location.origin });
+    logout();
   }, [logout]);
 
   const left = useMemo(() => {
     return (
       <>
         {AUTHENTICATED_LINKS.map(({ to, text }) => (
-          <Button component={Link} key={to} to={to} sx={{ mx: 1 }}>
+          <Button component={Link} key={to} href={to} sx={{ mx: 1 }}>
             {text}
           </Button>
         ))}
@@ -61,7 +60,7 @@ export const GeneralToolbar = memo(() => {
           onClick={handleMenuClose}
           data-testid="general-toolbar-menu"
         >
-          <MenuItem component={Link} to={Routes.Settings}>
+          <MenuItem component={Link} href="/settings">
             Settings
           </MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
@@ -78,4 +77,4 @@ export const GeneralToolbar = memo(() => {
   ]);
 
   return <ToolbarTemplate left={left} right={right} testId="general-toolbar" />;
-});
+};

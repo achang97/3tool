@@ -1,4 +1,4 @@
-import { isInBounds } from 'utils/window';
+import { isInBounds } from '../window';
 
 describe('window', () => {
   describe('isInBounds', () => {

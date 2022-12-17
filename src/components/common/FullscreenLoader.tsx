@@ -1,7 +1,6 @@
-import React, { Box, CircularProgress } from '@mui/material';
-import { memo } from 'react';
+import { Box, CircularProgress } from '@mui/material';
 
-export const FullscreenLoader = memo(() => {
+export const FullscreenLoader = () => {
   return (
     <Box
       sx={{
@@ -15,4 +14,4 @@ export const FullscreenLoader = memo(() => {
       <CircularProgress data-testid="fullscreen-loader" />
     </Box>
   );
-});
+};

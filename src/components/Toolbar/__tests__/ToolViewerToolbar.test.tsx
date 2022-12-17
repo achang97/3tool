@@ -1,5 +1,4 @@
-import React from 'react';
-import { render } from 'tests/utils/renderWithContext';
+import { render } from '@tests/utils/renderWithContext';
 import { ToolViewerToolbar } from '../ToolViewerToolbar';
 
 describe('ToolViewerToolbar', () => {

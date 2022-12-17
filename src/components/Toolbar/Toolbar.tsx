@@ -1,25 +1,23 @@
-import React, { memo } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { GeneralToolbar } from './GeneralToolbar';
 import { ToolViewerToolbar } from './ToolViewerToolbar';
 import { ToolEditorToolbar } from './ToolEditorToolbar';
 
-export const Toolbar = memo(() => {
+export const Toolbar = () => {
   const { isAuthenticated } = useAuth0();
-  const { pathname } = useLocation();
+  const { pathname } = useRouter();
 
   if (!isAuthenticated) {
     return null;
   }
 
-  if (pathname.startsWith('/tools')) {
-    return <ToolViewerToolbar />;
+  switch (pathname) {
+    case '/tools/[id]':
+      return <ToolViewerToolbar />;
+    case '/editor/[id]':
+      return <ToolEditorToolbar />;
+    default:
+      return <GeneralToolbar />;
   }
-
-  if (pathname.startsWith('/editor')) {
-    return <ToolEditorToolbar />;
-  }
-
-  return <GeneralToolbar />;
-});
+};
