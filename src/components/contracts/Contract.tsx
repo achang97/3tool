@@ -21,8 +21,10 @@ export const Contract = ({ contract, blockExplorerUrl }: ContractProps) => {
       const handleFunctionClick = async () => {
         try {
           const val = await contract[func.name]();
+          // eslint-disable-next-line no-alert
           alert(`${func.name}: ${val}`);
         } catch (e) {
+          // eslint-disable-next-line no-alert
           alert(e);
         }
       };
