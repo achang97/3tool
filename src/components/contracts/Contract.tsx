@@ -23,6 +23,7 @@ export const Contract = ({ contract, blockExplorerUrl }: ContractProps) => {
           const val = await contract[func.name]();
           alert(`${func.name}: ${val}`);
         } catch (e) {
+          // eslint-disable-next-line no-alert
           alert(e);
         }
       };
