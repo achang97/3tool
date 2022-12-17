@@ -15,7 +15,7 @@ jest.mock('@auth0/auth0-react', () => ({
 }));
 
 describe('GeneralToolbar', () => {
-  const avatarId = 'general-toolbar-avatar';
+  const avatarId: number = 'general-toolbar-avatar';
 
   beforeEach(() => {
     jest.clearAllMocks();
