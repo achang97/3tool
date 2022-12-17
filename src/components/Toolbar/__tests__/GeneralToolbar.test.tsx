@@ -46,11 +46,6 @@ describe('GeneralToolbar', () => {
   });
 
   it('renders link to Settings page', async () => {
-    Object.defineProperty(window, 'location', {
-      value: new URL('http://example.com'),
-      configurable: true,
-    });
-
     silenceConsoleError('inside a test was not wrapped in act(...)');
 
     const result = render(<GeneralToolbar />);
