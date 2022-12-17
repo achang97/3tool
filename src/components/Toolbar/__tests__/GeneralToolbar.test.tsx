@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { act, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { silenceConsoleError } from '@tests/utils/silenceConsoleError';
 import { GeneralToolbar } from '../GeneralToolbar';
@@ -15,7 +15,7 @@ jest.mock('@auth0/auth0-react', () => ({
 }));
 
 describe('GeneralToolbar', () => {
-  const avatarId: number = 'general-toolbar-avatar';
+  const avatarId = 'general-toolbar-avatar';
 
   beforeEach(() => {
     jest.clearAllMocks();

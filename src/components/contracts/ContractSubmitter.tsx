@@ -48,6 +48,7 @@ export const ContractSubmitter = () => {
       getContract(contractConfig);
       dispatch(addContract(contractConfig));
     } catch (e) {
+      // eslint-disable-next-line no-alert
       alert(e);
     }
   }, [chainId, address, abi, dispatch]);
