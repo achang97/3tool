@@ -8,30 +8,21 @@ import {
   SafeTransactionDataPartial,
 } from '@safe-global/safe-core-sdk-types';
 import SafeServiceClient, {
-  SafeMultisigTransactionResponse,
+  SignatureResponse,
 } from '@safe-global/safe-service-client';
 
-const getSigner = async (): Promise<ethers.Signer> => {
-  const safeOwner = await fetchSigner();
+export const getSigner = async (): Promise<ethers.Signer> => {
+  const signer = await fetchSigner();
 
   // eslint-disable-next-line no-underscore-dangle
-  if (!safeOwner?._isSigner) {
+  if (!signer || !signer._isSigner) {
     throw new Error('Invalid signer');
   }
 
-  return safeOwner;
+  return signer;
 };
 
-const getEthAdapter = async (signer: ethers.Signer): Promise<EthersAdapter> => {
-  const ethAdapter = new EthersAdapter({
-    ethers,
-    signerOrProvider: signer,
-  });
-
-  return ethAdapter;
-};
-
-const getSafeService = (ethAdapter: EthAdapter): SafeServiceClient => {
+export const getSafeService = (ethAdapter: EthAdapter): SafeServiceClient => {
   const { chain } = getNetwork();
 
   const safeService = new SafeServiceClient({
@@ -42,46 +33,75 @@ const getSafeService = (ethAdapter: EthAdapter): SafeServiceClient => {
   return safeService;
 };
 
-const getSafe = async (
-  safeAddress: string,
-  ethAdapter: EthAdapter
-): Promise<Safe> => {
+export const getSafeClients = async (
+  safeAddress: string
+): Promise<{
+  signer: ethers.Signer;
+  ethAdapter: EthersAdapter;
+  safeSdk: Safe;
+  safeService: SafeServiceClient;
+}> => {
+  const signer = await getSigner();
+  const ethAdapter = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
   const safeSdk = await Safe.create({
     ethAdapter,
     safeAddress,
   });
+  const safeService = getSafeService(ethAdapter);
 
-  return safeSdk;
+  return {
+    signer,
+    ethAdapter,
+    safeSdk,
+    safeService,
+  };
 };
 
-const executeTransaction = async (
-  safeSdk: Safe,
-  safeTransaction: SafeTransaction | SafeMultisigTransactionResponse
-): Promise<ethers.ContractReceipt | undefined> => {
-  const executeTxResponse = await safeSdk.executeTransaction(safeTransaction);
-  const receipt = await executeTxResponse.transactionResponse?.wait();
-  return receipt;
-};
-
-export const confirmAndExecuteTransaction = async (
+export const canExecuteTransaction = async (
   safeAddress: string,
   safeTransactionHash: string
-): Promise<ethers.ContractReceipt | undefined> => {
-  const signer = await getSigner();
-  const ethAdapter = await getEthAdapter(signer);
-
-  const safeSdk = await getSafe(safeAddress, ethAdapter);
-  const safeService = getSafeService(ethAdapter);
+): Promise<boolean> => {
+  const { signer, safeSdk, safeService } = await getSafeClients(safeAddress);
 
   const threshold = await safeSdk.getThreshold();
   const transaction = await safeService.getTransaction(safeTransactionHash);
-  const numConfirmations = transaction?.confirmations?.length || 0;
+  const numConfirmations = transaction.confirmations?.length || 0;
 
-  if (numConfirmations >= threshold - 1) {
-    // Execute the transaction
-    const receipt = executeTransaction(safeSdk, transaction);
-    return receipt;
+  const signerAddress = await signer.getAddress();
+  const hasConfirmed = transaction.confirmations?.some(
+    (confirmation) => confirmation.owner === signerAddress
+  );
+
+  if (hasConfirmed) {
+    return numConfirmations >= threshold;
   }
+
+  return numConfirmations + 1 >= threshold;
+};
+
+export const executeTransaction = async (
+  safeAddress: string,
+  safeTransactionHash: string
+): Promise<ethers.ContractReceipt | undefined> => {
+  const { safeSdk, safeService } = await getSafeClients(safeAddress);
+
+  const transaction = await safeService.getTransaction(safeTransactionHash);
+
+  const executeTxResponse = await safeSdk.executeTransaction(transaction);
+  const receipt = await executeTxResponse.transactionResponse?.wait();
+
+  return receipt;
+};
+
+export const confirmTransaction = async (
+  safeAddress: string,
+  safeTransactionHash: string
+): Promise<SignatureResponse> => {
+  const { safeSdk, safeService } = await getSafeClients(safeAddress);
 
   // Sign the transaction
   const senderSignature = await safeSdk.signTransactionHash(
@@ -89,31 +109,27 @@ export const confirmAndExecuteTransaction = async (
   );
 
   // Confirm the transaction
-  await safeService.confirmTransaction(
+  const signatureResponse = await safeService.confirmTransaction(
     safeTransactionHash,
     senderSignature.data
   );
 
-  return undefined;
+  return signatureResponse;
 };
 
 export const createSafeTransaction = async (
   safeAddress: string,
-  data: SafeTransactionDataPartial
+  safeTransactionData: SafeTransactionDataPartial
 ): Promise<{
   transaction: SafeTransaction;
   transactionHash: string;
   receipt?: ethers.ContractReceipt;
 }> => {
-  const signer = await getSigner();
-  const ethAdapter = await getEthAdapter(signer);
-
-  const safeSdk = await getSafe(safeAddress, ethAdapter);
-  const safeService = getSafeService(ethAdapter);
+  const { signer, safeSdk, safeService } = await getSafeClients(safeAddress);
 
   // Create a SafeTransaction
   const safeTransaction = await safeSdk.createTransaction({
-    safeTransactionData: data,
+    safeTransactionData,
   });
   const safeTransactionHash = await safeSdk.getTransactionHash(safeTransaction);
 
@@ -122,7 +138,8 @@ export const createSafeTransaction = async (
 
   if (threshold <= 1) {
     // Execute the transaction immediately
-    receipt = await executeTransaction(safeSdk, safeTransaction);
+    const executeTxResponse = await safeSdk.executeTransaction(safeTransaction);
+    receipt = await executeTxResponse.transactionResponse?.wait();
   } else {
     // Propose a transaction to the relayer
     const senderSignature = await safeSdk.signTransactionHash(
