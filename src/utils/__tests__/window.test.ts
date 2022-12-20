@@ -1,4 +1,4 @@
-import { isInBounds } from '../window';
+import { getTitle, isInBounds } from '../window';
 
 describe('window', () => {
   describe('isInBounds', () => {
@@ -50,6 +50,14 @@ describe('window', () => {
         bottom: 20,
       } as DOMRect);
       expect(result).toEqual(false);
+    });
+  });
+
+  describe('getTitle', () => {
+    it('appends "- ACA Labs" suffix to given string', () => {
+      const mockTitle = 'Title';
+      const result = getTitle(mockTitle);
+      expect(result).toEqual(`${mockTitle} - ACA Labs`);
     });
   });
 });

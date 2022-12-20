@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import { Box, Typography } from '@mui/material';
+import { getTitle } from '@app/utils/window';
 
 const Error404 = () => {
   return (
     <>
       <Head>
-        <title>404 Error</title>
+        <title>{getTitle('404 Error')}</title>
       </Head>
       <main>
         <Box data-testid="error-404">
