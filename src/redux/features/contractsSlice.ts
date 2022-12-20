@@ -16,7 +16,7 @@ export const contractsSlice = createSlice({
   initialState,
   reducers: {
     addContract: (state, action: PayloadAction<ContractConfig>) => {
-      const isExistingAddress = state.configs.find(
+      const isExistingAddress = state.configs.some(
         (config) => config.address === action.payload.address
       );
 

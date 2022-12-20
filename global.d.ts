@@ -1,7 +1,9 @@
-declare module "etherscan-api" {
+declare module 'etherscan-api' {
   export type EtherscanClient = {
     contract: {
-      getabi: (address: string) => { result: import("abitype").Abi };
+      getabi: (address: string) => {
+        result: import('abitype').Abi;
+      };
     };
   };
 
@@ -9,10 +11,10 @@ declare module "etherscan-api" {
     apiKey: string,
     network: string,
     timeout: number,
-    client: import("axios").AxiosInstance
+    client: import('axios').AxiosInstance
   ): EtherscanClient;
 }
 
-declare module "*.png";
-declare module "*.jpg";
-declare module "*.svg";
+declare module '*.png';
+declare module '*.jpg';
+declare module '*.svg';

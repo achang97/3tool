@@ -29,7 +29,7 @@ export const GeneralToolbar = () => {
   }, []);
 
   const handleLogout = useCallback(() => {
-    logout();
+    logout({ returnTo: window.location.origin });
   }, [logout]);
 
   const left = useMemo(() => {

@@ -16,8 +16,8 @@ import {
   startMoveComponent,
   updateLayout,
 } from '@app/redux/features/editorSlice';
+import { useFocusClickedComponent } from '@app/hooks/useFocusClickedComponent';
 import { ToolEditorComponent } from './ToolEditorComponent';
-import { useFocusClickedComponent } from '../../hooks/useFocusClickedComponent';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 

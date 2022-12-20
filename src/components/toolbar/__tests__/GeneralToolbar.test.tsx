@@ -68,6 +68,7 @@ describe('GeneralToolbar', () => {
 
     await waitFor(() => {
       expect(mockLogout).toHaveBeenCalledTimes(1);
+      expect(mockLogout).toHaveBeenCalledWith({ returnTo: 'http://localhost' });
       expect(result.queryByText('Logout')).toBeNull();
     });
   });
