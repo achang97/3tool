@@ -1,5 +1,3 @@
-import { Abi } from 'abitype';
-
 export enum ComponentType {
   Button = 'button',
   TextInput = 'text_input',
@@ -11,9 +9,3 @@ export enum SidebarViewType {
   Inspect = 'inspect',
   Create = 'create',
 }
-
-export type ContractConfig = {
-  address: string;
-  abi: Abi;
-  chainId: number;
-};
