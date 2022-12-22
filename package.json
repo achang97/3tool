@@ -33,6 +33,7 @@
     "axios": "^1.2.1",
     "ethers": "^5.7.2",
     "etherscan-api": "^10.2.0",
+    "moment": "^2.29.4",
     "next": "13.0.7",
     "next-redux-wrapper": "^8.0.0",
     "react": "18.2.0",

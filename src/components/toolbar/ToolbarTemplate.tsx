@@ -39,7 +39,7 @@ export const ToolbarTemplate = ({
         alignItems: 'center',
         borderBottom: 1,
         borderColor: 'divider',
-        px: 1,
+        paddingX: 1,
       }}
       data-testid={testId}
     >

@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { Box } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { Toolbar } from '@app/components/toolbar/Toolbar';
-import { theme } from '@app/utils/theme';
+import { theme } from '@app/utils/mui';
 import { store, persistor } from '@app/redux/store';
 import { wagmiClient, ethereumClient } from '@app/utils/wallet';
 import {
