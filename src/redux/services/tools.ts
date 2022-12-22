@@ -12,7 +12,15 @@ export const toolsApi = createApi({
     getToolById: builder.query<Tool, string>({
       query: (id) => `/tools/${id}`,
     }),
+    createTool: builder.mutation<Tool, { name: string }>({
+      query: (body) => ({
+        url: '/tools',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetToolByIdQuery, useGetToolsQuery } = toolsApi;
+export const { useGetToolByIdQuery, useGetToolsQuery, useCreateToolMutation } =
+  toolsApi;
