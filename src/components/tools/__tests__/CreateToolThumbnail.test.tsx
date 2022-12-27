@@ -16,6 +16,10 @@ jest.mock('@app/redux/services/tools', () => ({
 }));
 
 describe('CreateToolThumbnail', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders description', () => {
     const result = render(<CreateToolThumbnail />);
 
