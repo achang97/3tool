@@ -24,7 +24,7 @@ export const ToolThumbnail = ({ id, name, updatedAt }: ToolThumbnailProps) => {
         {name}
       </Typography>
       <Typography variant="caption">
-        Edited {moment(updatedAt.toISOString()).fromNow()}
+        Edited {moment(updatedAt).fromNow()}
       </Typography>
     </ThumbnailContainer>
   );

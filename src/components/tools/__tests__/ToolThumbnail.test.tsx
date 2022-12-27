@@ -9,9 +9,9 @@ const mockUpdatedAt = new Date();
 const mockPush = jest.fn();
 
 jest.mock('next/router', () => ({
-  useRouter: () => ({
+  useRouter: jest.fn(() => ({
     push: mockPush,
-  }),
+  })),
 }));
 
 describe('ToolThumbnail', () => {
