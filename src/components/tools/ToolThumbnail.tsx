@@ -1,5 +1,6 @@
 import { lineClamp } from '@app/utils/mui';
 import { Typography } from '@mui/material';
+import { GridViewRounded } from '@mui/icons-material';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
@@ -19,8 +20,17 @@ export const ToolThumbnail = ({ id, name, updatedAt }: ToolThumbnailProps) => {
   }, [push, id]);
 
   return (
-    <ThumbnailContainer onClick={handleNavigateToTool}>
-      <Typography variant="subtitle1" sx={{ ...lineClamp(2) }}>
+    <ThumbnailContainer
+      icon={
+        <GridViewRounded
+          fontSize="inherit"
+          color="primary"
+          sx={{ transform: 'rotate(45deg)' }}
+        />
+      }
+      onClick={handleNavigateToTool}
+    >
+      <Typography variant="subtitle1" sx={{ ...lineClamp(1) }}>
         {name}
       </Typography>
       <Typography variant="caption">

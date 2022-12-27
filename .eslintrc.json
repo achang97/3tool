@@ -28,6 +28,12 @@
     "indent": "off",
     "@typescript-eslint/indent": "off",
     "react/jsx-one-expression-per-line": "off",
-    "function-paren-newline": "off"
+    "function-paren-newline": "off",
+    "react/jsx-wrap-multilines": [
+      "error",
+      {
+        "prop": "ignore"
+      }
+    ]
   }
 }

@@ -65,6 +65,7 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
               type="submit"
               loading={isLoading}
               sx={{ marginTop: 1 }}
+              disabled={!name}
             >
               Create tool
             </LoadingButton>

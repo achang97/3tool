@@ -39,7 +39,7 @@ describe('Home', () => {
 
     const result = render(<ToolsPage />);
 
-    const createThumbnailText = result.getByText('Start a new project');
+    const createThumbnailText = result.getByText('New tool');
     userEvent.click(createThumbnailText);
 
     const input = await result.findByTestId('create-tool-dialog-input');
