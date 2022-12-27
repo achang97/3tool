@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Avatar, Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { Avatar, IconButton, Menu, MenuItem, Tab, Tabs } from '@mui/material';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ToolbarTemplate } from './ToolbarTemplate';
 
 const AUTHENTICATED_LINKS = [
@@ -11,6 +12,8 @@ const AUTHENTICATED_LINKS = [
 
 export const GeneralToolbar = () => {
   const { logout, user } = useAuth0();
+  const { pathname } = useRouter();
+
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
 
   const menuOpen = useMemo(() => {
@@ -32,17 +35,30 @@ export const GeneralToolbar = () => {
     logout({ returnTo: window.location.origin });
   }, [logout]);
 
-  const left = useMemo(() => {
+  const middle = useMemo(() => {
     return (
-      <>
+      <Tabs
+        value={pathname}
+        sx={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          height: '100%',
+        }}
+      >
         {AUTHENTICATED_LINKS.map(({ to, text }) => (
-          <Button component={Link} key={to} href={to} sx={{ marginX: 1 }}>
-            {text}
-          </Button>
+          <Tab
+            component={Link}
+            key={to}
+            href={to}
+            sx={{ marginX: 1, height: '100%' }}
+            label={text}
+            value={to}
+            disableRipple
+          />
         ))}
-      </>
+      </Tabs>
     );
-  }, []);
+  }, [pathname]);
 
   const right = useMemo(() => {
     return (
@@ -76,5 +92,7 @@ export const GeneralToolbar = () => {
     menuAnchor,
   ]);
 
-  return <ToolbarTemplate left={left} right={right} testId="general-toolbar" />;
+  return (
+    <ToolbarTemplate middle={middle} right={right} testId="general-toolbar" />
+  );
 };

@@ -14,6 +14,12 @@ jest.mock('@auth0/auth0-react', () => ({
   }),
 }));
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    pathname: '/',
+  }),
+}));
+
 describe('GeneralToolbar', () => {
   const avatarId = 'general-toolbar-avatar';
 

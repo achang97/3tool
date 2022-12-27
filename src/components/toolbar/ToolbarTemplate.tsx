@@ -18,7 +18,15 @@ type ToolbarSectionProps = {
 
 const ToolbarSection = ({ sx, children }: ToolbarSectionProps) => {
   return (
-    <Box sx={{ display: 'flex', flex: 1, alignItems: 'center', ...sx }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flex: 1,
+        alignItems: 'center',
+        height: '100%',
+        ...sx,
+      }}
+    >
       {children}
     </Box>
   );
