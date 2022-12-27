@@ -9,9 +9,11 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
+import { setupListeners } from '@reduxjs/toolkit/query';
 import storage from 'redux-persist/lib/storage';
 import editorReducer from './features/editorSlice';
 import contractsReducer from './features/contractsSlice';
+import { toolsApi } from './services/tools';
 
 const editorPersistConfig = {
   key: 'editor',
@@ -24,15 +26,25 @@ export const store = configureStore({
     // @ts-ignore Type check should not use unknown type
     editor: persistReducer(editorPersistConfig, editorReducer),
     contracts: contractsReducer,
+    [toolsApi.reducerPath]: toolsApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware({
+    const middlewareConfig = {
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    });
+    };
+    const apiMiddlewares = [toolsApi.middleware];
+
+    const middleware = getDefaultMiddleware(middlewareConfig).concat(
+      ...apiMiddlewares
+    );
+
+    return middleware;
   },
 });
+
+setupListeners(store.dispatch);
 
 export const persistor = persistStore(store);
 

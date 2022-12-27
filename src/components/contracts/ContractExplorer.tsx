@@ -17,7 +17,7 @@ export const ContractExplorer = () => {
   const provider = useProvider({ chainId: selectedConfig?.chainId });
 
   const signerOrProvider = useMemo(
-    () => signer || provider,
+    () => signer ?? provider,
     [signer, provider]
   );
 

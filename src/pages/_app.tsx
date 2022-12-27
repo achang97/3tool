@@ -1,14 +1,16 @@
+import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Box } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { Toolbar } from '@app/components/toolbar/Toolbar';
-import { theme } from '@app/utils/theme';
+import { theme } from '@app/utils/mui';
 import { store, persistor } from '@app/redux/store';
 import { wagmiClient, ethereumClient } from '@app/utils/wallet';
 import {
   AUTH0_CLIENT_ID,
   AUTH0_DOMAIN,
+  MSW_API,
   WALLETCONNECT_PROJECT_ID,
 } from '@app/utils/constants';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -21,7 +23,21 @@ import { Auth0RedirectWrapper } from '@app/components/auth0/Auth0RedirectWrapper
 import '@app/styles/globals.css';
 import '@app/styles/react-grid-layout.css';
 
+// Start MSW on the server
+if (MSW_API) {
+  // eslint-disable-next-line global-require
+  require('@app/mocks');
+}
+
 const App = ({ Component, pageProps }: AppProps) => {
+  // Start MSW on the browser
+  useEffect(() => {
+    if (MSW_API) {
+      // eslint-disable-next-line global-require
+      require('@app/mocks');
+    }
+  }, []);
+
   return (
     <>
       <Head>

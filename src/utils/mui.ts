@@ -1,4 +1,7 @@
-import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
+import {
+  experimental_extendTheme as extendTheme,
+  SxProps,
+} from '@mui/material/styles';
 
 export const theme = extendTheme({
   typography: {
@@ -25,3 +28,13 @@ export const theme = extendTheme({
     },
   },
 });
+
+export const lineClamp = (numLines: number): SxProps => {
+  return {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: numLines,
+    WebkitBoxOrient: 'vertical',
+  };
+};

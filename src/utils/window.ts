@@ -5,3 +5,7 @@ export const isInBounds = (
 ): boolean => {
   return x >= left && x <= right && y >= top && y <= bottom;
 };
+
+export const getTitle = (title: string) => {
+  return `${title} - ACA Labs`;
+};

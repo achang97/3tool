@@ -4,12 +4,13 @@ import Head from 'next/head';
 import { ToolEditorCanvas } from '@app/components/editor/ToolEditorCanvas/ToolEditorCanvas';
 import { ToolEditorSidebar } from '@app/components/editor/ToolEditorSidebar/ToolEditorSidebar';
 import { ToolEditorQueryBuilder } from '@app/components/editor/ToolEditorQueryBuilder/ToolEditorQueryBuilder';
+import { getTitle } from '@app/utils/window';
 
 const ToolEditor = () => {
   return (
     <>
       <Head>
-        <title>Tool Editor</title>
+        <title>{getTitle('Tool Editor')}</title>
       </Head>
       <Box
         data-testid="tool-editor"

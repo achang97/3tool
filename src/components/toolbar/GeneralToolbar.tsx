@@ -36,7 +36,7 @@ export const GeneralToolbar = () => {
     return (
       <>
         {AUTHENTICATED_LINKS.map(({ to, text }) => (
-          <Button component={Link} key={to} href={to} sx={{ mx: 1 }}>
+          <Button component={Link} key={to} href={to} sx={{ marginX: 1 }}>
             {text}
           </Button>
         ))}

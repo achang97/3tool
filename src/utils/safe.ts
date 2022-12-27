@@ -69,7 +69,7 @@ export const canExecuteTransaction = async (
 
   const threshold = await safeSdk.getThreshold();
   const transaction = await safeService.getTransaction(safeTransactionHash);
-  const numConfirmations = transaction.confirmations?.length || 0;
+  const numConfirmations = transaction.confirmations?.length ?? 0;
 
   const signerAddress = await signer.getAddress();
   const hasConfirmed = transaction.confirmations?.some(

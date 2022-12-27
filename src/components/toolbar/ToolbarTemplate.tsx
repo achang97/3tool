@@ -33,10 +33,13 @@ export const ToolbarTemplate = ({
   return (
     <Box
       sx={{
-        height: '48px',
+        height: '60px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        borderBottom: 1,
+        borderColor: 'divider',
+        paddingX: 1,
       }}
       data-testid={testId}
     >
