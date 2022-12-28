@@ -1,4 +1,5 @@
 import { useCreateToolMutation } from '@app/redux/services/tools';
+import { parseApiError } from '@app/utils/api';
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
@@ -6,6 +7,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
@@ -13,6 +15,7 @@ import {
   FormEvent,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
@@ -24,14 +27,17 @@ type CreateToolDialogProps = {
 export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
   const [name, setName] = useState('');
 
-  const [createTool, { data: newTool, isLoading }] = useCreateToolMutation();
+  const [createTool, { data: newTool, isLoading, error }] =
+    useCreateToolMutation();
   const { push } = useRouter();
 
   useEffect(() => {
     if (newTool) {
+      onClose();
+      setName('');
       push(`/editor/${newTool.id}`);
     }
-  }, [newTool, push]);
+  }, [newTool, onClose, push]);
 
   const handleNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -44,6 +50,10 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
     },
     [createTool, name]
   );
+
+  const errorMessage = useMemo(() => {
+    return error && parseApiError(error);
+  }, [error]);
 
   return (
     <Dialog onClose={onClose} open={open} fullWidth>
@@ -65,9 +75,18 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
               type="submit"
               loading={isLoading}
               sx={{ marginTop: 1 }}
+              disabled={!name || isLoading}
             >
               Create tool
             </LoadingButton>
+            {errorMessage && (
+              <Typography
+                sx={{ color: 'error.main', textAlign: 'center', marginTop: 1 }}
+                variant="body2"
+              >
+                {errorMessage}
+              </Typography>
+            )}
           </Box>
         </form>
       </DialogContent>

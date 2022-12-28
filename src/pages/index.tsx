@@ -24,6 +24,7 @@ const Tools = () => {
               id={tool.id}
               name={tool.name}
               updatedAt={tool.updatedAt}
+              creator={tool.creator}
             />
           ))}
         </Box>

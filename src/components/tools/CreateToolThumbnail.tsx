@@ -1,5 +1,6 @@
-import { Button, Icon } from '@mui/material';
 import { useCallback, useState } from 'react';
+import { Button } from '@mui/material';
+import { Add } from '@mui/icons-material';
 import { CreateToolDialog } from './CreateToolDialog';
 import { ThumbnailContainer } from './ThumbnailContainer';
 
@@ -16,11 +17,17 @@ export const CreateToolThumbnail = () => {
 
   return (
     <>
-      <ThumbnailContainer onClick={handleDialogOpen}>
-        <Icon fontSize="large" color="primary" sx={{ marginBottom: 1 }}>
-          add
-        </Icon>
-        <Button variant="contained">Start a new project</Button>
+      <ThumbnailContainer
+        icon={<Add fontSize="inherit" color="primary" />}
+        onClick={handleDialogOpen}
+      >
+        <Button
+          startIcon={<Add fontSize="inherit" />}
+          variant="contained"
+          fullWidth
+        >
+          New tool
+        </Button>
       </ThumbnailContainer>
       <CreateToolDialog open={isDialogOpen} onClose={handleDialogClose} />
     </>

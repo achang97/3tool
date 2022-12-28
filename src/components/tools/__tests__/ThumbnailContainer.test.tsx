@@ -2,6 +2,7 @@ import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThumbnailContainer } from '../ThumbnailContainer';
 
+const mockIcon = 'icon';
 const mockChildren = 'children';
 const mockHandleClick = jest.fn();
 
@@ -12,7 +13,17 @@ describe('ThumbnailContainer', () => {
 
   it('renders children', () => {
     const result = render(
-      <ThumbnailContainer onClick={mockHandleClick}>
+      <ThumbnailContainer icon={mockIcon} onClick={mockHandleClick}>
+        {mockChildren}
+      </ThumbnailContainer>
+    );
+
+    expect(result.getByText(mockIcon)).toBeDefined();
+  });
+
+  it('renders children', () => {
+    const result = render(
+      <ThumbnailContainer icon={mockIcon} onClick={mockHandleClick}>
         {mockChildren}
       </ThumbnailContainer>
     );
@@ -22,7 +33,7 @@ describe('ThumbnailContainer', () => {
 
   it('calls onClick when container is clicked', async () => {
     const result = render(
-      <ThumbnailContainer onClick={mockHandleClick}>
+      <ThumbnailContainer icon={mockIcon} onClick={mockHandleClick}>
         {mockChildren}
       </ThumbnailContainer>
     );

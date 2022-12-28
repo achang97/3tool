@@ -4,8 +4,20 @@ import { Tool } from '@app/types';
 import ToolsPage from '@app/pages';
 
 const mockTools: Tool[] = [
-  { id: '1', name: 'Tool 1', createdAt: new Date(), updatedAt: new Date() },
-  { id: '2', name: 'Tool 2', createdAt: new Date(), updatedAt: new Date() },
+  {
+    id: '1',
+    name: 'Tool 1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    creator: { name: 'Andrew Chang' },
+  },
+  {
+    id: '2',
+    name: 'Tool 2',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    creator: { name: 'Andrew Chang' },
+  },
 ];
 
 const mockNewTool: Tool = {
@@ -13,6 +25,7 @@ const mockNewTool: Tool = {
   name: 'Tool 3',
   createdAt: new Date(),
   updatedAt: new Date(),
+  creator: { name: 'Andrew Chang' },
 };
 
 const mockPush = jest.fn();
@@ -39,7 +52,7 @@ describe('Home', () => {
 
     const result = render(<ToolsPage />);
 
-    const createThumbnailText = result.getByText('Start a new project');
+    const createThumbnailText = result.getByText('New tool');
     userEvent.click(createThumbnailText);
 
     const input = await result.findByTestId('create-tool-dialog-input');

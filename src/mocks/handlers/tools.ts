@@ -9,18 +9,27 @@ const TOOLS: Tool[] = [
     name: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
+    creator: {
+      name: 'Andrew Chang',
+    },
   },
   {
     id: '2',
     name: 'Script Dashboard',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
+    creator: {
+      name: 'Akshay Ramaswamy',
+    },
   },
   {
     id: '3',
     name: 'Topping Up Nodes',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
+    creator: {
+      name: 'Chetan Rane',
+    },
   },
 ];
 
@@ -40,11 +49,19 @@ export const toolHandlers = [
   rest.post('*/api/tools', async (req, res, ctx) => {
     const body = await req.json();
 
+    if (TOOLS.some((tool) => tool.name === body.name)) {
+      return res(
+        ctx.status(400),
+        ctx.json({ message: `Tool with name "${body.name}" already exists.` })
+      );
+    }
+
     const newTool: Tool = {
       id: crypto.randomUUID(),
       name: body.name,
       createdAt: new Date(),
       updatedAt: new Date(),
+      creator: { name: 'Andrew Chang' },
     };
     TOOLS.push(newTool);
 

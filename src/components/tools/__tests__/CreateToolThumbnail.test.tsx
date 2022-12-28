@@ -23,13 +23,13 @@ describe('CreateToolThumbnail', () => {
   it('renders description', () => {
     const result = render(<CreateToolThumbnail />);
 
-    expect(result.getByText('Start a new project')).toBeDefined();
+    expect(result.getByText('New tool')).toBeDefined();
   });
 
   it('opens dialog on click', async () => {
     const result = render(<CreateToolThumbnail />);
 
-    userEvent.click(result.getByText('Start a new project'));
+    userEvent.click(result.getByText('New tool'));
     await waitFor(() => {
       expect(result.getByText('Create new tool')).toBeDefined();
     });
@@ -43,7 +43,7 @@ describe('CreateToolThumbnail', () => {
       </>
     );
 
-    userEvent.click(result.getByText('Start a new project'));
+    userEvent.click(result.getByText('New tool'));
     await waitFor(() => {
       expect(result.getByText('Create new tool')).toBeDefined();
     });
