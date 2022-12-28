@@ -49,6 +49,13 @@ export const toolHandlers = [
   rest.post('*/api/tools', async (req, res, ctx) => {
     const body = await req.json();
 
+    if (TOOLS.some((tool) => tool.name === body.name)) {
+      return res(
+        ctx.status(400),
+        ctx.json({ message: `Tool with name "${body.name}" already exists.` })
+      );
+    }
+
     const newTool: Tool = {
       id: crypto.randomUUID(),
       name: body.name,

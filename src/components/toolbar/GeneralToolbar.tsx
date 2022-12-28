@@ -112,7 +112,11 @@ export const GeneralToolbar = () => {
           data-testid="general-toolbar-menu"
           sx={{ padding: 2 }}
         >
-          <MenuItem component={Link} href="/settings">
+          <MenuItem
+            component={Link}
+            href="/settings"
+            data-testid="general-toolbar-settings"
+          >
             <MenuItemContent
               icon={<Tune fontSize="inherit" />}
               text="Settings"

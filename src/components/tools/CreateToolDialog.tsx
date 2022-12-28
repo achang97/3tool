@@ -29,9 +29,11 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
 
   useEffect(() => {
     if (newTool) {
+      onClose();
+      setName('');
       push(`/editor/${newTool.id}`);
     }
-  }, [newTool, push]);
+  }, [newTool, onClose, push]);
 
   const handleNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -65,7 +67,7 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
               type="submit"
               loading={isLoading}
               sx={{ marginTop: 1 }}
-              disabled={!name}
+              disabled={!name || isLoading}
             >
               Create tool
             </LoadingButton>

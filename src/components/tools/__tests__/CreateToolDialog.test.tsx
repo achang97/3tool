@@ -78,7 +78,7 @@ describe('CreateToolDialog', () => {
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  it('navigates to /editor/:id after successful creation of tool', async () => {
+  it('navigates to /editor/:id and resets state after successful creation of tool', async () => {
     const mockNewTool = { id: 'new-tool-id' };
     (useCreateToolMutation as jest.Mock).mockImplementationOnce(() => [
       mockCreateTool,
@@ -90,6 +90,8 @@ describe('CreateToolDialog', () => {
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledTimes(1);
       expect(mockPush).toHaveBeenCalledWith(`/editor/${mockNewTool.id}`);
+
+      expect(mockHandleClose).toHaveBeenCalledTimes(1);
     });
   });
 });

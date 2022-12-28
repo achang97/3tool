@@ -58,8 +58,10 @@ describe('GeneralToolbar', () => {
 
     userEvent.click(result.getByTestId(avatarId));
 
-    const settingsNav = await result.findByText('Settings');
+    const settingsNav = await result.findByTestId('general-toolbar-settings');
+
     expect(settingsNav.getAttribute('href')).toEqual('/settings');
+    expect(settingsNav).toHaveTextContent('Settings');
   });
 
   it('logs out the user and toggles dropdown menu', async () => {

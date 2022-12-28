@@ -4,6 +4,18 @@ import {
 } from '@mui/material/styles';
 
 export const theme = extendTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: '#1890FF',
+        },
+      },
+    },
+  },
+  shape: {
+    borderRadius: 12,
+  },
   typography: {
     fontFamily: [
       'Rubik',
@@ -19,12 +31,8 @@ export const theme = extendTheme({
       'Helvetica Neue',
       'sans-serif',
     ].join(','),
-  },
-  components: {
-    MuiButtonBase: {
-      styleOverrides: {
-        root: 'text-transform: none !important;',
-      },
+    button: {
+      textTransform: 'none',
     },
   },
 });
