@@ -1,7 +1,16 @@
-import { useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { UserAvatar } from '@app/components/common/UserAvatar';
-import { IconButton, Menu, MenuItem, Tab, Tabs } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
+import { Tune, Logout } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ToolbarTemplate } from './ToolbarTemplate';
@@ -10,6 +19,31 @@ const AUTHENTICATED_LINKS = [
   { to: '/', text: 'Tools' },
   { to: '/resources', text: 'Resources' },
 ];
+
+type MenuItemOptionProps = {
+  icon: ReactNode;
+  text: ReactNode;
+  color?: string;
+};
+
+const MenuItemContent = ({ icon, text, color }: MenuItemOptionProps) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        width: '150px',
+        fontSize: '0.9rem',
+        color,
+      }}
+    >
+      {icon}
+      <Typography sx={{ marginLeft: 2.5, fontSize: 'inherit' }}>
+        {text}
+      </Typography>
+    </Box>
+  );
+};
 
 export const GeneralToolbar = () => {
   const { logout, user } = useAuth0();
@@ -76,11 +110,21 @@ export const GeneralToolbar = () => {
           onClose={handleMenuClose}
           onClick={handleMenuClose}
           data-testid="general-toolbar-menu"
+          sx={{ padding: 2 }}
         >
           <MenuItem component={Link} href="/settings">
-            Settings
+            <MenuItemContent
+              icon={<Tune fontSize="inherit" />}
+              text="Settings"
+            />
           </MenuItem>
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem onClick={handleLogout}>
+            <MenuItemContent
+              icon={<Logout fontSize="inherit" />}
+              text="Logout"
+              color="error.main"
+            />
+          </MenuItem>
         </Menu>
       </>
     );
