@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Avatar, IconButton, Menu, MenuItem, Tab, Tabs } from '@mui/material';
+import { UserAvatar } from '@app/components/common/UserAvatar';
+import { IconButton, Menu, MenuItem, Tab, Tabs } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ToolbarTemplate } from './ToolbarTemplate';
@@ -67,7 +68,7 @@ export const GeneralToolbar = () => {
           onClick={handleMenuOpen}
           data-testid="general-toolbar-avatar"
         >
-          <Avatar sx={{ width: 32, height: 32 }}>{user?.name?.[0]}</Avatar>
+          <UserAvatar name={user?.name} size={40} />
         </IconButton>
         <Menu
           anchorEl={menuAnchor}
