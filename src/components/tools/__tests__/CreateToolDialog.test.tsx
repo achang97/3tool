@@ -1,6 +1,7 @@
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useCreateToolMutation } from '@app/redux/services/tools';
+import { ApiError } from '@app/types/api';
 import { CreateToolDialog } from '../CreateToolDialog';
 
 const mockHandleClose = jest.fn();
@@ -93,5 +94,21 @@ describe('CreateToolDialog', () => {
 
       expect(mockHandleClose).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('renders error message after failed creation', () => {
+    const mockError: ApiError = {
+      status: 400,
+      data: {
+        message: 'Mock Error Message',
+      },
+    };
+    (useCreateToolMutation as jest.Mock).mockImplementationOnce(() => [
+      mockCreateTool,
+      { error: mockError },
+    ]);
+
+    const result = render(<CreateToolDialog onClose={mockHandleClose} open />);
+    expect(result.getByText(mockError.data.message)).toBeDefined();
   });
 });
