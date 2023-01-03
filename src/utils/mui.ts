@@ -135,6 +135,13 @@ export const theme = extendTheme({
         color: 'text.primary',
       },
     },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: 'var(--mui-palette-greyscale-icon-main)',
+        },
+      },
+    },
   },
 });
 
