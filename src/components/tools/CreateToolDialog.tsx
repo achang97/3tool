@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
-  Typography,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import {
@@ -67,6 +66,8 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
               value={name}
               onChange={handleNameChange}
               required
+              error={!!errorMessage}
+              helperText={errorMessage}
               inputProps={{
                 'data-testid': 'create-tool-dialog-input',
               }}
@@ -79,14 +80,6 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
             >
               Create tool
             </LoadingButton>
-            {errorMessage && (
-              <Typography
-                sx={{ color: 'error.main', textAlign: 'center', marginTop: 1 }}
-                variant="body2"
-              >
-                {errorMessage}
-              </Typography>
-            )}
           </Box>
         </form>
       </DialogContent>

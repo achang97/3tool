@@ -35,6 +35,19 @@
         "prop": "ignore"
       }
     ],
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/stories/**/*.*",
+          "**/tests/**/*.*",
+          "**/__tests__/**/*.*",
+          "*.test.tsx",
+          "*.test.ts"
+        ],
+        "peerDependencies": true
+      }
+    ]
   }
 }

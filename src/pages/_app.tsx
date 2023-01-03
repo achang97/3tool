@@ -26,7 +26,7 @@ import '@app/styles/react-grid-layout.css';
 // Start MSW on the server
 if (MSW_API) {
   // eslint-disable-next-line global-require
-  require('@app/mocks');
+  require('@mocks/init');
 }
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -34,7 +34,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     if (MSW_API) {
       // eslint-disable-next-line global-require
-      require('@app/mocks');
+      require('@mocks/init');
     }
   }, []);
 

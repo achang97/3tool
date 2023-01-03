@@ -38,7 +38,9 @@ const MenuItemContent = ({ icon, text, color }: MenuItemOptionProps) => {
       }}
     >
       {icon}
-      <Typography sx={{ marginLeft: 2.5, fontSize: 'inherit' }}>
+      <Typography
+        sx={{ marginLeft: 2.5, fontSize: 'inherit', color: 'inherit' }}
+      >
         {text}
       </Typography>
     </Box>
@@ -88,7 +90,6 @@ export const GeneralToolbar = () => {
             sx={{ marginX: 1, height: '100%' }}
             label={text}
             value={to}
-            disableRipple
           />
         ))}
       </Tabs>
