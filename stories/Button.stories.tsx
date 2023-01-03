@@ -3,19 +3,37 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Button } from '@mui/material';
 
 export default {
-  title: 'Example/Button',
+  title: 'Button',
   component: Button,
+  argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['contained', 'raised', 'outlined', 'text'],
+      defaultValue: 'contained',
+    },
+    color: {
+      control: { type: 'select' },
+      options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'],
+      defaultValue: 'primary',
+    },
+    disabled: {
+      control: 'boolean',
+      defaultValue: false,
+    },
+  },
 } as ComponentMeta<typeof Button>;
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const Contained = Template.bind({});
+Contained.args = {
+  variant: 'contained',
   children: 'Button',
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
+export const Raised = Template.bind({});
+Raised.args = {
+  variant: 'raised',
   children: 'Button',
 };
 

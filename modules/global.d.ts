@@ -1,9 +1,9 @@
 declare module 'etherscan-api' {
   export type EtherscanClient = {
     contract: {
-      getabi: (address: string) => {
+      getabi: (address: string) => Promise<{
         result: import('abitype').Abi;
-      };
+      }>;
     };
   };
 

@@ -88,7 +88,6 @@ export const GeneralToolbar = () => {
             sx={{ marginX: 1, height: '100%' }}
             label={text}
             value={to}
-            disableRipple
           />
         ))}
       </Tabs>
