@@ -24,7 +24,7 @@ const Error404 = () => {
             zIndex: 0,
           }}
         >
-          <WebAssetOff sx={{ fontSize: '100px' }} />
+          <WebAssetOff sx={{ fontSize: '100px', color: 'text.primary' }} />
           <Typography variant="h2">Whoops!</Typography>
           <Typography variant="h6" sx={{ marginTop: 1 }}>
             It seems like the page you’re looking for is missing.
