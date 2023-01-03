@@ -9,6 +9,29 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/styles/createPalette' {
+  interface GreyscalePalette {
+    main: string;
+    dark: string;
+  }
+
+  interface Greyscale {
+    disabled: string;
+    border: string;
+    primary: GreyscalePalette;
+    icon: GreyscalePalette;
+    offwhite: GreyscalePalette;
+  }
+
+  interface Palette {
+    greyscale: Greyscale;
+  }
+
+  interface PaletteOptions {
+    greyscale: Greyscale;
+  }
+}
+
 export const theme = extendTheme({
   colorSchemes: {
     light: {
@@ -23,6 +46,22 @@ export const theme = extendTheme({
           // which is unconventional.
           secondary: '#212B36',
           disabled: '#A2A9B9',
+        },
+        greyscale: {
+          disabled: '#E8E8E8',
+          border: '#CDD6E1',
+          primary: {
+            main: '#DFE3E8',
+            dark: '#B6C2D0',
+          },
+          icon: {
+            main: '#A2A9B9',
+            dark: '#9099AD',
+          },
+          offwhite: {
+            main: '#F7F7F7',
+            dark: '#F2F2F2',
+          },
         },
       },
     },
@@ -82,6 +121,9 @@ export const theme = extendTheme({
           style: {
             borderWidth: '2px !important',
             borderColor: 'var(--primary-main)',
+            ':hover': {
+              background: '#DFE3E8',
+            },
           },
         },
       ],
