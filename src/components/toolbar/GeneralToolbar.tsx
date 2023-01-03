@@ -38,7 +38,9 @@ const MenuItemContent = ({ icon, text, color }: MenuItemOptionProps) => {
       }}
     >
       {icon}
-      <Typography sx={{ marginLeft: 2.5, fontSize: 'inherit' }}>
+      <Typography
+        sx={{ marginLeft: 2.5, fontSize: 'inherit', color: 'inherit' }}
+      >
         {text}
       </Typography>
     </Box>

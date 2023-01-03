@@ -53,7 +53,7 @@ export const ToolThumbnail = ({
           <Typography variant="subtitle1" sx={{ ...lineClamp(1) }}>
             {name}
           </Typography>
-          <Typography variant="caption">
+          <Typography variant="caption" color="text.tertiary">
             Updated {moment(updatedAt).fromNow()}
           </Typography>
         </Box>

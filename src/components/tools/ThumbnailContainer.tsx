@@ -20,7 +20,7 @@ export const ThumbnailContainer = ({
         alignItems: 'center',
         padding: 3,
         margin: 2,
-        backgroundColor: 'grey.100',
+        backgroundColor: 'greyscale.offwhite.dark',
         borderRadius: 2,
         cursor: 'pointer',
         width: '300px',

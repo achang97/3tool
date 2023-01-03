@@ -30,6 +30,10 @@ declare module '@mui/material/styles/createPalette' {
   interface PaletteOptions {
     greyscale: Greyscale;
   }
+
+  interface TypeText {
+    tertiary: string;
+  }
 }
 
 export const theme = extendTheme({
@@ -41,11 +45,9 @@ export const theme = extendTheme({
           dark: '#1168B9',
         },
         text: {
-          primary: '#667080',
-          // NOTE: The secondary color is actually darker than the primary color,
-          // which is unconventional.
-          secondary: '#212B36',
-          disabled: '#A2A9B9',
+          primary: '#505B6B',
+          secondary: '#667080',
+          tertiary: '#A2A9B9',
         },
         greyscale: {
           disabled: '#E8E8E8',
@@ -107,9 +109,9 @@ export const theme = extendTheme({
         {
           props: { variant: 'raised' },
           style: {
-            background: '#DFE3E8',
+            background: 'var(--mui-palette-greyscale-primary-main)',
             ':hover': {
-              background: '#CDD6E1',
+              background: 'var(--mui-palette-greyscale-border)',
             },
             ':active': {
               boxShadow: 'inset 0px 2px 6px rgba(0, 0, 0, 0.16)',
@@ -120,13 +122,18 @@ export const theme = extendTheme({
           props: { variant: 'outlined' },
           style: {
             borderWidth: '2px !important',
-            borderColor: 'var(--primary-main)',
+            borderColor: 'var(--mui-palette-primary-main)',
             ':hover': {
-              background: '#DFE3E8',
+              background: 'var(--mui-palette-greyscale-primary-main)',
             },
           },
         },
       ],
+    },
+    MuiTypography: {
+      defaultProps: {
+        color: 'text.primary',
+      },
     },
   },
 });
