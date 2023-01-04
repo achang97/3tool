@@ -9,7 +9,7 @@ const Settings = () => {
         <title>{getTitle('Settings')}</title>
       </Head>
       <main>
-        <Box data-testid="settings">Settings</Box>
+        <Box>Settings</Box>
       </main>
     </>
   );
