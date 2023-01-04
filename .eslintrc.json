@@ -41,6 +41,7 @@
       {
         "devDependencies": [
           "**/stories/**/*.*",
+          "**/mocks/**/*.*",
           "**/tests/**/*.*",
           "**/__tests__/**/*.*",
           "*.test.tsx",

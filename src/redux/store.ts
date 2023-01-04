@@ -14,6 +14,7 @@ import storage from 'redux-persist/lib/storage';
 import editorReducer from './features/editorSlice';
 import contractsReducer from './features/contractsSlice';
 import { toolsApi } from './services/tools';
+import { resourcesApi } from './services/resources';
 
 const editorPersistConfig = {
   key: 'editor',
@@ -27,6 +28,7 @@ export const store = configureStore({
     editor: persistReducer(editorPersistConfig, editorReducer),
     contracts: contractsReducer,
     [toolsApi.reducerPath]: toolsApi.reducer,
+    [resourcesApi.reducerPath]: resourcesApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     const middlewareConfig = {
@@ -34,7 +36,7 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     };
-    const apiMiddlewares = [toolsApi.middleware];
+    const apiMiddlewares = [toolsApi.middleware, resourcesApi.middleware];
 
     const middleware = getDefaultMiddleware(middlewareConfig).concat(
       ...apiMiddlewares
