@@ -12,7 +12,6 @@ const Error404 = () => {
       </Head>
       <main>
         <Box
-          data-testid="error-404"
           sx={{
             height: '100%',
             display: 'flex',

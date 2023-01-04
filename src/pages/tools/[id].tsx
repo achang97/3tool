@@ -9,7 +9,7 @@ const ToolViewer = () => {
         <title>{getTitle('Tool Viewer')}</title>
       </Head>
       <main>
-        <Box data-testid="tool-viewer">Tool Viewer</Box>
+        <Box>Tool Viewer</Box>
       </main>
     </>
   );

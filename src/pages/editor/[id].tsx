@@ -13,10 +13,7 @@ const ToolEditor = () => {
         <title>{getTitle('Tool Editor')}</title>
       </Head>
       <main>
-        <Box
-          data-testid="tool-editor"
-          sx={{ width: '100%', height: '100%', display: 'flex' }}
-        >
+        <Box sx={{ width: '100%', height: '100%', display: 'flex' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', flex: 3 }}>
             <Box sx={{ flex: 3 }}>
               <Web3Button />
