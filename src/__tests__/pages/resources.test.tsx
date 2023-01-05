@@ -9,6 +9,6 @@ describe('Resources', () => {
   it('renders page title', () => {
     const result = render(<ResourcesPage />);
 
-    expect(result.getByText('Resources')).toBeDefined();
+    expect(result.getByText('Resource Library')).toBeDefined();
   });
 });
