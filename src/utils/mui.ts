@@ -7,6 +7,7 @@ import {
 import { gridClasses } from '@mui/x-data-grid';
 
 import type {} from '@mui/x-data-grid/themeAugmentation';
+import type {} from '@mui/lab/themeAugmentation';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
@@ -107,7 +108,15 @@ export const theme = extendTheme({
         disableRipple: true,
       },
     },
+    MuiLoadingButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
+    },
     MuiButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
       variants: [
         {
           props: { variant: 'contained' },
@@ -157,7 +166,7 @@ export const theme = extendTheme({
               },
             },
           },
-          [`.${gridClasses.row}:nth-child(even)`]: {
+          [`.${gridClasses.row}:nth-of-type(even)`]: {
             '&:not(:hover):not(.Mui-hovered)': {
               backgroundColor: palette.greyscale.offwhite.main,
             },
@@ -208,6 +217,13 @@ export const theme = extendTheme({
           [`.${gridClasses.columnSeparator}`]: {
             display: 'none',
           },
+        },
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          padding: '8px 24px',
         },
       },
     },

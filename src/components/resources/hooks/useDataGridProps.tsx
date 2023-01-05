@@ -32,7 +32,11 @@ export const useDataGridProps = ({
   }, [resources]);
 
   const getRowActions = useCallback(
-    (params: GridRowParams) => {
+    (params: GridRowParams<Resource>) => {
+      if (params.row.type !== 'smart_contract') {
+        return [];
+      }
+
       // TODO: Add delete action
       return [
         <GridActionsCellItem

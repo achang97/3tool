@@ -1,5 +1,7 @@
 import { Resource } from '@app/types';
-import { renderHook } from '@testing-library/react';
+import { render, renderHook, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { ReactNode } from 'react';
 import {
   formatCreatedAt,
   formatResourceType,
@@ -124,6 +126,63 @@ describe('useDataGridProps', () => {
         type: 'actions',
         getActions: expect.any(Function),
         flex: 0,
+      });
+    });
+
+    describe('getActions', () => {
+      it('returns array with edit action if type is smart_contract', async () => {
+        const { result } = renderHook(() =>
+          useDataGridProps({
+            resources: mockResources,
+            onEditClick: mockHandleEditClick,
+          })
+        );
+
+        const mockGridRowParams = {
+          id: 1,
+          row: {
+            type: 'smart_contract',
+          },
+        };
+        // @ts-ignore getActions should be defined
+        const actions = result.current.columns[4].getActions(mockGridRowParams);
+        expect(actions).toHaveLength(1);
+
+        const renderResult = render(
+          <div>
+            {actions.map((action: ReactNode, i: number) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <div key={i}>{action}</div>
+            ))}
+          </div>
+        );
+
+        const editButton = renderResult.getByText('Edit');
+        userEvent.click(editButton);
+        await waitFor(() => {
+          expect(mockHandleEditClick).toHaveBeenCalledWith(
+            mockGridRowParams.id.toString()
+          );
+        });
+      });
+
+      it('returns empty array if type is not smart_contract', () => {
+        const { result } = renderHook(() =>
+          useDataGridProps({
+            resources: mockResources,
+            onEditClick: mockHandleEditClick,
+          })
+        );
+
+        const mockGridRowParams = {
+          id: 1,
+          row: {
+            type: 'dune',
+          },
+        };
+        // @ts-ignore getActions should be defined
+        const actions = result.current.columns[4].getActions(mockGridRowParams);
+        expect(actions).toHaveLength(0);
       });
     });
   });

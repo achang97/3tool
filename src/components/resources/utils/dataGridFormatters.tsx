@@ -26,7 +26,7 @@ export const formatCreatedAt = ({ value }: GridValueFormatterParams<Date>) => {
 export const renderNameCell = ({
   value,
   row,
-}: GridRenderCellParams<string>) => {
+}: GridRenderCellParams<string, Resource>) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
       <Typography>{value}</Typography>

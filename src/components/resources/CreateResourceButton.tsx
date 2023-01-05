@@ -17,6 +17,7 @@ export const CreateResourceButton = () => {
   return (
     <>
       <Button
+        variant="text"
         startIcon={<Add color="primary" />}
         onClick={handleCreateDialogOpen}
       >
