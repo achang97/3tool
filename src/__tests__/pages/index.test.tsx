@@ -47,6 +47,12 @@ describe('Home', () => {
     jest.clearAllMocks();
   });
 
+  it('renders page title', () => {
+    const result = render(<ToolsPage />);
+
+    expect(result.getByText('Tools')).toBeDefined();
+  });
+
   it('renders create tool thumbnail and navigates to /editor/:id page on successful creation', async () => {
     const mockName = 'New Tool Name';
 

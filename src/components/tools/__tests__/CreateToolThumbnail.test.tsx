@@ -16,6 +16,8 @@ jest.mock('@app/redux/services/tools', () => ({
 }));
 
 describe('CreateToolThumbnail', () => {
+  const createToolDialogId = 'create-tool-dialog';
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -31,26 +33,21 @@ describe('CreateToolThumbnail', () => {
 
     userEvent.click(result.getByText('New tool'));
     await waitFor(() => {
-      expect(result.getByText('Create new tool')).toBeDefined();
+      expect(result.getByTestId(createToolDialogId)).toBeDefined();
     });
   });
 
-  it('closes dialog when clicking outside of dialog', async () => {
-    const result = render(
-      <>
-        <CreateToolThumbnail />
-        <div>Close dialog</div>
-      </>
-    );
+  it('closes dialog on blur', async () => {
+    const result = render(<CreateToolThumbnail />);
 
     userEvent.click(result.getByText('New tool'));
     await waitFor(() => {
-      expect(result.getByText('Create new tool')).toBeDefined();
+      expect(result.getByTestId(createToolDialogId)).toBeDefined();
     });
 
-    userEvent.click(result.getByText('Close dialog'));
+    userEvent.keyboard('[Escape]');
     await waitFor(() => {
-      expect(result.queryByTestId('Create new tool')).toBeNull();
+      expect(result.queryByTestId(createToolDialogId)).toBeNull();
     });
   });
 });
