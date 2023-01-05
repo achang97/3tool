@@ -67,13 +67,13 @@ describe('ResourceDataGrid', () => {
     expect(
       result.getByText('(0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3)')
     ).toBeDefined();
-    expect(result.getByText('Jan 4, 2023 6:37 PM')).toBeDefined();
+    expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeDefined();
     expect(result.getByText('3')).toBeDefined();
 
     // Check second row
     expect(result.getByText('Dune')).toBeDefined();
     expect(result.getByText('Dune API')).toBeDefined();
-    expect(result.getByText('Jan 4, 2023 6:33 PM')).toBeDefined();
+    expect(result.getByText('Jan 5, 2023 2:33 AM')).toBeDefined();
     expect(result.getByText('4')).toBeDefined();
   });
 

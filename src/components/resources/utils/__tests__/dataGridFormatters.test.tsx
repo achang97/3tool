@@ -38,7 +38,7 @@ describe('dataGridFormatters', () => {
       const result = formatCreatedAt({
         value: new Date('2023-01-05T02:37:30.083Z'),
       } as GridValueFormatterParams);
-      expect(result).toEqual('Jan 4, 2023 6:37 PM');
+      expect(result).toEqual('Jan 5, 2023 2:37 AM');
     });
   });
 
