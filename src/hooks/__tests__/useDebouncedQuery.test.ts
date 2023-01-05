@@ -3,11 +3,17 @@ import { ChangeEvent } from 'react';
 import { act } from 'react-dom/test-utils';
 import { useDebouncedQuery } from '../useDebouncedQuery';
 
-jest.useFakeTimers();
-
 describe('useDebouncedQuery', () => {
+  beforeAll(() => {
+    jest.useFakeTimers();
+  });
+
   beforeEach(() => {
     jest.clearAllTimers();
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
   });
 
   it('sets query value immediately', () => {
