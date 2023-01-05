@@ -15,18 +15,14 @@ describe('CreateResourceButton', () => {
 
     userEvent.click(result.getByText('Add new resource'));
 
-    await waitFor(() => {
-      expect(result.getByTestId(createResourceDialogId)).toBeDefined();
-    });
+    expect(result.findByTestId(createResourceDialogId)).toBeDefined();
   });
 
   it('closes dialog on blur', async () => {
     const result = render(<CreateResourceButton />);
 
     userEvent.click(result.getByText('Add new resource'));
-    await waitFor(() => {
-      expect(result.getByTestId(createResourceDialogId)).toBeDefined();
-    });
+    expect(result.findByTestId(createResourceDialogId)).toBeDefined();
 
     userEvent.keyboard('[Escape]');
     await waitFor(() => {

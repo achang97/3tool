@@ -32,18 +32,15 @@ describe('CreateToolThumbnail', () => {
     const result = render(<CreateToolThumbnail />);
 
     userEvent.click(result.getByText('New tool'));
-    await waitFor(() => {
-      expect(result.getByTestId(createToolDialogId)).toBeDefined();
-    });
+
+    expect(result.findByTestId(createToolDialogId)).toBeDefined();
   });
 
   it('closes dialog on blur', async () => {
     const result = render(<CreateToolThumbnail />);
 
     userEvent.click(result.getByText('New tool'));
-    await waitFor(() => {
-      expect(result.getByTestId(createToolDialogId)).toBeDefined();
-    });
+    expect(result.findByTestId(createToolDialogId)).toBeDefined();
 
     userEvent.keyboard('[Escape]');
     await waitFor(() => {
