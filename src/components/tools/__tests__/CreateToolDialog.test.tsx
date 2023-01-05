@@ -29,7 +29,7 @@ describe('CreateToolDialog', () => {
       <CreateToolDialog onClose={mockHandleClose} open={false} />
     );
 
-    expect(result.queryByText('Create new tool')).toBeNull();
+    expect(result.queryByTestId('create-tool-dialog')).toBeNull();
   });
 
   it('renders dialog title', () => {

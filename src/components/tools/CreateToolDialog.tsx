@@ -55,7 +55,12 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
   }, [error]);
 
   return (
-    <Dialog onClose={onClose} open={open} fullWidth>
+    <Dialog
+      onClose={onClose}
+      open={open}
+      fullWidth
+      data-testid="create-tool-dialog"
+    >
       <DialogTitle>Create new tool</DialogTitle>
       <DialogContent>
         <form onSubmit={handleCreateTool}>

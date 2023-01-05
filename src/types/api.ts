@@ -14,3 +14,27 @@ export type Tool = {
   updatedAt: Date;
   creator: User;
 };
+
+export type SmartContract = {
+  chainId: number;
+  address: string;
+  abi: string;
+  proxy: boolean;
+  logicAddress?: string;
+  logicAbi?: string;
+};
+
+export type Resource = {
+  id: string;
+  name: string;
+  type: 'smart_contract' | 'dune';
+  createdAt: Date;
+  updatedAt: Date;
+  numLinkedQueries: number;
+  metadata: {
+    smartContract?: SmartContract;
+    dune?: {
+      apiKey: string;
+    };
+  };
+};
