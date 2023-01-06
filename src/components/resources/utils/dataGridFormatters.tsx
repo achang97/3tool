@@ -29,7 +29,7 @@ export const renderNameCell = ({
 }: GridRenderCellParams<string, Resource>) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-      <Typography>{value}</Typography>
+      <span>{value}</span>
       {row.type === 'smart_contract' && (
         <Typography
           variant="caption"
