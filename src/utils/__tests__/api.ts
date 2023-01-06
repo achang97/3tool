@@ -12,6 +12,15 @@ describe('api', () => {
       expect(result).toEqual(mockError.message);
     });
 
+    it('returns default error message if ApiError has no data', () => {
+      const mockError: ApiError = {
+        status: 400,
+        data: null,
+      };
+      const result = parseApiError(mockError);
+      expect(result).toEqual('Something went wrong. Please try again.');
+    });
+
     it('parses message from ApiError', () => {
       const mockError: ApiError = {
         status: 400,
@@ -20,7 +29,7 @@ describe('api', () => {
         },
       };
       const result = parseApiError(mockError);
-      expect(result).toEqual(mockError.data.message);
+      expect(result).toEqual('Mock Error Message');
     });
   });
 });
