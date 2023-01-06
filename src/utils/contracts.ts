@@ -42,7 +42,7 @@ export const getContractAbi = async (
   try {
     response = await etherscanClient.contract.getabi(address);
   } catch (e) {
-    throw new Error(`Etherscan API: ${e}`);
+    throw new Error(e as string);
   }
 
   return JSON.parse(response.result);

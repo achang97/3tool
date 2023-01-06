@@ -1,8 +1,13 @@
 import { Resource } from '@app/types';
-import { render, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
+import { render } from '@tests/utils/renderWithContext';
+import { store } from '@app/redux/store';
+import { setActiveResource } from '@app/redux/features/resourcesSlice';
 import { ResourceDataGrid } from '../ResourceDataGrid';
+
+const dispatchSpy = jest.spyOn(store, 'dispatch');
 
 const mockResources: Resource[] = [
   {
@@ -33,6 +38,7 @@ const mockResources: Resource[] = [
 ];
 
 jest.mock('@app/redux/services/resources', () => ({
+  ...jest.requireActual('@app/redux/services/resources'),
   useGetResourcesQuery: jest.fn(() => ({ data: mockResources })),
 }));
 
@@ -45,7 +51,9 @@ describe('ResourceDataGrid', () => {
     await userEvent.type(input, 'abc');
 
     await waitFor(() => {
-      expect(useGetResourcesQuery).toHaveBeenCalledWith('abc');
+      expect(useGetResourcesQuery).toHaveBeenCalledWith('abc', {
+        refetchOnMountOrArgChange: true,
+      });
     });
   });
 
@@ -86,10 +94,16 @@ describe('ResourceDataGrid', () => {
     const editButton = await result.findByText('Edit');
     userEvent.click(editButton);
     expect(result.findByTestId('edit-resource-dialog')).toBeDefined();
+    await waitFor(() => {
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setActiveResource(mockResources[0])
+      );
+    });
 
     userEvent.keyboard('[Escape]');
     await waitFor(() => {
       expect(result.queryByTestId('edit-resource-dialog')).toBeNull();
+      expect(dispatchSpy).toHaveBeenCalledWith(setActiveResource(undefined));
     });
   });
 });

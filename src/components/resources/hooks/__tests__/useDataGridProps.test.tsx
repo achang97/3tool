@@ -1,5 +1,5 @@
 import { Resource } from '@app/types';
-import { render, renderHook, waitFor } from '@testing-library/react';
+import { render, renderHook, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
 import {
@@ -158,10 +158,12 @@ describe('useDataGridProps', () => {
         );
 
         const editButton = renderResult.getByText('Edit');
-        userEvent.click(editButton);
+        act(() => {
+          userEvent.click(editButton);
+        });
         await waitFor(() => {
           expect(mockHandleEditClick).toHaveBeenCalledWith(
-            mockGridRowParams.id.toString()
+            mockGridRowParams.row
           );
         });
       });

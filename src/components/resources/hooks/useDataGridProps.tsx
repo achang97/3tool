@@ -15,7 +15,7 @@ import {
 
 type HookArgs = {
   resources?: Resource[];
-  onEditClick: (resourceId: string) => void;
+  onEditClick: (resource: Resource) => void;
 };
 
 type HookReturnType = {
@@ -42,7 +42,7 @@ export const useDataGridProps = ({
         <GridActionsCellItem
           icon={<Edit />}
           label="Edit"
-          onClick={() => onEditClick(params.id.toString())}
+          onClick={() => onEditClick(params.row)}
           showInMenu
         />,
       ];
