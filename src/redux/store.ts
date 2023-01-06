@@ -12,6 +12,7 @@ import {
 import { setupListeners } from '@reduxjs/toolkit/query';
 import storage from 'redux-persist/lib/storage';
 import editorReducer from './features/editorSlice';
+import resourcesReducer from './features/resourcesSlice';
 import { toolsApi } from './services/tools';
 import { resourcesApi } from './services/resources';
 
@@ -25,6 +26,7 @@ export const store = configureStore({
   reducer: {
     // @ts-ignore Type check should not use unknown type
     editor: persistReducer(editorPersistConfig, editorReducer),
+    resources: resourcesReducer,
     [toolsApi.reducerPath]: toolsApi.reducer,
     [resourcesApi.reducerPath]: resourcesApi.reducer,
   },

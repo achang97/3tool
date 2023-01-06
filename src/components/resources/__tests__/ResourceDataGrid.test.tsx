@@ -9,8 +9,8 @@ const mockResources: Resource[] = [
     id: '1',
     type: 'smart_contract',
     name: 'Staking Pool Contract',
-    createdAt: new Date('2023-01-05T02:37:30.083Z'),
-    updatedAt: new Date('2023-01-05T02:37:30.083Z'),
+    createdAt: '2023-01-05T02:37:30.083Z',
+    updatedAt: '2023-01-05T02:37:30.083Z',
     numLinkedQueries: 3,
     metadata: {
       smartContract: {
@@ -25,8 +25,8 @@ const mockResources: Resource[] = [
     id: '2',
     type: 'dune',
     name: 'Dune API',
-    createdAt: new Date('2023-01-05T02:33:30.083Z'),
-    updatedAt: new Date('2023-01-05T02:33:30.083Z'),
+    createdAt: '2023-01-05T02:33:30.083Z',
+    updatedAt: '2023-01-05T02:33:30.083Z',
     numLinkedQueries: 4,
     metadata: {},
   },

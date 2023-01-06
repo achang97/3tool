@@ -75,7 +75,7 @@ describe('resources', () => {
   });
 
   describe('useUpdateResourceMutation', () => {
-    it('calls fetch to POST /resources', async () => {
+    it('calls fetch to PUT /resources', async () => {
       const mockId = '1';
       const mockBody: Pick<Resource, 'type' | 'name' | 'metadata'> = {
         type: 'smart_contract',
@@ -92,7 +92,7 @@ describe('resources', () => {
       await waitFor(() =>
         expect(fetch).toHaveBeenCalledWith(
           expect.objectContaining({
-            method: 'POST',
+            method: 'PUT',
             url: `/resources/${mockId}`,
             _bodyInit: JSON.stringify(mockBody),
           })

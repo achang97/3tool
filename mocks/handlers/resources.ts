@@ -92,8 +92,8 @@ export const resourceHandlers = [
       id: crypto.randomUUID(),
       type: body.type,
       name: body.name,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       metadata: body.metadata,
       numLinkedQueries: 0,
     };

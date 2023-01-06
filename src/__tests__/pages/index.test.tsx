@@ -7,15 +7,15 @@ const mockTools: Tool[] = [
   {
     id: '1',
     name: 'Tool 1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     creator: { name: 'Andrew Chang' },
   },
   {
     id: '2',
     name: 'Tool 2',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     creator: { name: 'Andrew Chang' },
   },
 ];
@@ -23,8 +23,8 @@ const mockTools: Tool[] = [
 const mockNewTool: Tool = {
   id: '3',
   name: 'Tool 3',
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
   creator: { name: 'Andrew Chang' },
 };
 

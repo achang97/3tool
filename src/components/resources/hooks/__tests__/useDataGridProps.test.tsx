@@ -15,8 +15,8 @@ const mockResources: Resource[] = [
     id: '1',
     type: 'smart_contract',
     name: 'Test Contract',
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     numLinkedQueries: 1,
     metadata: {
       smartContract: {

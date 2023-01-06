@@ -10,8 +10,8 @@ export type ApiError = {
 export type Tool = {
   id: string;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   creator: User;
 };
 
@@ -28,8 +28,8 @@ export type Resource = {
   id: string;
   name: string;
   type: 'smart_contract' | 'dune';
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   numLinkedQueries: number;
   metadata: {
     smartContract?: SmartContract;
