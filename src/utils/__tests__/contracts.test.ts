@@ -36,7 +36,7 @@ describe('contracts', () => {
       (axios.create as jest.Mock).mockImplementation(() => mockAxiosClient);
 
       mockEtherscanClient.contract.getabi.mockImplementation(() => ({
-        result: [],
+        result: '[]',
       }));
 
       await getContractAbi('0x123', mainnet.id);
@@ -63,7 +63,7 @@ describe('contracts', () => {
     it('returns parsed ABI', async () => {
       const mockAbi = ['123'];
       mockEtherscanClient.contract.getabi.mockImplementation(() => ({
-        result: mockAbi,
+        result: JSON.stringify(mockAbi),
       }));
 
       expect(await getContractAbi('0x0', mainnet.id)).toEqual(mockAbi);

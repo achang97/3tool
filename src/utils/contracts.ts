@@ -45,5 +45,5 @@ export const getContractAbi = async (
     throw new Error(`Etherscan API: ${e}`);
   }
 
-  return response.result;
+  return JSON.parse(response.result);
 };
