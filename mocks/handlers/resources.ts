@@ -101,4 +101,20 @@ export const resourceHandlers = [
 
     return res(ctx.status(201), ctx.json<Resource>(newResource));
   }),
+  rest.put('*/api/resources/:id', async (req, res, ctx) => {
+    const body = await req.json();
+
+    const resource = RESOURCES.find(
+      (currResource) => currResource.id === req.id
+    );
+
+    if (!resource) {
+      return res(ctx.status(400));
+    }
+
+    resource.name = body.name;
+    resource.metadata = body.metadata;
+
+    return res(ctx.status(201), ctx.json<Resource>(resource));
+  }),
 ];

@@ -15,7 +15,9 @@ export const ResourceDataGrid = ({
   __test__disableVirtualization = process.env.NODE_ENV === 'test',
 }: ResourceDataGridProps) => {
   const { query, debouncedQuery, handleQueryChange } = useDebouncedQuery();
-  const { data: resources } = useGetResourcesQuery(debouncedQuery);
+  const { data: resources } = useGetResourcesQuery(debouncedQuery, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const [activeResourceId, setActiveResourceId] = useState<string>();
 

@@ -32,6 +32,16 @@ export const resourcesApi = createApi({
         body,
       }),
     }),
+    updateResource: builder.mutation<
+      Resource,
+      Pick<Resource, 'name' | 'metadata'>
+    >({
+      query: (body) => ({
+        url: '/resources/:id',
+        method: 'PUT',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -39,4 +49,5 @@ export const {
   useGetResourceByIdQuery,
   useGetResourcesQuery,
   useCreateResourceMutation,
+  useUpdateResourceMutation,
 } = resourcesApi;
