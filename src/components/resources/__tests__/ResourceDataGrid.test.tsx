@@ -17,7 +17,7 @@ const mockResources: Resource[] = [
         chainId: 5,
         address: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
         abi: '[{"inputs":[{"internalType":"address","name":"contractLogic","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"stateMutability":"payable","type":"fallback"}]',
-        proxy: false,
+        isProxy: false,
       },
     },
   },

@@ -23,7 +23,7 @@ const mockResources: Resource[] = [
         chainId: 1,
         address: '0x123',
         abi: '[]',
-        proxy: false,
+        isProxy: false,
       },
     },
   },

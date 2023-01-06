@@ -19,7 +19,7 @@ export type SmartContract = {
   chainId: number;
   address: string;
   abi: string;
-  proxy: boolean;
+  isProxy: boolean;
   logicAddress?: string;
   logicAbi?: string;
 };
