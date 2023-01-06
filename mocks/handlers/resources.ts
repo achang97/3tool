@@ -32,9 +32,9 @@ const RESOURCES: Resource[] = [
         address: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
         abi: '[{"inputs":[{"internalType":"address","name":"contractLogic","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"stateMutability":"payable","type":"fallback"}]',
         isProxy: true,
-        logicAbi: '0x73F165E0013a1BfA645f7d867E9cA87d03cDb598',
-        logicAddress:
+        logicAbi:
           '[{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"newAddress","type":"address"}],"name":"CodeAddressUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint8","name":"version","type":"uint8"}],"name":"Initialized","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[],"name":"anotherVariable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getLogicAddress","outputs":[{"internalType":"address","name":"logicAddress","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getThisAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_someVariable","type":"uint256"}],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"proxiableUUID","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"pure","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"otherArg","type":"uint256"}],"name":"setOtherVariable","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"someArg","type":"uint256"}],"name":"setSomeVariable","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"someVariable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newLogic","type":"address"}],"name":"upgrade","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
+        logicAddress: '0x73F165E0013a1BfA645f7d867E9cA87d03cDb598',
       },
     },
   },
@@ -56,7 +56,7 @@ const RESOURCES: Resource[] = [
 export const resourceHandlers = [
   rest.get('*/api/resources/:id', (req, res, ctx) => {
     const resource = RESOURCES.find(
-      (currResource) => currResource.id === req.id
+      (currResource) => currResource.id === req.params.id
     );
 
     if (!resource) {
@@ -105,7 +105,7 @@ export const resourceHandlers = [
     const body = await req.json();
 
     const resource = RESOURCES.find(
-      (currResource) => currResource.id === req.id
+      (currResource) => currResource.id === req.params.id
     );
 
     if (!resource) {
@@ -115,6 +115,6 @@ export const resourceHandlers = [
     resource.name = body.name;
     resource.metadata = body.metadata;
 
-    return res(ctx.status(201), ctx.json<Resource>(resource));
+    return res(ctx.status(200), ctx.json<Resource>(resource));
   }),
 ];

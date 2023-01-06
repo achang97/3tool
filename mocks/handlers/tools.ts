@@ -34,7 +34,7 @@ const TOOLS: Tool[] = [
 
 export const toolHandlers = [
   rest.get('*/api/tools/:id', (req, res, ctx) => {
-    const tool = TOOLS.find((currTool) => currTool.id === req.id);
+    const tool = TOOLS.find((currTool) => currTool.id === req.params.id);
 
     if (!tool) {
       return res(ctx.status(400));
