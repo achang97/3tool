@@ -49,6 +49,12 @@
         ],
         "peerDependencies": true
       }
+    ],
+    "no-param-reassign": [
+      "error",
+      {
+        "ignorePropertyModificationsFor": ["**/redux/features/**/*.*"]
+      }
     ]
   }
 }
