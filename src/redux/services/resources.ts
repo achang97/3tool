@@ -9,6 +9,7 @@ import { API_BASE_URL } from '@app/utils/constants';
 
 export const resourcesApi = createApi({
   reducerPath: 'resourcesApi',
+  tagTypes: ['Resource'],
   baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }) as BaseQueryFn<
     string | FetchArgs,
     unknown,
@@ -18,9 +19,11 @@ export const resourcesApi = createApi({
   endpoints: (builder) => ({
     getResources: builder.query<Resource[], string>({
       query: (name) => `/resources?name=${name}`,
+      providesTags: ['Resource'],
     }),
     getResourceById: builder.query<Resource, string>({
       query: (id) => `/resources/${id}`,
+      providesTags: ['Resource'],
     }),
     createResource: builder.mutation<
       Resource,
@@ -31,16 +34,18 @@ export const resourcesApi = createApi({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['Resource'],
     }),
     updateResource: builder.mutation<
       Resource,
-      Pick<Resource, 'name' | 'metadata'>
+      Pick<Resource, 'id' | 'name' | 'metadata'>
     >({
-      query: (body) => ({
-        url: '/resources/:id',
+      query: ({ id, ...body }) => ({
+        url: `/resources/${id}`,
         method: 'PUT',
         body,
       }),
+      invalidatesTags: ['Resource'],
     }),
   }),
 });
