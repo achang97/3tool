@@ -1,3 +1,4 @@
+import { usePrevious } from '@app/hooks/usePrevious';
 import { getContractAbi } from '@app/utils/contracts';
 import { isAddress } from 'ethers/lib/utils';
 import { useEffect, useState } from 'react';
@@ -23,6 +24,8 @@ export const useFetchAbi = ({
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const prevArgs = usePrevious({ address, chainId });
+
   useEffect(() => {
     const fetchAbi = async () => {
       setIsLoading(true);
@@ -43,8 +46,12 @@ export const useFetchAbi = ({
       return;
     }
 
+    if (prevArgs?.address === address && prevArgs?.chainId === chainId) {
+      return;
+    }
+
     fetchAbi();
-  }, [abi, address, chainId, onAbiChange]);
+  }, [abi, address, chainId, onAbiChange, prevArgs]);
 
   return { error, isLoading };
 };

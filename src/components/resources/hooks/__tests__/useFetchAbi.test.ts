@@ -28,6 +28,26 @@ describe('useFetchAbi', () => {
       expect(getContractAbi).not.toHaveBeenCalled();
     });
 
+    it('does nothing if abi changes to the empty string', () => {
+      const { rerender } = renderHook(() =>
+        useFetchAbi({
+          abi: '[]',
+          chainId: mockChainId,
+          address: mockAddress,
+          onAbiChange: mockHandleAbiChange,
+        })
+      );
+
+      rerender({
+        abi: '',
+        chainId: mockChainId,
+        address: mockAddress,
+        onAbiChange: mockHandleAbiChange,
+      });
+
+      expect(getContractAbi).not.toHaveBeenCalled();
+    });
+
     it('does nothing if abi is defined', () => {
       renderHook(() =>
         useFetchAbi({
