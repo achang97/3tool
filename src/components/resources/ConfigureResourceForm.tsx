@@ -1,3 +1,4 @@
+import { Resource } from '@app/types';
 import {
   Box,
   InputLabel,
@@ -11,7 +12,15 @@ enum ToggleType {
   Blockchain = 'blockchain',
 }
 
-export const ConfigureResourceForm = () => {
+type ConfigureResourceFormProps = {
+  formId: string;
+  onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => void;
+};
+
+export const ConfigureResourceForm = ({
+  formId,
+  onSubmit,
+}: ConfigureResourceFormProps) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ marginBottom: 2 }}>
@@ -31,7 +40,7 @@ export const ConfigureResourceForm = () => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>
-      <ConfigureContractForm />
+      <ConfigureContractForm formId={formId} onSubmit={onSubmit} />
     </Box>
   );
 };

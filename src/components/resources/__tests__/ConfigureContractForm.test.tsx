@@ -1,15 +1,9 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { Resource } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
-import {
-  render,
-  waitFor,
-  act,
-  screen,
-  fireEvent,
-  RenderResult,
-} from '@testing-library/react';
+import { render, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { submitForm } from '@tests/utils/form';
 import { Abi } from 'abitype';
 import { goerli, mainnet } from 'wagmi';
 import { ConfigureContractForm } from '../ConfigureContractForm';
@@ -43,12 +37,6 @@ const mockResource: Resource = {
 describe('ConfigureContractForm', () => {
   const networkSelectId = 'configure-contract-form-network-select';
   const proxyCheckboxId = 'configure-contract-form-proxy-checkbox';
-
-  const submitForm = (result: RenderResult) => {
-    fireEvent.submit(
-      result.container.querySelector(`#${mockFormId}`) as Element
-    );
-  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -291,7 +279,7 @@ describe('ConfigureContractForm', () => {
         );
 
         userEvent.click(result.getByLabelText(/^Network/));
-        userEvent.click(await screen.findByText(mainnet.name));
+        userEvent.click(await result.findByText(mainnet.name));
 
         await waitFor(() => {
           expect(getContractAbi).toHaveBeenCalledTimes(2);
@@ -315,7 +303,7 @@ describe('ConfigureContractForm', () => {
         />
       );
 
-      submitForm(result);
+      submitForm(result, mockFormId);
       expect(mockHandleSubmit).not.toHaveBeenCalled();
     });
 
@@ -333,7 +321,7 @@ describe('ConfigureContractForm', () => {
         'Invalid Contract'
       );
 
-      submitForm(result);
+      submitForm(result, mockFormId);
       expect(mockHandleSubmit).not.toHaveBeenCalled();
     });
 
@@ -352,7 +340,7 @@ describe('ConfigureContractForm', () => {
       );
       await userEvent.type(result.getByLabelText(/^ABI/), 'Invalid JSON');
 
-      submitForm(result);
+      submitForm(result, mockFormId);
       expect(mockHandleSubmit).not.toHaveBeenCalled();
     });
 
@@ -376,7 +364,7 @@ describe('ConfigureContractForm', () => {
         'Invalid Address'
       );
 
-      submitForm(result);
+      submitForm(result, mockFormId);
       expect(mockHandleSubmit).not.toHaveBeenCalled();
     });
 
@@ -401,7 +389,7 @@ describe('ConfigureContractForm', () => {
       );
       await userEvent.type(result.getByLabelText(/^Logic ABI/), 'Invalid JSON');
 
-      submitForm(result);
+      submitForm(result, mockFormId);
       expect(mockHandleSubmit).not.toHaveBeenCalled();
     });
 
@@ -416,7 +404,7 @@ describe('ConfigureContractForm', () => {
       await userEvent.type(result.getByLabelText(/^Name/), 'New Contract');
 
       userEvent.click(result.getByLabelText(/^Network/));
-      userEvent.click(await screen.findByText(goerli.name));
+      userEvent.click(await result.findByText(goerli.name));
 
       await userEvent.type(
         result.getByLabelText(/^Address/),
@@ -429,7 +417,7 @@ describe('ConfigureContractForm', () => {
         '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3'
       );
 
-      submitForm(result);
+      submitForm(result, mockFormId);
       await waitFor(() => {
         expect(mockHandleSubmit).toHaveBeenCalledWith({
           type: 'smart_contract',
@@ -459,14 +447,14 @@ describe('ConfigureContractForm', () => {
       await userEvent.type(result.getByLabelText(/^Name/), 'New Contract');
 
       userEvent.click(result.getByLabelText(/^Network/));
-      userEvent.click(await screen.findByText(goerli.name));
+      userEvent.click(await result.findByText(goerli.name));
 
       await userEvent.type(
         result.getByLabelText(/^Address/),
         '0xf33Cb58287017175CADf990c9e4733823704aA86'
       );
 
-      submitForm(result);
+      submitForm(result, mockFormId);
       await waitFor(() => {
         expect(mockHandleSubmit).toHaveBeenCalledWith({
           type: 'smart_contract',
