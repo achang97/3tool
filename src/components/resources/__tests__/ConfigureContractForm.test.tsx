@@ -242,7 +242,7 @@ describe('ConfigureContractForm', () => {
         await waitFor(() => {
           expect(getContractAbi).toHaveBeenCalledTimes(1);
           expect(result.getByLabelText(/^ABI/)).toHaveValue(
-            JSON.stringify(mockAbi, null, 2)
+            JSON.stringify(mockAbi)
           );
         });
       });
@@ -265,7 +265,7 @@ describe('ConfigureContractForm', () => {
         await waitFor(() => {
           expect(getContractAbi).toHaveBeenCalledTimes(1);
           expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
-            JSON.stringify(mockAbi, null, 2)
+            JSON.stringify(mockAbi)
           );
         });
       });
@@ -284,10 +284,10 @@ describe('ConfigureContractForm', () => {
         await waitFor(() => {
           expect(getContractAbi).toHaveBeenCalledTimes(2);
           expect(result.getByLabelText(/^ABI/)).toHaveValue(
-            JSON.stringify(mockAbi, null, 2)
+            JSON.stringify(mockAbi)
           );
           expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
-            JSON.stringify(mockAbi, null, 2)
+            JSON.stringify(mockAbi)
           );
         });
       });

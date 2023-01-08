@@ -93,7 +93,7 @@ describe('ResourceDataGrid', () => {
 
     const editButton = await result.findByText('Edit');
     userEvent.click(editButton);
-    expect(result.findByTestId('edit-resource-dialog')).toBeDefined();
+    expect(await result.findByTestId('edit-resource-dialog')).toBeDefined();
     await waitFor(() => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         setActiveResource(mockResources[0])

@@ -48,7 +48,7 @@ describe('ConfigureResourceForm', () => {
         name: contractFields.name,
         metadata: {
           smartContract: {
-            chainId: mainnet.id,
+            chainId: contractFields.chainId,
             address: contractFields.address,
             abi: JSON.stringify(mockAbi),
             isProxy: false,

@@ -81,7 +81,7 @@ describe('useFetchAbi', () => {
 
       await waitFor(() => {
         expect(mockHandleAbiChange).toHaveBeenCalledWith(
-          JSON.stringify(mockAbi, null, 2)
+          JSON.stringify(mockAbi)
         );
       });
     });

@@ -70,7 +70,7 @@ describe('CreateResourceDialog', () => {
     expect(result.getByText('Mock Error')).toBeDefined();
   });
 
-  it('calls onSubmit and onClose on click of Save button', async () => {
+  it('calls onSubmit with smart contract resource and onClose on Save button click', async () => {
     const mockAbi: Abi = [];
     (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
 
@@ -92,7 +92,7 @@ describe('CreateResourceDialog', () => {
         name: contractFields.name,
         metadata: {
           smartContract: {
-            chainId: mainnet.id,
+            chainId: contractFields.chainId,
             address: contractFields.address,
             abi: JSON.stringify(mockAbi),
             isProxy: false,

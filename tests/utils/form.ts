@@ -12,18 +12,22 @@ export const completeContractForm = async (
     logicAddress,
     logicAbi,
   }: {
-    name: string;
+    name?: string;
     chainId?: number;
-    address: string;
+    address?: string;
     abi?: string;
     isProxy?: boolean;
     logicAddress?: string;
     logicAbi?: string;
   }
 ) => {
-  await userEvent.type(result.getByLabelText(/^Name/), name);
+  if (name) {
+    await userEvent.type(result.getByLabelText(/^Name/), name);
+  }
 
-  await userEvent.type(result.getByLabelText(/^Address/), address);
+  if (address) {
+    await userEvent.type(result.getByLabelText(/^Address/), address);
+  }
 
   if (abi) {
     await userEvent.type(
@@ -55,10 +59,10 @@ export const completeContractForm = async (
     );
   }
 
-  const proxyCheckbox = result.getByTestId(
-    'configure-contract-form-proxy-checkbox'
-  );
   if (isProxy) {
+    const proxyCheckbox = result.getByTestId(
+      'configure-contract-form-proxy-checkbox'
+    );
     try {
       await waitFor(() => {
         expect(proxyCheckbox).toBeChecked();
