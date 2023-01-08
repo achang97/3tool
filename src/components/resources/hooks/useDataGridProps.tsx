@@ -15,7 +15,7 @@ import {
 
 type HookArgs = {
   resources?: Resource[];
-  onEditClick: (resourceId: string) => void;
+  onEditClick: (resource: Resource) => void;
 };
 
 type HookReturnType = {
@@ -32,13 +32,17 @@ export const useDataGridProps = ({
   }, [resources]);
 
   const getRowActions = useCallback(
-    (params: GridRowParams) => {
+    (params: GridRowParams<Resource>) => {
+      if (params.row.type !== 'smart_contract') {
+        return [];
+      }
+
       // TODO: Add delete action
       return [
         <GridActionsCellItem
           icon={<Edit />}
           label="Edit"
-          onClick={() => onEditClick(params.id.toString())}
+          onClick={() => onEditClick(params.row)}
           showInMenu
         />,
       ];

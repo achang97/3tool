@@ -1,30 +1,43 @@
 import ResourcesPage from '@app/pages/resources';
 import { Resource } from '@app/types';
-import { render, waitFor } from '@testing-library/react';
+import { getContractAbi } from '@app/utils/contracts';
+import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { completeContractForm } from '@tests/utils/form';
+import { render } from '@tests/utils/renderWithContext';
+import { Abi } from 'abitype';
+import { goerli, mainnet } from 'wagmi';
 
 const mockResources: Resource[] = [
   {
     id: '1',
     type: 'smart_contract',
     name: 'Staking Pool Contract',
-    createdAt: new Date('2023-01-05T02:37:30.083Z'),
-    updatedAt: new Date('2023-01-05T02:37:30.083Z'),
+    createdAt: '2023-01-05T02:37:30.083Z',
+    updatedAt: '2023-01-05T02:37:30.083Z',
     numLinkedQueries: 3,
     metadata: {
       smartContract: {
         chainId: 5,
         address: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
         abi: '[{"inputs":[{"internalType":"address","name":"contractLogic","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"stateMutability":"payable","type":"fallback"}]',
-        proxy: false,
+        isProxy: false,
       },
     },
   },
 ];
 
+const mockCreateResource = jest.fn();
+const mockUpdateResource = jest.fn();
+
 jest.mock('@app/redux/services/resources', () => ({
+  ...jest.requireActual('@app/redux/services/resources'),
   useGetResourcesQuery: jest.fn(() => ({ data: mockResources })),
+  useCreateResourceMutation: jest.fn(() => [mockCreateResource, {}]),
+  useUpdateResourceMutation: jest.fn(() => [mockUpdateResource, {}]),
 }));
+
+jest.mock('@app/utils/contracts');
 
 describe('Resources', () => {
   beforeEach(() => {
@@ -50,7 +63,10 @@ describe('Resources', () => {
     expect(result.getByText('3')).toBeDefined();
   });
 
-  it('opens and closes edit dialog', async () => {
+  it('opens edit dialog and updates smart contract resource', async () => {
+    const mockAbi: Abi = [];
+    (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
+
     const result = render(<ResourcesPage />);
 
     const moreButtons = result.getAllByTestId('MoreVertIcon');
@@ -58,23 +74,72 @@ describe('Resources', () => {
 
     const editButton = await result.findByText('Edit');
     userEvent.click(editButton);
-    expect(result.findByTestId('edit-resource-dialog')).toBeDefined();
+    expect(await result.findByTestId('edit-resource-dialog')).toBeDefined();
 
-    userEvent.keyboard('[Escape]');
+    const contractFields = {
+      name: '- Edited',
+      chainId: goerli.id,
+      isProxy: true,
+      logicAddress: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
+    };
+
+    await completeContractForm(result, contractFields);
+    userEvent.click(result.getByText('Save'));
+
     await waitFor(() => {
+      expect(mockUpdateResource).toHaveBeenCalledWith({
+        id: mockResources[0].id,
+        type: 'smart_contract',
+        name: `${mockResources[0].name}${contractFields.name}`,
+        metadata: {
+          smartContract: {
+            chainId: contractFields.chainId,
+            address: mockResources[0].metadata.smartContract?.address,
+            abi: mockResources[0].metadata.smartContract?.abi,
+            isProxy: contractFields.isProxy,
+            logicAddress: contractFields.logicAddress,
+            logicAbi: JSON.stringify(mockAbi),
+          },
+        },
+      });
       expect(result.queryByTestId('edit-resource-dialog')).toBeNull();
     });
   });
 
-  it('opens and closes create dialog', async () => {
+  it('opens create dialog and creates smart contract resource', async () => {
+    const mockAbi: Abi = [];
+    (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
+
     const result = render(<ResourcesPage />);
 
     const createButton = result.getByText('Add new resource');
     userEvent.click(createButton);
-    expect(result.findByTestId('create-resource-dialog')).toBeDefined();
+    expect(await result.findByTestId('create-resource-dialog')).toBeDefined();
 
-    userEvent.keyboard('[Escape]');
+    const contractFields = {
+      name: 'Contract',
+      chainId: mainnet.id,
+      address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
+    };
+
+    await completeContractForm(result, contractFields);
+    userEvent.click(result.getByText('Save'));
+
     await waitFor(() => {
+      expect(mockCreateResource).toHaveBeenCalledWith({
+        type: 'smart_contract',
+        name: contractFields.name,
+        metadata: {
+          smartContract: {
+            chainId: contractFields.chainId,
+            address: contractFields.address,
+            abi: JSON.stringify(mockAbi),
+            isProxy: false,
+            logicAddress: undefined,
+            logicAbi: undefined,
+          },
+        },
+      });
       expect(result.queryByTestId('create-resource-dialog')).toBeNull();
     });
   });

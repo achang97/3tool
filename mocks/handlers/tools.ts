@@ -34,7 +34,7 @@ const TOOLS: Tool[] = [
 
 export const toolHandlers = [
   rest.get('*/api/tools/:id', (req, res, ctx) => {
-    const tool = TOOLS.find((currTool) => currTool.id === req.id);
+    const tool = TOOLS.find((currTool) => currTool.id === req.params.id);
 
     if (!tool) {
       return res(ctx.status(400));
@@ -58,8 +58,8 @@ export const toolHandlers = [
     const newTool: Tool = {
       id: crypto.randomUUID(),
       name: body.name,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       creator: { name: 'Andrew Chang' },
     };
     TOOLS.push(newTool);

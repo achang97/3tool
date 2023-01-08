@@ -28,7 +28,7 @@ const Error404 = () => {
           <Typography variant="h6" sx={{ marginTop: 1 }}>
             It seems like the page you’re looking for is missing.
           </Typography>
-          <Button variant="contained" sx={{ marginTop: 5 }}>
+          <Button sx={{ marginTop: 5 }}>
             <Link href="/">Go back home</Link>
           </Button>
           <Typography

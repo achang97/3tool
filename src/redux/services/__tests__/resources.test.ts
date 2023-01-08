@@ -5,6 +5,7 @@ import {
   useGetResourceByIdQuery,
   useGetResourcesQuery,
   useCreateResourceMutation,
+  useUpdateResourceMutation,
 } from '../resources';
 
 const mockResponse = new Response('response');
@@ -66,6 +67,33 @@ describe('resources', () => {
           expect.objectContaining({
             method: 'POST',
             url: '/resources',
+            _bodyInit: JSON.stringify(mockBody),
+          })
+        )
+      );
+    });
+  });
+
+  describe('useUpdateResourceMutation', () => {
+    it('calls fetch to PUT /resources', async () => {
+      const mockId = '1';
+      const mockBody: Pick<Resource, 'type' | 'name' | 'metadata'> = {
+        type: 'smart_contract',
+        name: 'New Resource',
+        metadata: {},
+      };
+      const { result } = renderHook(() => useUpdateResourceMutation());
+      const [updateResource] = result.current;
+
+      act(() => {
+        updateResource({ id: mockId, ...mockBody });
+      });
+
+      await waitFor(() =>
+        expect(fetch).toHaveBeenCalledWith(
+          expect.objectContaining({
+            method: 'PUT',
+            url: `/resources/${mockId}`,
             _bodyInit: JSON.stringify(mockBody),
           })
         )

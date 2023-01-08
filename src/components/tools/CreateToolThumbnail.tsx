@@ -21,11 +21,7 @@ export const CreateToolThumbnail = () => {
         icon={<Add fontSize="inherit" color="primary" />}
         onClick={handleDialogOpen}
       >
-        <Button
-          startIcon={<Add fontSize="inherit" />}
-          variant="contained"
-          fullWidth
-        >
+        <Button startIcon={<Add fontSize="inherit" />} fullWidth>
           New tool
         </Button>
       </ThumbnailContainer>

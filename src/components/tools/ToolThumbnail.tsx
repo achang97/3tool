@@ -12,7 +12,7 @@ import { ThumbnailContainer } from './ThumbnailContainer';
 type ToolThumbnailProps = {
   id: string;
   name: string;
-  updatedAt: Date;
+  updatedAt: string;
   creator: User;
 };
 

@@ -80,6 +80,7 @@ export const GeneralToolbar = () => {
           display: 'flex',
           alignItems: 'flex-end',
           height: '100%',
+          gap: 2,
         }}
       >
         {AUTHENTICATED_LINKS.map(({ to, text }) => (
@@ -87,7 +88,7 @@ export const GeneralToolbar = () => {
             component={Link}
             key={to}
             href={to}
-            sx={{ marginX: 1, height: '100%' }}
+            sx={{ height: '100%' }}
             label={text}
             value={to}
           />
