@@ -1,4 +1,7 @@
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { useCreateResourceMutation } from '@app/redux/services/resources';
+import { Resource } from '@app/types';
+import { useCallback } from 'react';
+import { BaseResourceDialog } from './BaseResourceDialog';
 
 type CreateResourceDialogProps = {
   onClose: () => void;
@@ -9,15 +12,24 @@ export const CreateResourceDialog = ({
   onClose,
   open,
 }: CreateResourceDialogProps) => {
+  const [createResource, { isLoading, error }] = useCreateResourceMutation();
+
+  const handleCreateResource = useCallback(
+    async (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
+      await createResource(resource);
+    },
+    [createResource]
+  );
+
   return (
-    <Dialog
+    <BaseResourceDialog
+      title="Add Resource"
+      testId="create-resource-dialog"
       onClose={onClose}
       open={open}
-      fullWidth
-      data-testid="create-resource-dialog"
-    >
-      <DialogTitle>Create Resource</DialogTitle>
-      <DialogContent>New Resource</DialogContent>
-    </Dialog>
+      onSubmit={handleCreateResource}
+      error={error}
+      isLoading={isLoading}
+    />
   );
 };

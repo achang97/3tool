@@ -1,3 +1,4 @@
+import { useUpdateResourceMutation } from '@app/redux/services/resources';
 import { ApiError } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/dom';
@@ -6,41 +7,46 @@ import { completeContractForm } from '@tests/utils/form';
 import { render } from '@tests/utils/renderWithContext';
 import { Abi } from 'abitype';
 import { mainnet } from 'wagmi';
-import { BaseResourceDialog } from '../BaseResourceDialog';
+import { EditResourceDialog } from '../EditResourceDialog';
 
-const mockTitle = 'Dialog title';
-const mockHandleSubmit = jest.fn();
+const mockResourceId = 'resource-id';
+
 const mockHandleClose = jest.fn();
-const mockTestId = 'test-id';
+const mockUpdateResource = jest.fn();
 
 jest.mock('@app/utils/contracts');
 
-describe('BaseResourceDialog', () => {
+jest.mock('@app/redux/services/resources', () => ({
+  ...jest.requireActual('@app/redux/services/resources'),
+  useUpdateResourceMutation: jest.fn(),
+}));
+
+describe('EditResourceDialog', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (useUpdateResourceMutation as jest.Mock).mockImplementation(() => [
+      mockUpdateResource,
+      {},
+    ]);
   });
 
   it('does not render dialog', () => {
     const result = render(
-      <BaseResourceDialog
-        title={mockTitle}
+      <EditResourceDialog
+        resourceId={mockResourceId}
         onClose={mockHandleClose}
-        onSubmit={mockHandleSubmit}
         open={false}
-        testId={mockTestId}
       />
     );
-    expect(result.queryByTestId(mockTestId)).toBeNull();
+    expect(result.queryByTestId('create-resource-dialog')).toBeNull();
   });
 
   it('calls onClose when dialog is closed', async () => {
     render(
-      <BaseResourceDialog
-        title={mockTitle}
+      <EditResourceDialog
+        resourceId={mockResourceId}
         onClose={mockHandleClose}
-        onSubmit={mockHandleSubmit}
         open
-        testId={mockTestId}
       />
     );
 
@@ -52,15 +58,13 @@ describe('BaseResourceDialog', () => {
 
   it('renders title', () => {
     const result = render(
-      <BaseResourceDialog
-        title={mockTitle}
+      <EditResourceDialog
+        resourceId={mockResourceId}
         onClose={mockHandleClose}
-        onSubmit={mockHandleSubmit}
         open
-        testId={mockTestId}
       />
     );
-    expect(result.getByText(mockTitle)).toBeDefined();
+    expect(result.getByText('Edit Resource')).toBeDefined();
   });
 
   it('renders error message', () => {
@@ -71,14 +75,16 @@ describe('BaseResourceDialog', () => {
       },
     };
 
+    (useUpdateResourceMutation as jest.Mock).mockImplementation(() => [
+      mockUpdateResource,
+      { error: mockError },
+    ]);
+
     const result = render(
-      <BaseResourceDialog
-        title={mockTitle}
+      <EditResourceDialog
+        resourceId={mockResourceId}
         onClose={mockHandleClose}
-        onSubmit={mockHandleSubmit}
         open
-        error={mockError}
-        testId={mockTestId}
       />
     );
     expect(result.getByText('Mock Error')).toBeDefined();
@@ -89,12 +95,10 @@ describe('BaseResourceDialog', () => {
     (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
 
     const result = render(
-      <BaseResourceDialog
-        title={mockTitle}
+      <EditResourceDialog
+        resourceId={mockResourceId}
         onClose={mockHandleClose}
-        onSubmit={mockHandleSubmit}
         open
-        testId={mockTestId}
       />
     );
     const contractFields = {
@@ -107,7 +111,8 @@ describe('BaseResourceDialog', () => {
     userEvent.click(result.getByText('Save'));
 
     await waitFor(() => {
-      expect(mockHandleSubmit).toHaveBeenCalledWith({
+      expect(mockUpdateResource).toHaveBeenCalledWith({
+        id: mockResourceId,
         type: 'smart_contract',
         name: contractFields.name,
         metadata: {

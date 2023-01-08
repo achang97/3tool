@@ -16,12 +16,16 @@ jest.mock('next/router', () => ({
 }));
 
 jest.mock('@app/redux/services/tools', () => ({
-  useCreateToolMutation: jest.fn(() => [mockCreateTool, {}]),
+  useCreateToolMutation: jest.fn(),
 }));
 
 describe('CreateToolDialog', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (useCreateToolMutation as jest.Mock).mockImplementation(() => [
+      mockCreateTool,
+      {},
+    ]);
   });
 
   it('does not render dialog if open is false', () => {
@@ -69,7 +73,7 @@ describe('CreateToolDialog', () => {
   });
 
   it('does not navigate to new page', () => {
-    (useCreateToolMutation as jest.Mock).mockImplementationOnce(() => [
+    (useCreateToolMutation as jest.Mock).mockImplementation(() => [
       mockCreateTool,
       {},
     ]);
@@ -81,7 +85,7 @@ describe('CreateToolDialog', () => {
 
   it('navigates to /editor/:id and resets state after successful creation of tool', async () => {
     const mockNewTool = { id: 'new-tool-id' };
-    (useCreateToolMutation as jest.Mock).mockImplementationOnce(() => [
+    (useCreateToolMutation as jest.Mock).mockImplementation(() => [
       mockCreateTool,
       { data: mockNewTool },
     ]);
@@ -103,12 +107,12 @@ describe('CreateToolDialog', () => {
         message: 'Mock Error Message',
       },
     };
-    (useCreateToolMutation as jest.Mock).mockImplementationOnce(() => [
+    (useCreateToolMutation as jest.Mock).mockImplementation(() => [
       mockCreateTool,
       { error: mockError },
     ]);
 
     const result = render(<CreateToolDialog onClose={mockHandleClose} open />);
-    expect(result.getByText(mockError.data.message)).toBeDefined();
+    expect(result.getByText('Mock Error Message')).toBeDefined();
   });
 });

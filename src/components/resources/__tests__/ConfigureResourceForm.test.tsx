@@ -12,6 +12,10 @@ const mockHandleSubmit = jest.fn();
 jest.mock('@app/utils/contracts');
 
 describe('ConfigureResourceForm', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders toggle button group', () => {
     const result = render(
       <ConfigureResourceForm formId={mockFormId} onSubmit={mockHandleSubmit} />
