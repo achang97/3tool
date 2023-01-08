@@ -1,5 +1,6 @@
-import { render, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { render } from '@tests/utils/renderWithContext';
 import { CreateResourceButton } from '../CreateResourceButton';
 
 describe('CreateResourceButton', () => {

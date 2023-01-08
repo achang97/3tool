@@ -1,7 +1,8 @@
 import ResourcesPage from '@app/pages/resources';
 import { Resource } from '@app/types';
-import { render, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { render } from '@tests/utils/renderWithContext';
 
 const mockResources: Resource[] = [
   {
@@ -22,8 +23,14 @@ const mockResources: Resource[] = [
   },
 ];
 
+const mockCreateResource = jest.fn();
+const mockUpdateResource = jest.fn();
+
 jest.mock('@app/redux/services/resources', () => ({
+  ...jest.requireActual('@app/redux/services/resources'),
   useGetResourcesQuery: jest.fn(() => ({ data: mockResources })),
+  useCreateResourceMutation: jest.fn(() => [mockCreateResource, {}]),
+  useUpdateResourceMutation: jest.fn(() => [mockUpdateResource, {}]),
 }));
 
 describe('Resources', () => {
