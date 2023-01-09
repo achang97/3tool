@@ -70,7 +70,7 @@ describe('CreateResourceDialog', () => {
     expect(result.getByText('Mock Error')).toBeDefined();
   });
 
-  it('calls onSubmit with smart contract resource and onClose on Save button click', async () => {
+  it('calls onSubmit with smart contract resource on Save button click', async () => {
     const mockAbi: Abi = [];
     (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
 
@@ -101,6 +101,18 @@ describe('CreateResourceDialog', () => {
           },
         },
       });
+    });
+  });
+
+  it('calls onClose on successful creation of resource', async () => {
+    (useCreateResourceMutation as jest.Mock).mockImplementation(() => [
+      mockCreateResource,
+      { data: {} },
+    ]);
+
+    render(<CreateResourceDialog onClose={mockHandleClose} open />);
+
+    await waitFor(() => {
       expect(mockHandleClose).toHaveBeenCalled();
     });
   });

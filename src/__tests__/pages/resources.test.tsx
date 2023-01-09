@@ -1,4 +1,8 @@
 import ResourcesPage from '@app/pages/resources';
+import {
+  useCreateResourceMutation,
+  useUpdateResourceMutation,
+} from '@app/redux/services/resources';
 import { Resource } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/react';
@@ -33,8 +37,8 @@ const mockUpdateResource = jest.fn();
 jest.mock('@app/redux/services/resources', () => ({
   ...jest.requireActual('@app/redux/services/resources'),
   useGetResourcesQuery: jest.fn(() => ({ data: mockResources })),
-  useCreateResourceMutation: jest.fn(() => [mockCreateResource, {}]),
-  useUpdateResourceMutation: jest.fn(() => [mockUpdateResource, {}]),
+  useCreateResourceMutation: jest.fn(),
+  useUpdateResourceMutation: jest.fn(),
 }));
 
 jest.mock('@app/utils/contracts');
@@ -42,6 +46,14 @@ jest.mock('@app/utils/contracts');
 describe('Resources', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (useCreateResourceMutation as jest.Mock).mockImplementation(() => [
+      mockCreateResource,
+      {},
+    ]);
+    (useUpdateResourceMutation as jest.Mock).mockImplementation(() => [
+      mockUpdateResource,
+      {},
+    ]);
   });
 
   it('renders page title', () => {
@@ -82,8 +94,12 @@ describe('Resources', () => {
       isProxy: true,
       logicAddress: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
     };
-
     await completeContractForm(result, contractFields);
+
+    (useUpdateResourceMutation as jest.Mock).mockImplementation(() => [
+      mockUpdateResource,
+      { data: {} },
+    ]);
     userEvent.click(result.getByText('Save'));
 
     await waitFor(() => {
@@ -102,6 +118,10 @@ describe('Resources', () => {
           },
         },
       });
+    });
+
+    result.rerender(<ResourcesPage />);
+    await waitFor(() => {
       expect(result.queryByTestId('edit-resource-dialog')).toBeNull();
     });
   });
@@ -121,8 +141,12 @@ describe('Resources', () => {
       chainId: mainnet.id,
       address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
     };
-
     await completeContractForm(result, contractFields);
+
+    (useCreateResourceMutation as jest.Mock).mockImplementation(() => [
+      mockCreateResource,
+      { data: {} },
+    ]);
     userEvent.click(result.getByText('Save'));
 
     await waitFor(() => {
@@ -140,6 +164,10 @@ describe('Resources', () => {
           },
         },
       });
+    });
+
+    result.rerender(<ResourcesPage />);
+    await waitFor(() => {
       expect(result.queryByTestId('create-resource-dialog')).toBeNull();
     });
   });

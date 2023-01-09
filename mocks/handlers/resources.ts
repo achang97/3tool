@@ -112,6 +112,20 @@ export const resourceHandlers = [
       return res(ctx.status(400));
     }
 
+    if (
+      RESOURCES.some(
+        (currResource) =>
+          currResource.id !== resource.id && currResource.name === body.name
+      )
+    ) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          message: `Resource with name "${body.name}" already exists.`,
+        })
+      );
+    }
+
     resource.name = body.name;
     resource.metadata = body.metadata;
 
