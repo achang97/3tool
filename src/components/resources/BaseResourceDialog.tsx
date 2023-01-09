@@ -9,15 +9,13 @@ import {
   Typography,
 } from '@mui/material';
 import { SerializedError } from '@reduxjs/toolkit';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { ConfigureResourceForm } from './ConfigureResourceForm';
 
 type BaseResourceDialogProps = {
   title: string;
   open: boolean;
-  onSubmit: (
-    resource: Pick<Resource, 'type' | 'name' | 'metadata'>
-  ) => Promise<void>;
+  onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => void;
   onClose: () => void;
   error?: ApiError | SerializedError;
   isLoading?: boolean;
@@ -35,17 +33,24 @@ export const BaseResourceDialog = ({
   isLoading,
   testId,
 }: BaseResourceDialogProps) => {
+  const errorRef = useRef<HTMLSpanElement>(null);
+
   const handleSubmit = useCallback(
-    async (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
-      await onSubmit(resource);
-      onClose();
+    (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
+      onSubmit(resource);
     },
-    [onSubmit, onClose]
+    [onSubmit]
   );
 
   const errorMessage = useMemo(() => {
     return error && parseApiError(error);
   }, [error]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      errorRef.current?.scrollIntoView();
+    }
+  }, [errorMessage]);
 
   return (
     <Dialog onClose={onClose} open={open} fullWidth data-testid={testId}>
@@ -54,6 +59,7 @@ export const BaseResourceDialog = ({
         <ConfigureResourceForm formId={FORM_ID} onSubmit={handleSubmit} />
         {errorMessage && (
           <Typography
+            ref={errorRef}
             color="error"
             variant="body2"
             sx={{ marginTop: 1, textAlign: 'center' }}

@@ -1,6 +1,6 @@
 import { useUpdateResourceMutation } from '@app/redux/services/resources';
 import { Resource } from '@app/types';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { BaseResourceDialog } from './BaseResourceDialog';
 
 type EditResourceDialogProps = {
@@ -14,11 +14,18 @@ export const EditResourceDialog = ({
   open,
   resourceId,
 }: EditResourceDialogProps) => {
-  const [updateResource, { isLoading, error }] = useUpdateResourceMutation();
+  const [updateResource, { isLoading, error, data: updatedResource }] =
+    useUpdateResourceMutation();
+
+  useEffect(() => {
+    if (updatedResource) {
+      onClose();
+    }
+  }, [updatedResource, onClose]);
 
   const handleUpdateResource = useCallback(
-    async (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
-      await updateResource({ id: resourceId, ...resource });
+    (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
+      updateResource({ id: resourceId, ...resource });
     },
     [updateResource, resourceId]
   );

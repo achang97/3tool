@@ -16,7 +16,18 @@ export const render = (
   ui: ReactElement,
   options?: RenderOptions
 ): RenderResult => {
-  return baseRender(<Provider store={store}>{ui}</Provider>, options);
+  return baseRender(ui, {
+    ...options,
+    wrapper: ({ children }: { children: ReactElement }) => (
+      <Provider store={store}>
+        {options?.wrapper ? (
+          <options.wrapper>{children}</options.wrapper>
+        ) : (
+          children
+        )}
+      </Provider>
+    ),
+  });
 };
 
 export const renderHook = <

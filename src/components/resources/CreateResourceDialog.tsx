@@ -1,6 +1,6 @@
 import { useCreateResourceMutation } from '@app/redux/services/resources';
 import { Resource } from '@app/types';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { BaseResourceDialog } from './BaseResourceDialog';
 
 type CreateResourceDialogProps = {
@@ -12,11 +12,18 @@ export const CreateResourceDialog = ({
   onClose,
   open,
 }: CreateResourceDialogProps) => {
-  const [createResource, { isLoading, error }] = useCreateResourceMutation();
+  const [createResource, { isLoading, error, data: newResource }] =
+    useCreateResourceMutation();
+
+  useEffect(() => {
+    if (newResource) {
+      onClose();
+    }
+  }, [newResource, onClose]);
 
   const handleCreateResource = useCallback(
-    async (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
-      await createResource(resource);
+    (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
+      createResource(resource);
     },
     [createResource]
   );
