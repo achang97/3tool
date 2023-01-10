@@ -5,6 +5,10 @@ const Document = () => {
     <Html lang="en">
       <Head>
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Rubik&display=optional"
+        />
       </Head>
       <body>
         <Main />

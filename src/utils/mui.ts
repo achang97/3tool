@@ -15,6 +15,30 @@ declare module '@mui/material/Button' {
   }
 }
 
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    code1: React.CSSProperties;
+    code2: React.CSSProperties;
+
+    customBody1: React.CSSProperties;
+    customBody2: React.CSSProperties;
+
+    customSubtitle1: React.CSSProperties;
+    customSubtitle2: React.CSSProperties;
+  }
+
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    code1?: React.CSSProperties;
+    code2?: React.CSSProperties;
+
+    customBody1?: React.CSSProperties;
+    customBody2?: React.CSSProperties;
+
+    customSubtitle1?: React.CSSProperties;
+    customSubtitle2?: React.CSSProperties;
+  }
+}
 declare module '@mui/material/styles/createPalette' {
   interface GreyscalePalette {
     main: string;
@@ -100,6 +124,38 @@ export const theme = extendTheme({
     ].join(','),
     button: {
       textTransform: 'none',
+    },
+    code1: {
+      fontFamily: 'monospace',
+      fontWeight: 400,
+      fontSize: '0.875rem',
+      lineHeight: 1.286,
+    },
+    code2: {
+      fontFamily: 'monospace',
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 1.25,
+    },
+    customBody1: {
+      fontWeight: 400,
+      fontSize: '1.625rem',
+      lineHeight: 1.192,
+    },
+    customBody2: {
+      fontWeight: 400,
+      fontSize: '1rem',
+      lineHeight: 1.188,
+    },
+    customSubtitle1: {
+      fontWeight: 400,
+      fontSize: '1rem',
+      lineHeight: 1.125,
+    },
+    customSubtitle2: {
+      fontWeight: 400,
+      fontSize: '0.75rem',
+      lineHeight: 1.25,
     },
   },
   components: {
@@ -224,6 +280,24 @@ export const theme = extendTheme({
       styleOverrides: {
         root: {
           padding: '8px 24px',
+        },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        InputLabelProps: {
+          shrink: true,
+          variant: 'standard',
+        },
+        InputProps: {
+          notched: false,
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          position: 'relative',
         },
       },
     },

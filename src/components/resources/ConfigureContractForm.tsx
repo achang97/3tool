@@ -37,7 +37,7 @@ type FormContainerProps = {
 
 export const FormContainer = ({ children, sx }: FormContainerProps) => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, ...sx }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, ...sx }}>
       {children}
     </Box>
   );
@@ -174,6 +174,7 @@ export const ConfigureContractForm = ({
       <>
         <TextField
           label="Name"
+          placeholder="Enter contract name"
           size="small"
           value={name}
           onChange={handleNameChange}
@@ -181,6 +182,7 @@ export const ConfigureContractForm = ({
         />
         <TextField
           value={chainId}
+          placeholder="Select contract network"
           label="Network"
           onChange={handleNetworkChange}
           size="small"
@@ -198,6 +200,7 @@ export const ConfigureContractForm = ({
         </TextField>
         <AddressTextField
           value={address}
+          placeholder="Enter contract address"
           label="Address"
           onChange={handleAddressChange}
           fetchAbiError={fetchAbiError}
@@ -222,6 +225,7 @@ export const ConfigureContractForm = ({
       <>
         <AbiTextField
           value={abi}
+          placeholder="Enter ABI"
           label="ABI"
           onChange={handleAbiChange}
           size="small"
@@ -252,6 +256,7 @@ export const ConfigureContractForm = ({
       <>
         <AddressTextField
           value={logicAddress}
+          placeholder="Enter logic contract address"
           label="Logic Address"
           onChange={handleLogicAddressChange}
           fetchAbiError={fetchLogicAbiError}
@@ -261,6 +266,7 @@ export const ConfigureContractForm = ({
         <Collapse in={isLogicAbiShown}>
           <AbiTextField
             value={logicAbi}
+            placeholder="Enter logic contract ABI"
             label="Logic ABI"
             onChange={handleLogicAbiChange}
             size="small"

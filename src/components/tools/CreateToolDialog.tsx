@@ -2,8 +2,8 @@ import { useCreateToolMutation } from '@app/redux/services/tools';
 import { parseApiError } from '@app/utils/api';
 import { LoadingButton } from '@mui/lab';
 import {
-  Box,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
@@ -22,6 +22,8 @@ type CreateToolDialogProps = {
   onClose: () => void;
   open: boolean;
 };
+
+const FORM_ID = 'create-tool-form';
 
 export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
   const [name, setName] = useState('');
@@ -63,31 +65,34 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
     >
       <DialogTitle>Create new tool</DialogTitle>
       <DialogContent>
-        <form onSubmit={handleCreateTool}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', paddingY: 1 }}>
-            <TextField
-              variant="outlined"
-              label="Tool name"
-              value={name}
-              onChange={handleNameChange}
-              required
-              error={!!errorMessage}
-              helperText={errorMessage}
-              inputProps={{
-                'data-testid': 'create-tool-dialog-input',
-              }}
-            />
-            <LoadingButton
-              type="submit"
-              loading={isLoading}
-              sx={{ marginTop: 1 }}
-              disabled={!name || isLoading}
-            >
-              Create tool
-            </LoadingButton>
-          </Box>
+        <form id={FORM_ID} onSubmit={handleCreateTool}>
+          <TextField
+            variant="outlined"
+            placeholder="Enter tool name"
+            label="Tool name"
+            value={name}
+            onChange={handleNameChange}
+            fullWidth
+            required
+            error={!!errorMessage}
+            helperText={errorMessage}
+            inputProps={{
+              'data-testid': 'create-tool-dialog-input',
+            }}
+          />
         </form>
       </DialogContent>
+      <DialogActions>
+        <LoadingButton
+          type="submit"
+          form={FORM_ID}
+          loading={isLoading}
+          fullWidth
+          disabled={!name || isLoading}
+        >
+          Create tool
+        </LoadingButton>
+      </DialogActions>
     </Dialog>
   );
 };
