@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box } from '@mui/material';
+import { Grid } from '@mui/material';
 import { getTitle } from '@app/utils/window';
 import { useGetToolsQuery } from '@app/redux/services/tools';
 import { ToolThumbnail } from '@app/components/tools/ToolThumbnail';
@@ -20,7 +20,7 @@ const Tools = () => {
       <main>
         <PageContainer>
           <PageTitle>Tools</PageTitle>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Grid container spacing={4}>
             <CreateToolThumbnail />
             {tools?.map((tool) => (
               <ToolThumbnail
@@ -31,7 +31,7 @@ const Tools = () => {
                 creator={tool.creator}
               />
             ))}
-          </Box>
+          </Grid>
         </PageContainer>
       </main>
     </>

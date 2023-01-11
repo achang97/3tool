@@ -25,7 +25,7 @@ type EditorState = {
 const initialState: EditorState = {
   layout: [],
   components: {},
-  sidebarView: SidebarViewType.Create,
+  sidebarView: SidebarViewType.Components,
 };
 
 export const editorSlice = createSlice({

@@ -5,7 +5,7 @@ import {
   javascriptLanguage,
   scopeCompletionSource,
 } from '@codemirror/lang-javascript';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 
 type CodeEditorProps = {
   height?: string;
@@ -18,11 +18,6 @@ export const CodeEditor = ({ height = '200px' }: CodeEditorProps) => {
     setValue(newValue);
   }, []);
 
-  const handleExecuteClick = useCallback(() => {
-    // eslint-disable-next-line no-eval
-    eval(value);
-  }, [value]);
-
   return (
     <Box>
       <CodeMirror
@@ -32,14 +27,10 @@ export const CodeEditor = ({ height = '200px' }: CodeEditorProps) => {
         extensions={[
           javascript({ jsx: false }),
           javascriptLanguage.data.of({
-            autocomplete: scopeCompletionSource({
-              ...globalThis,
-              gibberish: 5,
-            }),
+            autocomplete: scopeCompletionSource(globalThis),
           }),
         ]}
       />
-      <Button onClick={handleExecuteClick}>Execute</Button>
     </Box>
   );
 };

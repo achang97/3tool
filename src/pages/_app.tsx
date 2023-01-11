@@ -51,7 +51,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <Auth0RedirectWrapper>
                   <Box
                     sx={{
-                      bgcolor: 'background.paper',
+                      backgroundColor: 'background.paper',
                       height: '100%',
                       display: 'flex',
                       flexDirection: 'column',

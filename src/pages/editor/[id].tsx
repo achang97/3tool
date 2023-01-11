@@ -1,35 +1,27 @@
 import { Box } from '@mui/material';
-import { Web3Button } from '@web3modal/react';
 import Head from 'next/head';
-import { ToolEditorCanvas } from '@app/components/editor/ToolEditorCanvas/ToolEditorCanvas';
-import { ToolEditorSidebar } from '@app/components/editor/ToolEditorSidebar/ToolEditorSidebar';
-import { ToolEditorQueryBuilder } from '@app/components/editor/ToolEditorQueryBuilder/ToolEditorQueryBuilder';
+import { EditorCanvas } from '@app/components/editor/EditorCanvas';
+import { EditorSidebar } from '@app/components/editor/EditorSidebar';
+import { EditorQueryBuilder } from '@app/components/editor/EditorQueryBuilder';
 import { getTitle } from '@app/utils/window';
 
-const ToolEditor = () => {
+const Editor = () => {
   return (
     <>
       <Head>
         <title>{getTitle('Tool Editor')}</title>
       </Head>
       <main>
-        <Box sx={{ width: '100%', height: '100%', display: 'flex' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', flex: 3 }}>
-            <Box sx={{ flex: 3 }}>
-              <Web3Button />
-              <ToolEditorCanvas />
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <ToolEditorQueryBuilder />
-            </Box>
+        <Box sx={{ height: '100%', display: 'flex' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+            <EditorCanvas />
+            <EditorQueryBuilder />
           </Box>
-          <Box sx={{ flex: 1 }}>
-            <ToolEditorSidebar />
-          </Box>
+          <EditorSidebar />
         </Box>
       </main>
     </>
   );
 };
 
-export default ToolEditor;
+export default Editor;

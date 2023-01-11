@@ -8,9 +8,9 @@
 
 .react-grid-layout {
   position: relative;
-  height: 100% !important;
-  background: var(--background-grid);
-  border: 1px solid var(--mui-palette-divider);
+  height: auto !important;
+  min-height: 700px;
+  background: inherit;
 }
 
 .react-grid-item {
@@ -79,7 +79,7 @@
   display: block;
 }
 
-.react-resizable-handle-se {
+.react-grid-item > .react-resizable-handle-se {
   position: absolute;
   width: var(--padding-container);
   height: var(--padding-container);
@@ -93,12 +93,12 @@
   cursor: se-resize;
 }
 
-.react-resizable-handle-se:hover,
-.react-resizable-handle-se:focus {
+.react-grid-item > .react-resizable-handle-se:hover,
+.react-grid-item > .react-resizable-handle-se:focus {
   background: var(--mui-palette-primary-dark);
 }
 
-.react-resizable-handle-s {
+.react-grid-item > .react-resizable-handle-s {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -108,7 +108,7 @@
   cursor: s-resize;
 }
 
-.react-resizable-handle-e {
+.react-grid-item > .react-resizable-handle-e {
   position: absolute;
   right: 0;
   top: 0;

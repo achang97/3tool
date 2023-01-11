@@ -14,7 +14,7 @@ jest.mock('next/router', () => ({
 describe('Toolbar', () => {
   const generalToolbarId = 'general-toolbar';
   const toolViewerToolbarId = 'tool-viewer-toolbar';
-  const toolEditorToolbarId = 'tool-editor-toolbar';
+  const toolToolEditorToolbarId = 'tool-editor-toolbar';
 
   it('renders nothing if user is unauthenticated', () => {
     (useAuth0 as jest.Mock).mockImplementation(() => ({
@@ -24,7 +24,7 @@ describe('Toolbar', () => {
     const result = render(<Toolbar />);
     expect(result.queryByTestId(generalToolbarId)).toBeNull();
     expect(result.queryByTestId(toolViewerToolbarId)).toBeNull();
-    expect(result.queryByTestId(toolEditorToolbarId)).toBeNull();
+    expect(result.queryByTestId(toolToolEditorToolbarId)).toBeNull();
   });
 
   it('renders Tool Viewer toolbar if on /tools/[id] route', () => {
@@ -48,7 +48,7 @@ describe('Toolbar', () => {
     }));
 
     const result = render(<Toolbar />);
-    expect(result.getByTestId(toolEditorToolbarId)).toBeDefined();
+    expect(result.getByTestId(toolToolEditorToolbarId)).toBeDefined();
   });
 
   it('renders general toolbar in the default case', () => {

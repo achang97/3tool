@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 
 type ThumbnailContainerProps = {
@@ -13,34 +13,33 @@ export const ThumbnailContainer = ({
   onClick,
 }: ThumbnailContainerProps) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: 3,
-        marginRight: 4,
-        marginBottom: 4,
-        backgroundColor: 'greyscale.offwhite.dark',
-        borderRadius: 2,
-        cursor: 'pointer',
-        width: '300px',
-        height: '200px',
-      }}
-      onClick={onClick}
-    >
+    <Grid item xs={3}>
       <Box
         sx={{
-          flex: 3,
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '3.5rem',
+          padding: 3,
+          backgroundColor: 'greyscale.offwhite.dark',
+          borderRadius: 2,
+          cursor: 'pointer',
+          height: '200px',
         }}
+        onClick={onClick}
       >
-        {icon}
+        <Box
+          sx={{
+            flex: 3,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '3.5rem',
+          }}
+        >
+          {icon}
+        </Box>
+        <Box sx={{ flex: 1, width: '100%' }}>{children}</Box>
       </Box>
-      <Box sx={{ flex: 1, width: '100%' }}>{children}</Box>
-    </Box>
+    </Grid>
   );
 };

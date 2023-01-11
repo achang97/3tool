@@ -8,7 +8,7 @@ import {
 import { ConfigureContractForm } from './ConfigureContractForm';
 
 enum ToggleType {
-  SmartContract = 'smartContract',
+  SmartContract = 'smart_contract',
   Blockchain = 'blockchain',
 }
 

@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { blurFocus, deleteComponent } from '@app/redux/features/editorSlice';
 
-export const ToolEditorInspector = () => {
+export const EditorComponentInspector = () => {
   const { focusedComponentId } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
@@ -12,13 +12,16 @@ export const ToolEditorInspector = () => {
     dispatch(blurFocus());
   }, [dispatch, focusedComponentId]);
 
-  if (!focusedComponentId) {
-    return <Box>No focused component</Box>;
-  }
   return (
-    <Box>
-      <Typography>{focusedComponentId}</Typography>
-      <Button onClick={handleDelete}>Delete</Button>
+    <Box data-testid="editor-component-inspector">
+      {focusedComponentId ? (
+        <>
+          <Typography>{focusedComponentId}</Typography>
+          <Button onClick={handleDelete}>Delete</Button>
+        </>
+      ) : (
+        <Typography>No focused component</Typography>
+      )}
     </Box>
   );
 };

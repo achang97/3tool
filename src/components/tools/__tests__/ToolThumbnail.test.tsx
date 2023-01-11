@@ -5,7 +5,7 @@ import { ToolThumbnail } from '../ToolThumbnail';
 
 const mockId = 'mock-id';
 const mockName = 'Mock Thumbnail Name';
-const mockUpdatedAt = new Date().toString();
+const mockUpdatedAt = new Date().toISOString();
 const mockCreator: User = { name: 'Andrew Chang' };
 
 const mockPush = jest.fn();
@@ -49,7 +49,7 @@ describe('ToolThumbnail', () => {
 
   it('renders date when tool was last updated', () => {
     const mockNow = new Date(Date.UTC(2017, 1, 1));
-    const mockOneMonthAgo = new Date(Date.UTC(2017, 0, 1)).toString();
+    const mockOneMonthAgo = new Date(Date.UTC(2017, 0, 1)).toISOString();
 
     Date.now = jest.fn(() => mockNow.valueOf());
 

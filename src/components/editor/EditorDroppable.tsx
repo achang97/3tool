@@ -1,4 +1,5 @@
 import { Component, useCallback, useMemo, useRef } from 'react';
+import { Box } from '@mui/material';
 import {
   Layout,
   Responsive,
@@ -17,11 +18,11 @@ import {
   updateLayout,
 } from '@app/redux/features/editorSlice';
 import { useFocusClickedComponent } from '@app/hooks/useFocusClickedComponent';
-import { ToolEditorComponent } from './ToolEditorComponent';
+import { EditorComponent } from './EditorComponent';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-export const ToolEditorCanvas = () => {
+export const EditorDroppable = () => {
   const {
     layout,
     components,
@@ -91,7 +92,7 @@ export const ToolEditorCanvas = () => {
 
   const gridComponents = useMemo(() => {
     return layout.map((element) => (
-      <ToolEditorComponent
+      <EditorComponent
         key={element.i}
         componentId={element.i}
         componentType={components[element.i]}
@@ -102,28 +103,30 @@ export const ToolEditorCanvas = () => {
   }, [layout, components, movingComponentId, focusedComponentId]);
 
   return (
-    <ResponsiveReactGridLayout
-      rowHeight={5}
-      cols={{
-        lg: 48,
-        md: 40,
-        sm: 24,
-        xs: 16,
-        xxs: 8,
-      }}
-      resizeHandles={['s', 'e', 'se']}
-      layouts={{ lg: layout }}
-      onLayoutChange={handleLayoutChange}
-      onDrag={handleDrag}
-      onDragStop={handleDragStop}
-      onDrop={handleDrop}
-      compactType={null}
-      preventCollision={false}
-      droppingItem={droppingItem}
-      isDroppable
-      ref={gridRef}
-    >
-      {gridComponents}
-    </ResponsiveReactGridLayout>
+    <Box>
+      <ResponsiveReactGridLayout
+        rowHeight={5}
+        cols={{
+          lg: 48,
+          md: 40,
+          sm: 24,
+          xs: 16,
+          xxs: 8,
+        }}
+        resizeHandles={['s', 'e', 'se']}
+        layouts={{ lg: layout }}
+        onLayoutChange={handleLayoutChange}
+        onDrag={handleDrag}
+        onDragStop={handleDragStop}
+        onDrop={handleDrop}
+        compactType={null}
+        preventCollision={false}
+        droppingItem={droppingItem}
+        isDroppable
+        ref={gridRef}
+      >
+        {gridComponents}
+      </ResponsiveReactGridLayout>
+    </Box>
   );
 };

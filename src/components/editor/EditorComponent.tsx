@@ -14,20 +14,17 @@ import {
 } from '@mui/material';
 import { ComponentType } from '@app/types';
 
-type ToolEditorComponentProps = {
-  /* eslint-disable react/no-unused-prop-types */
+type EditorComponentProps = {
   componentId: string;
   componentType: ComponentType;
   isDragging: boolean;
   isFocused: boolean;
   className?: string;
   children?: ReactNode;
-  /* eslint-enable react/no-unused-prop-types */
 };
 
-export const ToolEditorComponent = forwardRef(
+export const EditorComponent = forwardRef(
   (
-    /* eslint-disable react/prop-types */
     {
       componentId,
       componentType,
@@ -36,8 +33,7 @@ export const ToolEditorComponent = forwardRef(
       children,
       className,
       ...rest
-    }: ToolEditorComponentProps,
-    /* eslint-enable react/prop-types */
+    }: EditorComponentProps,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const getComponent = useCallback(() => {
@@ -78,12 +74,10 @@ export const ToolEditorComponent = forwardRef(
       <Box
         ref={ref}
         id={componentId}
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={0}
         className={`${isFocused ? 'react-grid-item-focused' : ''} ${
           isDragging ? 'react-grid-item-dragging' : ''
         } ${className}`}
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...rest}
       >
         {getComponent()}
@@ -92,5 +86,3 @@ export const ToolEditorComponent = forwardRef(
     );
   }
 );
-
-ToolEditorComponent.displayName = 'ToolEditorComponent';

@@ -7,15 +7,17 @@ import {
   endCreateComponentDrag,
 } from '@app/redux/features/editorSlice';
 
-type ToolEditorDraggableProps = {
+type EditorDraggableProps = {
   componentType: ComponentType;
-  children: ReactNode;
+  label: string;
+  icon: ReactNode;
 };
 
-export const ToolEditorDraggable = ({
-  children,
+export const EditorDraggable = ({
+  label,
+  icon,
   componentType,
-}: ToolEditorDraggableProps) => {
+}: EditorDraggableProps) => {
   const { newComponent } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
@@ -47,16 +49,30 @@ export const ToolEditorDraggable = ({
   return (
     <Box
       sx={{
-        margin: 2,
         cursor: 'pointer',
         opacity: isCurrentlyDragged ? 0.5 : 1,
+        textAlign: 'center',
       }}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       draggable
       unselectable="on"
     >
-      <Typography sx={{ color: 'text.primary' }}>{children}</Typography>
+      <Box
+        sx={{
+          height: '60px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'greyscale.offwhite.main',
+          borderRadius: 1,
+        }}
+      >
+        {icon}
+      </Box>
+      <Typography variant="body2" sx={{ marginTop: 1 }}>
+        {label}
+      </Typography>
     </Box>
   );
 };
