@@ -1,5 +1,5 @@
+import { ConnectWalletButton } from '@app/components/common/ConnectWalletButton';
 import { Box } from '@mui/material';
-import { ConnectWalletButton } from '../common/ConnectWalletButton';
 
 export const EditorToolbar = () => {
   return (

@@ -1,4 +1,10 @@
-import { forwardRef, useCallback, ForwardedRef, ReactNode } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  ForwardedRef,
+  ReactNode,
+  MouseEvent,
+} from 'react';
 import {
   Box,
   Button,
@@ -13,6 +19,8 @@ import {
   Typography,
 } from '@mui/material';
 import { ComponentType } from '@app/types';
+import { useAppDispatch } from '@app/redux/hooks';
+import { focusComponent } from '@app/redux/features/editorSlice';
 
 type EditorComponentProps = {
   componentId: string;
@@ -36,10 +44,16 @@ export const EditorComponent = forwardRef(
     }: EditorComponentProps,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
+    const dispatch = useAppDispatch();
+
     const getComponent = useCallback(() => {
       switch (componentType) {
         case ComponentType.Button:
-          return <Button variant="outlined">Button</Button>;
+          return (
+            <Button variant="outlined" onClick={() => console.log('clicked')}>
+              Button
+            </Button>
+          );
         case ComponentType.Select:
           return (
             <Select MenuProps={{ sx: { display: isDragging ? 'none' : '' } }}>
@@ -70,6 +84,14 @@ export const EditorComponent = forwardRef(
       }
     }, [componentType, isDragging]);
 
+    const handleClick = useCallback(
+      (e: MouseEvent) => {
+        e.stopPropagation();
+        dispatch(focusComponent(componentId));
+      },
+      [dispatch, componentId]
+    );
+
     return (
       <Box
         ref={ref}
@@ -78,6 +100,7 @@ export const EditorComponent = forwardRef(
         className={`${isFocused ? 'react-grid-item-focused' : ''} ${
           isDragging ? 'react-grid-item-dragging' : ''
         } ${className}`}
+        onClick={handleClick}
         {...rest}
       >
         {getComponent()}

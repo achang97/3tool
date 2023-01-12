@@ -19,11 +19,11 @@ import {
 import { isAddress } from 'ethers/lib/utils';
 import { mainnet } from 'wagmi';
 import { isJSON } from '@app/utils/string';
-import { Resource } from '@app/types';
+import { Resource, ResourceType } from '@app/types';
 import { useAppSelector } from '@app/redux/hooks';
 import { AddressTextField } from './AddressTextField';
 import { AbiTextField } from './AbiTextField';
-import { useFetchAbi } from './hooks/useFetchAbi';
+import { useFetchAbi } from '../hooks/useFetchAbi';
 
 type ConfigureContractFormProps = {
   formId: string;
@@ -152,7 +152,7 @@ export const ConfigureContractForm = ({
       }
 
       onSubmit({
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name,
         metadata: {
           smartContract: {

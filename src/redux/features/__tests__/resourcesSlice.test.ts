@@ -1,31 +1,35 @@
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { Resource } from '@app/types';
+import { Resource, ResourceType } from '@app/types';
 import { waitFor, act } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
 import { setActiveResource } from '../resourcesSlice';
 
 describe('resourcesSlice', () => {
+  const renderHooks = () => {
+    const { result } = renderHook(() =>
+      useAppSelector((state) => state.resources)
+    );
+    const {
+      result: { current: dispatch },
+    } = renderHook(() => useAppDispatch());
+
+    return { result, dispatch };
+  };
+
   describe('initialState', () => {
     it('initially sets activeResource to undefined', () => {
-      const { result } = renderHook(() =>
-        useAppSelector((state) => state.resources)
-      );
+      const { result } = renderHooks();
       expect(result.current.activeResource).toBeUndefined();
     });
   });
 
-  describe('setActiveResource', () => {
-    it('sets activeResource to given value', async () => {
-      const { result } = renderHook(() =>
-        useAppSelector((state) => state.resources)
-      );
-      const {
-        result: { current: dispatch },
-      } = renderHook(() => useAppDispatch());
+  describe('actions', () => {
+    it('setActiveResource: sets activeResource to given value', async () => {
+      const { result, dispatch } = renderHooks();
 
       const mockResource: Resource = {
         id: '1',
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name: 'SpaceCoin ICO',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

@@ -3,7 +3,7 @@ import {
   useCreateResourceMutation,
   useUpdateResourceMutation,
 } from '@app/redux/services/resources';
-import { Resource } from '@app/types';
+import { Resource, ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -15,7 +15,7 @@ import { goerli, mainnet } from 'wagmi';
 const mockResources: Resource[] = [
   {
     id: '1',
-    type: 'smart_contract',
+    type: ResourceType.SmartContract,
     name: 'Staking Pool Contract',
     createdAt: '2023-01-05T02:37:30.083Z',
     updatedAt: '2023-01-05T02:37:30.083Z',
@@ -105,7 +105,7 @@ describe('Resources', () => {
     await waitFor(() => {
       expect(mockUpdateResource).toHaveBeenCalledWith({
         id: mockResources[0].id,
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name: `${mockResources[0].name}${contractFields.name}`,
         metadata: {
           smartContract: {
@@ -151,7 +151,7 @@ describe('Resources', () => {
 
     await waitFor(() => {
       expect(mockCreateResource).toHaveBeenCalledWith({
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name: contractFields.name,
         metadata: {
           smartContract: {

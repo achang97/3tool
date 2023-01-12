@@ -1,3 +1,4 @@
+import { ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/dom';
 import { completeContractForm, submitForm } from '@tests/utils/form';
@@ -44,7 +45,7 @@ describe('ConfigureResourceForm', () => {
 
     await waitFor(() => {
       expect(mockHandleSubmit).toHaveBeenCalledWith({
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name: contractFields.name,
         metadata: {
           smartContract: {

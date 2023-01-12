@@ -1,11 +1,11 @@
 import { rest } from 'msw';
-import { Resource } from '@app/types';
+import { Resource, ResourceType } from '@app/types';
 import { generateRandomDate } from '../utils';
 
 const RESOURCES: Resource[] = [
   {
     id: '1',
-    type: 'smart_contract',
+    type: ResourceType.SmartContract,
     name: 'SpaceCoin ICO',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
@@ -21,7 +21,7 @@ const RESOURCES: Resource[] = [
   },
   {
     id: '2',
-    type: 'smart_contract',
+    type: ResourceType.SmartContract,
     name: 'Staking Pool Contract',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
@@ -40,7 +40,7 @@ const RESOURCES: Resource[] = [
   },
   {
     id: '3',
-    type: 'dune',
+    type: ResourceType.Dune,
     name: 'Dune API',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),

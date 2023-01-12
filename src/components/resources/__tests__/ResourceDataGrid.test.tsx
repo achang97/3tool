@@ -1,4 +1,4 @@
-import { Resource } from '@app/types';
+import { Resource, ResourceType } from '@app/types';
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
@@ -12,7 +12,7 @@ const dispatchSpy = jest.spyOn(store, 'dispatch');
 const mockResources: Resource[] = [
   {
     id: '1',
-    type: 'smart_contract',
+    type: ResourceType.SmartContract,
     name: 'Staking Pool Contract',
     createdAt: '2023-01-05T02:37:30.083Z',
     updatedAt: '2023-01-05T02:37:30.083Z',
@@ -28,7 +28,7 @@ const mockResources: Resource[] = [
   },
   {
     id: '2',
-    type: 'dune',
+    type: ResourceType.Dune,
     name: 'Dune API',
     createdAt: '2023-01-05T02:33:30.083Z',
     updatedAt: '2023-01-05T02:33:30.083Z',

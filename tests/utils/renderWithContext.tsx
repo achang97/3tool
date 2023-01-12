@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement } from 'react';
 import {
   render as baseRender,
   renderHook as baseRenderHook,
@@ -40,9 +40,16 @@ export const renderHook = <
   renderFn: (initialProps: Props) => Result,
   options?: RenderHookOptions<Props, Q, Container, BaseElement>
 ): RenderHookResult<Result, Props> => {
-  const wrapper = ({ children }: { children: ReactNode }) => (
-    <Provider store={store}>{children}</Provider>
-  );
-
-  return baseRenderHook(renderFn, { wrapper, ...options });
+  return baseRenderHook(renderFn, {
+    ...options,
+    wrapper: ({ children }: { children: ReactElement }) => (
+      <Provider store={store}>
+        {options?.wrapper ? (
+          <options.wrapper>{children}</options.wrapper>
+        ) : (
+          children
+        )}
+      </Provider>
+    ),
+  });
 };

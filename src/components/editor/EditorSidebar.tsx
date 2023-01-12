@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { SidebarViewType } from '@app/types';
-import { updateSidebarView } from '@app/redux/features/editorSlice';
-import { EditorComponentPicker } from './EditorComponentPicker';
-import { EditorComponentInspector } from './EditorComponentInspector';
+import { setSidebarView } from '@app/redux/features/editorSlice';
+import { EditorComponentPicker } from './sidebar/EditorComponentPicker';
+import { EditorInspector } from './sidebar/EditorInspector';
 
 const WIDTH = '300px';
 
@@ -17,33 +17,21 @@ const TABS = [
   },
   {
     label: 'Inspector',
-    panel: <EditorComponentInspector />,
+    panel: <EditorInspector />,
     value: SidebarViewType.Inspector,
   },
 ];
 
 export const EditorSidebar = () => {
-  const { sidebarView, focusedComponentId } = useAppSelector(
-    (state) => state.editor
-  );
+  const { sidebarView } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
   const handleTabChange = useCallback(
     (e: React.SyntheticEvent, newSidebarView: SidebarViewType) => {
-      dispatch(updateSidebarView(newSidebarView));
+      dispatch(setSidebarView(newSidebarView));
     },
     [dispatch]
   );
-
-  useEffect(() => {
-    dispatch(
-      updateSidebarView(
-        focusedComponentId
-          ? SidebarViewType.Inspector
-          : SidebarViewType.Components
-      )
-    );
-  }, [focusedComponentId, dispatch]);
 
   return (
     <Box sx={{ width: WIDTH, display: 'flex', flexDirection: 'column' }}>

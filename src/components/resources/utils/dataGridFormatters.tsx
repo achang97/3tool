@@ -1,4 +1,4 @@
-import { Resource } from '@app/types/api';
+import { Resource, ResourceType } from '@app/types/api';
 import { Box, Typography } from '@mui/material';
 import {
   GridRenderCellParams,
@@ -8,11 +8,11 @@ import moment from 'moment';
 
 export const formatResourceType = ({
   value,
-}: GridValueFormatterParams<Resource['type']>) => {
+}: GridValueFormatterParams<ResourceType>) => {
   switch (value) {
-    case 'smart_contract':
+    case ResourceType.SmartContract:
       return 'Smart contract';
-    case 'dune':
+    case ResourceType.Dune:
       return 'Dune';
     default:
       return '';
@@ -30,7 +30,7 @@ export const renderNameCell = ({
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
       <span>{value}</span>
-      {row.type === 'smart_contract' && (
+      {row.type === ResourceType.SmartContract && (
         <Typography
           variant="caption"
           color="text.tertiary"

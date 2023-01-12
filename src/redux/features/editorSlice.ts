@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { ComponentType, SidebarViewType } from '@app/types';
 import { Layout } from 'react-grid-layout';
+import { getNewComponentId } from '../utils/editor';
 
 type EditorState = {
   // General layout information
@@ -34,24 +35,27 @@ export const editorSlice = createSlice({
   reducers: {
     startCreateComponentDrag: (state, action: PayloadAction<ComponentType>) => {
       state.newComponent = {
-        id: `${action.payload}-${Math.floor(
-          Math.random() * 100_000_000
-        ).toString()}`,
+        id: getNewComponentId(action.payload, Object.keys(state.components)),
         type: action.payload,
       };
-    },
-    createComponent: (state) => {
-      const { newComponent } = state;
-      state.components[newComponent!.id] = newComponent!.type;
     },
     endCreateComponentDrag: (state) => {
       state.newComponent = undefined;
     },
+    createComponent: (
+      state,
+      action: PayloadAction<{
+        id: string;
+        type: ComponentType;
+      }>
+    ) => {
+      state.components[action.payload.id] = action.payload.type;
+    },
 
-    startMoveComponent: (state, action: PayloadAction<string>) => {
+    startMoveComponentDrag: (state, action: PayloadAction<string>) => {
       state.movingComponentId = action.payload;
     },
-    endMoveComponent: (state) => {
+    endMoveComponentDrag: (state) => {
       state.movingComponentId = undefined;
     },
 
@@ -62,17 +66,22 @@ export const editorSlice = createSlice({
 
     focusComponent: (state, action: PayloadAction<string>) => {
       state.focusedComponentId = action.payload;
+      state.sidebarView = SidebarViewType.Inspector;
     },
-    blurFocus: (state) => {
+    blurComponentFocus: (state) => {
       state.focusedComponentId = undefined;
+      state.sidebarView = SidebarViewType.Components;
+    },
+    focusToolSettings: (state) => {
+      state.focusedComponentId = undefined;
+      state.sidebarView = SidebarViewType.Inspector;
+    },
+    setSidebarView: (state, action: PayloadAction<SidebarViewType>) => {
+      state.sidebarView = action.payload;
     },
 
     updateLayout: (state, action: PayloadAction<Layout[]>) => {
       state.layout = action.payload;
-    },
-
-    updateSidebarView: (state, action: PayloadAction<SidebarViewType>) => {
-      state.sidebarView = action.payload;
     },
   },
 });
@@ -81,13 +90,14 @@ export const {
   startCreateComponentDrag,
   createComponent,
   endCreateComponentDrag,
-  startMoveComponent,
-  endMoveComponent,
+  startMoveComponentDrag,
+  endMoveComponentDrag,
   deleteComponent,
   focusComponent,
-  blurFocus,
+  blurComponentFocus,
   updateLayout,
-  updateSidebarView,
+  focusToolSettings,
+  setSidebarView,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

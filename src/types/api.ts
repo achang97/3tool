@@ -24,10 +24,15 @@ export type SmartContract = {
   logicAbi?: string;
 };
 
+export enum ResourceType {
+  SmartContract = 'smartContract',
+  Dune = 'dune',
+}
+
 export type Resource = {
   id: string;
   name: string;
-  type: 'smart_contract' | 'dune';
+  type: ResourceType;
   createdAt: string;
   updatedAt: string;
   numLinkedQueries: number;

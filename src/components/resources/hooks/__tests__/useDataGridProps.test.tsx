@@ -1,4 +1,4 @@
-import { Resource } from '@app/types';
+import { Resource, ResourceType } from '@app/types';
 import { render, renderHook, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
@@ -13,7 +13,7 @@ const mockHandleEditClick = jest.fn();
 const mockResources: Resource[] = [
   {
     id: '1',
-    type: 'smart_contract',
+    type: ResourceType.SmartContract,
     name: 'Test Contract',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -141,7 +141,7 @@ describe('useDataGridProps', () => {
         const mockGridRowParams = {
           id: 1,
           row: {
-            type: 'smart_contract',
+            type: ResourceType.SmartContract,
           },
         };
         // @ts-ignore getActions should be defined
@@ -179,7 +179,7 @@ describe('useDataGridProps', () => {
         const mockGridRowParams = {
           id: 1,
           row: {
-            type: 'dune',
+            type: ResourceType.Dune,
           },
         };
         // @ts-ignore getActions should be defined

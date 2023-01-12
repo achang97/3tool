@@ -1,23 +1,16 @@
-import { Component, useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Box } from '@mui/material';
-import {
-  Layout,
-  Responsive,
-  ResponsiveProps,
-  WidthProvider,
-  WidthProviderProps,
-} from 'react-grid-layout';
+import { Layout, Responsive, WidthProvider } from 'react-grid-layout';
 import { ComponentType } from '@app/types';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import {
   createComponent,
   endCreateComponentDrag,
-  endMoveComponent,
+  endMoveComponentDrag,
   focusComponent,
-  startMoveComponent,
+  startMoveComponentDrag,
   updateLayout,
 } from '@app/redux/features/editorSlice';
-import { useFocusClickedComponent } from '@app/hooks/useFocusClickedComponent';
 import { EditorComponent } from './EditorComponent';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -32,13 +25,6 @@ export const EditorDroppable = () => {
   } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
-  const gridRef = useRef<Component<ResponsiveProps & WidthProviderProps>>(null);
-
-  useFocusClickedComponent(
-    // @ts-ignore elementRef should be defined on WidthProvider
-    gridRef.current?.elementRef
-  );
-
   const handleLayoutChange = useCallback(
     (newLayout: Layout[]) => {
       if (!newComponent) {
@@ -50,23 +36,29 @@ export const EditorDroppable = () => {
 
   const handleDrag = useCallback(
     (_layout: Layout[], _oldComponent: Layout, component: Layout) => {
-      if (!newComponent) {
-        dispatch(startMoveComponent(component.i));
+      if (!newComponent && !movingComponentId) {
+        dispatch(startMoveComponentDrag(component.i));
+        dispatch(focusComponent(component.i));
       }
     },
-    [dispatch, newComponent]
+    [dispatch, newComponent, movingComponentId]
   );
 
   const handleDragStop = useCallback(() => {
-    dispatch(endMoveComponent());
+    dispatch(endMoveComponentDrag());
   }, [dispatch]);
 
   const handleDrop = useCallback(
     (newLayout: Layout[]) => {
-      dispatch(updateLayout(newLayout));
-      dispatch(createComponent());
+      if (!newComponent) {
+        return;
+      }
+
       dispatch(endCreateComponentDrag());
-      dispatch(focusComponent(newComponent!.id));
+      dispatch(updateLayout(newLayout));
+
+      dispatch(createComponent(newComponent));
+      dispatch(focusComponent(newComponent.id));
     },
     [dispatch, newComponent]
   );
@@ -123,7 +115,6 @@ export const EditorDroppable = () => {
         preventCollision={false}
         droppingItem={droppingItem}
         isDroppable
-        ref={gridRef}
       >
         {gridComponents}
       </ResponsiveReactGridLayout>

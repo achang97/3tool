@@ -1,33 +1,31 @@
 .react-grid-layout {
-  --padding-container: 7px;
-  --border-hover: 1px solid var(--mui-palette-primary-light);
-  --border-focus: 1px solid var(--mui-palette-primary-dark);
-  --background-grid: var(--mui-palette-grey-100);
-  --background-placeholder: var(--mui-palette-grey-300);
+  --resize-handler-size: 8px;
+  --outline-hover: 1px solid var(--mui-palette-primary-light);
+  --outline-focus: 1px solid var(--mui-palette-primary-main);
+  --background-grid: var(--mui-palette-background-paper);
+  --background-placeholder: var(--mui-palette-greyscale-offwhite-dark);
 }
 
 .react-grid-layout {
   position: relative;
   height: auto !important;
   min-height: 700px;
-  background: inherit;
 }
 
 .react-grid-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
-  padding: var(--padding-container);
+  padding: 10px;
 }
 
 .react-grid-item:not(.react-grid-placeholder):hover {
-  border: var(--border-hover);
+  outline: var(--outline-hover);
   cursor: pointer;
 }
 
 .react-grid-item-focused:not(.react-grid-placeholder) {
-  border: var(--border-focus);
+  outline: var(--outline-focus);
 }
 
 .react-grid-item > *:first-child {
@@ -53,7 +51,7 @@
 /* Resizing */
 .react-grid-item.resizing ~ .react-grid-item.react-grid-placeholder,
 .react-grid-item.resizing > *:first-child {
-  display: none;
+  visibility: hidden;
 }
 
 .react-grid-item.resizing {
@@ -62,31 +60,30 @@
 
 /* Dragging */
 .react-grid-item.react-grid-item-dragging {
-  display: none;
+  visibility: hidden;
 }
 
 .react-grid-item.react-grid-item-dragging
   ~ .react-grid-item.react-grid-placeholder {
-  border: var(--border-focus);
+  outline: var(--outline-focus);
 }
 
 /* Resizeable Handles */
 .react-grid-item > .react-resizable-handle {
-  display: none;
+  visibility: hidden;
 }
 
-.react-grid-item-focused > .react-resizable-handle {
-  display: block;
+.react-grid-item-focused:not(.react-grid-item-dragging)
+  > .react-resizable-handle {
+  visibility: visible;
 }
 
 .react-grid-item > .react-resizable-handle-se {
   position: absolute;
-  width: var(--padding-container);
-  height: var(--padding-container);
-  border-radius: 100%;
-  outline: 1px solid var(--mui-palette-common-black);
+  width: var(--resize-handler-size);
+  height: var(--resize-handler-size);
+  outline: var(--outline-focus);
   background: var(--background-grid);
-  box-sizing: border-box;
   bottom: 0;
   right: 0;
   transform: translate(50%, 50%);
@@ -95,7 +92,7 @@
 
 .react-grid-item > .react-resizable-handle-se:hover,
 .react-grid-item > .react-resizable-handle-se:focus {
-  background: var(--mui-palette-primary-dark);
+  background: var(--mui-palette-primary-light);
 }
 
 .react-grid-item > .react-resizable-handle-s {
@@ -103,7 +100,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: var(--padding-container);
+  height: var(--resize-handler-size);
   transform: translate(0, 50%);
   cursor: s-resize;
 }
@@ -113,7 +110,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  width: var(--padding-container);
+  width: var(--resize-handler-size);
   transform: translate(50%, 0);
   cursor: e-resize;
 }

@@ -16,9 +16,7 @@ describe('EditorSidebar', () => {
     userEvent.click(result.getByText('Components'));
     userEvent.click(result.getByText('Inspector'));
 
-    expect(
-      await result.findByTestId('editor-component-inspector')
-    ).toBeDefined();
+    expect(await result.findByTestId('editor-inspector')).toBeDefined();
   });
 
   it('switches to Component panel on tab click', async () => {

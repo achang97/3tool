@@ -1,7 +1,7 @@
 export enum ComponentType {
   Button = 'button',
-  TextInput = 'text_input',
-  NumberInput = 'number_input',
+  TextInput = 'textInput',
+  NumberInput = 'numberInput',
   Select = 'select',
   Container = 'container',
   Table = 'table',

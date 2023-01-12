@@ -1,4 +1,4 @@
-import { Resource } from '@app/types/api';
+import { Resource, ResourceType } from '@app/types/api';
 import { Edit } from '@mui/icons-material';
 import {
   GridActionsCellItem,
@@ -33,7 +33,7 @@ export const useDataGridProps = ({
 
   const getRowActions = useCallback(
     (params: GridRowParams<Resource>) => {
-      if (params.row.type !== 'smart_contract') {
+      if (params.row.type !== ResourceType.SmartContract) {
         return [];
       }
 

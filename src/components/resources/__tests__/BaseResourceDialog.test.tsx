@@ -1,4 +1,4 @@
-import { ApiError } from '@app/types';
+import { ApiError, ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -108,7 +108,7 @@ describe('BaseResourceDialog', () => {
 
     await waitFor(() => {
       expect(mockHandleSubmit).toHaveBeenCalledWith({
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name: contractFields.name,
         metadata: {
           smartContract: {

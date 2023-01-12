@@ -1,5 +1,5 @@
 import { useAppSelector } from '@app/redux/hooks';
-import { Resource } from '@app/types';
+import { Resource, ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { render, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -15,7 +15,7 @@ jest.mock('@app/redux/hooks');
 jest.mock('@app/utils/contracts');
 
 const mockResource: Resource = {
-  type: 'smart_contract',
+  type: ResourceType.SmartContract,
   name: 'Name',
   id: '1',
   createdAt: new Date().toISOString(),
@@ -420,7 +420,7 @@ describe('ConfigureContractForm', () => {
       submitForm(result, mockFormId);
       await waitFor(() => {
         expect(mockHandleSubmit).toHaveBeenCalledWith({
-          type: 'smart_contract',
+          type: ResourceType.SmartContract,
           name: 'New Contract',
           metadata: {
             smartContract: {
@@ -457,7 +457,7 @@ describe('ConfigureContractForm', () => {
       submitForm(result, mockFormId);
       await waitFor(() => {
         expect(mockHandleSubmit).toHaveBeenCalledWith({
-          type: 'smart_contract',
+          type: ResourceType.SmartContract,
           name: 'New Contract',
           metadata: {
             smartContract: {

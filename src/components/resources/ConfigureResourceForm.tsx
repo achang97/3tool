@@ -5,10 +5,10 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
-import { ConfigureContractForm } from './ConfigureContractForm';
+import { ConfigureContractForm } from './contracts/ConfigureContractForm';
 
 enum ToggleType {
-  SmartContract = 'smart_contract',
+  SmartContract = 'smartContract',
   Blockchain = 'blockchain',
 }
 

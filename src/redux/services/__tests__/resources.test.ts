@@ -1,4 +1,4 @@
-import { Resource } from '@app/types/api';
+import { Resource, ResourceType } from '@app/types/api';
 import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
 import {
@@ -51,7 +51,7 @@ describe('resources', () => {
   describe('useCreateResourceMutation', () => {
     it('calls fetch to POST /resources', async () => {
       const mockBody: Pick<Resource, 'type' | 'name' | 'metadata'> = {
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name: 'New Resource',
         metadata: {},
       };
@@ -78,7 +78,7 @@ describe('resources', () => {
     it('calls fetch to PUT /resources', async () => {
       const mockId = '1';
       const mockBody: Pick<Resource, 'type' | 'name' | 'metadata'> = {
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name: 'New Resource',
         metadata: {},
       };

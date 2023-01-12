@@ -9,12 +9,6 @@ import { gridClasses } from '@mui/x-data-grid';
 import type {} from '@mui/x-data-grid/themeAugmentation';
 import type {} from '@mui/lab/themeAugmentation';
 
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    raised: true;
-  }
-}
-
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     code1: React.CSSProperties;
@@ -38,8 +32,7 @@ declare module '@mui/material/styles' {
     customSubtitle1?: React.CSSProperties;
     customSubtitle2?: React.CSSProperties;
   }
-}
-declare module '@mui/material/styles/createPalette' {
+
   interface GreyscalePalette {
     main: string;
     dark: string;
@@ -47,7 +40,6 @@ declare module '@mui/material/styles/createPalette' {
 
   interface Greyscale {
     disabled: string;
-    border: string;
     primary: GreyscalePalette;
     icon: GreyscalePalette;
     offwhite: GreyscalePalette;
@@ -66,13 +58,18 @@ declare module '@mui/material/styles/createPalette' {
   }
 }
 
-const ODD_OPACITY = 0.2;
+const DATA_GRID_ODD_ROW_OPACITY = 0.2;
 
 const { palette } = createTheme({
   palette: {
+    divider: '#CDD6E1',
     primary: {
       main: '#1890FF',
       dark: '#1168B9',
+    },
+    secondary: {
+      main: '#DFE3E8',
+      dark: '#CDD6E1',
     },
     text: {
       primary: '#505B6B',
@@ -81,7 +78,6 @@ const { palette } = createTheme({
     },
     greyscale: {
       disabled: '#E8E8E8',
-      border: '#CDD6E1',
       primary: {
         main: '#DFE3E8',
         dark: '#B6C2D0',
@@ -183,11 +179,12 @@ export const theme = extendTheme({
           },
         },
         {
-          props: { variant: 'raised' },
+          props: { variant: 'contained', color: 'secondary' },
           style: {
-            background: palette.greyscale.primary.main,
+            boxShadow: 'none',
             ':hover': {
-              background: palette.greyscale.border,
+              background: palette.divider,
+              boxShadow: 'none',
             },
             ':active': {
               boxShadow: 'inset 0px 2px 6px rgba(0, 0, 0, 0.16)',
@@ -198,6 +195,11 @@ export const theme = extendTheme({
           props: { variant: 'outlined' },
           style: {
             borderWidth: '2px !important',
+          },
+        },
+        {
+          props: { variant: 'outlined', color: 'primary' },
+          style: {
             borderColor: palette.primary.main,
             ':hover': {
               background: palette.greyscale.primary.main,
@@ -216,7 +218,10 @@ export const theme = extendTheme({
         root: {
           [`.${gridClasses.row}`]: {
             '&:hover, &.Mui-hovered': {
-              backgroundColor: alpha(palette.primary.main, ODD_OPACITY),
+              backgroundColor: alpha(
+                palette.primary.main,
+                DATA_GRID_ODD_ROW_OPACITY
+              ),
               '@media (hover: none)': {
                 backgroundColor: 'transparent',
               },
@@ -229,12 +234,12 @@ export const theme = extendTheme({
             '&.Mui-selected': {
               backgroundColor: alpha(
                 palette.primary.main,
-                ODD_OPACITY + palette.action.selectedOpacity
+                DATA_GRID_ODD_ROW_OPACITY + palette.action.selectedOpacity
               ),
               '&:hover, &.Mui-hovered': {
                 backgroundColor: alpha(
                   palette.primary.main,
-                  ODD_OPACITY +
+                  DATA_GRID_ODD_ROW_OPACITY +
                     palette.action.selectedOpacity +
                     palette.action.hoverOpacity
                 ),
@@ -242,7 +247,7 @@ export const theme = extendTheme({
                 '@media (hover: none)': {
                   backgroundColor: alpha(
                     palette.primary.main,
-                    ODD_OPACITY + palette.action.selectedOpacity
+                    DATA_GRID_ODD_ROW_OPACITY + palette.action.selectedOpacity
                   ),
                 },
               },

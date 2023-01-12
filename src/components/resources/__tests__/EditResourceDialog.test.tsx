@@ -1,5 +1,5 @@
 import { useUpdateResourceMutation } from '@app/redux/services/resources';
-import { ApiError } from '@app/types';
+import { ApiError, ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -113,7 +113,7 @@ describe('EditResourceDialog', () => {
     await waitFor(() => {
       expect(mockUpdateResource).toHaveBeenCalledWith({
         id: mockResourceId,
-        type: 'smart_contract',
+        type: ResourceType.SmartContract,
         name: contractFields.name,
         metadata: {
           smartContract: {

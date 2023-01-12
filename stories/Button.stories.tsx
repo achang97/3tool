@@ -8,7 +8,7 @@ export default {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['contained', 'raised', 'outlined', 'text'],
+      options: ['contained', 'outlined', 'text'],
       defaultValue: 'contained',
     },
     color: {
@@ -28,12 +28,6 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 export const Contained = Template.bind({});
 Contained.args = {
   variant: 'contained',
-  children: 'Button',
-};
-
-export const Raised = Template.bind({});
-Raised.args = {
-  variant: 'raised',
   children: 'Button',
 };
 

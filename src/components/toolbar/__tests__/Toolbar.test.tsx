@@ -11,6 +11,12 @@ jest.mock('next/router', () => ({
   })),
 }));
 
+jest.mock('@app/redux/services/tools', () => ({
+  __esModule: true,
+  ...jest.requireActual('@app/redux/services/tools'),
+  useGetToolByIdQuery: jest.fn(() => ({})),
+}));
+
 describe('Toolbar', () => {
   const generalToolbarId = 'general-toolbar';
   const toolViewerToolbarId = 'tool-viewer-toolbar';
@@ -45,6 +51,7 @@ describe('Toolbar', () => {
     }));
     (useRouter as jest.Mock).mockImplementation(() => ({
       pathname: '/editor/[id]',
+      query: {},
     }));
 
     const result = render(<Toolbar />);
