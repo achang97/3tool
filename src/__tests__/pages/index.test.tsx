@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Tool } from '@app/types';
 import ToolsPage from '@app/pages';
@@ -10,6 +10,7 @@ const mockTools: Tool[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     creator: { name: 'Andrew Chang' },
+    components: [],
   },
   {
     id: '2',
@@ -17,6 +18,7 @@ const mockTools: Tool[] = [
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     creator: { name: 'Andrew Chang' },
+    components: [],
   },
 ];
 
@@ -26,6 +28,7 @@ const mockNewTool: Tool = {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   creator: { name: 'Andrew Chang' },
+  components: [],
 };
 
 const mockPush = jest.fn();
@@ -59,7 +62,7 @@ describe('Home', () => {
     const result = render(<ToolsPage />);
 
     const createThumbnailText = result.getByText('New tool');
-    userEvent.click(createThumbnailText);
+    await userEvent.click(createThumbnailText);
 
     const input = await result.findByTestId('create-tool-dialog-input');
     await userEvent.type(input, mockName);
@@ -67,10 +70,8 @@ describe('Home', () => {
     const submitButton = result.getByText('Create tool');
     await userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(mockCreateTool).toHaveBeenCalledTimes(1);
-      expect(mockCreateTool).toHaveBeenCalledWith({ name: mockName });
-    });
+    expect(mockCreateTool).toHaveBeenCalledTimes(1);
+    expect(mockCreateTool).toHaveBeenCalledWith({ name: mockName });
 
     expect(mockPush).toHaveBeenCalledWith(`/editor/${mockNewTool.id}`);
   });
@@ -79,15 +80,11 @@ describe('Home', () => {
     const result = render(<ToolsPage />);
 
     const toolOne = result.getByText('Tool 1');
-    userEvent.click(toolOne);
-    await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/tools/1');
-    });
+    await userEvent.click(toolOne);
+    expect(mockPush).toHaveBeenCalledWith('/tools/1');
 
     const toolTwo = result.getByText('Tool 2');
-    userEvent.click(toolTwo);
-    await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/tools/2');
-    });
+    await userEvent.click(toolTwo);
+    expect(mockPush).toHaveBeenCalledWith('/tools/2');
   });
 });

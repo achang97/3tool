@@ -50,10 +50,8 @@ describe('EditResourceDialog', () => {
       />
     );
 
-    userEvent.keyboard('[Escape]');
-    await waitFor(() => {
-      expect(mockHandleClose).toHaveBeenCalled();
-    });
+    await userEvent.keyboard('[Escape]');
+    expect(mockHandleClose).toHaveBeenCalled();
   });
 
   it('renders title', () => {
@@ -108,24 +106,22 @@ describe('EditResourceDialog', () => {
     };
 
     await completeContractForm(result, contractFields);
-    userEvent.click(result.getByText('Save'));
+    await userEvent.click(result.getByText('Save'));
 
-    await waitFor(() => {
-      expect(mockUpdateResource).toHaveBeenCalledWith({
-        id: mockResourceId,
-        type: ResourceType.SmartContract,
-        name: contractFields.name,
-        metadata: {
-          smartContract: {
-            chainId: contractFields.chainId,
-            address: contractFields.address,
-            abi: JSON.stringify(mockAbi),
-            isProxy: false,
-            logicAddress: undefined,
-            logicAbi: undefined,
-          },
+    expect(mockUpdateResource).toHaveBeenCalledWith({
+      id: mockResourceId,
+      type: ResourceType.SmartContract,
+      name: contractFields.name,
+      metadata: {
+        smartContract: {
+          chainId: contractFields.chainId,
+          address: contractFields.address,
+          abi: JSON.stringify(mockAbi),
+          isProxy: false,
+          logicAddress: undefined,
+          logicAbi: undefined,
         },
-      });
+      },
     });
   });
 

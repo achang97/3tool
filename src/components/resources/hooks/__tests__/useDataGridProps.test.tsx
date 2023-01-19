@@ -1,5 +1,5 @@
 import { Resource, ResourceType } from '@app/types';
-import { render, renderHook, waitFor, act } from '@testing-library/react';
+import { render, renderHook } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
 import {
@@ -158,14 +158,8 @@ describe('useDataGridProps', () => {
         );
 
         const editButton = renderResult.getByText('Edit');
-        act(() => {
-          userEvent.click(editButton);
-        });
-        await waitFor(() => {
-          expect(mockHandleEditClick).toHaveBeenCalledWith(
-            mockGridRowParams.row
-          );
-        });
+        await userEvent.click(editButton);
+        expect(mockHandleEditClick).toHaveBeenCalledWith(mockGridRowParams.row);
       });
 
       it('returns empty array if type is not smart_contract', () => {

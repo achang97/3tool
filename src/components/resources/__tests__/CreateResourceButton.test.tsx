@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { render } from '@tests/utils/renderWithContext';
 import { CreateResourceButton } from '../CreateResourceButton';
@@ -14,7 +14,7 @@ describe('CreateResourceButton', () => {
   it('opens dialog on click', async () => {
     const result = render(<CreateResourceButton />);
 
-    userEvent.click(result.getByText('Add new resource'));
+    await userEvent.click(result.getByText('Add new resource'));
 
     expect(await result.findByTestId(createResourceDialogId)).toBeDefined();
   });
@@ -22,10 +22,10 @@ describe('CreateResourceButton', () => {
   it('closes dialog on blur', async () => {
     const result = render(<CreateResourceButton />);
 
-    userEvent.click(result.getByText('Add new resource'));
+    await userEvent.click(result.getByText('Add new resource'));
     expect(await result.findByTestId(createResourceDialogId)).toBeDefined();
 
-    userEvent.keyboard('[Escape]');
+    await userEvent.keyboard('[Escape]');
     await waitFor(() => {
       expect(result.queryByTestId(createResourceDialogId)).toBeNull();
     });

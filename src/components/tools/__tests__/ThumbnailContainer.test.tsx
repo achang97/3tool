@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThumbnailContainer } from '../ThumbnailContainer';
 
@@ -38,7 +38,7 @@ describe('ThumbnailContainer', () => {
       </ThumbnailContainer>
     );
 
-    userEvent.click(result.getByText(mockChildren));
-    await waitFor(() => expect(mockHandleClick).toHaveBeenCalledTimes(1));
+    await userEvent.click(result.getByText(mockChildren));
+    expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
 });

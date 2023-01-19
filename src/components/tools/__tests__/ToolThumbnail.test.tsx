@@ -1,5 +1,5 @@
 import { User } from '@auth0/auth0-react';
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ToolThumbnail } from '../ToolThumbnail';
 
@@ -75,11 +75,9 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    userEvent.click(result.getByText(mockName));
+    await userEvent.click(result.getByText(mockName));
 
-    await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledTimes(1);
-      expect(mockPush).toHaveBeenCalledWith(`/tools/${mockId}`);
-    });
+    expect(mockPush).toHaveBeenCalledTimes(1);
+    expect(mockPush).toHaveBeenCalledWith(`/tools/${mockId}`);
   });
 });

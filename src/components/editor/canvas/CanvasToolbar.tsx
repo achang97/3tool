@@ -1,7 +1,7 @@
 import { ConnectWalletButton } from '@app/components/common/ConnectWalletButton';
 import { Box } from '@mui/material';
 
-export const EditorToolbar = () => {
+export const CanvasToolbar = () => {
   return (
     <Box
       sx={{
@@ -13,6 +13,7 @@ export const EditorToolbar = () => {
         borderBottom: 1,
         borderColor: 'divider',
       }}
+      data-testid="canvas-toolbar"
     >
       <ConnectWalletButton />
     </Box>

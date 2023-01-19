@@ -38,10 +38,8 @@ describe('CreateResourceDialog', () => {
   it('calls onClose when dialog is closed', async () => {
     render(<CreateResourceDialog onClose={mockHandleClose} open />);
 
-    userEvent.keyboard('[Escape]');
-    await waitFor(() => {
-      expect(mockHandleClose).toHaveBeenCalled();
-    });
+    await userEvent.keyboard('[Escape]');
+    expect(mockHandleClose).toHaveBeenCalled();
   });
 
   it('renders title', () => {
@@ -84,23 +82,21 @@ describe('CreateResourceDialog', () => {
     };
 
     await completeContractForm(result, contractFields);
-    userEvent.click(result.getByText('Save'));
+    await userEvent.click(result.getByText('Save'));
 
-    await waitFor(() => {
-      expect(mockCreateResource).toHaveBeenCalledWith({
-        type: ResourceType.SmartContract,
-        name: contractFields.name,
-        metadata: {
-          smartContract: {
-            chainId: contractFields.chainId,
-            address: contractFields.address,
-            abi: JSON.stringify(mockAbi),
-            isProxy: false,
-            logicAddress: undefined,
-            logicAbi: undefined,
-          },
+    expect(mockCreateResource).toHaveBeenCalledWith({
+      type: ResourceType.SmartContract,
+      name: contractFields.name,
+      metadata: {
+        smartContract: {
+          chainId: contractFields.chainId,
+          address: contractFields.address,
+          abi: JSON.stringify(mockAbi),
+          isProxy: false,
+          logicAddress: undefined,
+          logicAbi: undefined,
         },
-      });
+      },
     });
   });
 

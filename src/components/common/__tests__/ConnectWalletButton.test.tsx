@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ConnectWalletButton } from '../ConnectWalletButton';
 
@@ -18,9 +18,7 @@ describe('ConnectWalletButton', () => {
 
   it('opens WalletConnect modal on click', async () => {
     const result = render(<ConnectWalletButton />);
-    userEvent.click(result.getByText('Connect Wallet'));
-    await waitFor(() => {
-      expect(mockOpen).toHaveBeenCalled();
-    });
+    await userEvent.click(result.getByText('Connect Wallet'));
+    expect(mockOpen).toHaveBeenCalled();
   });
 });

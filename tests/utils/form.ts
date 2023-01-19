@@ -37,14 +37,14 @@ export const completeContractForm = async (
   }
 
   if (chainId) {
-    userEvent.click(result.getByLabelText(/^Network/));
+    await userEvent.click(result.getByLabelText(/^Network/));
     const options = await result.findAllByRole('option');
     const option = options.find(
       (currOption) =>
         currOption.getAttribute('data-value') === chainId.toString()
     );
     if (option) {
-      userEvent.click(option);
+      await userEvent.click(option);
     }
   }
 
@@ -68,7 +68,7 @@ export const completeContractForm = async (
         expect(proxyCheckbox).toBeChecked();
       });
     } catch {
-      userEvent.click(proxyCheckbox);
+      await userEvent.click(proxyCheckbox);
     }
   }
 };

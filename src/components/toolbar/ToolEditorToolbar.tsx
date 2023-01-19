@@ -1,26 +1,45 @@
 import { useCallback, useMemo } from 'react';
-import { Box, Button, IconButton, Typography } from '@mui/material';
-import { useGetToolByIdQuery } from '@app/redux/services/tools';
-import { useRouter } from 'next/router';
+import { Box, Button, IconButton } from '@mui/material';
 import { Tune } from '@mui/icons-material';
 import { useAppDispatch } from '@app/redux/hooks';
 import { focusToolSettings } from '@app/redux/features/editorSlice';
 import { ToolbarTemplate } from './ToolbarTemplate';
+import { EditableTextField } from '../common/EditableTextField';
+import { useGetActiveTool } from '../editor/hooks/useGetActiveTool';
+import { useUpdateActiveTool } from '../editor/hooks/useUpdateActiveTool';
 
 export const ToolEditorToolbar = () => {
-  const {
-    query: { id },
-  } = useRouter();
   const dispatch = useAppDispatch();
-  const { data: tool } = useGetToolByIdQuery(id as string);
+  const tool = useGetActiveTool();
+  const updateTool = useUpdateActiveTool();
 
-  const middle = useMemo(() => {
-    return <Typography>{tool ? tool.name : 'Untitled'}</Typography>;
-  }, [tool]);
+  const handleUpdateToolName = useCallback(
+    (name: string) => {
+      if (tool && name) {
+        updateTool({ id: tool.id, name });
+      }
+    },
+    [tool, updateTool]
+  );
 
   const handleSettingsClick = useCallback(() => {
     dispatch(focusToolSettings());
   }, [dispatch]);
+
+  const middle = useMemo(() => {
+    if (!tool) {
+      return undefined;
+    }
+
+    return (
+      <EditableTextField
+        value={tool.name}
+        onSubmit={handleUpdateToolName}
+        TypographyProps={{ sx: { whiteSpace: 'nowrap' } }}
+        TextFieldProps={{ fullWidth: true }}
+      />
+    );
+  }, [tool, handleUpdateToolName]);
 
   const right = useMemo(() => {
     if (!tool) {

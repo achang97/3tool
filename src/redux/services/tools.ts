@@ -5,10 +5,11 @@ import {
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
 import { ApiError, Tool } from '@app/types';
-import { API_BASE_URL } from '@app/utils/constants';
+import { API_BASE_URL } from '@app/constants';
 
 export const toolsApi = createApi({
   reducerPath: 'toolsApi',
+  tagTypes: ['Tool'],
   baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }) as BaseQueryFn<
     string | FetchArgs,
     unknown,
@@ -18,9 +19,11 @@ export const toolsApi = createApi({
   endpoints: (builder) => ({
     getTools: builder.query<Tool[], void>({
       query: () => '/tools',
+      providesTags: ['Tool'],
     }),
     getToolById: builder.query<Tool, string>({
       query: (id) => `/tools/${id}`,
+      providesTags: ['Tool'],
     }),
     createTool: builder.mutation<Tool, { name: string }>({
       query: (body) => ({
@@ -28,9 +31,25 @@ export const toolsApi = createApi({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['Tool'],
+    }),
+    updateTool: builder.mutation<
+      Tool,
+      Pick<Tool, 'id'> & Partial<Pick<Tool, 'name' | 'components'>>
+    >({
+      query: ({ id, ...body }) => ({
+        url: `/tools/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Tool'],
     }),
   }),
 });
 
-export const { useGetToolByIdQuery, useGetToolsQuery, useCreateToolMutation } =
-  toolsApi;
+export const {
+  useGetToolByIdQuery,
+  useGetToolsQuery,
+  useCreateToolMutation,
+  useUpdateToolMutation,
+} = toolsApi;

@@ -82,10 +82,10 @@ describe('Resources', () => {
     const result = render(<ResourcesPage />);
 
     const moreButtons = result.getAllByTestId('MoreVertIcon');
-    userEvent.click(moreButtons[0]);
+    await userEvent.click(moreButtons[0]);
 
     const editButton = await result.findByText('Edit');
-    userEvent.click(editButton);
+    await userEvent.click(editButton);
     expect(await result.findByTestId('edit-resource-dialog')).toBeDefined();
 
     const contractFields = {
@@ -100,24 +100,21 @@ describe('Resources', () => {
       mockUpdateResource,
       { data: {} },
     ]);
-    userEvent.click(result.getByText('Save'));
-
-    await waitFor(() => {
-      expect(mockUpdateResource).toHaveBeenCalledWith({
-        id: mockResources[0].id,
-        type: ResourceType.SmartContract,
-        name: `${mockResources[0].name}${contractFields.name}`,
-        metadata: {
-          smartContract: {
-            chainId: contractFields.chainId,
-            address: mockResources[0].metadata.smartContract?.address,
-            abi: mockResources[0].metadata.smartContract?.abi,
-            isProxy: contractFields.isProxy,
-            logicAddress: contractFields.logicAddress,
-            logicAbi: JSON.stringify(mockAbi),
-          },
+    await userEvent.click(result.getByText('Save'));
+    expect(mockUpdateResource).toHaveBeenCalledWith({
+      id: mockResources[0].id,
+      type: ResourceType.SmartContract,
+      name: `${mockResources[0].name}${contractFields.name}`,
+      metadata: {
+        smartContract: {
+          chainId: contractFields.chainId,
+          address: mockResources[0].metadata.smartContract?.address,
+          abi: mockResources[0].metadata.smartContract?.abi,
+          isProxy: contractFields.isProxy,
+          logicAddress: contractFields.logicAddress,
+          logicAbi: JSON.stringify(mockAbi),
         },
-      });
+      },
     });
 
     result.rerender(<ResourcesPage />);
@@ -133,7 +130,7 @@ describe('Resources', () => {
     const result = render(<ResourcesPage />);
 
     const createButton = result.getByText('Add new resource');
-    userEvent.click(createButton);
+    await userEvent.click(createButton);
     expect(await result.findByTestId('create-resource-dialog')).toBeDefined();
 
     const contractFields = {
@@ -147,23 +144,20 @@ describe('Resources', () => {
       mockCreateResource,
       { data: {} },
     ]);
-    userEvent.click(result.getByText('Save'));
-
-    await waitFor(() => {
-      expect(mockCreateResource).toHaveBeenCalledWith({
-        type: ResourceType.SmartContract,
-        name: contractFields.name,
-        metadata: {
-          smartContract: {
-            chainId: contractFields.chainId,
-            address: contractFields.address,
-            abi: JSON.stringify(mockAbi),
-            isProxy: false,
-            logicAddress: undefined,
-            logicAbi: undefined,
-          },
+    await userEvent.click(result.getByText('Save'));
+    expect(mockCreateResource).toHaveBeenCalledWith({
+      type: ResourceType.SmartContract,
+      name: contractFields.name,
+      metadata: {
+        smartContract: {
+          chainId: contractFields.chainId,
+          address: contractFields.address,
+          abi: JSON.stringify(mockAbi),
+          isProxy: false,
+          logicAddress: undefined,
+          logicAbi: undefined,
         },
-      });
+      },
     });
 
     result.rerender(<ResourcesPage />);

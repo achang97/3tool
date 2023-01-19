@@ -1,7 +1,11 @@
 import { render } from '@tests/utils/renderWithContext';
-import { EditorComponentPicker } from '../EditorComponentPicker';
+import { ComponentPicker } from '../ComponentPicker';
 
-describe('EditorComponentPicker', () => {
+jest.mock('../../hooks/useGetActiveTool', () => ({
+  useGetActiveTool: jest.fn(() => undefined),
+}));
+
+describe('ComponentPicker', () => {
   it.each([
     'Button',
     'Text Input',
@@ -11,7 +15,7 @@ describe('EditorComponentPicker', () => {
     'Text',
     'Table',
   ])('renders %s component', (componentLabel: string) => {
-    const result = render(<EditorComponentPicker />);
+    const result = render(<ComponentPicker />);
     expect(result.getByText(componentLabel)).toBeDefined();
   });
 });

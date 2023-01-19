@@ -1,6 +1,5 @@
 import { ApiError, ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
-import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { completeContractForm } from '@tests/utils/form';
 import { render } from '@tests/utils/renderWithContext';
@@ -44,10 +43,8 @@ describe('BaseResourceDialog', () => {
       />
     );
 
-    userEvent.keyboard('[Escape]');
-    await waitFor(() => {
-      expect(mockHandleClose).toHaveBeenCalled();
-    });
+    await userEvent.keyboard('[Escape]');
+    expect(mockHandleClose).toHaveBeenCalled();
   });
 
   it('renders title', () => {
@@ -104,23 +101,21 @@ describe('BaseResourceDialog', () => {
     };
 
     await completeContractForm(result, contractFields);
-    userEvent.click(result.getByText('Save'));
+    await userEvent.click(result.getByText('Save'));
 
-    await waitFor(() => {
-      expect(mockHandleSubmit).toHaveBeenCalledWith({
-        type: ResourceType.SmartContract,
-        name: contractFields.name,
-        metadata: {
-          smartContract: {
-            chainId: contractFields.chainId,
-            address: contractFields.address,
-            abi: JSON.stringify(mockAbi),
-            isProxy: false,
-            logicAddress: undefined,
-            logicAbi: undefined,
-          },
+    expect(mockHandleSubmit).toHaveBeenCalledWith({
+      type: ResourceType.SmartContract,
+      name: contractFields.name,
+      metadata: {
+        smartContract: {
+          chainId: contractFields.chainId,
+          address: contractFields.address,
+          abi: JSON.stringify(mockAbi),
+          isProxy: false,
+          logicAddress: undefined,
+          logicAbi: undefined,
         },
-      });
+      },
     });
   });
 });

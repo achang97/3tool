@@ -1,7 +1,7 @@
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useCreateToolMutation } from '@app/redux/services/tools';
-import { ApiError } from '@app/types/api';
+import { ApiError } from '@app/types';
 import { CreateToolDialog } from '../CreateToolDialog';
 
 const mockHandleClose = jest.fn();
@@ -50,9 +50,7 @@ describe('CreateToolDialog', () => {
       /pointer-events: none/
     );
 
-    await waitFor(() => {
-      expect(mockCreateTool).not.toHaveBeenCalled();
-    });
+    expect(mockCreateTool).not.toHaveBeenCalled();
   });
 
   it('calls API to create tool on submit click', async () => {
@@ -66,10 +64,8 @@ describe('CreateToolDialog', () => {
     const submitButton = result.getByText('Create tool');
     await userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(mockCreateTool).toHaveBeenCalledTimes(1);
-      expect(mockCreateTool).toHaveBeenCalledWith({ name: mockName });
-    });
+    expect(mockCreateTool).toHaveBeenCalledTimes(1);
+    expect(mockCreateTool).toHaveBeenCalledWith({ name: mockName });
   });
 
   it('does not navigate to new page', () => {

@@ -1,22 +1,19 @@
-import { useGetToolByIdQuery } from '@app/redux/services/tools';
 import userEvent from '@testing-library/user-event';
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { focusToolSettings } from '@app/redux/features/editorSlice';
+import { useGetActiveTool } from '@app/components/editor/hooks/useGetActiveTool';
 import { ToolEditorToolbar } from '../ToolEditorToolbar';
 
 const mockDispatch = jest.fn();
-const mockToolId = 'tool-id';
-
-jest.mock('@app/redux/services/tools', () => ({
-  useGetToolByIdQuery: jest.fn(),
-}));
+const mockUpdateTool = jest.fn();
 
 jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => mockDispatch),
 }));
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({ query: { id: mockToolId } })),
+jest.mock('@app/components/editor/hooks/useGetActiveTool');
+jest.mock('@app/components/editor/hooks/useUpdateActiveTool', () => ({
+  useUpdateActiveTool: jest.fn(() => mockUpdateTool),
 }));
 
 describe('ToolEditorToolbar', () => {
@@ -24,22 +21,12 @@ describe('ToolEditorToolbar', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useGetToolByIdQuery as jest.Mock).mockImplementation(() => ({}));
-  });
-
-  it('calls useGetToolByIdQuery with query id', () => {
-    render(<ToolEditorToolbar />);
-    expect(useGetToolByIdQuery as jest.Mock).toHaveBeenCalledWith(mockToolId);
+    (useGetActiveTool as jest.Mock).mockImplementation(() => undefined);
   });
 
   describe('invalid tool', () => {
     beforeEach(() => {
-      (useGetToolByIdQuery as jest.Mock).mockImplementation(() => ({}));
-    });
-
-    it('renders Untitled as title', () => {
-      const result = render(<ToolEditorToolbar />);
-      expect(result.queryByText('Untitled')).toBeDefined();
+      (useGetActiveTool as jest.Mock).mockImplementation(() => undefined);
     });
 
     it('does not render action buttons', () => {
@@ -52,29 +39,39 @@ describe('ToolEditorToolbar', () => {
 
   describe('valid tool', () => {
     const mockTool = {
+      id: 'tool-id',
       name: 'Tool',
     };
 
     beforeEach(() => {
-      (useGetToolByIdQuery as jest.Mock).mockImplementation(() => ({
-        data: mockTool,
-      }));
+      (useGetActiveTool as jest.Mock).mockImplementation(() => mockTool);
     });
 
-    it('renders title', () => {
+    it('renders name and toggles input to update value', async () => {
       const result = render(<ToolEditorToolbar />);
-      expect(result.getByText(mockTool.name)).toBeDefined();
+
+      await userEvent.click(result.getByText(mockTool.name));
+      await result.findByTestId('editable-text-field-edit');
+
+      const newNameText = '1234';
+      await userEvent.keyboard(newNameText);
+      await userEvent.keyboard('[Enter]');
+
+      expect(mockUpdateTool).toHaveBeenCalledWith({
+        id: mockTool.id,
+        name: `${mockTool.name}${newNameText}`,
+      });
+
+      await result.findByTestId('editable-text-field-view');
     });
 
     it('renders settings icon button and focuses tool settings on click', async () => {
       const result = render(<ToolEditorToolbar />);
 
       const button = result.getByTestId(settingsButtonId);
-      userEvent.click(button);
+      await userEvent.click(button);
 
-      await waitFor(() => {
-        expect(mockDispatch).toHaveBeenCalledWith(focusToolSettings());
-      });
+      expect(mockDispatch).toHaveBeenCalledWith(focusToolSettings());
     });
 
     it('renders Preview button', () => {

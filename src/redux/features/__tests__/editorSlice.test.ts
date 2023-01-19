@@ -2,19 +2,17 @@ import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { ComponentType, SidebarViewType } from '@app/types';
 import { waitFor, act } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
-import { Layout } from 'react-grid-layout';
 import {
-  blurComponentFocus,
-  createComponent,
-  deleteComponent,
+  startCreateComponentDrag,
   endCreateComponentDrag,
+  startMoveComponentDrag,
   endMoveComponentDrag,
   focusComponent,
+  blurComponentFocus,
   focusToolSettings,
+  setSnackbarMessage,
   setSidebarView,
-  startCreateComponentDrag,
-  startMoveComponentDrag,
-  updateLayout,
+  SnackbarMessage,
 } from '../editorSlice';
 
 describe('resourcesSlice', () => {
@@ -30,16 +28,6 @@ describe('resourcesSlice', () => {
   };
 
   describe('initialState', () => {
-    it('initially sets layout to empty array', () => {
-      const { result } = renderHooks();
-      expect(result.current.layout).toEqual([]);
-    });
-
-    it('initially sets components to empty object', () => {
-      const { result } = renderHooks();
-      expect(result.current.components).toEqual({});
-    });
-
     it('initially sets sidebar view to components', () => {
       const { result } = renderHooks();
       expect(result.current.sidebarView).toEqual(SidebarViewType.Components);
@@ -51,15 +39,12 @@ describe('resourcesSlice', () => {
       it('startCreateComponentDrag: sets new component object', async () => {
         const { result, dispatch } = renderHooks();
 
-        const mockComponentType = ComponentType.Button;
+        const mockComponent = { name: 'name', type: ComponentType.Button };
         act(() => {
-          dispatch(startCreateComponentDrag(mockComponentType));
+          dispatch(startCreateComponentDrag(mockComponent));
         });
         await waitFor(() => {
-          expect(result.current.newComponent).toEqual({
-            id: `${mockComponentType}1`,
-            type: mockComponentType,
-          });
+          expect(result.current.newComponent).toEqual(mockComponent);
         });
       });
 
@@ -67,7 +52,12 @@ describe('resourcesSlice', () => {
         const { result, dispatch } = renderHooks();
 
         act(() => {
-          dispatch(startCreateComponentDrag(ComponentType.Button));
+          dispatch(
+            startCreateComponentDrag({
+              name: 'name',
+              type: ComponentType.Button,
+            })
+          );
         });
         await waitFor(() => {
           expect(result.current.newComponent).toBeDefined();
@@ -80,113 +70,78 @@ describe('resourcesSlice', () => {
           expect(result.current.newComponent).toBeUndefined();
         });
       });
-
-      it('createComponent: adds new entry to components object', async () => {
-        const { result, dispatch } = renderHooks();
-
-        const mockNewComponent = { id: 'button1', type: ComponentType.Button };
-        act(() => {
-          dispatch(createComponent(mockNewComponent));
-        });
-        await waitFor(() => {
-          expect(result.current.components[mockNewComponent.id]).toEqual(
-            mockNewComponent.type
-          );
-        });
-      });
     });
 
     describe('move', () => {
-      it('startMoveComponentDrag: sets moving component id', async () => {
+      it('startMoveComponentDrag: sets moving component name', async () => {
         const { result, dispatch } = renderHooks();
 
-        const mockComponentId = 'id';
+        const mockComponentName = 'name';
         act(() => {
-          dispatch(startMoveComponentDrag(mockComponentId));
+          dispatch(startMoveComponentDrag(mockComponentName));
         });
         await waitFor(() => {
-          expect(result.current.movingComponentId).toEqual(mockComponentId);
+          expect(result.current.movingComponentName).toEqual(mockComponentName);
         });
       });
 
-      it('endMoveComponentDrag: unsets moving component id', async () => {
+      it('endMoveComponentDrag: unsets moving component name', async () => {
         const { result, dispatch } = renderHooks();
 
         act(() => {
-          dispatch(startMoveComponentDrag('id'));
+          dispatch(startMoveComponentDrag('name'));
         });
         await waitFor(() => {
-          expect(result.current.movingComponentId).toBeDefined();
+          expect(result.current.movingComponentName).toBeDefined();
         });
 
         act(() => {
           dispatch(endMoveComponentDrag());
         });
         await waitFor(() => {
-          expect(result.current.movingComponentId).toBeUndefined();
-        });
-      });
-    });
-
-    describe('delete', () => {
-      it('deleteComponent: deletes component with given id', async () => {
-        const { result, dispatch } = renderHooks();
-
-        const mockNewComponent = { id: 'button1', type: ComponentType.Button };
-        act(() => {
-          dispatch(createComponent(mockNewComponent));
-        });
-        await waitFor(() => {
-          expect(result.current.components[mockNewComponent.id]).toBeDefined();
-        });
-
-        act(() => {
-          dispatch(deleteComponent(mockNewComponent.id));
-        });
-        await waitFor(() => {
-          expect(
-            result.current.components[mockNewComponent.id]
-          ).toBeUndefined();
+          expect(result.current.movingComponentName).toBeUndefined();
         });
       });
     });
 
     describe('sidebar focus', () => {
-      it('focusComponent: sets focused component id and changes sidebar view to Inspector', async () => {
+      it('focusComponent: sets focused component name and changes sidebar view to Inspector', async () => {
         const { result, dispatch } = renderHooks();
 
-        const mockComponentId = 'id';
+        const mockComponentName = 'name';
         act(() => {
-          dispatch(focusComponent(mockComponentId));
+          dispatch(focusComponent(mockComponentName));
         });
         await waitFor(() => {
-          expect(result.current.focusedComponentId).toEqual(mockComponentId);
+          expect(result.current.focusedComponentName).toEqual(
+            mockComponentName
+          );
           expect(result.current.sidebarView).toEqual(SidebarViewType.Inspector);
         });
       });
 
-      it('blurComponentFocus: unsets focused component id and changes sidebar view to Components', async () => {
+      it('blurComponentFocus: unsets focused component name and changes sidebar view to Components', async () => {
         const { result, dispatch } = renderHooks();
 
         act(() => {
           dispatch(blurComponentFocus());
         });
         await waitFor(() => {
-          expect(result.current.focusedComponentId).toBeUndefined();
+          expect(result.current.focusedComponentName).toBeUndefined();
           expect(result.current.sidebarView).toEqual(
             SidebarViewType.Components
           );
         });
       });
 
-      it('focusToolSettings: unsets focused component id and changes sidebar view to Inspector', async () => {
+      it('focusToolSettings: unsets focused component name and changes sidebar view to Inspector', async () => {
         const { result, dispatch } = renderHooks();
 
         act(() => {
           dispatch(focusToolSettings());
         });
         await waitFor(() => {
-          expect(result.current.focusedComponentId).toBeUndefined();
+          expect(result.current.focusedComponentName).toBeUndefined();
           expect(result.current.sidebarView).toEqual(SidebarViewType.Inspector);
         });
       });
@@ -206,24 +161,26 @@ describe('resourcesSlice', () => {
       );
     });
 
-    describe('layout', () => {
-      it('updateLayout: sets layout', async () => {
+    describe('alerts', () => {
+      it('setSnackbarMessage: sets snackbar message object to given value', async () => {
         const { result, dispatch } = renderHooks();
 
-        const mockLayout: Layout[] = [
-          {
-            i: '1',
-            x: 1,
-            y: 1,
-            w: 1,
-            h: 1,
-          },
-        ];
+        const snackbarMessage: SnackbarMessage = {
+          type: 'success',
+          message: 'Hello',
+        };
         act(() => {
-          dispatch(updateLayout(mockLayout));
+          dispatch(setSnackbarMessage(snackbarMessage));
         });
         await waitFor(() => {
-          expect(result.current.layout).toEqual(mockLayout);
+          expect(result.current.snackbarMessage).toEqual(snackbarMessage);
+        });
+
+        act(() => {
+          dispatch(setSnackbarMessage(undefined));
+        });
+        await waitFor(() => {
+          expect(result.current.snackbarMessage).toBeUndefined();
         });
       });
     });

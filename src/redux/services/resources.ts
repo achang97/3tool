@@ -5,7 +5,7 @@ import {
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
 import { ApiError, Resource } from '@app/types';
-import { API_BASE_URL } from '@app/utils/constants';
+import { API_BASE_URL } from '@app/constants';
 
 export const resourcesApi = createApi({
   reducerPath: 'resourcesApi',
@@ -38,7 +38,7 @@ export const resourcesApi = createApi({
     }),
     updateResource: builder.mutation<
       Resource,
-      Pick<Resource, 'id' | 'name' | 'metadata'>
+      Pick<Resource, 'id'> & Partial<Pick<Resource, 'name' | 'metadata'>>
     >({
       query: ({ id, ...body }) => ({
         url: `/resources/${id}`,

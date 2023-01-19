@@ -11,6 +11,7 @@ const TOOLS: Tool[] = [
     creator: {
       name: 'Andrew Chang',
     },
+    components: [],
   },
   {
     id: '2',
@@ -20,6 +21,7 @@ const TOOLS: Tool[] = [
     creator: {
       name: 'Akshay Ramaswamy',
     },
+    components: [],
   },
   {
     id: '3',
@@ -29,6 +31,7 @@ const TOOLS: Tool[] = [
     creator: {
       name: 'Chetan Rane',
     },
+    components: [],
   },
 ];
 
@@ -61,9 +64,38 @@ export const toolHandlers = [
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       creator: { name: 'Andrew Chang' },
+      components: [],
     };
     TOOLS.push(newTool);
 
     return res(ctx.status(201), ctx.json<Tool>(newTool));
+  }),
+  rest.put('*/api/tools/:id', async (req, res, ctx) => {
+    const body = await req.json();
+
+    const tool = TOOLS.find((currTool) => currTool.id === req.params.id);
+
+    if (!tool) {
+      return res(ctx.status(400));
+    }
+
+    if (
+      TOOLS.some(
+        (currTool) => currTool.id !== tool.id && currTool.name === body.name
+      )
+    ) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          message: `Tool with name "${body.name}" already exists.`,
+        })
+      );
+    }
+
+    if (body.name) tool.name = body.name;
+    if (body.components) tool.components = body.components;
+    tool.updatedAt = new Date().toISOString();
+
+    return res(ctx.status(200), ctx.json<Tool>(tool));
   }),
 ];

@@ -8,7 +8,6 @@
 
 .react-grid-layout {
   position: relative;
-  height: auto !important;
   min-height: 700px;
 }
 

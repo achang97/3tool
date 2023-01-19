@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { CHAINS } from '@app/utils/constants';
+import { CHAINS } from '@app/constants';
 import {
   Box,
   Checkbox,
@@ -175,7 +175,6 @@ export const ConfigureContractForm = ({
         <TextField
           label="Name"
           placeholder="Enter contract name"
-          size="small"
           value={name}
           onChange={handleNameChange}
           required
@@ -185,7 +184,6 @@ export const ConfigureContractForm = ({
           placeholder="Select contract network"
           label="Network"
           onChange={handleNetworkChange}
-          size="small"
           select
           required
           inputProps={{
@@ -204,7 +202,6 @@ export const ConfigureContractForm = ({
           label="Address"
           onChange={handleAddressChange}
           fetchAbiError={fetchAbiError}
-          size="small"
           required
         />
       </>
@@ -228,7 +225,6 @@ export const ConfigureContractForm = ({
           placeholder="Enter ABI"
           label="ABI"
           onChange={handleAbiChange}
-          size="small"
           required
           fullWidth
         />
@@ -260,7 +256,6 @@ export const ConfigureContractForm = ({
           label="Logic Address"
           onChange={handleLogicAddressChange}
           fetchAbiError={fetchLogicAbiError}
-          size="small"
           required={isProxy}
         />
         <Collapse in={isLogicAbiShown}>
@@ -269,7 +264,6 @@ export const ConfigureContractForm = ({
             placeholder="Enter logic contract ABI"
             label="Logic ABI"
             onChange={handleLogicAbiChange}
-            size="small"
             fullWidth
             required={isProxy}
           />

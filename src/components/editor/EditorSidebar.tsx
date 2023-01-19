@@ -4,20 +4,20 @@ import { TabContext, TabPanel } from '@mui/lab';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { SidebarViewType } from '@app/types';
 import { setSidebarView } from '@app/redux/features/editorSlice';
-import { EditorComponentPicker } from './sidebar/EditorComponentPicker';
-import { EditorInspector } from './sidebar/EditorInspector';
+import { ComponentPicker } from './sidebar/ComponentPicker';
+import { Inspector } from './sidebar/Inspector';
 
 const WIDTH = '300px';
 
 const TABS = [
   {
     label: 'Components',
-    panel: <EditorComponentPicker />,
+    panel: <ComponentPicker />,
     value: SidebarViewType.Components,
   },
   {
     label: 'Inspector',
-    panel: <EditorInspector />,
+    panel: <Inspector />,
     value: SidebarViewType.Inspector,
   },
 ];

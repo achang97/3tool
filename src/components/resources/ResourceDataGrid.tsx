@@ -46,7 +46,6 @@ export const ResourceDataGrid = ({
       <TextField
         placeholder="Search resources"
         fullWidth
-        size="small"
         sx={{ marginBottom: 2 }}
         InputProps={{
           startAdornment: (

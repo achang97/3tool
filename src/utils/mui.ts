@@ -304,6 +304,35 @@ export const theme = extendTheme({
         root: {
           position: 'relative',
         },
+        shrink: {
+          width: '133%',
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          height: '40px',
+        },
+        sizeSmall: {
+          height: '32px',
+        },
+      },
+    },
+    // NOTE: There's some buggy behavior in MUI which requires this fontSize to be declared
+    // separately from the MuiInputBase root class.
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.875rem',
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.875rem',
+        },
       },
     },
   },

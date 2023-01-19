@@ -126,8 +126,9 @@ export const resourceHandlers = [
       );
     }
 
-    resource.name = body.name;
-    resource.metadata = body.metadata;
+    if (body.name) resource.name = body.name;
+    if (resource.metadata) resource.metadata = body.metadata;
+    resource.updatedAt = new Date().toISOString();
 
     return res(ctx.status(200), ctx.json<Resource>(resource));
   }),

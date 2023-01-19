@@ -4,6 +4,7 @@ import { EditorCanvas } from '@app/components/editor/EditorCanvas';
 import { EditorSidebar } from '@app/components/editor/EditorSidebar';
 import { EditorQueryBuilder } from '@app/components/editor/EditorQueryBuilder';
 import { getTitle } from '@app/utils/window';
+import { EditorSnackbar } from '@app/components/editor/EditorSnackbar';
 
 const Editor = () => {
   return (
@@ -13,11 +14,19 @@ const Editor = () => {
       </Head>
       <main>
         <Box sx={{ height: '100%', display: 'flex' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              flex: 1,
+              position: 'relative',
+            }}
+          >
             <EditorCanvas />
             <EditorQueryBuilder />
           </Box>
           <EditorSidebar />
+          <EditorSnackbar />
         </Box>
       </main>
     </>

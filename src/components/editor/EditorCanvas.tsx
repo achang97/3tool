@@ -5,8 +5,8 @@ import {
 import { useAppDispatch } from '@app/redux/hooks';
 import { Box, Button } from '@mui/material';
 import { useCallback, MouseEvent } from 'react';
-import { EditorDroppable } from './canvas/EditorDroppable';
-import { EditorToolbar } from './canvas/EditorToolbar';
+import { CanvasDroppable } from './canvas/CanvasDroppable';
+import { CanvasToolbar } from './canvas/CanvasToolbar';
 
 export const EditorCanvas = () => {
   const dispatch = useAppDispatch();
@@ -36,6 +36,7 @@ export const EditorCanvas = () => {
         overflowY: 'auto',
       }}
       onClick={handleCanvasClick}
+      data-testid="editor-canvas"
     >
       <Button
         size="small"
@@ -53,8 +54,8 @@ export const EditorCanvas = () => {
           flex: 1,
         }}
       >
-        <EditorToolbar />
-        <EditorDroppable />
+        <CanvasToolbar />
+        <CanvasDroppable />
       </Box>
     </Box>
   );

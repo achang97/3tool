@@ -89,21 +89,17 @@ describe('ResourceDataGrid', () => {
     const result = render(<ResourceDataGrid __test__disableVirtualization />);
 
     const moreButtons = result.getAllByTestId('MoreVertIcon');
-    userEvent.click(moreButtons[0]);
+    await userEvent.click(moreButtons[0]);
 
     const editButton = await result.findByText('Edit');
-    userEvent.click(editButton);
+    await userEvent.click(editButton);
     expect(await result.findByTestId('edit-resource-dialog')).toBeDefined();
-    await waitFor(() => {
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setActiveResource(mockResources[0])
-      );
-    });
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      setActiveResource(mockResources[0])
+    );
 
-    userEvent.keyboard('[Escape]');
-    await waitFor(() => {
-      expect(result.queryByTestId('edit-resource-dialog')).toBeNull();
-      expect(dispatchSpy).toHaveBeenCalledWith(setActiveResource(undefined));
-    });
+    await userEvent.keyboard('[Escape]');
+    expect(result.queryByTestId('edit-resource-dialog')).toBeNull();
+    expect(dispatchSpy).toHaveBeenCalledWith(setActiveResource(undefined));
   });
 });

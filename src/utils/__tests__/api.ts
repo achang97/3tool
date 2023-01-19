@@ -1,4 +1,4 @@
-import { ApiError } from '@app/types/api';
+import { ApiError } from '@app/types';
 import { SerializedError } from '@reduxjs/toolkit';
 import { parseApiError } from '../api';
 

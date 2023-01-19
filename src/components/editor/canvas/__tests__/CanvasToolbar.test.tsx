@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
-import { EditorToolbar } from '../EditorToolbar';
+import { CanvasToolbar } from '../CanvasToolbar';
 
-describe('EditorToolbar', () => {
+describe('CanvasToolbar', () => {
   it('renders Connect Wallet button', () => {
-    const result = render(<EditorToolbar />);
+    const result = render(<CanvasToolbar />);
     expect(result.getByTestId('connect-wallet-button')).toBeDefined();
   });
 });

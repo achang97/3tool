@@ -1,12 +1,14 @@
 import { ApiError } from '@app/types';
 import { SerializedError } from '@reduxjs/toolkit';
 
-export const parseApiError = (
-  error: ApiError | SerializedError
-): string | undefined => {
-  if ('data' in error) {
-    return error.data?.message ?? 'Something went wrong. Please try again.';
+export const parseApiError = (error: ApiError | SerializedError): string => {
+  if ('data' in error && error.data?.message) {
+    return error.data.message;
   }
 
-  return error.message;
+  if ('message' in error && error.message) {
+    return error.message;
+  }
+
+  return 'Something went wrong. Please try again.';
 };

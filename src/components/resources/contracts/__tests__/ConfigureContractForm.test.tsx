@@ -1,7 +1,7 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { Resource, ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
-import { render, waitFor, act } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { submitForm } from '@tests/utils/form';
 import { Abi } from 'abitype';
@@ -145,22 +145,20 @@ describe('ConfigureContractForm', () => {
         result.getByLabelText(/^Address/),
         '0xf33Cb58287017175CADf990c9e4733823704aA86'
       );
-      userEvent.click(result.getByText(/^This is a proxy contract/));
+      await userEvent.click(result.getByText(/^This is a proxy contract/));
 
       const logicAddressInput = result.getByLabelText(/^Logic Address/);
       await waitFor(() => {
         expect(logicAddressInput).toBeVisible();
       });
 
-      await act(async () => {
-        await userEvent.type(
-          logicAddressInput,
-          '0xf33Cb58287017175CADf990c9e4733823704aA86'
-        );
+      await userEvent.type(
+        logicAddressInput,
+        '0xf33Cb58287017175CADf990c9e4733823704aA86'
+      );
 
-        await waitFor(() => {
-          expect(result.getByLabelText(/^Logic ABI/)).toBeVisible();
-        });
+      await waitFor(() => {
+        expect(result.getByLabelText(/^Logic ABI/)).toBeVisible();
       });
     });
   });
@@ -239,12 +237,10 @@ describe('ConfigureContractForm', () => {
           '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3'
         );
 
-        await waitFor(() => {
-          expect(getContractAbi).toHaveBeenCalledTimes(1);
-          expect(result.getByLabelText(/^ABI/)).toHaveValue(
-            JSON.stringify(mockAbi, null, 2)
-          );
-        });
+        expect(getContractAbi).toHaveBeenCalledTimes(1);
+        expect(result.getByLabelText(/^ABI/)).toHaveValue(
+          JSON.stringify(mockAbi, null, 2)
+        );
       });
 
       it('updates logic ABI when logic address is changed', async () => {
@@ -262,12 +258,10 @@ describe('ConfigureContractForm', () => {
           '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3'
         );
 
-        await waitFor(() => {
-          expect(getContractAbi).toHaveBeenCalledTimes(1);
-          expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
-            JSON.stringify(mockAbi, null, 2)
-          );
-        });
+        expect(getContractAbi).toHaveBeenCalledTimes(1);
+        expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
+          JSON.stringify(mockAbi, null, 2)
+        );
       });
 
       it('updates ABI and logic ABI when chainId is changed', async () => {
@@ -278,18 +272,16 @@ describe('ConfigureContractForm', () => {
           />
         );
 
-        userEvent.click(result.getByLabelText(/^Network/));
-        userEvent.click(await result.findByText(mainnet.name));
+        await userEvent.click(result.getByLabelText(/^Network/));
+        await userEvent.click(await result.findByText(mainnet.name));
 
-        await waitFor(() => {
-          expect(getContractAbi).toHaveBeenCalledTimes(2);
-          expect(result.getByLabelText(/^ABI/)).toHaveValue(
-            JSON.stringify(mockAbi, null, 2)
-          );
-          expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
-            JSON.stringify(mockAbi, null, 2)
-          );
-        });
+        expect(getContractAbi).toHaveBeenCalledTimes(2);
+        expect(result.getByLabelText(/^ABI/)).toHaveValue(
+          JSON.stringify(mockAbi, null, 2)
+        );
+        expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
+          JSON.stringify(mockAbi, null, 2)
+        );
       });
     });
   });
@@ -358,7 +350,7 @@ describe('ConfigureContractForm', () => {
         '0xf33Cb58287017175CADf990c9e4733823704aA86'
       );
 
-      userEvent.click(result.getByTestId(proxyCheckboxId));
+      await userEvent.click(result.getByTestId(proxyCheckboxId));
       await userEvent.type(
         result.getByLabelText(/^Logic Address/),
         'Invalid Address'
@@ -382,7 +374,7 @@ describe('ConfigureContractForm', () => {
         '0xf33Cb58287017175CADf990c9e4733823704aA86'
       );
 
-      userEvent.click(result.getByTestId(proxyCheckboxId));
+      await userEvent.click(result.getByTestId(proxyCheckboxId));
       await userEvent.type(
         result.getByLabelText(/^Logic Address/),
         '0xf33Cb58287017175CADf990c9e4733823704aA86'
@@ -403,15 +395,15 @@ describe('ConfigureContractForm', () => {
 
       await userEvent.type(result.getByLabelText(/^Name/), 'New Contract');
 
-      userEvent.click(result.getByLabelText(/^Network/));
-      userEvent.click(await result.findByText(goerli.name));
+      await userEvent.click(result.getByLabelText(/^Network/));
+      await userEvent.click(await result.findByText(goerli.name));
 
       await userEvent.type(
         result.getByLabelText(/^Address/),
         '0xf33Cb58287017175CADf990c9e4733823704aA86'
       );
 
-      userEvent.click(result.getByTestId(proxyCheckboxId));
+      await userEvent.click(result.getByTestId(proxyCheckboxId));
       await userEvent.type(
         result.getByLabelText(/^Logic Address/),
         '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3'
@@ -446,8 +438,8 @@ describe('ConfigureContractForm', () => {
 
       await userEvent.type(result.getByLabelText(/^Name/), 'New Contract');
 
-      userEvent.click(result.getByLabelText(/^Network/));
-      userEvent.click(await result.findByText(goerli.name));
+      await userEvent.click(result.getByLabelText(/^Network/));
+      await userEvent.click(await result.findByText(goerli.name));
 
       await userEvent.type(
         result.getByLabelText(/^Address/),

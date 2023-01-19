@@ -6,18 +6,21 @@ import {
   startCreateComponentDrag,
   endCreateComponentDrag,
 } from '@app/redux/features/editorSlice';
+import { getNewComponentName } from '../../utils/editor';
+import { useGetActiveTool } from '../../hooks/useGetActiveTool';
 
-type EditorDraggableProps = {
-  componentType: ComponentType;
+type DraggableComponentProps = {
+  type: ComponentType;
   label: string;
   icon: ReactNode;
 };
 
-export const EditorDraggable = ({
+export const DraggableComponent = ({
   label,
   icon,
-  componentType,
-}: EditorDraggableProps) => {
+  type,
+}: DraggableComponentProps) => {
+  const tool = useGetActiveTool();
   const { newComponent } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
@@ -32,25 +35,30 @@ export const EditorDraggable = ({
     (e: DragEvent) => {
       e.dataTransfer.setDragImage(hiddenImage, 0, 0);
       e.dataTransfer.setData('text/plain', '');
-      dispatch(startCreateComponentDrag(componentType));
+      dispatch(
+        startCreateComponentDrag({
+          type,
+          name: getNewComponentName(type, tool?.components),
+        })
+      );
     },
-    [componentType, dispatch, hiddenImage]
+    [hiddenImage, dispatch, type, tool]
   );
 
   const handleDragEnd = useCallback(() => {
     dispatch(endCreateComponentDrag());
   }, [dispatch]);
 
-  const isCurrentlyDragged = useMemo(
-    () => componentType === newComponent?.type,
-    [componentType, newComponent]
+  const isDragging = useMemo(
+    () => type === newComponent?.type,
+    [type, newComponent]
   );
 
   return (
     <Box
       sx={{
         cursor: 'pointer',
-        opacity: isCurrentlyDragged ? 0.5 : 1,
+        opacity: isDragging ? 0.5 : 1,
         textAlign: 'center',
       }}
       onDragStart={handleDragStart}

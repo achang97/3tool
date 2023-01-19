@@ -2,7 +2,7 @@ import axios from 'axios';
 import { init as etherscanInit } from 'etherscan-api';
 import { Abi } from 'abitype';
 import { mainnet, goerli } from 'wagmi';
-import { CHAINS_BY_ID, ETHERSCAN_API_KEY } from './constants';
+import { CHAINS_BY_ID, ETHERSCAN_API_KEY } from '@app/constants';
 
 const TIMEOUT = 10_000;
 

@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {
   persistStore,
-  persistReducer,
   FLUSH,
   REHYDRATE,
   PAUSE,
@@ -10,22 +9,14 @@ import {
   REGISTER,
 } from 'redux-persist';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import storage from 'redux-persist/lib/storage';
 import editorReducer from './features/editorSlice';
 import resourcesReducer from './features/resourcesSlice';
 import { toolsApi } from './services/tools';
 import { resourcesApi } from './services/resources';
 
-const editorPersistConfig = {
-  key: 'editor',
-  storage,
-  whitelist: ['layout', 'components'],
-};
-
 export const store = configureStore({
   reducer: {
-    // @ts-ignore Type check should not use unknown type
-    editor: persistReducer(editorPersistConfig, editorReducer),
+    editor: editorReducer,
     resources: resourcesReducer,
     [toolsApi.reducerPath]: toolsApi.reducer,
     [resourcesApi.reducerPath]: resourcesApi.reducer,

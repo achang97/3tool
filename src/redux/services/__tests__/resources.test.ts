@@ -1,4 +1,4 @@
-import { Resource, ResourceType } from '@app/types/api';
+import { Resource, ResourceType } from '@app/types';
 import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
 import {
@@ -58,18 +58,16 @@ describe('resources', () => {
       const { result } = renderHook(() => useCreateResourceMutation());
       const [createResource] = result.current;
 
-      act(() => {
-        createResource(mockBody);
+      await act(async () => {
+        await createResource(mockBody);
       });
 
-      await waitFor(() =>
-        expect(fetch).toHaveBeenCalledWith(
-          expect.objectContaining({
-            method: 'POST',
-            url: '/resources',
-            _bodyInit: JSON.stringify(mockBody),
-          })
-        )
+      expect(fetch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'POST',
+          url: '/resources',
+          _bodyInit: JSON.stringify(mockBody),
+        })
       );
     });
   });
@@ -85,18 +83,16 @@ describe('resources', () => {
       const { result } = renderHook(() => useUpdateResourceMutation());
       const [updateResource] = result.current;
 
-      act(() => {
-        updateResource({ id: mockId, ...mockBody });
+      await act(async () => {
+        await updateResource({ id: mockId, ...mockBody });
       });
 
-      await waitFor(() =>
-        expect(fetch).toHaveBeenCalledWith(
-          expect.objectContaining({
-            method: 'PUT',
-            url: `/resources/${mockId}`,
-            _bodyInit: JSON.stringify(mockBody),
-          })
-        )
+      expect(fetch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'PUT',
+          url: `/resources/${mockId}`,
+          _bodyInit: JSON.stringify(mockBody),
+        })
       );
     });
   });

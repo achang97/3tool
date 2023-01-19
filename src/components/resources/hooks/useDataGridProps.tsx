@@ -1,4 +1,4 @@
-import { Resource, ResourceType } from '@app/types/api';
+import { Resource, ResourceType } from '@app/types';
 import { Edit } from '@mui/icons-material';
 import {
   GridActionsCellItem,

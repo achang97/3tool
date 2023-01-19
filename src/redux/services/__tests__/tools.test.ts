@@ -1,9 +1,11 @@
+import { ComponentType, Tool } from '@app/types';
 import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
 import {
   useGetToolByIdQuery,
   useGetToolsQuery,
   useCreateToolMutation,
+  useUpdateToolMutation,
 } from '../tools';
 
 const mockResponse = new Response('response');
@@ -45,18 +47,52 @@ describe('tools', () => {
       const { result } = renderHook(() => useCreateToolMutation());
       const [createTool] = result.current;
 
-      act(() => {
-        createTool(mockBody);
+      await act(async () => {
+        await createTool(mockBody);
       });
 
-      await waitFor(() =>
-        expect(fetch).toHaveBeenCalledWith(
-          expect.objectContaining({
-            method: 'POST',
-            url: '/tools',
-            _bodyInit: JSON.stringify(mockBody),
-          })
-        )
+      expect(fetch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'POST',
+          url: '/tools',
+          _bodyInit: JSON.stringify(mockBody),
+        })
+      );
+    });
+  });
+
+  describe('useUpdateToolMutation', () => {
+    it('calls fetch to PUT /tools/:id', async () => {
+      const mockId = '1';
+      const mockBody: Pick<Tool, 'name' | 'components'> = {
+        name: 'New Tool',
+        components: [
+          {
+            name: 'button1',
+            type: ComponentType.Button,
+            layout: {
+              w: 1,
+              h: 1,
+              x: 1,
+              y: 1,
+            },
+            metadata: {},
+          },
+        ],
+      };
+      const { result } = renderHook(() => useUpdateToolMutation());
+      const [updateTool] = result.current;
+
+      await act(async () => {
+        await updateTool({ id: mockId, ...mockBody });
+      });
+
+      expect(fetch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'PUT',
+          url: `/tools/${mockId}`,
+          _bodyInit: JSON.stringify(mockBody),
+        })
       );
     });
   });

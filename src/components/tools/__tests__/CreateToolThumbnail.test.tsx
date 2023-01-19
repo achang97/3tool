@@ -31,7 +31,7 @@ describe('CreateToolThumbnail', () => {
   it('opens dialog on click', async () => {
     const result = render(<CreateToolThumbnail />);
 
-    userEvent.click(result.getByText('New tool'));
+    await userEvent.click(result.getByText('New tool'));
 
     expect(await result.findByTestId(createToolDialogId)).toBeDefined();
   });
@@ -39,10 +39,10 @@ describe('CreateToolThumbnail', () => {
   it('closes dialog on blur', async () => {
     const result = render(<CreateToolThumbnail />);
 
-    userEvent.click(result.getByText('New tool'));
+    await userEvent.click(result.getByText('New tool'));
     expect(await result.findByTestId(createToolDialogId)).toBeDefined();
 
-    userEvent.keyboard('[Escape]');
+    await userEvent.keyboard('[Escape]');
     await waitFor(() => {
       expect(result.queryByTestId(createToolDialogId)).toBeNull();
     });

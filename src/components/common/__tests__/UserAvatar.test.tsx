@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserAvatar } from '../UserAvatar';
 
@@ -15,6 +15,6 @@ describe('UserAvatar', () => {
     const result = render(<UserAvatar name={mockName} />);
 
     await userEvent.hover(result.getByText(mockName[0]));
-    await waitFor(() => expect(result.getByText(mockName)).toBeDefined());
+    expect(await result.findByText(mockName)).toBeDefined();
   });
 });

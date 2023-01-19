@@ -4,7 +4,7 @@ import {
   walletConnectProvider,
 } from '@web3modal/ethereum';
 import { configureChains, createClient } from 'wagmi';
-import { CHAINS, WALLETCONNECT_PROJECT_ID } from './constants';
+import { CHAINS, WALLETCONNECT_PROJECT_ID } from '@app/constants';
 
 // Wagmi client
 const { provider } = configureChains(CHAINS, [

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { init as etherscanInit } from 'etherscan-api';
-import { CHAINS_BY_ID } from '@app/utils/constants';
+import { CHAINS_BY_ID } from '@app/constants';
 import { mainnet } from 'wagmi';
 import { ETHERSCAN_CONFIGS, getContractAbi } from '../contracts';
 

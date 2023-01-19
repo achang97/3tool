@@ -1,5 +1,5 @@
+import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { waitFor } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { silenceConsoleError } from '@tests/utils/silenceConsoleError';
 import { GeneralToolbar } from '../GeneralToolbar';
@@ -33,7 +33,7 @@ describe('GeneralToolbar', () => {
     const avatar = result.getByTestId(avatarId);
     expect(avatar.textContent).toEqual(mockUser.name[0]);
 
-    userEvent.click(avatar);
+    await userEvent.click(avatar);
     expect(await result.findByTestId('general-toolbar-menu')).toBeDefined();
   });
 
@@ -56,7 +56,7 @@ describe('GeneralToolbar', () => {
 
     const result = render(<GeneralToolbar />);
 
-    userEvent.click(result.getByTestId(avatarId));
+    await userEvent.click(result.getByTestId(avatarId));
 
     const settingsNav = await result.findByTestId('general-toolbar-settings');
 
@@ -69,14 +69,14 @@ describe('GeneralToolbar', () => {
 
     const result = render(<GeneralToolbar />);
 
-    userEvent.click(result.getByTestId(avatarId));
+    await userEvent.click(result.getByTestId(avatarId));
 
     const logoutButton = await result.findByText('Logout');
-    userEvent.click(logoutButton);
+    await userEvent.click(logoutButton);
 
+    expect(mockLogout).toHaveBeenCalledTimes(1);
+    expect(mockLogout).toHaveBeenCalledWith({ returnTo: 'http://localhost' });
     await waitFor(() => {
-      expect(mockLogout).toHaveBeenCalledTimes(1);
-      expect(mockLogout).toHaveBeenCalledWith({ returnTo: 'http://localhost' });
       expect(result.queryByText('Logout')).toBeNull();
     });
   });
