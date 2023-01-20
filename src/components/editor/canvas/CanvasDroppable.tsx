@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { Component } from '@app/types';
 import { useAppSelector } from '@app/redux/hooks';
+import { isSuccessfulApiResponse } from '@app/utils/api';
 import { CanvasComponent } from './CanvasComponent';
 import { useGetActiveTool } from '../hooks/useGetActiveTool';
 import { useUpdateActiveTool } from '../hooks/useUpdateActiveTool';
@@ -24,16 +25,13 @@ export const CanvasDroppable = () => {
 
   const handleUpdateToolComponents = useCallback(
     async (newComponents: Component[]) => {
-      if (!tool) {
-        return;
-      }
-
-      await updateTool({
-        id: tool.id,
+      const response = await updateTool({
         components: newComponents,
       });
+
+      return isSuccessfulApiResponse(response);
     },
-    [tool, updateTool]
+    [updateTool]
   );
 
   const { onLayoutChange, onDrag, onDragStop, onDrop, layout, droppingItem } =

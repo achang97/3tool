@@ -9,6 +9,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import { createWrapper } from 'next-redux-wrapper';
 import editorReducer from './features/editorSlice';
 import resourcesReducer from './features/resourcesSlice';
 import { toolsApi } from './services/tools';
@@ -37,6 +38,8 @@ export const store = configureStore({
   },
 });
 
+export const makeStore = () => store;
+
 setupListeners(store.dispatch);
 
 export const persistor = persistStore(store);
@@ -44,3 +47,5 @@ export const persistor = persistStore(store);
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const wrapper = createWrapper(makeStore);

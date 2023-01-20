@@ -1,7 +1,10 @@
 import { COMPONENTS_BY_TYPE } from '@app/constants';
-import { setSnackbarMessage } from '@app/redux/features/editorSlice';
+import {
+  blurComponentFocus,
+  setSnackbarMessage,
+} from '@app/redux/features/editorSlice';
 import { ComponentType, Tool } from '@app/types';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentInspector } from '../ComponentInspector';
 
@@ -66,9 +69,7 @@ describe('ComponentInspector', () => {
   });
 
   it('renders component name and type', () => {
-    const result = render(
-      <ComponentInspector name={mockTool.components[0].name} />
-    );
+    const result = render(<ComponentInspector name={mockComponent.name} />);
     expect(result.getByText(mockComponent.name)).toBeDefined();
     expect(
       result.getByText(COMPONENTS_BY_TYPE[mockComponent.type].label)
@@ -76,9 +77,7 @@ describe('ComponentInspector', () => {
   });
 
   it('toggles input on name click and updates component name on enter', async () => {
-    const result = render(
-      <ComponentInspector name={mockTool.components[0].name} />
-    );
+    const result = render(<ComponentInspector name={mockComponent.name} />);
 
     await userEvent.click(result.getByText(mockComponent.name));
 
@@ -87,7 +86,6 @@ describe('ComponentInspector', () => {
     await userEvent.keyboard('[Enter]');
 
     expect(mockUpdateTool).toHaveBeenCalledWith({
-      id: mockTool.id,
       components: [
         { ...mockComponent, name: `${mockComponent.name}${newNameText}` },
         ...mockTool.components.slice(1),
@@ -96,9 +94,7 @@ describe('ComponentInspector', () => {
   });
 
   it('toggles input on name click and shows error if name contains invalid characters', async () => {
-    const result = render(
-      <ComponentInspector name={mockTool.components[0].name} />
-    );
+    const result = render(<ComponentInspector name={mockComponent.name} />);
 
     await userEvent.click(result.getByText(mockComponent.name));
 
@@ -112,5 +108,23 @@ describe('ComponentInspector', () => {
       })
     );
     expect(mockUpdateTool).not.toHaveBeenCalled();
+  });
+
+  it('deletes component by clicking Delete and confirming in the presented dialog', async () => {
+    mockUpdateTool.mockImplementation(() => ({ data: mockTool }));
+
+    const result = render(<ComponentInspector name={mockComponent.name} />);
+
+    await userEvent.click(result.getByText('Delete'));
+    expect(result.getByTestId('delete-component-button-dialog')).toBeDefined();
+
+    await userEvent.click(result.getByText('Confirm'));
+    await waitFor(() => {
+      expect(result.queryByTestId('delete-component-button-dialog')).toBeNull();
+      expect(mockUpdateTool).toHaveBeenCalledWith({
+        components: mockTool.components.slice(1),
+      });
+      expect(mockDispatch).toHaveBeenCalledWith(blurComponentFocus());
+    });
   });
 });

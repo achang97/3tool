@@ -1,4 +1,6 @@
 import { ethers } from 'ethers';
+import AbortController from 'abort-controller';
+import fetch from 'node-fetch';
 
 export const GLOBAL_LIBRARIES = [
   { label: 'ethers', library: ethers },
@@ -11,5 +13,12 @@ export const initGlobal = () => {
       // @ts-ignore Forcefully populating global fields
       global[label] = library;
     }
+  });
+};
+
+export const initFetch = () => {
+  Object.assign(globalThis, {
+    fetch,
+    AbortController,
   });
 };

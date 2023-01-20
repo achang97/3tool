@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { ApiError, Tool } from '@app/types';
 import { API_BASE_URL } from '@app/constants';
+import { HYDRATE } from 'next-redux-wrapper';
 
 export const toolsApi = createApi({
   reducerPath: 'toolsApi',
@@ -16,6 +17,12 @@ export const toolsApi = createApi({
     ApiError,
     {}
   >,
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+    return undefined;
+  },
   endpoints: (builder) => ({
     getTools: builder.query<Tool[], void>({
       query: () => '/tools',
@@ -52,4 +59,6 @@ export const {
   useGetToolsQuery,
   useCreateToolMutation,
   useUpdateToolMutation,
+  endpoints: { getToolById },
+  util: { getRunningQueriesThunk },
 } = toolsApi;

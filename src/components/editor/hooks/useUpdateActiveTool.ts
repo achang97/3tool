@@ -1,12 +1,17 @@
 import { setSnackbarMessage } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
 import { useUpdateToolMutation } from '@app/redux/services/tools';
+import { ApiResponse, Tool } from '@app/types';
 import { parseApiError } from '@app/utils/api';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useGetActiveTool } from './useGetActiveTool';
 
-type HookReturnType = ReturnType<typeof useUpdateToolMutation>[0];
+type HookReturnType = (
+  update: Partial<Pick<Tool, 'name' | 'components'>>
+) => Promise<ApiResponse<Tool> | undefined>;
 
 export const useUpdateActiveTool = (): HookReturnType => {
+  const tool = useGetActiveTool();
   const [updateTool, { error }] = useUpdateToolMutation();
   const dispatch = useAppDispatch();
 
@@ -21,5 +26,19 @@ export const useUpdateActiveTool = (): HookReturnType => {
     }
   }, [error, dispatch]);
 
-  return updateTool;
+  const handleUpdateTool = useCallback(
+    async (update: Partial<Pick<Tool, 'name' | 'components'>>) => {
+      if (!tool) {
+        return undefined;
+      }
+
+      return updateTool({
+        id: tool.id,
+        ...update,
+      });
+    },
+    [tool, updateTool]
+  );
+
+  return handleUpdateTool;
 };

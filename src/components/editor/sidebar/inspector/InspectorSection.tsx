@@ -42,7 +42,9 @@ export const InspectorSection = ({
           )}
         </IconButton>
       </Box>
-      <Collapse in={isOpen}>{children}</Collapse>
+      <Collapse in={isOpen}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>{children}</Box>
+      </Collapse>
     </Box>
   );
 };

@@ -1,4 +1,5 @@
 import { User } from '@auth0/auth0-react';
+import { SerializedError } from '@reduxjs/toolkit';
 
 export type ApiError = {
   status: number;
@@ -6,6 +7,14 @@ export type ApiError = {
     message: string;
   } | null;
 };
+
+export type ApiResponse<T> =
+  | {
+      data: T;
+    }
+  | {
+      error: ApiError | SerializedError;
+    };
 
 export type Tool = {
   id: string;

@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { Toolbar } from '@app/components/toolbar/Toolbar';
 import { theme } from '@app/utils/mui';
-import { store } from '@app/redux/store';
+import { wrapper } from '@app/redux/store';
 import { wagmiClient, ethereumClient } from '@app/utils/wallet';
 import {
   AUTH0_CLIENT_ID,
@@ -18,6 +18,7 @@ import { WagmiConfig } from 'wagmi';
 import { Web3Modal } from '@web3modal/react';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { Auth0RedirectWrapper } from '@app/components/auth0/Auth0RedirectWrapper';
+import { initFetch, initGlobal } from '@app/utils/global';
 
 import '@app/styles/globals.css';
 import '@app/styles/react-grid-layout.css';
@@ -28,7 +29,12 @@ if (MSW_API) {
   require('@mocks/init');
 }
 
-const App = ({ Component, pageProps }: AppProps) => {
+initGlobal();
+initFetch();
+
+const App = ({ Component, ...rest }: AppProps) => {
+  const { store, props } = wrapper.useWrappedStore(rest);
+
   // Start MSW on the browser
   useEffect(() => {
     if (MSW_API) {
@@ -58,7 +64,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 >
                   <Toolbar />
                   <Box sx={{ flex: 1, overflowY: 'scroll' }}>
-                    <Component {...pageProps} />
+                    <Component {...props.pageProps} />
                   </Box>
                 </Box>
                 <Web3Modal

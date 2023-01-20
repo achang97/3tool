@@ -11,6 +11,8 @@ import {
 import { InspectorEditableName } from './InspectorEditableName';
 import { useGetActiveTool } from '../../hooks/useGetActiveTool';
 import { useUpdateActiveTool } from '../../hooks/useUpdateActiveTool';
+import { DeleteComponentButton } from './DeleteComponentButton';
+import { InspectorSection } from './InspectorSection';
 
 type ComponentInspectorProps = {
   name: string;
@@ -29,14 +31,8 @@ export const ComponentInspector = ({ name }: ComponentInspectorProps) => {
 
   const handleUpdateComponent = useCallback(
     async (update: Partial<Component>) => {
-      if (!tool) {
-        return;
-      }
-
-      // Should refactor this out
       await updateTool({
-        id: tool.id,
-        components: tool.components.map((currComponent) => {
+        components: tool?.components.map((currComponent) => {
           return currComponent.name === name
             ? { ...currComponent, ...update }
             : currComponent;
@@ -82,6 +78,9 @@ export const ComponentInspector = ({ name }: ComponentInspectorProps) => {
         value={name}
         onSubmit={handleSubmitName}
       />
+      <InspectorSection title="Actions">
+        <DeleteComponentButton name={name} />
+      </InspectorSection>
     </Box>
   );
 };

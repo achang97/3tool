@@ -1,6 +1,6 @@
 import { ApiError } from '@app/types';
 import { SerializedError } from '@reduxjs/toolkit';
-import { parseApiError } from '../api';
+import { isSuccessfulApiResponse, parseApiError } from '../api';
 
 describe('api', () => {
   describe('parseApiError', () => {
@@ -30,6 +30,28 @@ describe('api', () => {
       };
       const result = parseApiError(mockError);
       expect(result).toEqual('Mock Error Message');
+    });
+  });
+
+  describe('isSuccessfulApiResponse', () => {
+    it('returns false if response is undefined', () => {
+      const result = isSuccessfulApiResponse(undefined);
+      expect(result).toEqual(false);
+    });
+
+    it('returns true if data field is in response', () => {
+      const result = isSuccessfulApiResponse({ data: 'hello' });
+      expect(result).toEqual(true);
+    });
+
+    it('returns false if data field is not in response', () => {
+      const result = isSuccessfulApiResponse({
+        error: {
+          status: 400,
+          data: { message: 'Error Message ' },
+        },
+      });
+      expect(result).toEqual(false);
     });
   });
 });

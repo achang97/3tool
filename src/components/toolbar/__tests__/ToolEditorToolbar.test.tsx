@@ -58,7 +58,6 @@ describe('ToolEditorToolbar', () => {
       await userEvent.keyboard('[Enter]');
 
       expect(mockUpdateTool).toHaveBeenCalledWith({
-        id: mockTool.id,
         name: `${mockTool.name}${newNameText}`,
       });
 

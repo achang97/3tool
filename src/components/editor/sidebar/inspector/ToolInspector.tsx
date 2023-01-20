@@ -9,21 +9,19 @@ export const ToolInspector = () => {
     <Box data-testid="tool-inspector">
       <InspectorEditableName value="tool" icon={<Web />} editable={false} />
       <InspectorSection title="Libraries">
-        <Box>
-          {GLOBAL_LIBRARIES.map(({ label }) => (
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-              key={label}
-            >
-              <Typography variant="body2">{label}</Typography>
-              <Checkbox checked size="small" />
-            </Box>
-          ))}
-        </Box>
+        {GLOBAL_LIBRARIES.map(({ label }) => (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+            key={label}
+          >
+            <Typography variant="body2">{label}</Typography>
+            <Checkbox checked size="small" />
+          </Box>
+        ))}
       </InspectorSection>
     </Box>
   );

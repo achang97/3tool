@@ -264,6 +264,7 @@ describe('useReactGridLayoutProps', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         newComponent: mockNewComponent,
       }));
+      mockHandleUpdateComponents.mockImplementation(() => true);
 
       const { result } = renderHook(() =>
         useReactGridLayoutProps({
@@ -294,9 +295,7 @@ describe('useReactGridLayoutProps', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         newComponent: mockNewComponent,
       }));
-      mockHandleUpdateComponents.mockImplementation(() => {
-        throw new Error('Error');
-      });
+      mockHandleUpdateComponents.mockImplementation(() => false);
 
       const { result } = renderHook(() =>
         useReactGridLayoutProps({

@@ -15,11 +15,11 @@ export const ToolEditorToolbar = () => {
 
   const handleUpdateToolName = useCallback(
     (name: string) => {
-      if (tool && name) {
-        updateTool({ id: tool.id, name });
+      if (name) {
+        updateTool({ name });
       }
     },
-    [tool, updateTool]
+    [updateTool]
   );
 
   const handleSettingsClick = useCallback(() => {

@@ -12,7 +12,7 @@ import { createNewComponent } from '../utils/editor';
 
 type HookArgs = {
   components: Component[];
-  onUpdateComponents: (newComponents: Component[]) => Promise<void>;
+  onUpdateComponents: (newComponents: Component[]) => Promise<boolean>;
 };
 
 type HookReturnType = {
@@ -98,14 +98,14 @@ export const useReactGridLayoutProps = ({
       );
       const newComponents = [...prevComponents, newToolComponent];
 
-      try {
-        await onUpdateComponents(newComponents);
-        dispatch(focusComponent(newComponent.name));
-      } catch {
-        // Do nothing
+      const success = await onUpdateComponents(newComponents);
+      dispatch(endCreateComponentDrag());
+
+      if (!success) {
+        return;
       }
 
-      dispatch(endCreateComponentDrag());
+      dispatch(focusComponent(newComponent.name));
     },
     [dispatch, getComponentsWithLayout, newComponent, onUpdateComponents]
   );

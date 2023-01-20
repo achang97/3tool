@@ -1,5 +1,7 @@
 import { ethers } from 'ethers';
-import { initGlobal } from '../global';
+import fetch from 'node-fetch';
+import AbortController from 'abort-controller';
+import { initFetch, initGlobal } from '../global';
 
 describe('global', () => {
   describe('initGlobal', () => {
@@ -11,6 +13,15 @@ describe('global', () => {
 
       // @ts-ignore globalThis has no typing
       expect(global.ethers).toEqual(ethers);
+    });
+  });
+
+  describe('initFetch', () => {
+    it('sets fetch and AbortController', () => {
+      initFetch();
+
+      expect(global.fetch).toEqual(fetch);
+      expect(global.AbortController).toEqual(AbortController);
     });
   });
 });
