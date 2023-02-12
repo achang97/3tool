@@ -18,4 +18,18 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+document.createRange = () => {
+  const range = new Range();
+
+  range.getBoundingClientRect = jest.fn();
+
+  // @ts-ignore purposefully overriding function
+  range.getClientRects = jest.fn(() => ({
+    item: () => null,
+    length: 0,
+  }));
+
+  return range;
+};
+
 moment.tz.setDefault('Etc/UTC');

@@ -1,86 +1,104 @@
-import { useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 import { Box } from '@mui/material';
-import { COMPONENTS_BY_TYPE } from '@app/constants';
+import { COMPONENT_CONFIGS } from '@app/constants';
 import Image from 'next/image';
-import { Component } from '@app/types';
-import { useAppDispatch } from '@app/redux/hooks';
 import {
-  focusComponent,
-  setSnackbarMessage,
-} from '@app/redux/features/editorSlice';
+  BaseComponentInspectorProps,
+  Component,
+  ComponentData,
+  ComponentType,
+} from '@app/types';
+import _ from 'lodash';
 import { InspectorEditableName } from './InspectorEditableName';
-import { useGetActiveTool } from '../../hooks/useGetActiveTool';
-import { useUpdateActiveTool } from '../../hooks/useUpdateActiveTool';
+import { useActiveTool } from '../../hooks/useActiveTool';
 import { DeleteComponentButton } from './DeleteComponentButton';
 import { InspectorSection } from './InspectorSection';
+import { ButtonInspector } from './components/ButtonInspector';
+import { TextInputInspector } from './components/TextInputInspector';
+import { TextInspector } from './components/TextInspector';
+import { NumberInputInspector } from './components/NumberInputInspector';
+import { useUpdateComponentName } from '../../hooks/useUpdateComponentName';
+import { TableInspector } from './components/TableInspector';
 
 type ComponentInspectorProps = {
-  name: string;
+  component: Component;
 };
 
-export const ComponentInspector = ({ name }: ComponentInspectorProps) => {
-  const tool = useGetActiveTool();
-  const updateTool = useUpdateActiveTool();
-  const dispatch = useAppDispatch();
+const DEBOUNCE_TIME_MS = 300;
 
-  const component = useMemo(() => {
-    return tool?.components.find(
-      (currComponent) => currComponent.name === name
-    );
-  }, [tool, name]);
+const COMPONENT_INSPECTOR_MAP: Record<
+  ComponentType,
+  FC<BaseComponentInspectorProps>
+> = {
+  [ComponentType.Button]: ButtonInspector,
+  [ComponentType.TextInput]: TextInputInspector,
+  [ComponentType.NumberInput]: NumberInputInspector,
+  [ComponentType.Text]: TextInspector,
+  [ComponentType.Table]: TableInspector,
+};
+
+export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
+  const { tool, updateTool } = useActiveTool();
+
+  const handleUpdateName = useUpdateComponentName(component.name);
 
   const handleUpdateComponent = useCallback(
-    async (update: Partial<Component>) => {
+    async (update: RecursivePartial<Component>) => {
       await updateTool({
-        components: tool?.components.map((currComponent) => {
-          return currComponent.name === name
-            ? { ...currComponent, ...update }
+        components: tool.components.map((currComponent) => {
+          return currComponent.name === component.name
+            ? _.merge({}, currComponent, update)
             : currComponent;
         }),
       });
     },
-    [name, tool, updateTool]
+    [component.name, tool.components, updateTool]
   );
 
-  const handleSubmitName = useCallback(
-    async (newName: string) => {
-      if (!newName.match(/^[\w_$]+$/)) {
-        dispatch(
-          setSnackbarMessage({
-            type: 'error',
-            message: 'Name can only contain letters, numbers, _, or $',
-          })
-        );
-        return;
-      }
+  const debouncedHandleUpdateData = useMemo(() => {
+    return _.debounce((update: RecursivePartial<ComponentData>) => {
+      handleUpdateComponent({ data: update });
+    }, DEBOUNCE_TIME_MS);
+  }, [handleUpdateComponent]);
 
-      await handleUpdateComponent({ name: newName });
-      dispatch(focusComponent(newName));
-    },
-    [handleUpdateComponent, dispatch]
-  );
+  const dataInspector = useMemo(() => {
+    const Inspector = COMPONENT_INSPECTOR_MAP[component.type];
+    if (!Inspector) {
+      return null;
+    }
 
-  if (!component) {
-    return null;
-  }
+    return (
+      <Inspector
+        name={component.name}
+        data={component.data}
+        onUpdate={debouncedHandleUpdateData}
+      />
+    );
+  }, [component, debouncedHandleUpdateData]);
 
   return (
-    <Box data-testid="component-inspector">
+    <Box
+      data-testid="component-inspector"
+      sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+    >
       <InspectorEditableName
         icon={
           <Image
             style={{ height: '20px', width: '20px' }}
-            src={COMPONENTS_BY_TYPE[component.type].icon}
+            src={COMPONENT_CONFIGS[component.type].icon}
             alt=""
           />
         }
-        subtitle={COMPONENTS_BY_TYPE[component.type].label}
-        value={name}
-        onSubmit={handleSubmitName}
+        subtitle={COMPONENT_CONFIGS[component.type].label}
+        value={component.name}
+        onSubmit={handleUpdateName}
       />
-      <InspectorSection title="Actions">
-        <DeleteComponentButton name={name} />
-      </InspectorSection>
+      <Box sx={{ overflow: 'auto', minHeight: 0 }}>
+        {dataInspector}
+        <InspectorSection title="Actions">
+          <DeleteComponentButton name={component.name} />
+        </InspectorSection>
+      </Box>
     </Box>
   );
 };

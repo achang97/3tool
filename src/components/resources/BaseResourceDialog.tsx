@@ -15,7 +15,7 @@ import { ConfigureResourceForm } from './ConfigureResourceForm';
 type BaseResourceDialogProps = {
   title: string;
   open: boolean;
-  onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => void;
+  onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'data'>) => void;
   onClose: () => void;
   error?: ApiError | SerializedError;
   isLoading?: boolean;
@@ -36,7 +36,7 @@ export const BaseResourceDialog = ({
   const errorRef = useRef<HTMLSpanElement>(null);
 
   const handleSubmit = useCallback(
-    (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
+    (resource: Pick<Resource, 'type' | 'name' | 'data'>) => {
       onSubmit(resource);
     },
     [onSubmit]

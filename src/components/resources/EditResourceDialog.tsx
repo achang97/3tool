@@ -24,7 +24,7 @@ export const EditResourceDialog = ({
   }, [updatedResource, onClose]);
 
   const handleUpdateResource = useCallback(
-    (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
+    (resource: Pick<Resource, 'type' | 'name' | 'data'>) => {
       updateResource({ id: resourceId, ...resource });
     },
     [updateResource, resourceId]

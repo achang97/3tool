@@ -14,7 +14,7 @@ describe('ToolbarTemplate', () => {
 
     const result = render(<ToolbarTemplate left={mockLeft} />);
 
-    expect(result.getByText(mockLeft)).toBeDefined();
+    expect(result.getByText(mockLeft)).toBeTruthy();
   });
 
   it('renders middle component', () => {
@@ -22,7 +22,7 @@ describe('ToolbarTemplate', () => {
 
     const result = render(<ToolbarTemplate middle={mockMiddle} />);
 
-    expect(result.getByText(mockMiddle)).toBeDefined();
+    expect(result.getByText(mockMiddle)).toBeTruthy();
   });
 
   it('renders right component', () => {
@@ -30,6 +30,6 @@ describe('ToolbarTemplate', () => {
 
     const result = render(<ToolbarTemplate right={mockRight} />);
 
-    expect(result.getByText(mockRight)).toBeDefined();
+    expect(result.getByText(mockRight)).toBeTruthy();
   });
 });

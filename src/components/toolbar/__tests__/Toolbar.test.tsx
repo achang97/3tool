@@ -11,16 +11,8 @@ jest.mock('next/router', () => ({
   })),
 }));
 
-jest.mock('@app/redux/services/tools', () => ({
-  __esModule: true,
-  ...jest.requireActual('@app/redux/services/tools'),
-  useGetToolByIdQuery: jest.fn(() => ({})),
-}));
-
 describe('Toolbar', () => {
   const generalToolbarId = 'general-toolbar';
-  const toolViewerToolbarId = 'tool-viewer-toolbar';
-  const toolToolEditorToolbarId = 'tool-editor-toolbar';
 
   it('renders nothing if user is unauthenticated', () => {
     (useAuth0 as jest.Mock).mockImplementation(() => ({
@@ -28,12 +20,10 @@ describe('Toolbar', () => {
     }));
 
     const result = render(<Toolbar />);
-    expect(result.queryByTestId(generalToolbarId)).toBeNull();
-    expect(result.queryByTestId(toolViewerToolbarId)).toBeNull();
-    expect(result.queryByTestId(toolToolEditorToolbarId)).toBeNull();
+    expect(result.container.firstChild).toBeNull();
   });
 
-  it('renders Tool Viewer toolbar if on /tools/[id] route', () => {
+  it('renders nothing if on /tools/[id] route', () => {
     (useAuth0 as jest.Mock).mockImplementation(() => ({
       isAuthenticated: true,
     }));
@@ -42,10 +32,10 @@ describe('Toolbar', () => {
     }));
 
     const result = render(<Toolbar />);
-    expect(result.getByTestId(toolViewerToolbarId)).toBeDefined();
+    expect(result.container.firstChild).toBeNull();
   });
 
-  it('renders Tool Editor toolbar if on /editor/[id] route', () => {
+  it('renders nothing if on /editor/[id] route', () => {
     (useAuth0 as jest.Mock).mockImplementation(() => ({
       isAuthenticated: true,
     }));
@@ -55,7 +45,7 @@ describe('Toolbar', () => {
     }));
 
     const result = render(<Toolbar />);
-    expect(result.getByTestId(toolToolEditorToolbarId)).toBeDefined();
+    expect(result.container.firstChild).toBeNull();
   });
 
   it('renders general toolbar in the default case', () => {
@@ -67,6 +57,6 @@ describe('Toolbar', () => {
     }));
 
     const result = render(<Toolbar />);
-    expect(result.getByTestId(generalToolbarId)).toBeDefined();
+    expect(result.getByTestId(generalToolbarId)).toBeTruthy();
   });
 });

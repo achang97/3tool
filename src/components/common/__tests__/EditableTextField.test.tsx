@@ -1,9 +1,24 @@
+import {
+  TextField,
+  TextFieldProps,
+  Typography,
+  TypographyProps,
+} from '@mui/material';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EditableTextField } from '../EditableTextField';
 
 const mockHandleSubmit = jest.fn();
 const mockValue = 'Some Value';
+
+jest.mock('@mui/material', () => {
+  const ActualMui = jest.requireActual('@mui/material');
+  return {
+    ...ActualMui,
+    Typography: jest.fn((props) => <ActualMui.Typography {...props} />),
+    TextField: jest.fn((props) => <ActualMui.TextField {...props} />),
+  };
+});
 
 describe('EditableTextField', () => {
   const textId = 'editable-text-field-view';
@@ -118,5 +133,45 @@ describe('EditableTextField', () => {
     );
     await userEvent.click(result.getByTestId(textId));
     expect(await result.findByTestId(inputId)).toHaveValue(newValue);
+  });
+
+  it('passes TypographyProps to Typography', () => {
+    const mockTypographyProps: TypographyProps = {
+      textAlign: 'center',
+      sx: { width: '1000px' },
+    };
+
+    render(
+      <EditableTextField
+        value={mockValue}
+        onSubmit={mockHandleSubmit}
+        TypographyProps={mockTypographyProps}
+      />
+    );
+
+    expect((Typography as jest.Mock).mock.calls[0][0]).toMatchObject(
+      mockTypographyProps
+    );
+  });
+
+  it('passes TextFieldProps to TextField', async () => {
+    const mockTextFieldProps: TextFieldProps = {
+      label: 'Something',
+      sx: { width: '1000px' },
+    };
+
+    const result = render(
+      <EditableTextField
+        value={mockValue}
+        onSubmit={mockHandleSubmit}
+        TextFieldProps={mockTextFieldProps}
+      />
+    );
+
+    await userEvent.click(result.getByTestId(textId));
+    expect(TextField).toHaveBeenCalledWith(
+      expect.objectContaining(mockTextFieldProps),
+      {}
+    );
   });
 });

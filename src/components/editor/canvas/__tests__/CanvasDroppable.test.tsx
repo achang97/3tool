@@ -1,51 +1,48 @@
-import { ComponentType, Tool } from '@app/types';
+import { Component, ComponentType, Tool } from '@app/types';
+import {
+  mockComponentLayout,
+  mockTool as baseMockTool,
+} from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
+import { DepGraph } from 'dependency-graph';
+import React from 'react';
 import { CanvasDroppable } from '../CanvasDroppable';
 
-const mockTool: Tool = {
-  id: 'test',
-  name: 'Tool',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  creator: {
-    name: 'Andrew',
-  },
-  components: [
-    {
-      name: 'button1',
-      type: ComponentType.Button,
-      layout: {
-        w: 1,
-        h: 1,
-        x: 1,
-        y: 1,
-      },
-      metadata: {
-        button: {
-          basic: {
-            text: 'Button 1',
-          },
-          interaction: {},
-        },
-      },
-    },
-  ],
-};
 const mockUpdateTool = jest.fn();
 
-jest.mock('../../hooks/useGetActiveTool', () => ({
-  useGetActiveTool: jest.fn(() => mockTool),
+const mockComponents: Component[] = [
+  {
+    name: 'button1',
+    type: ComponentType.Button,
+    layout: mockComponentLayout,
+    data: {},
+  },
+];
+
+const mockTool: Tool = {
+  ...baseMockTool,
+  components: mockComponents,
+};
+
+jest.mock('../../hooks/useActiveTool', () => ({
+  useActiveTool: jest.fn(() => ({
+    tool: mockTool,
+    updateTool: mockUpdateTool,
+    componentDataDepGraph: new DepGraph<string>(),
+    componentEvalDataMap: {},
+    componentEvalDataValuesMap: {},
+  })),
 }));
 
-jest.mock('../../hooks/useUpdateActiveTool', () => ({
-  useUpdateActiveTool: jest.fn(() => mockUpdateTool),
+jest.mock('../../hooks/useComponentEvalData', () => ({
+  useComponentEvalData: jest.fn(() => ({
+    evalDataValues: {},
+  })),
 }));
 
 describe('CanvasDroppable', () => {
   it('renders tool components', () => {
     const result = render(<CanvasDroppable />);
-    expect(
-      result.container.querySelector(`#${mockTool.components[0].name}`)
-    ).toBeDefined();
+    expect(result.getByTestId('button1')).toBeTruthy();
   });
 });

@@ -10,7 +10,7 @@ const RESOURCES: Resource[] = [
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
     numLinkedQueries: 5,
-    metadata: {
+    data: {
       smartContract: {
         chainId: 5,
         address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
@@ -26,7 +26,7 @@ const RESOURCES: Resource[] = [
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
     numLinkedQueries: 3,
-    metadata: {
+    data: {
       smartContract: {
         chainId: 5,
         address: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
@@ -45,7 +45,7 @@ const RESOURCES: Resource[] = [
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
     numLinkedQueries: 4,
-    metadata: {
+    data: {
       dune: {
         apiKey: 'api-key',
       },
@@ -94,7 +94,7 @@ export const resourceHandlers = [
       name: body.name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      metadata: body.metadata,
+      data: body.data,
       numLinkedQueries: 0,
     };
     RESOURCES.push(newResource);
@@ -127,7 +127,7 @@ export const resourceHandlers = [
     }
 
     if (body.name) resource.name = body.name;
-    if (resource.metadata) resource.metadata = body.metadata;
+    if (resource.data) resource.data = body.data;
     resource.updatedAt = new Date().toISOString();
 
     return res(ctx.status(200), ctx.json<Resource>(resource));

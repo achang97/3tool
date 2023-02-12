@@ -19,7 +19,12 @@ export const InspectorSection = ({
 
   return (
     <Box
-      sx={{ paddingX: 2, paddingY: 1, borderTop: 1, borderColor: 'divider' }}
+      sx={{
+        paddingX: 2,
+        paddingY: 1,
+        '&:not(:first-of-type)': { borderTop: 1, borderColor: 'divider' },
+      }}
+      data-testid={`inspector-section-${title}`}
     >
       <Box
         sx={{
@@ -43,7 +48,9 @@ export const InspectorSection = ({
         </IconButton>
       </Box>
       <Collapse in={isOpen}>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>{children}</Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          {children}
+        </Box>
       </Collapse>
     </Box>
   );

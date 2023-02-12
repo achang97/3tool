@@ -39,7 +39,7 @@ describe('CreateToolDialog', () => {
   it('renders dialog title', () => {
     const result = render(<CreateToolDialog onClose={mockHandleClose} open />);
 
-    expect(result.getByText('Create new tool')).toBeDefined();
+    expect(result.getByText('Create new tool')).toBeTruthy();
   });
 
   it('does not call API to create tool if no tool name is provided', async () => {
@@ -109,6 +109,6 @@ describe('CreateToolDialog', () => {
     ]);
 
     const result = render(<CreateToolDialog onClose={mockHandleClose} open />);
-    expect(result.getByText('Mock Error Message')).toBeDefined();
+    expect(result.getByText('Mock Error Message')).toBeTruthy();
   });
 });

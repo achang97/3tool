@@ -8,9 +8,9 @@ export type ApiError = {
   } | null;
 };
 
-export type ApiResponse<T> =
+export type ApiResponse<DataType = {}> =
   | {
-      data: T;
+      data: DataType;
     }
   | {
       error: ApiError | SerializedError;
@@ -46,7 +46,7 @@ export type Resource = {
   createdAt: string;
   updatedAt: string;
   numLinkedQueries: number;
-  metadata: {
+  data: {
     smartContract?: SmartContract;
     dune?: {
       apiKey: string;
@@ -58,11 +58,47 @@ export enum ComponentType {
   Button = 'button',
   TextInput = 'textInput',
   NumberInput = 'numberInput',
-  Select = 'select',
-  Container = 'container',
   Table = 'table',
   Text = 'text',
 }
+
+export type ComponentData = {
+  [ComponentType.Button]?: {
+    text: string;
+    disabled: string;
+    loading: string;
+  };
+  [ComponentType.TextInput]?: {
+    defaultValue: string;
+    placeholder: string;
+    label: string;
+    disabled: string;
+    required: string;
+    minLength: string;
+    maxLength: string;
+  };
+  [ComponentType.NumberInput]?: {
+    defaultValue: string;
+    placeholder: string;
+    label: string;
+    disabled: string;
+    required: string;
+    minimum: string;
+    maximum: string;
+  };
+  [ComponentType.Text]?: {
+    value: string;
+    horizontalAlignment: 'left' | 'center' | 'right';
+  };
+  [ComponentType.Table]?: {
+    data: string;
+    emptyMessage: string;
+    multiselect: string;
+    // NOTE: Currently only using this for testing
+    columnHeaderNames: Record<string, string>;
+    columnHeadersByIndex: string[];
+  };
+};
 
 export type Component = {
   name: string;
@@ -73,116 +109,5 @@ export type Component = {
     w: number;
     h: number;
   };
-  metadata: {
-    // container?: {
-    //   layout: {
-    //     showHeader: boolean;
-    //     showFooter: boolean;
-    //     height: 'auto' | 'fixed';
-    //   };
-    //   components: Component[];
-    // };
-    // table?: {
-    //   data: {
-    //     data: string;
-    //   };
-    //   columns: {
-    //     title: string;
-    //     hidden: string;
-    //     editable: boolean;
-    //   }[];
-    //   rowSelection: {
-    //     multiselect: string;
-    //   };
-    //   layout: {
-    //     maxPageSize: string;
-    //   };
-    // };
-    // textInput?: {
-    //   basic: {
-    //     defaultValue: string;
-    //     placeholder: string;
-    //   };
-    //   label: {
-    //     label: string;
-    //   };
-    //   interaction: {
-    //     disabled: string;
-    //   };
-    //   validation: {
-    //     required: string;
-    //     minLength: string;
-    //     maxLength: string;
-    //     pattern: 'email' | 'regex' | 'url';
-    //     regex: string;
-    //   };
-    // };
-    // numberInput?: {
-    //   basic: {
-    //     defaultValue: string;
-    //     placeholder: string;
-    //     format: 'standard' | 'currency' | 'percentage';
-    //     currencyCode: string;
-    //     minimum: string;
-    //     maximum: string;
-    //   };
-    //   label: {
-    //     label: string;
-    //   };
-    //   interaction: {
-    //     disabled: string;
-    //   };
-    //   validation: {
-    //     required: string;
-    //   };
-    // };
-    // select?: {
-    //   options: {
-    //     data: {
-    //       manual: {
-    //         label: string;
-    //         value: string;
-    //         disabled: string;
-    //         hidden: string;
-    //       }[];
-    //       mapped: {
-    //         dataSource: string;
-    //         label: string;
-    //         value: string;
-    //         disabled: string;
-    //         hidden: string;
-    //       };
-    //     };
-    //     label: {
-    //       label: string;
-    //     };
-    //     interaction: {
-    //       disabled: string;
-    //     };
-    //     validation: {
-    //       required: string;
-    //     };
-    //   };
-    // };
-    // text?: {
-    //   basic: {
-    //     value: string;
-    //   };
-    //   layout: {
-    //     alignmentHorizontal: 'start' | 'center' | 'end';
-    //     alignmentVertical: 'start' | 'center' | 'end';
-    //     height: 'auto' | 'fixed';
-    //     overflow: 'scroll' | 'hidden';
-    //   };
-    // };
-    button?: {
-      basic: {
-        text: string;
-      };
-      interaction: {
-        disabled?: string;
-        loading?: string;
-      };
-    };
-  };
+  data: ComponentData;
 };

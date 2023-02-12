@@ -1,68 +1,41 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Box } from '@mui/material';
 import { Responsive, WidthProvider } from 'react-grid-layout';
-import { Component } from '@app/types';
-import { useAppSelector } from '@app/redux/hooks';
-import { isSuccessfulApiResponse } from '@app/utils/api';
 import { CanvasComponent } from './CanvasComponent';
-import { useGetActiveTool } from '../hooks/useGetActiveTool';
-import { useUpdateActiveTool } from '../hooks/useUpdateActiveTool';
 import { useReactGridLayoutProps } from '../hooks/useReactGridLayoutProps';
+import { useActiveTool } from '../hooks/useActiveTool';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
+const NUM_COLS = 48;
+
 export const CanvasDroppable = () => {
-  const tool = useGetActiveTool();
-  const updateTool = useUpdateActiveTool();
-
-  const { movingComponentName, focusedComponentName } = useAppSelector(
-    (state) => state.editor
-  );
-
-  const components = useMemo(() => {
-    return tool ? tool.components : [];
-  }, [tool]);
-
-  const handleUpdateToolComponents = useCallback(
-    async (newComponents: Component[]) => {
-      const response = await updateTool({
-        components: newComponents,
-      });
-
-      return isSuccessfulApiResponse(response);
-    },
-    [updateTool]
-  );
+  const { tool } = useActiveTool();
 
   const { onLayoutChange, onDrag, onDragStop, onDrop, layout, droppingItem } =
-    useReactGridLayoutProps({
-      components,
-      onUpdateComponents: handleUpdateToolComponents,
-    });
+    useReactGridLayoutProps();
 
   const gridChildren = useMemo(() => {
-    return components.map((component) => (
+    return tool.components.map((component) => (
       <CanvasComponent
         key={component.name}
         name={component.name}
         type={component.type}
-        metadata={component.metadata}
-        isDragging={component.name === movingComponentName}
-        isFocused={component.name === focusedComponentName}
       />
     ));
-  }, [components, movingComponentName, focusedComponentName]);
+  }, [tool.components]);
 
   return (
     <Box data-testid="canvas-droppable">
       <ResponsiveReactGridLayout
         rowHeight={5}
         cols={{
-          lg: 48,
-          md: 40,
-          sm: 24,
-          xs: 16,
-          xxs: 8,
+          // TODO: Figure out responsive sizing
+          lg: NUM_COLS,
+          md: NUM_COLS,
+          sm: NUM_COLS,
+          xs: NUM_COLS,
+          xxs: NUM_COLS,
         }}
         resizeHandles={['s', 'e', 'se']}
         layouts={{ lg: layout }}

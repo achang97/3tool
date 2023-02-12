@@ -16,6 +16,18 @@ describe('tools', () => {
     (fetch as jest.Mock).mockImplementation(() => mockResponse);
   });
 
+  describe('useGetToolsQuery', () => {
+    it('calls fetch to GET /tools', async () => {
+      renderHook(() => useGetToolsQuery());
+
+      await waitFor(() =>
+        expect(fetch).toHaveBeenCalledWith(
+          expect.objectContaining({ method: 'GET', url: '/tools' })
+        )
+      );
+    });
+  });
+
   describe('useGetToolByIdQuery', () => {
     it('calls fetch to GET /tools/:id', async () => {
       const mockId = 'toolId';
@@ -24,18 +36,6 @@ describe('tools', () => {
       await waitFor(() =>
         expect(fetch).toHaveBeenCalledWith(
           expect.objectContaining({ method: 'GET', url: `/tools/${mockId}` })
-        )
-      );
-    });
-  });
-
-  describe('useGetToolsQuery', () => {
-    it('calls fetch to GET /tools', async () => {
-      renderHook(() => useGetToolsQuery());
-
-      await waitFor(() =>
-        expect(fetch).toHaveBeenCalledWith(
-          expect.objectContaining({ method: 'GET', url: '/tools' })
         )
       );
     });
@@ -76,7 +76,7 @@ describe('tools', () => {
               x: 1,
               y: 1,
             },
-            metadata: {},
+            data: {},
           },
         ],
       };

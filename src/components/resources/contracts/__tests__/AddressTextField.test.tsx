@@ -17,7 +17,7 @@ describe('AddressTextField', () => {
   it('renders error if value is not valid address', () => {
     const mockValue = '0x';
     const result = render(<AddressTextField value={mockValue} />);
-    expect(result.getByText('Invalid address')).toBeDefined();
+    expect(result.getByText('Invalid address')).toBeTruthy();
   });
 
   it('renders error if value is valid address and fetchAbiError is defined', () => {
@@ -27,7 +27,7 @@ describe('AddressTextField', () => {
     const result = render(
       <AddressTextField value={mockValue} fetchAbiError={mockFetchAbiError} />
     );
-    expect(result.getByText(mockFetchAbiError)).toBeDefined();
+    expect(result.getByText(mockFetchAbiError)).toBeTruthy();
   });
 
   it('does not render error if value is empty', () => {

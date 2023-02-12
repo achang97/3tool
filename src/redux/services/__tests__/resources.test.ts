@@ -50,10 +50,10 @@ describe('resources', () => {
 
   describe('useCreateResourceMutation', () => {
     it('calls fetch to POST /resources', async () => {
-      const mockBody: Pick<Resource, 'type' | 'name' | 'metadata'> = {
+      const mockBody: Pick<Resource, 'type' | 'name' | 'data'> = {
         type: ResourceType.SmartContract,
         name: 'New Resource',
-        metadata: {},
+        data: {},
       };
       const { result } = renderHook(() => useCreateResourceMutation());
       const [createResource] = result.current;
@@ -75,10 +75,10 @@ describe('resources', () => {
   describe('useUpdateResourceMutation', () => {
     it('calls fetch to PUT /resources', async () => {
       const mockId = '1';
-      const mockBody: Pick<Resource, 'type' | 'name' | 'metadata'> = {
+      const mockBody: Pick<Resource, 'type' | 'name' | 'data'> = {
         type: ResourceType.SmartContract,
         name: 'New Resource',
-        metadata: {},
+        data: {},
       };
       const { result } = renderHook(() => useUpdateResourceMutation());
       const [updateResource] = result.current;

@@ -1,0 +1,52 @@
+.cm-theme-light {
+  min-height: 32px;
+}
+
+.cm-editor {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-weight: 400;
+  line-height: 1.4375em;
+  color: var(--mui-palette-text-primary);
+  cursor: text;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  min-height: 32px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(var(--mui-palette-common-onBackgroundChannel) / 0.23);
+  border-radius: var(--mui-shape-borderRadius);
+}
+
+.aca-dynamic-preview .cm-editor {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.cm-editor.cm-focused {
+  outline-style: solid;
+  outline-color: var(--mui-palette-primary-main);
+  outline-offset: -2px;
+  outline-width: 2px;
+}
+
+.cm-editor:not(.cm-focused):hover {
+  border-color: var(--mui-palette-text-primary);
+}
+
+.cm-editor .cm-scroller {
+  flex: 1;
+  width: 100%;
+}
+
+.cm-editor .cm-content {
+  font-family: 'Rubik';
+  margin: 0;
+  padding: 5px 0;
+}
+
+.cm-editor .cm-content .cm-line {
+  min-height: 20px;
+  padding: 0 0.75em;
+}

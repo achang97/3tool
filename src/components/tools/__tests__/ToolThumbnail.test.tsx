@@ -31,7 +31,7 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    expect(result.getByText(mockName)).toBeDefined();
+    expect(result.getByText(mockName)).toBeTruthy();
   });
 
   it('renders avatar for creator', () => {
@@ -44,7 +44,7 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    expect(result.getByText(mockCreator.name![0])).toBeDefined();
+    expect(result.getByText(mockCreator.name![0])).toBeTruthy();
   });
 
   it('renders date when tool was last updated', () => {
@@ -62,7 +62,7 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    expect(result.getByText('Updated a month ago')).toBeDefined();
+    expect(result.getByText('Updated a month ago')).toBeTruthy();
   });
 
   it('navigates to /tools/:id route on click', async () => {

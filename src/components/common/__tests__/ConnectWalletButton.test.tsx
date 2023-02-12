@@ -13,7 +13,7 @@ jest.mock('@web3modal/react', () => ({
 describe('ConnectWalletButton', () => {
   it('renders Connect Wallet text', () => {
     const result = render(<ConnectWalletButton />);
-    expect(result.getByText('Connect Wallet')).toBeDefined();
+    expect(result.getByText('Connect Wallet')).toBeTruthy();
   });
 
   it('opens WalletConnect modal on click', async () => {

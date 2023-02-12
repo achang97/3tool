@@ -43,6 +43,7 @@ export const ToolbarTemplate = ({
       sx={{
         height: '60px',
         display: 'flex',
+        flexShrink: 0,
         justifyContent: 'space-between',
         alignItems: 'center',
         borderBottom: 1,

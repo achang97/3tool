@@ -1,5 +1,6 @@
 import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { replaceSpecialChars } from './userEvent';
 
 export const completeContractForm = async (
   result: RenderResult,
@@ -32,7 +33,7 @@ export const completeContractForm = async (
   if (abi) {
     await userEvent.type(
       result.getByLabelText(/^ABI/),
-      abi.replace(/[{[]/g, '$&$&')
+      replaceSpecialChars(abi)
     );
   }
 
@@ -55,7 +56,7 @@ export const completeContractForm = async (
   if (logicAbi) {
     await userEvent.type(
       result.getByLabelText(/^Logic ABI/),
-      logicAbi.replace(/[{[]/g, '$&$&')
+      replaceSpecialChars(logicAbi)
     );
   }
 

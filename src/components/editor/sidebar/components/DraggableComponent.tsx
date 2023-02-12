@@ -6,8 +6,8 @@ import {
   startCreateComponentDrag,
   endCreateComponentDrag,
 } from '@app/redux/features/editorSlice';
-import { getNewComponentName } from '../../utils/editor';
-import { useGetActiveTool } from '../../hooks/useGetActiveTool';
+import { getNewComponentName } from '../../utils/components';
+import { useActiveTool } from '../../hooks/useActiveTool';
 
 type DraggableComponentProps = {
   type: ComponentType;
@@ -20,7 +20,7 @@ export const DraggableComponent = ({
   icon,
   type,
 }: DraggableComponentProps) => {
-  const tool = useGetActiveTool();
+  const { tool } = useActiveTool();
   const { newComponent } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
@@ -38,11 +38,11 @@ export const DraggableComponent = ({
       dispatch(
         startCreateComponentDrag({
           type,
-          name: getNewComponentName(type, tool?.components),
+          name: getNewComponentName(type, tool.components),
         })
       );
     },
-    [hiddenImage, dispatch, type, tool]
+    [dispatch, hiddenImage, tool.components, type]
   );
 
   const handleDragEnd = useCallback(() => {

@@ -22,7 +22,7 @@ export const CreateResourceDialog = ({
   }, [newResource, onClose]);
 
   const handleCreateResource = useCallback(
-    (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => {
+    (resource: Pick<Resource, 'type' | 'name' | 'data'>) => {
       createResource(resource);
     },
     [createResource]

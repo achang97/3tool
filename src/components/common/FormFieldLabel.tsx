@@ -1,5 +1,5 @@
 import { Help } from '@mui/icons-material';
-import { Box, FormLabel, Tooltip } from '@mui/material';
+import { Box, InputLabel, Tooltip } from '@mui/material';
 
 export type FormFieldLabelProps = {
   label: string;
@@ -16,10 +16,17 @@ export const FormFieldLabel = ({ label, tooltip }: FormFieldLabelProps) => {
         width: '100%',
       }}
     >
-      <FormLabel>{label}</FormLabel>
+      <InputLabel shrink>{label}</InputLabel>
       {tooltip && (
-        <Tooltip title={tooltip} sx={{ cursor: 'pointer' }}>
-          <Help data-testid="form-field-label-help" />
+        <Tooltip
+          title={tooltip}
+          sx={{
+            cursor: 'pointer',
+            fontSize: '0.9rem',
+            color: 'greyscale.icon.dark',
+          }}
+        >
+          <Help data-testid="form-field-label-help" fontSize="inherit" />
         </Tooltip>
       )}
     </Box>

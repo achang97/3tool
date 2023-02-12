@@ -1,5 +1,6 @@
 import { focusComponent } from '@app/redux/features/editorSlice';
-import { Component, ComponentType } from '@app/types';
+import { useAppSelector } from '@app/redux/hooks';
+import { ComponentType } from '@app/types';
 import { Box } from '@mui/material';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -8,85 +9,54 @@ import { CanvasComponent } from '../CanvasComponent';
 
 const mockName = 'name';
 const mockType = ComponentType.Button;
-const mockMetadata: Component['metadata'] = {
-  button: {
-    basic: {
-      text: 'Text',
-    },
-    interaction: {},
-  },
-};
 const mockChildren = 'children';
 
 const mockDispatch = jest.fn();
 
 jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => mockDispatch),
+  useAppSelector: jest.fn(),
+}));
+
+jest.mock('../../hooks/useComponentEvalData', () => ({
+  useComponentEvalData: jest.fn(() => ({
+    evalDataValues: {},
+  })),
 }));
 
 describe('CanvasComponent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    (useAppSelector as jest.Mock).mockImplementation(() => ({
+      componentInputs: {},
+    }));
   });
 
   it('renders children', () => {
     const result = render(
-      <CanvasComponent
-        name={mockName}
-        type={mockType}
-        metadata={mockMetadata}
-        isDragging
-        isFocused
-      >
+      <CanvasComponent name={mockName} type={mockType}>
         {mockChildren}
       </CanvasComponent>
     );
-    expect(result.getByText(mockChildren)).toBeDefined();
+    expect(result.getByText(mockChildren)).toBeTruthy();
   });
 
   it('forwards ref onto component', () => {
     const ref = createRef<HTMLDivElement>();
-    render(
-      <CanvasComponent
-        name={mockName}
-        type={mockType}
-        metadata={mockMetadata}
-        isDragging
-        isFocused
-        ref={ref}
-      >
-        {mockChildren}
-      </CanvasComponent>
-    );
-    expect(ref.current).toHaveProperty('id', mockName);
-  });
-
-  it('assigns name as id to component', () => {
     const result = render(
-      <CanvasComponent
-        name={mockName}
-        type={mockType}
-        metadata={mockMetadata}
-        isDragging
-        isFocused
-      >
+      <CanvasComponent name={mockName} type={mockType} ref={ref}>
         {mockChildren}
       </CanvasComponent>
     );
-    expect(result.container.querySelector(`#${mockName}`)).toBeDefined();
+    expect(result.container.firstChild).toEqual(ref.current);
   });
 
   it('focuses component on click and stops propagation of click event', async () => {
     const mockContainerHandleClick = jest.fn();
     const result = render(
       <Box onClick={mockContainerHandleClick}>
-        <CanvasComponent
-          name={mockName}
-          type={mockType}
-          metadata={mockMetadata}
-          isDragging
-          isFocused
-        >
+        <CanvasComponent name={mockName} type={mockType}>
           {mockChildren}
         </CanvasComponent>
       </Box>
@@ -103,9 +73,6 @@ describe('CanvasComponent', () => {
         <CanvasComponent
           name={mockName}
           type={mockType}
-          metadata={mockMetadata}
-          isDragging
-          isFocused
           className={mockClassName}
         >
           {mockChildren}
@@ -115,15 +82,13 @@ describe('CanvasComponent', () => {
       expect(component).toHaveClass(mockClassName);
     });
 
-    it('assigns "react-grid-item-focused" class if isFocused is true', () => {
+    it('assigns "react-grid-item-focused" class if name is equal to focused component name', () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        componentInputs: {},
+        focusedComponentName: mockName,
+      }));
       const result = render(
-        <CanvasComponent
-          name={mockName}
-          type={mockType}
-          metadata={mockMetadata}
-          isDragging
-          isFocused
-        >
+        <CanvasComponent name={mockName} type={mockType}>
           {mockChildren}
         </CanvasComponent>
       );
@@ -131,15 +96,9 @@ describe('CanvasComponent', () => {
       expect(component).toHaveClass('react-grid-item-focused');
     });
 
-    it('does not assign "react-grid-item-focused" class if not isFocused is false', () => {
+    it('does not assign "react-grid-item-focused" class if name is not equal to focused component name', () => {
       const result = render(
-        <CanvasComponent
-          name={mockName}
-          type={mockType}
-          metadata={mockMetadata}
-          isDragging
-          isFocused={false}
-        >
+        <CanvasComponent name={mockName} type={mockType}>
           {mockChildren}
         </CanvasComponent>
       );
@@ -147,15 +106,13 @@ describe('CanvasComponent', () => {
       expect(component).not.toHaveClass('react-grid-item-focused');
     });
 
-    it('assigns "react-grid-item-dragging" class if isDragging is true', () => {
+    it('assigns "react-grid-item-dragging" class if name is equal to moving component name', () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        componentInputs: {},
+        movingComponentName: mockName,
+      }));
       const result = render(
-        <CanvasComponent
-          name={mockName}
-          type={mockType}
-          metadata={mockMetadata}
-          isDragging
-          isFocused={false}
-        >
+        <CanvasComponent name={mockName} type={mockType}>
           {mockChildren}
         </CanvasComponent>
       );
@@ -163,15 +120,9 @@ describe('CanvasComponent', () => {
       expect(component).toHaveClass('react-grid-item-dragging');
     });
 
-    it('does not assign "react-grid-item-dragging" class if not isDragging is false', () => {
+    it('does not assign "react-grid-item-dragging" class if name is not equal to moving component name', () => {
       const result = render(
-        <CanvasComponent
-          name={mockName}
-          type={mockType}
-          metadata={mockMetadata}
-          isDragging={false}
-          isFocused
-        >
+        <CanvasComponent name={mockName} type={mockType}>
           {mockChildren}
         </CanvasComponent>
       );
@@ -181,27 +132,24 @@ describe('CanvasComponent', () => {
   });
 
   describe('components', () => {
-    it('button: renders button', () => {
-      const mockButtonMetadata: Component['metadata'] = {
-        button: {
-          basic: { text: 'Hello' },
-          interaction: {},
-        },
-      };
-      const result = render(
-        <CanvasComponent
-          name={mockName}
-          type={ComponentType.Button}
-          metadata={mockButtonMetadata}
-          isDragging
-          isFocused
-        >
-          {mockChildren}
-        </CanvasComponent>
-      );
+    it.each`
+      type                         | componentId
+      ${ComponentType.Button}      | ${'canvas-button'}
+      ${ComponentType.NumberInput} | ${'canvas-number-input'}
+      ${ComponentType.Table}       | ${'canvas-table'}
+      ${ComponentType.TextInput}   | ${'canvas-text-input'}
+      ${ComponentType.Text}        | ${'canvas-text'}
+    `(
+      'renders $type canvas component',
+      ({ type, componentId }: { type: ComponentType; componentId: string }) => {
+        const result = render(
+          <CanvasComponent name={mockName} type={type}>
+            {mockChildren}
+          </CanvasComponent>
+        );
 
-      const button = result.getByTestId('canvas-button');
-      expect(button).toHaveTextContent(mockButtonMetadata.button!.basic.text);
-    });
+        expect(result.getByTestId(componentId)).toBeTruthy();
+      }
+    );
   });
 });

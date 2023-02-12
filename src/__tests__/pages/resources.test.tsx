@@ -7,6 +7,7 @@ import { Resource, ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { mockSmartContractResource } from '@tests/constants/data';
 import { completeContractForm } from '@tests/utils/form';
 import { render } from '@tests/utils/renderWithContext';
 import { Abi } from 'abitype';
@@ -14,20 +15,8 @@ import { goerli, mainnet } from 'wagmi';
 
 const mockResources: Resource[] = [
   {
-    id: '1',
-    type: ResourceType.SmartContract,
-    name: 'Staking Pool Contract',
+    ...mockSmartContractResource,
     createdAt: '2023-01-05T02:37:30.083Z',
-    updatedAt: '2023-01-05T02:37:30.083Z',
-    numLinkedQueries: 3,
-    metadata: {
-      smartContract: {
-        chainId: 5,
-        address: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
-        abi: '[{"inputs":[{"internalType":"address","name":"contractLogic","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"stateMutability":"payable","type":"fallback"}]',
-        isProxy: false,
-      },
-    },
   },
 ];
 
@@ -59,20 +48,20 @@ describe('Resources', () => {
   it('renders page title', () => {
     const result = render(<ResourcesPage />);
 
-    expect(result.getByText('Resource Library')).toBeDefined();
+    expect(result.getByText('Resource Library')).toBeTruthy();
   });
 
   it('renders resources as rows in data grid', () => {
     const result = render(<ResourcesPage />);
 
     // Check first row
-    expect(result.getByText('Smart contract')).toBeDefined();
-    expect(result.getByText('Staking Pool Contract')).toBeDefined();
+    expect(result.getByText('Smart contract')).toBeTruthy();
+    expect(result.getByText('Staking Pool Contract')).toBeTruthy();
     expect(
       result.getByText('(0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3)')
-    ).toBeDefined();
-    expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeDefined();
-    expect(result.getByText('3')).toBeDefined();
+    ).toBeTruthy();
+    expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
+    expect(result.getByText('3')).toBeTruthy();
   });
 
   it('opens edit dialog and updates smart contract resource', async () => {
@@ -86,7 +75,7 @@ describe('Resources', () => {
 
     const editButton = await result.findByText('Edit');
     await userEvent.click(editButton);
-    expect(await result.findByTestId('edit-resource-dialog')).toBeDefined();
+    expect(await result.findByTestId('edit-resource-dialog')).toBeTruthy();
 
     const contractFields = {
       name: '- Edited',
@@ -105,11 +94,11 @@ describe('Resources', () => {
       id: mockResources[0].id,
       type: ResourceType.SmartContract,
       name: `${mockResources[0].name}${contractFields.name}`,
-      metadata: {
+      data: {
         smartContract: {
           chainId: contractFields.chainId,
-          address: mockResources[0].metadata.smartContract?.address,
-          abi: mockResources[0].metadata.smartContract?.abi,
+          address: mockResources[0].data.smartContract?.address,
+          abi: mockResources[0].data.smartContract?.abi,
           isProxy: contractFields.isProxy,
           logicAddress: contractFields.logicAddress,
           logicAbi: JSON.stringify(mockAbi),
@@ -131,7 +120,7 @@ describe('Resources', () => {
 
     const createButton = result.getByText('Add new resource');
     await userEvent.click(createButton);
-    expect(await result.findByTestId('create-resource-dialog')).toBeDefined();
+    expect(await result.findByTestId('create-resource-dialog')).toBeTruthy();
 
     const contractFields = {
       name: 'Contract',
@@ -148,7 +137,7 @@ describe('Resources', () => {
     expect(mockCreateResource).toHaveBeenCalledWith({
       type: ResourceType.SmartContract,
       name: contractFields.name,
-      metadata: {
+      data: {
         smartContract: {
           chainId: contractFields.chainId,
           address: contractFields.address,

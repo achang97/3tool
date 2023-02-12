@@ -36,7 +36,7 @@ export const renderNameCell = ({
           color="text.tertiary"
           sx={{ marginLeft: 0.5 }}
         >
-          ({row.metadata.smartContract?.address})
+          ({row.data.smartContract?.address})
         </Typography>
       )}
     </Box>

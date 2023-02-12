@@ -14,7 +14,7 @@ enum ToggleType {
 
 type ConfigureResourceFormProps = {
   formId: string;
-  onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => void;
+  onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'data'>) => void;
 };
 
 export const ConfigureResourceForm = ({

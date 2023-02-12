@@ -12,6 +12,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { createWrapper } from 'next-redux-wrapper';
 import editorReducer from './features/editorSlice';
 import resourcesReducer from './features/resourcesSlice';
+import activeToolReducer from './features/activeToolSlice';
 import { toolsApi } from './services/tools';
 import { resourcesApi } from './services/resources';
 
@@ -19,6 +20,7 @@ export const store = configureStore({
   reducer: {
     editor: editorReducer,
     resources: resourcesReducer,
+    activeTool: activeToolReducer,
     [toolsApi.reducerPath]: toolsApi.reducer,
     [resourcesApi.reducerPath]: resourcesApi.reducer,
   },

@@ -27,7 +27,7 @@ export const resourcesApi = createApi({
     }),
     createResource: builder.mutation<
       Resource,
-      Pick<Resource, 'name' | 'type' | 'metadata'>
+      Pick<Resource, 'name' | 'type' | 'data'>
     >({
       query: (body) => ({
         url: '/resources',
@@ -38,7 +38,7 @@ export const resourcesApi = createApi({
     }),
     updateResource: builder.mutation<
       Resource,
-      Pick<Resource, 'id'> & Partial<Pick<Resource, 'name' | 'metadata'>>
+      Pick<Resource, 'id'> & Partial<Pick<Resource, 'name' | 'data'>>
     >({
       query: ({ id, ...body }) => ({
         url: `/resources/${id}`,

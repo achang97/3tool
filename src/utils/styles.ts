@@ -1,4 +1,4 @@
-export const stringToColor = (str: string) => {
+export const stringToColor = (str: string): string => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     // eslint-disable-next-line no-bitwise

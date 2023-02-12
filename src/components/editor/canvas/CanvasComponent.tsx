@@ -1,50 +1,66 @@
-import {
+import React, {
   forwardRef,
   useCallback,
   ForwardedRef,
   ReactNode,
   MouseEvent,
+  FC,
+  useMemo,
 } from 'react';
-import { Box, Typography } from '@mui/material';
-import { Component, ComponentType } from '@app/types';
-import { useAppDispatch } from '@app/redux/hooks';
+import { Box } from '@mui/material';
+import { BaseCanvasComponentProps, ComponentType } from '@app/types';
+import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { focusComponent } from '@app/redux/features/editorSlice';
-import { CanvasButton } from './CanvasButton';
+import { CanvasButton } from './components/CanvasButton';
+import { CanvasTextInput } from './components/CanvasTextInput';
+import { CanvasText } from './components/CanvasText';
+import { CanvasNumberInput } from './components/CanvasNumberInput';
+import { CanvasTable } from './components/CanvasTable';
 
 type CanvasComponentProps = {
   name: string;
   type: ComponentType;
-  metadata: Component['metadata'];
-  isDragging: boolean;
-  isFocused: boolean;
   className?: string;
   children?: ReactNode;
 };
 
+const CANVAS_COMPONENT_MAP: Record<
+  ComponentType,
+  FC<BaseCanvasComponentProps>
+> = {
+  [ComponentType.Button]: CanvasButton,
+  [ComponentType.TextInput]: CanvasTextInput,
+  [ComponentType.NumberInput]: CanvasNumberInput,
+  [ComponentType.Text]: CanvasText,
+  [ComponentType.Table]: CanvasTable,
+};
+
 export const CanvasComponent = forwardRef(
   (
-    {
-      name,
-      type,
-      metadata,
-      isDragging,
-      isFocused,
-      children,
-      className,
-      ...rest
-    }: CanvasComponentProps,
+    { name, type, children, className, ...rest }: CanvasComponentProps,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const dispatch = useAppDispatch();
 
+    const { movingComponentName, focusedComponentName } = useAppSelector(
+      (state) => state.editor
+    );
+
+    const isFocused = useMemo(() => {
+      return name === focusedComponentName;
+    }, [focusedComponentName, name]);
+
+    const isDragging = useMemo(() => {
+      return name === movingComponentName;
+    }, [movingComponentName, name]);
+
     const getComponent = useCallback(() => {
-      switch (type) {
-        case ComponentType.Button:
-          return <CanvasButton {...metadata.button!} />;
-        default:
-          return <Typography>TODO</Typography>;
+      const Component = CANVAS_COMPONENT_MAP[type];
+      if (!Component) {
+        return null;
       }
-    }, [type, metadata]);
+      return <Component name={name} />;
+    }, [name, type]);
 
     const handleClick = useCallback(
       (e: MouseEvent) => {
@@ -57,12 +73,12 @@ export const CanvasComponent = forwardRef(
     return (
       <Box
         ref={ref}
-        id={name}
         tabIndex={0}
         className={`${isFocused ? 'react-grid-item-focused' : ''} ${
           isDragging ? 'react-grid-item-dragging' : ''
         } ${className}`}
         onClick={handleClick}
+        data-testid={name}
         {...rest}
       >
         {getComponent()}

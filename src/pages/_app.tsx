@@ -18,10 +18,11 @@ import { WagmiConfig } from 'wagmi';
 import { Web3Modal } from '@web3modal/react';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { Auth0RedirectWrapper } from '@app/components/auth0/Auth0RedirectWrapper';
-import { initFetch, initGlobal } from '@app/utils/global';
+import { initFetch } from '@app/utils/global';
 
 import '@app/styles/globals.css';
 import '@app/styles/react-grid-layout.css';
+import '@app/styles/code-mirror.css';
 
 // Start MSW on the server
 if (MSW_API) {
@@ -29,7 +30,6 @@ if (MSW_API) {
   require('@mocks/init');
 }
 
-initGlobal();
 initFetch();
 
 const App = ({ Component, ...rest }: AppProps) => {

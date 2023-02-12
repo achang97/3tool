@@ -1,39 +1,26 @@
-import { Resource, ResourceType } from '@app/types';
+import { Resource } from '@app/types';
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
 import { render } from '@tests/utils/renderWithContext';
 import { store } from '@app/redux/store';
 import { setActiveResource } from '@app/redux/features/resourcesSlice';
+import {
+  mockDuneResource,
+  mockSmartContractResource,
+} from '@tests/constants/data';
 import { ResourceDataGrid } from '../ResourceDataGrid';
 
 const dispatchSpy = jest.spyOn(store, 'dispatch');
 
 const mockResources: Resource[] = [
   {
-    id: '1',
-    type: ResourceType.SmartContract,
-    name: 'Staking Pool Contract',
+    ...mockSmartContractResource,
     createdAt: '2023-01-05T02:37:30.083Z',
-    updatedAt: '2023-01-05T02:37:30.083Z',
-    numLinkedQueries: 3,
-    metadata: {
-      smartContract: {
-        chainId: 5,
-        address: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
-        abi: '[{"inputs":[{"internalType":"address","name":"contractLogic","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"stateMutability":"payable","type":"fallback"}]',
-        isProxy: false,
-      },
-    },
   },
   {
-    id: '2',
-    type: ResourceType.Dune,
-    name: 'Dune API',
+    ...mockDuneResource,
     createdAt: '2023-01-05T02:33:30.083Z',
-    updatedAt: '2023-01-05T02:33:30.083Z',
-    numLinkedQueries: 4,
-    metadata: {},
   },
 ];
 
@@ -58,42 +45,42 @@ describe('ResourceDataGrid', () => {
   });
 
   it('renders columns', () => {
-    const result = render(<ResourceDataGrid __test__disableVirtualization />);
+    const result = render(<ResourceDataGrid />);
 
-    expect(result.getByText('Type')).toBeDefined();
-    expect(result.getByText('Resource')).toBeDefined();
-    expect(result.getByText('Created At')).toBeDefined();
-    expect(result.getByText('Linked Queries')).toBeDefined();
+    expect(result.getByText('Type')).toBeTruthy();
+    expect(result.getByText('Resource')).toBeTruthy();
+    expect(result.getByText('Created At')).toBeTruthy();
+    expect(result.getByText('Linked Queries')).toBeTruthy();
   });
 
   it('renders resources as rows in data grid', () => {
-    const result = render(<ResourceDataGrid __test__disableVirtualization />);
+    const result = render(<ResourceDataGrid />);
 
     // Check first row
-    expect(result.getByText('Smart contract')).toBeDefined();
-    expect(result.getByText('Staking Pool Contract')).toBeDefined();
+    expect(result.getByText('Smart contract')).toBeTruthy();
+    expect(result.getByText('Staking Pool Contract')).toBeTruthy();
     expect(
       result.getByText('(0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3)')
-    ).toBeDefined();
-    expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeDefined();
-    expect(result.getByText('3')).toBeDefined();
+    ).toBeTruthy();
+    expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
+    expect(result.getByText('3')).toBeTruthy();
 
     // Check second row
-    expect(result.getByText('Dune')).toBeDefined();
-    expect(result.getByText('Dune API')).toBeDefined();
-    expect(result.getByText('Jan 5, 2023 2:33 AM')).toBeDefined();
-    expect(result.getByText('4')).toBeDefined();
+    expect(result.getByText('Dune')).toBeTruthy();
+    expect(result.getByText('Dune API')).toBeTruthy();
+    expect(result.getByText('Jan 5, 2023 2:33 AM')).toBeTruthy();
+    expect(result.getByText('4')).toBeTruthy();
   });
 
   it('opens and closes edit dialog', async () => {
-    const result = render(<ResourceDataGrid __test__disableVirtualization />);
+    const result = render(<ResourceDataGrid />);
 
     const moreButtons = result.getAllByTestId('MoreVertIcon');
     await userEvent.click(moreButtons[0]);
 
     const editButton = await result.findByText('Edit');
     await userEvent.click(editButton);
-    expect(await result.findByTestId('edit-resource-dialog')).toBeDefined();
+    expect(await result.findByTestId('edit-resource-dialog')).toBeTruthy();
     expect(dispatchSpy).toHaveBeenCalledWith(
       setActiveResource(mockResources[0])
     );

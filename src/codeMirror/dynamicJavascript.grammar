@@ -1,0 +1,7 @@
+@top Program { expression* }
+
+expression { DynamicTerm }
+
+@tokens {
+  DynamicTerm { "{{" ![\\\n"]* "}}" }
+}

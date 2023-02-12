@@ -58,8 +58,6 @@ declare module '@mui/material/styles' {
   }
 }
 
-const DATA_GRID_ODD_ROW_OPACITY = 0.2;
-
 const { palette } = createTheme({
   palette: {
     divider: '#CDD6E1',
@@ -217,40 +215,25 @@ export const theme = extendTheme({
       styleOverrides: {
         root: {
           [`.${gridClasses.row}`]: {
-            '&:hover, &.Mui-hovered': {
-              backgroundColor: alpha(
-                palette.primary.main,
-                DATA_GRID_ODD_ROW_OPACITY
-              ),
-              '@media (hover: none)': {
-                backgroundColor: 'transparent',
-              },
-            },
-          },
-          [`.${gridClasses.row}:nth-of-type(even)`]: {
-            '&:not(:hover):not(.Mui-hovered)': {
-              backgroundColor: palette.greyscale.offwhite.main,
+            '&:hover': {
+              backgroundColor: alpha(palette.primary.main, 0.2),
             },
             '&.Mui-selected': {
               backgroundColor: alpha(
                 palette.primary.main,
-                DATA_GRID_ODD_ROW_OPACITY + palette.action.selectedOpacity
+                0.05 + palette.action.selectedOpacity
               ),
-              '&:hover, &.Mui-hovered': {
+              '&:hover': {
                 backgroundColor: alpha(
                   palette.primary.main,
-                  DATA_GRID_ODD_ROW_OPACITY +
-                    palette.action.selectedOpacity +
-                    palette.action.hoverOpacity
+                  0.2 + palette.action.selectedOpacity
                 ),
-                // Reset on touch devices, it doesn't add specificity
-                '@media (hover: none)': {
-                  backgroundColor: alpha(
-                    palette.primary.main,
-                    DATA_GRID_ODD_ROW_OPACITY + palette.action.selectedOpacity
-                  ),
-                },
               },
+            },
+          },
+          [`.${gridClasses.row}:nth-of-type(even)`]: {
+            '&:not(:hover):not(.Mui-selected)': {
+              backgroundColor: palette.greyscale.offwhite.main,
             },
           },
           [`.${gridClasses.cell}`]: {
@@ -303,9 +286,11 @@ export const theme = extendTheme({
       styleOverrides: {
         root: {
           position: 'relative',
+          overflow: 'visible',
         },
         shrink: {
-          width: '133%',
+          transform: 'none',
+          fontSize: '0.75rem',
         },
       },
     },
@@ -317,6 +302,9 @@ export const theme = extendTheme({
         sizeSmall: {
           height: '32px',
         },
+        multiline: {
+          height: 'auto',
+        },
       },
     },
     // NOTE: There's some buggy behavior in MUI which requires this fontSize to be declared
@@ -326,12 +314,27 @@ export const theme = extendTheme({
         root: {
           fontSize: '0.875rem',
         },
+        notchedOutline: {
+          '> legend': {
+            width: 0,
+          },
+        },
+      },
+      defaultProps: {
+        notched: false,
       },
     },
     MuiMenuItem: {
       styleOverrides: {
         root: {
           fontSize: '0.875rem',
+        },
+      },
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          marginLeft: 0,
         },
       },
     },

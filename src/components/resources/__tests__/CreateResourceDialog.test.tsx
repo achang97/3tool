@@ -46,7 +46,7 @@ describe('CreateResourceDialog', () => {
     const result = render(
       <CreateResourceDialog onClose={mockHandleClose} open />
     );
-    expect(result.getByText('Add Resource')).toBeDefined();
+    expect(result.getByText('Add Resource')).toBeTruthy();
   });
 
   it('renders error message', () => {
@@ -65,7 +65,7 @@ describe('CreateResourceDialog', () => {
     const result = render(
       <CreateResourceDialog onClose={mockHandleClose} open />
     );
-    expect(result.getByText('Mock Error')).toBeDefined();
+    expect(result.getByText('Mock Error')).toBeTruthy();
   });
 
   it('calls onSubmit with smart contract resource on Save button click', async () => {
@@ -87,7 +87,7 @@ describe('CreateResourceDialog', () => {
     expect(mockCreateResource).toHaveBeenCalledWith({
       type: ResourceType.SmartContract,
       name: contractFields.name,
-      metadata: {
+      data: {
         smartContract: {
           chainId: contractFields.chainId,
           address: contractFields.address,

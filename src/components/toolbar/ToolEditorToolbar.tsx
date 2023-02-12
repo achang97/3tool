@@ -3,23 +3,32 @@ import { Box, Button, IconButton } from '@mui/material';
 import { Tune } from '@mui/icons-material';
 import { useAppDispatch } from '@app/redux/hooks';
 import { focusToolSettings } from '@app/redux/features/editorSlice';
+import { isSuccessfulApiResponse } from '@app/utils/api';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { ToolbarTemplate } from './ToolbarTemplate';
 import { EditableTextField } from '../common/EditableTextField';
-import { useGetActiveTool } from '../editor/hooks/useGetActiveTool';
-import { useUpdateActiveTool } from '../editor/hooks/useUpdateActiveTool';
+import { useActiveTool } from '../editor/hooks/useActiveTool';
 
 export const ToolEditorToolbar = () => {
   const dispatch = useAppDispatch();
-  const tool = useGetActiveTool();
-  const updateTool = useUpdateActiveTool();
+  const { tool, updateTool } = useActiveTool();
+  const { reload } = useRouter();
 
   const handleUpdateToolName = useCallback(
-    (name: string) => {
-      if (name) {
-        updateTool({ name });
+    async (name: string) => {
+      if (!name) {
+        return;
       }
+
+      const response = await updateTool({ name });
+      if (!isSuccessfulApiResponse(response)) {
+        return;
+      }
+
+      reload();
     },
-    [updateTool]
+    [reload, updateTool]
   );
 
   const handleSettingsClick = useCallback(() => {
@@ -27,10 +36,6 @@ export const ToolEditorToolbar = () => {
   }, [dispatch]);
 
   const middle = useMemo(() => {
-    if (!tool) {
-      return undefined;
-    }
-
     return (
       <EditableTextField
         value={tool.name}
@@ -39,13 +44,9 @@ export const ToolEditorToolbar = () => {
         TextFieldProps={{ fullWidth: true }}
       />
     );
-  }, [tool, handleUpdateToolName]);
+  }, [handleUpdateToolName, tool.name]);
 
   const right = useMemo(() => {
-    if (!tool) {
-      return undefined;
-    }
-
     return (
       <Box sx={{ display: 'flex', gap: 1 }}>
         <IconButton
@@ -54,13 +55,17 @@ export const ToolEditorToolbar = () => {
         >
           <Tune />
         </IconButton>
-        <Button color="secondary" size="small">
+        <Button
+          color="secondary"
+          size="small"
+          LinkComponent={Link}
+          href={`/tools/${tool.id}`}
+        >
           Preview
         </Button>
-        <Button size="small">Publish</Button>
       </Box>
     );
-  }, [tool, handleSettingsClick]);
+  }, [handleSettingsClick, tool.id]);
 
   return (
     <ToolbarTemplate

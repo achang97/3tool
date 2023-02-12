@@ -62,7 +62,7 @@ describe('EditResourceDialog', () => {
         open
       />
     );
-    expect(result.getByText('Edit Resource')).toBeDefined();
+    expect(result.getByText('Edit Resource')).toBeTruthy();
   });
 
   it('renders error message', () => {
@@ -85,7 +85,7 @@ describe('EditResourceDialog', () => {
         open
       />
     );
-    expect(result.getByText('Mock Error')).toBeDefined();
+    expect(result.getByText('Mock Error')).toBeTruthy();
   });
 
   it('calls onSubmit with smart contract resource on Save button click', async () => {
@@ -112,7 +112,7 @@ describe('EditResourceDialog', () => {
       id: mockResourceId,
       type: ResourceType.SmartContract,
       name: contractFields.name,
-      metadata: {
+      data: {
         smartContract: {
           chainId: contractFields.chainId,
           address: contractFields.address,

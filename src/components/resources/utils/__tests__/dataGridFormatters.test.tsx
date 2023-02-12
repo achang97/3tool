@@ -54,7 +54,7 @@ describe('dataGridFormatters', () => {
         } as GridRenderCellParams)
       );
 
-      expect(result.getByText(mockName)).toBeDefined();
+      expect(result.getByText(mockName)).toBeTruthy();
     });
 
     it('renders address within parentheses if type is smart_contract', () => {
@@ -66,12 +66,12 @@ describe('dataGridFormatters', () => {
           value: mockName,
           row: {
             type: ResourceType.SmartContract,
-            metadata: { smartContract: { address: mockAddress } },
+            data: { smartContract: { address: mockAddress } },
           },
         } as GridRenderCellParams)
       );
 
-      expect(result.getByText(`(${mockAddress})`)).toBeDefined();
+      expect(result.getByText(`(${mockAddress})`)).toBeTruthy();
     });
   });
 });

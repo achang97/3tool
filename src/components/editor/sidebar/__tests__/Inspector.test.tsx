@@ -1,47 +1,23 @@
 import { useAppSelector } from '@app/redux/hooks';
-import { ComponentType, Tool } from '@app/types';
+import { mockTool } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
+import { DepGraph } from 'dependency-graph';
 import { Inspector } from '../Inspector';
 
-const mockTool: Tool = {
-  id: 'test',
-  name: 'Tool',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  creator: {
-    name: 'Andrew',
-  },
-  components: [
-    {
-      name: 'button1',
-      type: ComponentType.Button,
-      layout: {
-        w: 1,
-        h: 1,
-        x: 1,
-        y: 1,
-      },
-      metadata: {},
-    },
-  ],
-};
+const mockUpdateTool = jest.fn();
 
 jest.mock('@app/redux/hooks', () => ({
   useAppSelector: jest.fn(),
   useAppDispatch: jest.fn(),
 }));
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({
-    query: { id: mockTool.id },
-  })),
-}));
-
-jest.mock('@app/redux/services/tools', () => ({
-  __esModule: true,
-  ...jest.requireActual('@app/redux/services/tools'),
-  useGetToolByIdQuery: jest.fn(() => ({
-    data: mockTool,
+jest.mock('../../hooks/useActiveTool', () => ({
+  useActiveTool: jest.fn(() => ({
+    tool: mockTool,
+    updateTool: mockUpdateTool,
+    componentEvalDataMap: {},
+    componentEvalDataValuesMap: {},
+    componentDataDepGraph: new DepGraph<string>(),
   })),
 }));
 
@@ -52,7 +28,7 @@ describe('Inspector', () => {
     }));
 
     const result = render(<Inspector />);
-    expect(result.getByTestId('component-inspector')).toBeDefined();
+    expect(result.getByTestId('component-inspector')).toBeTruthy();
   });
 
   it('renders tool inspector if there is no focused component', () => {
@@ -61,6 +37,6 @@ describe('Inspector', () => {
     }));
 
     const result = render(<Inspector />);
-    expect(result.getByTestId('tool-inspector')).toBeDefined();
+    expect(result.getByTestId('tool-inspector')).toBeTruthy();
   });
 });

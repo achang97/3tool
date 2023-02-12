@@ -8,7 +8,7 @@ describe('CreateResourceButton', () => {
 
   it('renders text', () => {
     const result = render(<CreateResourceButton />);
-    expect(result.getByText('Add new resource')).toBeDefined();
+    expect(result.getByText('Add new resource')).toBeTruthy();
   });
 
   it('opens dialog on click', async () => {
@@ -16,14 +16,14 @@ describe('CreateResourceButton', () => {
 
     await userEvent.click(result.getByText('Add new resource'));
 
-    expect(await result.findByTestId(createResourceDialogId)).toBeDefined();
+    expect(await result.findByTestId(createResourceDialogId)).toBeTruthy();
   });
 
   it('closes dialog on blur', async () => {
     const result = render(<CreateResourceButton />);
 
     await userEvent.click(result.getByText('Add new resource'));
-    expect(await result.findByTestId(createResourceDialogId)).toBeDefined();
+    expect(await result.findByTestId(createResourceDialogId)).toBeTruthy();
 
     await userEvent.keyboard('[Escape]');
     await waitFor(() => {

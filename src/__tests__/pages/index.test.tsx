@@ -53,7 +53,7 @@ describe('Home', () => {
   it('renders page title', () => {
     const result = render(<ToolsPage />);
 
-    expect(result.getByText('Tools')).toBeDefined();
+    expect(result.getByText('Tools')).toBeTruthy();
   });
 
   it('renders create tool thumbnail and navigates to /editor/:id page on successful creation', async () => {

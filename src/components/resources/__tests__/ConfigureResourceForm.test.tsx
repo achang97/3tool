@@ -22,8 +22,8 @@ describe('ConfigureResourceForm', () => {
       <ConfigureResourceForm formId={mockFormId} onSubmit={mockHandleSubmit} />
     );
 
-    expect(result.getByText('Smart contract')).toBeDefined();
-    expect(result.getByText('Blockchain API (Coming Soon)')).toBeDefined();
+    expect(result.getByText('Smart contract')).toBeTruthy();
+    expect(result.getByText('Blockchain API (Coming Soon)')).toBeTruthy();
   });
 
   it('calls onSubmit after completing smart contract form', async () => {
@@ -47,7 +47,7 @@ describe('ConfigureResourceForm', () => {
       expect(mockHandleSubmit).toHaveBeenCalledWith({
         type: ResourceType.SmartContract,
         name: contractFields.name,
-        metadata: {
+        data: {
           smartContract: {
             chainId: contractFields.chainId,
             address: contractFields.address,

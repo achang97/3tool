@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { render } from '@testing-library/react';
+import { BASE_WINDOW_URL } from '@tests/constants/window';
 import { Auth0RedirectWrapper } from '../Auth0RedirectWrapper';
 
 jest.mock('@auth0/auth0-react');
@@ -22,7 +23,7 @@ describe('Auth0RedirectWrapper', () => {
     const result = render(
       <Auth0RedirectWrapper>{mockChildren}</Auth0RedirectWrapper>
     );
-    expect(result.getByTestId(loaderId)).toBeDefined();
+    expect(result.getByTestId(loaderId)).toBeTruthy();
   });
 
   it('renders loader if not authenticated', () => {
@@ -34,7 +35,7 @@ describe('Auth0RedirectWrapper', () => {
     const result = render(
       <Auth0RedirectWrapper>{mockChildren}</Auth0RedirectWrapper>
     );
-    expect(result.getByTestId(loaderId)).toBeDefined();
+    expect(result.getByTestId(loaderId)).toBeTruthy();
   });
 
   it('renders children if not loading and authenticated', () => {
@@ -46,7 +47,7 @@ describe('Auth0RedirectWrapper', () => {
       <Auth0RedirectWrapper>{mockChildren}</Auth0RedirectWrapper>
     );
     expect(result.queryByTestId(loaderId)).toBeNull();
-    expect(result.getByText(mockChildren)).toBeDefined();
+    expect(result.getByText(mockChildren)).toBeTruthy();
   });
 
   it('redirects to Auth0 login if not loading and unauthenticated', () => {
@@ -58,7 +59,7 @@ describe('Auth0RedirectWrapper', () => {
     render(<Auth0RedirectWrapper>{mockChildren}</Auth0RedirectWrapper>);
     expect(mockLoginWithRedirect).toHaveBeenCalledTimes(1);
     expect(mockLoginWithRedirect).toHaveBeenCalledWith({
-      redirectUri: 'http://localhost',
+      redirectUri: BASE_WINDOW_URL,
     });
   });
 });

@@ -15,7 +15,7 @@ import {
   SnackbarMessage,
 } from '../editorSlice';
 
-describe('resourcesSlice', () => {
+describe('editorSlice', () => {
   const renderHooks = () => {
     const { result } = renderHook(() =>
       useAppSelector((state) => state.editor)
@@ -60,7 +60,7 @@ describe('resourcesSlice', () => {
           );
         });
         await waitFor(() => {
-          expect(result.current.newComponent).toBeDefined();
+          expect(result.current.newComponent).toBeTruthy();
         });
 
         act(() => {
@@ -92,7 +92,7 @@ describe('resourcesSlice', () => {
           dispatch(startMoveComponentDrag('name'));
         });
         await waitFor(() => {
-          expect(result.current.movingComponentName).toBeDefined();
+          expect(result.current.movingComponentName).toBeTruthy();
         });
 
         act(() => {

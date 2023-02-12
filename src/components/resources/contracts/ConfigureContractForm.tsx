@@ -27,7 +27,7 @@ import { useFetchAbi } from '../hooks/useFetchAbi';
 
 type ConfigureContractFormProps = {
   formId: string;
-  onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'metadata'>) => void;
+  onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'data'>) => void;
 };
 
 type FormContainerProps = {
@@ -51,22 +51,20 @@ export const ConfigureContractForm = ({
 
   const [name, setName] = useState(activeResource?.name ?? '');
   const [chainId, setChainId] = useState<number>(
-    activeResource?.metadata.smartContract?.chainId ?? mainnet.id
+    activeResource?.data.smartContract?.chainId ?? mainnet.id
   );
   const [address, setAddress] = useState(
-    activeResource?.metadata.smartContract?.address ?? ''
+    activeResource?.data.smartContract?.address ?? ''
   );
-  const [abi, setAbi] = useState(
-    activeResource?.metadata.smartContract?.abi ?? ''
-  );
+  const [abi, setAbi] = useState(activeResource?.data.smartContract?.abi ?? '');
   const [isProxy, setIsProxy] = useState(
-    activeResource?.metadata.smartContract?.isProxy ?? false
+    activeResource?.data.smartContract?.isProxy ?? false
   );
   const [logicAddress, setLogicAddress] = useState(
-    activeResource?.metadata.smartContract?.logicAddress ?? ''
+    activeResource?.data.smartContract?.logicAddress ?? ''
   );
   const [logicAbi, setLogicAbi] = useState(
-    activeResource?.metadata.smartContract?.logicAbi ?? ''
+    activeResource?.data.smartContract?.logicAbi ?? ''
   );
 
   const { error: fetchAbiError, isLoading: isLoadingAbi } = useFetchAbi({
@@ -154,7 +152,7 @@ export const ConfigureContractForm = ({
       onSubmit({
         type: ResourceType.SmartContract,
         name,
-        metadata: {
+        data: {
           smartContract: {
             chainId,
             address,

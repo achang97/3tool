@@ -1,8 +1,9 @@
 import { useAppSelector } from '@app/redux/hooks';
-import { Resource, ResourceType } from '@app/types';
+import { ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { mockProxySmartContractResource } from '@tests/constants/data';
 import { submitForm } from '@tests/utils/form';
 import { Abi } from 'abitype';
 import { goerli, mainnet } from 'wagmi';
@@ -13,26 +14,6 @@ const mockHandleSubmit = jest.fn();
 
 jest.mock('@app/redux/hooks');
 jest.mock('@app/utils/contracts');
-
-const mockResource: Resource = {
-  type: ResourceType.SmartContract,
-  name: 'Name',
-  id: '1',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  numLinkedQueries: 0,
-  metadata: {
-    smartContract: {
-      chainId: 5,
-      address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
-      abi: '[{ stateMutability: "payable", type: "fallback" }]',
-      isProxy: true,
-      logicAddress: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
-      logicAbi:
-        '[{ stateMutability: "payable", inputs: [], type: "function" }]',
-    },
-  },
-};
 
 describe('ConfigureContractForm', () => {
   const networkSelectId = 'configure-contract-form-network-select';
@@ -49,13 +30,13 @@ describe('ConfigureContractForm', () => {
       <ConfigureContractForm formId={mockFormId} onSubmit={mockHandleSubmit} />
     );
 
-    expect(result.container.querySelector(`#${mockFormId}`)).toBeDefined();
+    expect(result.container.querySelector(`#${mockFormId}`)).toBeTruthy();
   });
 
   describe('edit mode', () => {
     beforeEach(() => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
-        activeResource: mockResource,
+        activeResource: mockProxySmartContractResource,
       }));
     });
 
@@ -67,25 +48,27 @@ describe('ConfigureContractForm', () => {
         />
       );
 
-      expect(result.getByLabelText(/^Name/)).toHaveValue(mockResource.name);
+      expect(result.getByLabelText(/^Name/)).toHaveValue(
+        mockProxySmartContractResource.name
+      );
       expect(result.getByTestId(networkSelectId)).toHaveValue(
-        mockResource.metadata.smartContract?.chainId.toString()
+        mockProxySmartContractResource.data.smartContract?.chainId.toString()
       );
       expect(result.getByLabelText(/^Address/)).toHaveValue(
-        mockResource.metadata.smartContract?.address
+        mockProxySmartContractResource.data.smartContract?.address
       );
       expect(result.getByLabelText(/^ABI/)).toHaveValue(
-        mockResource.metadata.smartContract?.abi
+        mockProxySmartContractResource.data.smartContract?.abi
       );
       expect(result.getByTestId(proxyCheckboxId)).toHaveProperty(
         'checked',
-        mockResource.metadata.smartContract?.isProxy
+        mockProxySmartContractResource.data.smartContract?.isProxy
       );
       expect(result.getByLabelText(/^Logic Address/)).toHaveValue(
-        mockResource.metadata.smartContract?.logicAddress
+        mockProxySmartContractResource.data.smartContract?.logicAddress
       );
       expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
-        mockResource.metadata.smartContract?.logicAbi
+        mockProxySmartContractResource.data.smartContract?.logicAbi
       );
     });
 
@@ -185,7 +168,7 @@ describe('ConfigureContractForm', () => {
           result.getByLabelText(/^Address/),
           '0xf33Cb58287017175CADf990c9e4733823704aA86'
         );
-        expect(result.getByText(mockError)).toBeDefined();
+        expect(result.getByText(mockError)).toBeTruthy();
       });
 
       it('displays fetch error for logic address field', async () => {
@@ -200,7 +183,7 @@ describe('ConfigureContractForm', () => {
           result.getByLabelText(/^Logic Address/),
           '0xf33Cb58287017175CADf990c9e4733823704aA86'
         );
-        expect(result.getByText(mockError)).toBeDefined();
+        expect(result.getByText(mockError)).toBeTruthy();
       });
     });
 
@@ -217,7 +200,7 @@ describe('ConfigureContractForm', () => {
 
       beforeEach(() => {
         (useAppSelector as jest.Mock).mockImplementation(() => ({
-          activeResource: mockResource,
+          activeResource: mockProxySmartContractResource,
         }));
         (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
       });
@@ -414,7 +397,7 @@ describe('ConfigureContractForm', () => {
         expect(mockHandleSubmit).toHaveBeenCalledWith({
           type: ResourceType.SmartContract,
           name: 'New Contract',
-          metadata: {
+          data: {
             smartContract: {
               chainId: goerli.id,
               address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
@@ -451,7 +434,7 @@ describe('ConfigureContractForm', () => {
         expect(mockHandleSubmit).toHaveBeenCalledWith({
           type: ResourceType.SmartContract,
           name: 'New Contract',
-          metadata: {
+          data: {
             smartContract: {
               chainId: goerli.id,
               address: '0xf33Cb58287017175CADf990c9e4733823704aA86',

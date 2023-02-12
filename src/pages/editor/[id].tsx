@@ -8,29 +8,42 @@ import { EditorSnackbar } from '@app/components/editor/EditorSnackbar';
 import { GetServerSideProps } from 'next';
 import { wrapper } from '@app/redux/store';
 import { getRunningQueriesThunk, getToolById } from '@app/redux/services/tools';
+import { Tool } from '@app/types';
+import { ActiveToolProvider } from '@app/components/editor/contexts/ActiveToolContext';
+import { ToolEditorToolbar } from '@app/components/toolbar/ToolEditorToolbar';
+import { PageContainer } from '@app/components/common/PageContainer';
 
-const Editor = () => {
+type EditorProps = {
+  tool: Tool;
+};
+
+const Editor = ({ tool }: EditorProps) => {
   return (
     <>
       <Head>
-        <title>{getTitle('Tool Editor')}</title>
+        <title>{getTitle(`${tool.name} | Editor `)}</title>
       </Head>
       <main>
-        <Box sx={{ height: '100%', display: 'flex' }}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              flex: 1,
-              position: 'relative',
-            }}
-          >
-            <EditorCanvas />
-            <EditorQueryBuilder />
-          </Box>
-          <EditorSidebar />
-          <EditorSnackbar />
-        </Box>
+        <ActiveToolProvider tool={tool}>
+          <PageContainer sx={{ padding: 0 }}>
+            <ToolEditorToolbar />
+            <Box sx={{ flex: 1, minHeight: 0, display: 'flex' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flex: 1,
+                  position: 'relative',
+                }}
+              >
+                <EditorCanvas />
+                <EditorQueryBuilder />
+              </Box>
+              <EditorSidebar />
+              <EditorSnackbar />
+            </Box>
+          </PageContainer>
+        </ActiveToolProvider>
       </main>
     </>
   );
@@ -52,7 +65,7 @@ export const getServerSideProps: GetServerSideProps =
     }
 
     return {
-      props: {},
+      props: { tool: result.data },
     };
   });
 

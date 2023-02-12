@@ -38,7 +38,7 @@ describe('EditorSnackbar', () => {
     }));
 
     const result = render(<EditorSnackbar />);
-    expect(result.getByText(mockSnackbarMessage.message)).toBeDefined();
+    expect(result.getByText(mockSnackbarMessage.message)).toBeTruthy();
   });
 
   it('hides alert after 3 seconds', async () => {
@@ -47,7 +47,7 @@ describe('EditorSnackbar', () => {
     }));
 
     const result = render(<EditorSnackbar />);
-    expect(result.getByText(mockSnackbarMessage.message)).toBeDefined();
+    expect(result.getByText(mockSnackbarMessage.message)).toBeTruthy();
 
     await act(async () => {
       jest.advanceTimersByTime(DURATION_MS);

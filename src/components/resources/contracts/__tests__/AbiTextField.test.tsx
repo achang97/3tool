@@ -9,13 +9,13 @@ describe('AbiTextField', () => {
   it('renders given value in input', () => {
     const mockValue = 'test';
     const result = render(<AbiTextField value={mockValue} />);
-    expect(result.getByText(mockValue)).toBeDefined();
+    expect(result.getByText(mockValue)).toBeTruthy();
   });
 
   it('renders error if value is not JSON', () => {
     const mockValue = '[';
     const result = render(<AbiTextField value={mockValue} />);
-    expect(result.getByText('Invalid JSON')).toBeDefined();
+    expect(result.getByText('Invalid JSON')).toBeTruthy();
   });
 
   it('does not render error if value is empty', () => {

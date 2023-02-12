@@ -15,6 +15,10 @@ declare module 'etherscan-api' {
   ): EtherscanClient;
 }
 
+type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]>;
+};
+
 declare module '*.png';
 declare module '*.jpg';
 declare module '*.svg';

@@ -18,7 +18,7 @@ describe('ThumbnailContainer', () => {
       </ThumbnailContainer>
     );
 
-    expect(result.getByText(mockIcon)).toBeDefined();
+    expect(result.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders children', () => {
@@ -28,7 +28,7 @@ describe('ThumbnailContainer', () => {
       </ThumbnailContainer>
     );
 
-    expect(result.getByText(mockChildren)).toBeDefined();
+    expect(result.getByText(mockChildren)).toBeTruthy();
   });
 
   it('calls onClick when container is clicked', async () => {

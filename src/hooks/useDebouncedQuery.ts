@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 
 const DEFAULT_DEBOUNCE_TIME_MS = 300;
 

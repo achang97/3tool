@@ -25,6 +25,8 @@ export const InspectorEditableName = ({
         justifyContent: 'space-between',
         paddingX: 1.5,
         paddingY: 1,
+        borderBottom: 1,
+        borderColor: 'divider',
       }}
     >
       <Box

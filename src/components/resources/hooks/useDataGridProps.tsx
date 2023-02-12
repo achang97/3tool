@@ -18,16 +18,16 @@ type HookArgs = {
   onEditClick: (resource: Resource) => void;
 };
 
-type HookReturnType = {
-  rows: GridRowsProp;
-  columns: GridColDef[];
+type DataGridProps = {
+  rows: GridRowsProp<Resource>;
+  columns: GridColDef<Resource>[];
 };
 
 export const useDataGridProps = ({
   resources,
   onEditClick,
-}: HookArgs): HookReturnType => {
-  const rows: GridRowsProp = useMemo(() => {
+}: HookArgs): DataGridProps => {
+  const rows: GridRowsProp<Resource> = useMemo(() => {
     return resources ?? [];
   }, [resources]);
 
@@ -50,7 +50,7 @@ export const useDataGridProps = ({
     [onEditClick]
   );
 
-  const columns: GridColDef[] = useMemo(() => {
+  const columns: GridColDef<Resource>[] = useMemo(() => {
     return [
       {
         field: 'type',

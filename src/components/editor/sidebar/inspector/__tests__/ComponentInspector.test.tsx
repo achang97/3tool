@@ -1,130 +1,205 @@
-import { COMPONENTS_BY_TYPE } from '@app/constants';
-import {
-  blurComponentFocus,
-  setSnackbarMessage,
-} from '@app/redux/features/editorSlice';
-import { ComponentType, Tool } from '@app/types';
-import { render, waitFor } from '@testing-library/react';
+import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
+import { COMPONENT_CONFIGS, COMPONENT_DATA_TEMPLATES } from '@app/constants';
+import { Component, ComponentType } from '@app/types';
+import { render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {
+  mockComponentLayout,
+  mockTool as baseMockTool,
+} from '@tests/constants/data';
+import { DepGraph } from 'dependency-graph';
 import { ComponentInspector } from '../ComponentInspector';
 
-const mockTool: Tool = {
-  id: '1',
-  name: 'Tool',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  creator: {
-    name: 'Andrew',
+const mockComponents: Component[] = [
+  {
+    name: 'button1',
+    type: ComponentType.Button,
+    layout: mockComponentLayout,
+    data: {},
   },
-  components: [
-    {
-      name: 'button1',
-      type: ComponentType.Button,
-      layout: {
-        w: 1,
-        h: 1,
-        x: 1,
-        y: 1,
-      },
-      metadata: {},
-    },
-    {
-      name: 'button2',
-      type: ComponentType.Button,
-      layout: {
-        w: 2,
-        h: 2,
-        x: 2,
-        y: 2,
-      },
-      metadata: {},
-    },
-  ],
-};
-const mockComponent = mockTool.components[0];
+  {
+    name: 'button2',
+    type: ComponentType.Button,
+    layout: mockComponentLayout,
+    data: {},
+  },
+];
+const mockComponent = mockComponents[0];
 
 const mockUpdateTool = jest.fn();
+const mockUpdateComponentName = jest.fn();
+const mockDeleteComponent = jest.fn();
 const mockDispatch = jest.fn();
 
-jest.mock('../../../hooks/useGetActiveTool', () => ({
-  useGetActiveTool: jest.fn(() => mockTool),
+jest.mock('../../../hooks/useActiveTool');
+
+jest.mock('../../../hooks/useUpdateComponentName', () => ({
+  useUpdateComponentName: jest.fn(() => mockUpdateComponentName),
 }));
 
-jest.mock('../../../hooks/useUpdateActiveTool', () => ({
-  useUpdateActiveTool: jest.fn(() => mockUpdateTool),
+jest.mock('../../../hooks/useDeleteComponent', () => ({
+  useDeleteComponent: jest.fn(() => mockDeleteComponent),
 }));
 
 jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => mockDispatch),
+  useAppSelector: jest.fn(() => ({
+    componentInputs: {},
+  })),
 }));
 
 describe('ComponentInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    (useActiveTool as jest.Mock).mockImplementation(() => ({
+      tool: {
+        ...baseMockTool,
+        mockComponents,
+      },
+      updateTool: mockUpdateTool,
+      componentEvalDataMap: {},
+      componentEvalDataValuesMap: {},
+      componentDataDepGraph: new DepGraph<string>(),
+    }));
   });
 
-  it('renders nothing if no component with corresponding name is found', () => {
-    const result = render(<ComponentInspector name="invalid" />);
-    expect(result.queryByTestId('component-inspector')).toBeNull();
-  });
+  describe('editable name', () => {
+    it('renders component name and type', () => {
+      const result = render(<ComponentInspector component={mockComponent} />);
+      expect(result.getByText(mockComponent.name)).toBeTruthy();
+      expect(
+        result.getByText(COMPONENT_CONFIGS[mockComponent.type].label)
+      ).toBeTruthy();
+    });
 
-  it('renders component name and type', () => {
-    const result = render(<ComponentInspector name={mockComponent.name} />);
-    expect(result.getByText(mockComponent.name)).toBeDefined();
-    expect(
-      result.getByText(COMPONENTS_BY_TYPE[mockComponent.type].label)
-    ).toBeDefined();
-  });
+    it('toggles input on name click and updates component name on enter', async () => {
+      const result = render(<ComponentInspector component={mockComponent} />);
 
-  it('toggles input on name click and updates component name on enter', async () => {
-    const result = render(<ComponentInspector name={mockComponent.name} />);
+      await userEvent.click(result.getByText(mockComponent.name));
 
-    await userEvent.click(result.getByText(mockComponent.name));
+      const newNameText = '1234';
+      await userEvent.keyboard(newNameText);
+      await userEvent.keyboard('[Enter]');
 
-    const newNameText = '1234';
-    await userEvent.keyboard(newNameText);
-    await userEvent.keyboard('[Enter]');
-
-    expect(mockUpdateTool).toHaveBeenCalledWith({
-      components: [
-        { ...mockComponent, name: `${mockComponent.name}${newNameText}` },
-        ...mockTool.components.slice(1),
-      ],
+      expect(mockUpdateComponentName).toHaveBeenCalledWith(
+        `${mockComponent.name}${newNameText}`
+      );
     });
   });
 
-  it('toggles input on name click and shows error if name contains invalid characters', async () => {
-    const result = render(<ComponentInspector name={mockComponent.name} />);
+  describe('deletion', () => {
+    it('deletes component by clicking Delete and then Confirm in the presented dialog', async () => {
+      mockDeleteComponent.mockImplementation(() => true);
 
-    await userEvent.click(result.getByText(mockComponent.name));
+      const result = render(<ComponentInspector component={mockComponent} />);
 
-    await userEvent.keyboard(' ! ');
-    await userEvent.keyboard('[Enter]');
+      await userEvent.click(result.getByText('Delete'));
+      expect(result.getByTestId('delete-component-button-dialog')).toBeTruthy();
 
-    expect(mockDispatch).toHaveBeenCalledWith(
-      setSnackbarMessage({
-        type: 'error',
-        message: 'Name can only contain letters, numbers, _, or $',
-      })
-    );
-    expect(mockUpdateTool).not.toHaveBeenCalled();
+      await userEvent.click(result.getByText('Confirm'));
+      await waitFor(() => {
+        expect(
+          result.queryByTestId('delete-component-button-dialog')
+        ).toBeNull();
+        expect(mockDeleteComponent).toHaveBeenCalled();
+      });
+    });
   });
 
-  it('deletes component by clicking Delete and confirming in the presented dialog', async () => {
-    mockUpdateTool.mockImplementation(() => ({ data: mockTool }));
+  describe('components', () => {
+    it.each`
+      type                         | inspectorId
+      ${ComponentType.Button}      | ${'button-inspector'}
+      ${ComponentType.NumberInput} | ${'number-input-inspector'}
+      ${ComponentType.Table}       | ${'table-inspector'}
+      ${ComponentType.TextInput}   | ${'text-input-inspector'}
+      ${ComponentType.Text}        | ${'text-inspector'}
+    `(
+      'renders $type inspector',
+      ({ type, inspectorId }: { type: ComponentType; inspectorId: string }) => {
+        const mockActiveComponent: Component = {
+          name: 'Name',
+          type,
+          layout: mockComponentLayout,
+          data: {
+            [type]: {},
+          },
+        };
 
-    const result = render(<ComponentInspector name={mockComponent.name} />);
+        (useActiveTool as jest.Mock).mockImplementation(() => ({
+          tool: {
+            ...baseMockTool,
+            components: [mockActiveComponent],
+          },
+          updateTool: mockUpdateTool,
+          componentEvalDataMap: {},
+          componentEvalDataValuesMap: {},
+          componentDataDepGraph: new DepGraph<string>(),
+        }));
 
-    await userEvent.click(result.getByText('Delete'));
-    expect(result.getByTestId('delete-component-button-dialog')).toBeDefined();
+        const result = render(
+          <ComponentInspector component={mockActiveComponent} />
+        );
 
-    await userEvent.click(result.getByText('Confirm'));
+        expect(result.getByTestId(inspectorId)).toBeTruthy();
+      }
+    );
+  });
+
+  it('calls API to update components with debounce of 300 ms', async () => {
+    const mockActiveComponent: Component = {
+      name: 'Name',
+      type: ComponentType.Button,
+      layout: mockComponentLayout,
+      data: {
+        button: COMPONENT_DATA_TEMPLATES[ComponentType.Button],
+      },
+    };
+
+    (useActiveTool as jest.Mock).mockImplementation(() => ({
+      tool: {
+        ...baseMockTool,
+        components: [mockActiveComponent],
+      },
+      updateTool: mockUpdateTool,
+      componentEvalDataMap: {},
+      componentEvalDataValuesMap: {},
+      componentDataDepGraph: new DepGraph<string>(),
+    }));
+
+    const result = render(
+      <ComponentInspector component={mockActiveComponent} />
+    );
+
+    const textInput = within(
+      result.getByTestId('dynamic-text-field-Text')
+    ).getByRole('textbox');
+    const newInputValue = 'h';
+    await userEvent.type(textInput, newInputValue);
+
+    // NOTE: It would be ideal to use fake timers to actually test the debounce time here,
+    // but this test stubbornly refuses to work (it seems like runAllTimers and advanceTimersByTime
+    // don't work properly here for some reason).
+    expect(mockUpdateTool).not.toHaveBeenCalled();
     await waitFor(() => {
-      expect(result.queryByTestId('delete-component-button-dialog')).toBeNull();
+      const newExpectedText = `${newInputValue}${
+        COMPONENT_DATA_TEMPLATES[ComponentType.Button].text
+      }`;
+
       expect(mockUpdateTool).toHaveBeenCalledWith({
-        components: mockTool.components.slice(1),
+        components: [
+          {
+            ...mockActiveComponent,
+            data: {
+              button: {
+                ...mockActiveComponent.data.button,
+                text: newExpectedText,
+              },
+            },
+          },
+        ],
       });
-      expect(mockDispatch).toHaveBeenCalledWith(blurComponentFocus());
     });
   });
 });

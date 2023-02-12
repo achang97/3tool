@@ -1,6 +1,3 @@
-import { blurComponentFocus } from '@app/redux/features/editorSlice';
-import { useAppDispatch } from '@app/redux/hooks';
-import { isSuccessfulApiResponse } from '@app/utils/api';
 import { Delete } from '@mui/icons-material';
 import {
   Button,
@@ -8,10 +5,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Typography,
 } from '@mui/material';
 import { useCallback, useState } from 'react';
-import { useGetActiveTool } from '../../hooks/useGetActiveTool';
-import { useUpdateActiveTool } from '../../hooks/useUpdateActiveTool';
+import { useComponentDataDependents } from '../../hooks/useComponentDataDependents';
+import { useDeleteComponent } from '../../hooks/useDeleteComponent';
 
 type DeleteComponentButtonProps = {
   name: string;
@@ -20,10 +18,8 @@ type DeleteComponentButtonProps = {
 export const DeleteComponentButton = ({ name }: DeleteComponentButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const tool = useGetActiveTool();
-  const updateTool = useUpdateActiveTool();
-
-  const dispatch = useAppDispatch();
+  const handleDeleteComponent = useDeleteComponent(name);
+  const dependents = useComponentDataDependents(name);
 
   const handleDialogOpen = useCallback(() => {
     setIsDialogOpen(true);
@@ -33,20 +29,14 @@ export const DeleteComponentButton = ({ name }: DeleteComponentButtonProps) => {
     setIsDialogOpen(false);
   }, []);
 
-  const handleDeleteComponent = useCallback(async () => {
-    const response = await updateTool({
-      components: tool?.components.filter(
-        (currComponent) => currComponent.name !== name
-      ),
-    });
-    handleDialogClose();
+  const handleConfirmDelete = useCallback(async () => {
+    const result = await handleDeleteComponent();
 
-    if (!isSuccessfulApiResponse(response)) {
+    if (!result) {
       return;
     }
-
-    dispatch(blurComponentFocus());
-  }, [dispatch, name, tool, updateTool, handleDialogClose]);
+    handleDialogClose();
+  }, [handleDeleteComponent, handleDialogClose]);
 
   return (
     <>
@@ -59,13 +49,20 @@ export const DeleteComponentButton = ({ name }: DeleteComponentButtonProps) => {
         fullWidth
         data-testid="delete-component-button-dialog"
       >
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>Are you sure you want to delete {name}?</DialogContent>
+        <DialogTitle>Are you sure you want to delete {name}?</DialogTitle>
+        {dependents.length !== 0 && (
+          <DialogContent>
+            <Typography>
+              You will need to manually delete the following JavaScript
+              expression references: {dependents.join(', ')}
+            </Typography>
+          </DialogContent>
+        )}
         <DialogActions>
           <Button variant="outlined" onClick={handleDialogClose}>
             Cancel
           </Button>
-          <Button color="error" onClick={handleDeleteComponent}>
+          <Button color="error" onClick={handleConfirmDelete}>
             Confirm
           </Button>
         </DialogActions>

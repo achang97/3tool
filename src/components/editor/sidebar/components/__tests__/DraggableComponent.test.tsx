@@ -1,4 +1,5 @@
 import { ComponentType } from '@app/types';
+import { mockTool } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
 import { DraggableComponent } from '../DraggableComponent';
 
@@ -6,8 +7,8 @@ const mockIcon = 'Icon';
 const mockLabel = 'Label';
 const mockComponentType = ComponentType.Button;
 
-jest.mock('../../../hooks/useGetActiveTool', () => ({
-  useGetActiveTool: jest.fn(() => undefined),
+jest.mock('../../../hooks/useActiveTool', () => ({
+  useActiveTool: jest.fn(() => ({ tool: mockTool })),
 }));
 
 describe('DraggableComponent', () => {
@@ -19,7 +20,7 @@ describe('DraggableComponent', () => {
         type={mockComponentType}
       />
     );
-    expect(result.getByText(mockIcon)).toBeDefined();
+    expect(result.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders label', () => {
@@ -30,6 +31,6 @@ describe('DraggableComponent', () => {
         type={mockComponentType}
       />
     );
-    expect(result.getByText(mockLabel)).toBeDefined();
+    expect(result.getByText(mockLabel)).toBeTruthy();
   });
 });

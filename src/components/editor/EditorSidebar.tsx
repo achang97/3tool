@@ -57,10 +57,14 @@ export const EditorSidebar = () => {
           ))}
         </Tabs>
       </Box>
-      <Box sx={{ boxShadow: 3, flex: 1 }}>
+      <Box sx={{ boxShadow: 3, flex: 1, minHeight: 0 }}>
         <TabContext value={sidebarView}>
           {TABS.map((tab) => (
-            <TabPanel key={tab.label} value={tab.value} sx={{ padding: 0 }}>
+            <TabPanel
+              key={tab.label}
+              value={tab.value}
+              sx={{ padding: 0, height: '100%' }}
+            >
               {tab.panel}
             </TabPanel>
           ))}

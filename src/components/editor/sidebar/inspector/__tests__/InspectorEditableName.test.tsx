@@ -19,7 +19,7 @@ describe('InspectorEditableName', () => {
         icon={mockIcon}
       />
     );
-    expect(result.getByText(mockIcon)).toBeDefined();
+    expect(result.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders subtitle', () => {
@@ -31,7 +31,7 @@ describe('InspectorEditableName', () => {
         subtitle={mockSubtitle}
       />
     );
-    expect(result.getByText(mockSubtitle)).toBeDefined();
+    expect(result.getByText(mockSubtitle)).toBeTruthy();
   });
 
   it('renders value', () => {
@@ -43,7 +43,7 @@ describe('InspectorEditableName', () => {
         subtitle={mockSubtitle}
       />
     );
-    expect(result.getByText(mockValue)).toBeDefined();
+    expect(result.getByText(mockValue)).toBeTruthy();
   });
 
   it('toggles input and calls onSubmit on enter if editable is true', async () => {

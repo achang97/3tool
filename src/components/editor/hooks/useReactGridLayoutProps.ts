@@ -6,16 +6,15 @@ import {
   startMoveComponentDrag,
 } from '@app/redux/features/editorSlice';
 import { Layout, ReactGridLayoutProps } from 'react-grid-layout';
-import { Component, ComponentType } from '@app/types';
+import { Component } from '@app/types';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { createNewComponent } from '../utils/editor';
+import { COMPONENT_CONFIGS } from '@app/constants';
+import { isSuccessfulApiResponse } from '@app/utils/api';
+import { createNewComponent } from '../utils/components';
+import { hasLayoutMoved, hasLayoutResized } from '../utils/reactGridLayout';
+import { useActiveTool } from './useActiveTool';
 
-type HookArgs = {
-  components: Component[];
-  onUpdateComponents: (newComponents: Component[]) => Promise<boolean>;
-};
-
-type HookReturnType = {
+type CustomReactGridLayoutProps = {
   onDrag: (_layout: Layout[], _oldComponent: Layout, component: Layout) => void;
   onDragStop: () => void;
   onLayoutChange: (newLayout: Layout[]) => void;
@@ -24,10 +23,10 @@ type HookReturnType = {
   droppingItem: ReactGridLayoutProps['droppingItem'];
 };
 
-export const useReactGridLayoutProps = ({
-  components,
-  onUpdateComponents,
-}: HookArgs): HookReturnType => {
+export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
+  const { tool, updateTool } = useActiveTool();
+  const components = useMemo(() => tool.components, [tool]);
+
   const { newComponent, movingComponentName } = useAppSelector(
     (state) => state.editor
   );
@@ -58,18 +57,17 @@ export const useReactGridLayoutProps = ({
       return undefined;
     }
 
-    const baseItem = { i: newComponent.name };
+    const { dimensions } = COMPONENT_CONFIGS[newComponent.type];
 
-    switch (newComponent.type) {
-      case ComponentType.Button:
-        return { ...baseItem, w: 8, h: 4 };
-      default:
-        return { ...baseItem, w: 8, h: 4 };
-    }
+    return {
+      i: newComponent.name,
+      w: dimensions.w,
+      h: dimensions.h,
+    };
   }, [newComponent]);
 
   const onDrag = useCallback(
-    (_layout: Layout[], _oldComponent: Layout, component: Layout) => {
+    (_layout: Layout[], oldComponent: Layout, component: Layout) => {
       if (!newComponent && !movingComponentName) {
         dispatch(startMoveComponentDrag(component.i));
         dispatch(focusComponent(component.i));
@@ -98,16 +96,16 @@ export const useReactGridLayoutProps = ({
       );
       const newComponents = [...prevComponents, newToolComponent];
 
-      const success = await onUpdateComponents(newComponents);
+      const response = await updateTool({ components: newComponents });
       dispatch(endCreateComponentDrag());
 
-      if (!success) {
+      if (!isSuccessfulApiResponse(response)) {
         return;
       }
 
       dispatch(focusComponent(newComponent.name));
     },
-    [dispatch, getComponentsWithLayout, newComponent, onUpdateComponents]
+    [dispatch, getComponentsWithLayout, newComponent, updateTool]
   );
 
   const onLayoutChange = useCallback(
@@ -129,18 +127,16 @@ export const useReactGridLayoutProps = ({
 
       const hasMovedOrResized = newLayout.some(
         (_, i) =>
-          newLayout[i].w !== layout[i].w ||
-          newLayout[i].h !== layout[i].h ||
-          newLayout[i].x !== layout[i].x ||
-          newLayout[i].y !== layout[i].y
+          hasLayoutResized(layout[i], newLayout[i]) ||
+          hasLayoutMoved(layout[i], newLayout[i])
       );
       if (!hasMovedOrResized) {
         return;
       }
 
-      onUpdateComponents(getComponentsWithLayout(newLayout));
+      updateTool({ components: getComponentsWithLayout(newLayout) });
     },
-    [newComponent, layout, onUpdateComponents, getComponentsWithLayout]
+    [newComponent, layout, updateTool, getComponentsWithLayout]
   );
 
   return {

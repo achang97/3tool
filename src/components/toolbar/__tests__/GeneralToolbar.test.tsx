@@ -1,5 +1,6 @@
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import { BASE_WINDOW_URL } from '@tests/constants/window';
 import { render } from '@tests/utils/renderWithContext';
 import { silenceConsoleError } from '@tests/utils/silenceConsoleError';
 import { GeneralToolbar } from '../GeneralToolbar';
@@ -34,7 +35,7 @@ describe('GeneralToolbar', () => {
     expect(avatar.textContent).toEqual(mockUser.name[0]);
 
     await userEvent.click(avatar);
-    expect(await result.findByTestId('general-toolbar-menu')).toBeDefined();
+    expect(await result.findByTestId('general-toolbar-menu')).toBeTruthy();
   });
 
   it('renders link to Tools page', () => {
@@ -75,7 +76,7 @@ describe('GeneralToolbar', () => {
     await userEvent.click(logoutButton);
 
     expect(mockLogout).toHaveBeenCalledTimes(1);
-    expect(mockLogout).toHaveBeenCalledWith({ returnTo: 'http://localhost' });
+    expect(mockLogout).toHaveBeenCalledWith({ returnTo: BASE_WINDOW_URL });
     await waitFor(() => {
       expect(result.queryByText('Logout')).toBeNull();
     });

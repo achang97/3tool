@@ -57,7 +57,7 @@ describe('BaseResourceDialog', () => {
         testId={mockTestId}
       />
     );
-    expect(result.getByText(mockTitle)).toBeDefined();
+    expect(result.getByText(mockTitle)).toBeTruthy();
   });
 
   it('renders error message', () => {
@@ -78,7 +78,7 @@ describe('BaseResourceDialog', () => {
         testId={mockTestId}
       />
     );
-    expect(result.getByText('Mock Error')).toBeDefined();
+    expect(result.getByText('Mock Error')).toBeTruthy();
   });
 
   it('calls onSubmit with smart contract resource on Save button click', async () => {
@@ -106,7 +106,7 @@ describe('BaseResourceDialog', () => {
     expect(mockHandleSubmit).toHaveBeenCalledWith({
       type: ResourceType.SmartContract,
       name: contractFields.name,
-      metadata: {
+      data: {
         smartContract: {
           chainId: contractFields.chainId,
           address: contractFields.address,

@@ -82,9 +82,9 @@ export const EditableTextField = ({
 
   return (
     <Typography
+      {...TypographyProps}
       onClick={handleToggleEditMode}
       data-testid="editable-text-field-view"
-      {...TypographyProps}
       sx={{ ...TypographyProps?.sx, cursor: editable ? 'pointer' : 'initial' }}
     >
       {value}

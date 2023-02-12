@@ -13,8 +13,8 @@ export const parseApiError = (error: ApiError | SerializedError): string => {
   return 'Something went wrong. Please try again.';
 };
 
-export const isSuccessfulApiResponse = <T>(
-  response: ApiResponse<T> | undefined
+export const isSuccessfulApiResponse = (
+  response: ApiResponse | undefined
 ): boolean => {
   return Boolean(response && 'data' in response);
 };
