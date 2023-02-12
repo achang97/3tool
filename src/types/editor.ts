@@ -1,4 +1,4 @@
-import { ComponentData, ComponentType } from './api';
+import { ComponentData } from './api';
 
 export enum SidebarViewType {
   Inspector = 'inspector',
@@ -13,20 +13,6 @@ export type ComponentFieldType =
   | 'object'
   | 'any'
   | 'nested';
-
-export type ComponentInputs = {
-  [ComponentType.Button]: {};
-  [ComponentType.TextInput]: {
-    value: string;
-  };
-  [ComponentType.NumberInput]: {
-    value: number;
-  };
-  [ComponentType.Text]: {};
-  [ComponentType.Table]: {
-    selectedRows: unknown[];
-  };
-};
 
 export type BaseCanvasComponentProps = {
   name: string;

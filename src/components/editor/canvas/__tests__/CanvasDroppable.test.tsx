@@ -1,8 +1,5 @@
-import { Component, ComponentType, Tool } from '@app/types';
-import {
-  mockComponentLayout,
-  mockTool as baseMockTool,
-} from '@tests/constants/data';
+import { Component, ComponentType } from '@app/types';
+import { mockComponentLayout } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
 import { DepGraph } from 'dependency-graph';
 import React from 'react';
@@ -19,14 +16,11 @@ const mockComponents: Component[] = [
   },
 ];
 
-const mockTool: Tool = {
-  ...baseMockTool,
-  components: mockComponents,
-};
-
 jest.mock('../../hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
-    tool: mockTool,
+    tool: {
+      components: mockComponents,
+    },
     updateTool: mockUpdateTool,
     componentDataDepGraph: new DepGraph<string>(),
     componentEvalDataMap: {},

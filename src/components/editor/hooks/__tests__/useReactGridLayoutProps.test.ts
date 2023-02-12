@@ -6,16 +6,13 @@ import {
   startMoveComponentDrag,
 } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
-import { Component, ComponentType, Tool } from '@app/types';
+import { Component, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import {
   mockApiErrorResponse,
   mockApiSuccessResponse,
 } from '@tests/constants/api';
-import {
-  mockComponentLayout,
-  mockTool as baseMockTool,
-} from '@tests/constants/data';
+import { mockComponentLayout } from '@tests/constants/data';
 import { Layout } from 'react-grid-layout';
 import { createNewComponent } from '../../utils/components';
 import { useReactGridLayoutProps } from '../useReactGridLayoutProps';
@@ -28,10 +25,6 @@ const mockComponents: Component[] = [
     data: {},
   },
 ];
-const mockTool: Tool = {
-  ...baseMockTool,
-  components: mockComponents,
-};
 
 const mockUpdateTool = jest.fn();
 
@@ -56,7 +49,9 @@ jest.mock('@app/redux/hooks', () => ({
 
 jest.mock('../useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
-    tool: mockTool,
+    tool: {
+      components: mockComponents,
+    },
     updateTool: mockUpdateTool,
   })),
 }));

@@ -1,12 +1,11 @@
 import { resetComponentInput } from '@app/redux/features/activeToolSlice';
 import { blurComponentFocus } from '@app/redux/features/editorSlice';
-import { Component, Tool } from '@app/types';
+import { Component } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import {
   mockApiErrorResponse,
   mockApiSuccessResponse,
 } from '@tests/constants/api';
-import { mockTool as baseMockTool } from '@tests/constants/data';
 import { useDeleteComponent } from '../useDeleteComponent';
 
 const mockName = 'name';
@@ -15,10 +14,6 @@ const mockComponents = [
   { name: mockName },
   { name: 'other-name' },
 ] as Component[];
-const mockTool: Tool = {
-  ...baseMockTool,
-  components: mockComponents,
-};
 
 const mockUpdateTool = jest.fn();
 const mockDispatch = jest.fn();
@@ -26,8 +21,7 @@ const mockDispatch = jest.fn();
 jest.mock('../useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
     tool: {
-      ...mockTool,
-      components: [{ name: mockName }, { name: 'other-name' }],
+      components: mockComponents,
     },
     updateTool: mockUpdateTool,
   })),

@@ -206,3 +206,31 @@ export type ComponentEvalData = {
     columnHeadersByIndex: unknown[];
   };
 };
+
+export type ComponentInputs = {
+  [ComponentType.Button]: {};
+  [ComponentType.TextInput]: {
+    value: string;
+  };
+  [ComponentType.NumberInput]: {
+    value: number;
+  };
+  [ComponentType.Text]: {};
+  [ComponentType.Table]: {
+    selectedRows: unknown[];
+  };
+};
+
+export const COMPONENT_INPUT_TEMPLATES: ComponentInputs = {
+  [ComponentType.Button]: {},
+  [ComponentType.TextInput]: {
+    value: '',
+  },
+  [ComponentType.NumberInput]: {
+    value: 0,
+  },
+  [ComponentType.Text]: {},
+  [ComponentType.Table]: {
+    selectedRows: [],
+  },
+};

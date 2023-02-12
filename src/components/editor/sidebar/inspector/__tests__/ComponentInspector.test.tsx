@@ -3,10 +3,7 @@ import { COMPONENT_CONFIGS, COMPONENT_DATA_TEMPLATES } from '@app/constants';
 import { Component, ComponentType } from '@app/types';
 import { render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  mockComponentLayout,
-  mockTool as baseMockTool,
-} from '@tests/constants/data';
+import { mockComponentLayout } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { ComponentInspector } from '../ComponentInspector';
 
@@ -54,7 +51,6 @@ describe('ComponentInspector', () => {
 
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: {
-        ...baseMockTool,
         mockComponents,
       },
       updateTool: mockUpdateTool,
@@ -129,7 +125,6 @@ describe('ComponentInspector', () => {
 
         (useActiveTool as jest.Mock).mockImplementation(() => ({
           tool: {
-            ...baseMockTool,
             components: [mockActiveComponent],
           },
           updateTool: mockUpdateTool,
@@ -159,7 +154,6 @@ describe('ComponentInspector', () => {
 
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: {
-        ...baseMockTool,
         components: [mockActiveComponent],
       },
       updateTool: mockUpdateTool,

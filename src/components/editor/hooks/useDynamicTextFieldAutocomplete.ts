@@ -1,4 +1,4 @@
-import { GLOBAL_LIBRARIES } from '@app/constants';
+import { COMPONENT_INPUT_TEMPLATES, GLOBAL_LIBRARIES } from '@app/constants';
 import { useAppSelector } from '@app/redux/hooks';
 import {
   Completion,
@@ -25,8 +25,15 @@ const GLOBAL_LIBRARY_MAP = _.chain(GLOBAL_LIBRARIES)
   .value();
 
 export const useDynamicTextFieldAutocomplete = (): CompletionSource => {
-  const { componentEvalDataValuesMap } = useActiveTool();
+  const { componentEvalDataValuesMap, tool } = useActiveTool();
   const { componentInputs } = useAppSelector((state) => state.activeTool);
+
+  const defaultComponentInputs = useMemo(() => {
+    return _.chain(tool.components)
+      .keyBy('name')
+      .mapValues((component) => COMPONENT_INPUT_TEMPLATES[component.type])
+      .value();
+  }, [tool.components]);
 
   const lookupMap = useMemo(
     () =>
@@ -34,9 +41,10 @@ export const useDynamicTextFieldAutocomplete = (): CompletionSource => {
         {},
         GLOBAL_LIBRARY_MAP,
         componentEvalDataValuesMap,
+        defaultComponentInputs,
         componentInputs
       ),
-    [componentEvalDataValuesMap, componentInputs]
+    [componentEvalDataValuesMap, componentInputs, defaultComponentInputs]
   );
 
   const rootOptions = useMemo(() => {

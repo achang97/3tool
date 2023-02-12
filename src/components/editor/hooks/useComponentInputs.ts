@@ -1,5 +1,5 @@
 import { useAppSelector } from '@app/redux/hooks';
-import { ComponentInputs } from '@app/types';
+import { ComponentInputs } from '@app/constants';
 import { useMemo } from 'react';
 
 export type Inputs<T extends keyof ComponentInputs> = Partial<

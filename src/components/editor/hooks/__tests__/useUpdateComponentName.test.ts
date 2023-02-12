@@ -4,16 +4,13 @@ import {
   focusComponent,
   setSnackbarMessage,
 } from '@app/redux/features/editorSlice';
-import { Component, ComponentType, Tool } from '@app/types';
+import { Component, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import {
   mockApiErrorResponse,
   mockApiSuccessResponse,
 } from '@tests/constants/api';
-import {
-  mockComponentLayout,
-  mockTool as baseMockTool,
-} from '@tests/constants/data';
+import { mockComponentLayout } from '@tests/constants/data';
 import _ from 'lodash';
 import { useUpdateComponentName } from '../useUpdateComponentName';
 
@@ -44,17 +41,15 @@ const mockComponents: Component[] = [
     },
   },
 ];
-const mockTool: Tool = {
-  ...baseMockTool,
-  components: mockComponents,
-};
 
 const mockDispatch = jest.fn();
 const mockUpdateTool = jest.fn();
 
 jest.mock('../useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
-    tool: mockTool,
+    tool: {
+      components: mockComponents,
+    },
     updateTool: mockUpdateTool,
   })),
 }));
