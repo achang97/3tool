@@ -62,13 +62,13 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
   }, [handleUpdateComponent]);
 
   const dataInspector = useMemo(() => {
-    const Inspector = COMPONENT_INSPECTOR_MAP[component.type];
-    if (!Inspector) {
+    const TypedInspector = COMPONENT_INSPECTOR_MAP[component.type];
+    if (!TypedInspector) {
       return null;
     }
 
     return (
-      <Inspector
+      <TypedInspector
         name={component.name}
         data={component.data}
         onUpdate={debouncedHandleUpdateData}

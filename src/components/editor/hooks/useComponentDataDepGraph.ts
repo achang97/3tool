@@ -13,7 +13,7 @@ export const useComponentDataDepGraph = (
   components: Component[]
 ): ComponentDataDepGraph => {
   const depGraph = useMemo(() => {
-    const graph = new DepGraph<string>();
+    const graph = new DepGraph<string>({ circular: true });
 
     // Add nodes
     components.forEach((component) => {

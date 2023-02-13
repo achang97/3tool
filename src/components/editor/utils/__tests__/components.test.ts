@@ -8,7 +8,6 @@ import {
   getComponentTokens,
   getNewComponentName,
   parseComponentFieldName,
-  parseDepGraphCycle,
   updateDynamicTermComponents,
 } from '../components';
 
@@ -278,26 +277,6 @@ describe('editor', () => {
         [{ name: 'button1' }] as Component[]
       );
       expect(result).toEqual('{{ newButton + "button1.text" }}');
-    });
-  });
-
-  describe('parseDepGraphCycle', () => {
-    it('returns undefined if error does not match regex', () => {
-      const result = parseDepGraphCycle(new Error('random error'));
-      expect(result).toBeUndefined();
-    });
-
-    it('returns list of cycle elements, excluding the first element', () => {
-      const result = parseDepGraphCycle(
-        new Error(
-          'Dependency Cycle Found: button1 -> button1.text -> textInput1.value -> button1.text'
-        )
-      );
-      expect(result).toEqual([
-        'button1.text',
-        'textInput1.value',
-        'button1.text',
-      ]);
     });
   });
 });

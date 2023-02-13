@@ -4,6 +4,7 @@ import { Responsive, WidthProvider } from 'react-grid-layout';
 import { CanvasComponent } from './CanvasComponent';
 import { useReactGridLayoutProps } from '../hooks/useReactGridLayoutProps';
 import { useActiveTool } from '../hooks/useActiveTool';
+import { CANVAS_COMPONENT_HANDLE_CLASSNAME } from './CanvasComponentHandle';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -17,11 +18,7 @@ export const CanvasDroppable = () => {
 
   const gridChildren = useMemo(() => {
     return tool.components.map((component) => (
-      <CanvasComponent
-        key={component.name}
-        name={component.name}
-        type={component.type}
-      />
+      <CanvasComponent key={component.name} component={component} />
     ));
   }, [tool.components]);
 
@@ -47,6 +44,7 @@ export const CanvasDroppable = () => {
         preventCollision={false}
         droppingItem={droppingItem}
         isDroppable
+        draggableCancel={`.${CANVAS_COMPONENT_HANDLE_CLASSNAME}`}
       >
         {gridChildren}
       </ResponsiveReactGridLayout>

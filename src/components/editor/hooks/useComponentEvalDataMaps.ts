@@ -2,13 +2,9 @@ import { COMPONENT_DATA_TYPES } from '@app/constants';
 import { Component, ComponentFieldType } from '@app/types';
 import { useCallback, useMemo, useState } from 'react';
 import _ from 'lodash';
-import { DepGraph } from 'dependency-graph';
+import { DepGraph, DepGraphCycleError } from 'dependency-graph';
 import { useAppSelector } from '@app/redux/hooks';
-import {
-  getComponentData,
-  parseComponentFieldName,
-  parseDepGraphCycle,
-} from '../utils/components';
+import { getComponentData, parseComponentFieldName } from '../utils/components';
 import { evalExpression, EvalResult } from '../utils/eval';
 
 type HookArgs = {
@@ -40,6 +36,26 @@ export const useComponentEvalDataMaps = ({
     return _.keyBy(components, 'name');
   }, [components]);
 
+  const getOverallOrder = useCallback(() => {
+    try {
+      // NOTE: We're leveraging a "bug" with the dependency-graph package where clone
+      // doesn't copy over the original circular property. In the future, we may have
+      // to explicitly construct a new graph.
+      return componentDataDepGraph.clone().overallOrder();
+    } catch (e) {
+      if (e instanceof DepGraphCycleError) {
+        setError(
+          new Error(
+            `Dependency Cycle Found: ${e.cyclePath.slice(1).join(' → ')}`
+          )
+        );
+        return componentDataDepGraph.overallOrder();
+      }
+    }
+
+    return [];
+  }, [componentDataDepGraph]);
+
   const getNodeEvalResult = useCallback(
     (nodeName: string, evalArgs: Record<string, unknown>) => {
       const { componentName, fieldName, rootFieldName } =
@@ -68,52 +84,29 @@ export const useComponentEvalDataMaps = ({
     [componentMap]
   );
 
-  const handleError = useCallback((e: Error) => {
-    const cycleElements = parseDepGraphCycle(e);
-    if (cycleElements) {
-      setError(
-        new Error(`Dependency Cycle Found: ${cycleElements.join(' → ')}`)
-      );
-    } else {
-      setError(e);
-    }
-  }, []);
-
   const evalMaps = useMemo(() => {
     const componentEvalDataMap: ComponentEvalDataMap = {};
-    const componentEvalDataValuesMap: ComponentEvalDataValuesMap = _.mapValues(
-      componentMap,
-      () => ({})
-    );
-    const evalArgs = _.merge({}, componentEvalDataValuesMap, componentInputs);
+    const componentEvalDataValuesMap: ComponentEvalDataValuesMap = {};
+    const evalArgs = _.merge({}, componentInputs);
 
-    try {
-      componentDataDepGraph.overallOrder().forEach((nodeName) => {
-        const evalResult = getNodeEvalResult(nodeName, evalArgs);
+    const overallOrder = getOverallOrder();
+    overallOrder.forEach((nodeName) => {
+      const evalResult = getNodeEvalResult(nodeName, evalArgs);
 
-        if (!evalResult) {
-          return;
-        }
+      if (!evalResult) {
+        return;
+      }
 
-        _.set(componentEvalDataMap, nodeName, evalResult);
-        _.set(componentEvalDataValuesMap, nodeName, evalResult.value);
-        _.set(evalArgs, nodeName, evalResult.value);
-      });
-    } catch (e) {
-      handleError(e as Error);
-    }
+      _.set(componentEvalDataMap, nodeName, evalResult);
+      _.set(componentEvalDataValuesMap, nodeName, evalResult.value);
+      _.set(evalArgs, nodeName, evalResult.value);
+    });
 
     return {
       componentEvalDataMap,
       componentEvalDataValuesMap,
     };
-  }, [
-    componentMap,
-    componentInputs,
-    componentDataDepGraph,
-    getNodeEvalResult,
-    handleError,
-  ]);
+  }, [componentInputs, getOverallOrder, getNodeEvalResult]);
 
   return {
     ...evalMaps,

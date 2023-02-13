@@ -253,9 +253,3 @@ export const updateDynamicTermComponents = (
 
   return newExpression;
 };
-
-export const parseDepGraphCycle = (error: Error): string[] | undefined => {
-  const cycleMatch = error.message.match(/^Dependency Cycle Found: (.*)$/);
-  const cycleElements = cycleMatch?.[1].split(' -> ').slice(1);
-  return cycleElements;
-};

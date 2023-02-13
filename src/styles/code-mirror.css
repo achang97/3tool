@@ -19,7 +19,7 @@
   border-radius: var(--mui-shape-borderRadius);
 }
 
-.aca-dynamic-preview .cm-editor {
+.dynamic-focused .cm-editor {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -49,4 +49,17 @@
 .cm-editor .cm-content .cm-line {
   min-height: 20px;
   padding: 0 0.75em;
+}
+
+/* Error */
+.dynamic-error .cm-editor {
+  border-color: var(--mui-palette-error-light);
+}
+
+.dynamic-error .cm-editor.cm-focused {
+  outline-color: var(--mui-palette-error-light);
+}
+
+.dynamic-error .cm-editor:not(.cm-focused):hover {
+  border-color: var(--mui-palette-error-light);
 }

@@ -1,15 +1,27 @@
 import { focusComponent } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
-import { ComponentType } from '@app/types';
+import { Component, ComponentType } from '@app/types';
 import { Box } from '@mui/material';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createRef } from 'react';
+import {
+  ComponentEvalError,
+  useComponentEvalErrors,
+} from '../../hooks/useComponentEvalErrors';
 import { CanvasComponent } from '../CanvasComponent';
 
-const mockName = 'name';
-const mockType = ComponentType.Button;
+const mockComponent = {
+  name: 'button1',
+  type: ComponentType.Button,
+  data: {},
+} as Component;
 const mockChildren = 'children';
+
+const mockComponentEvalError: ComponentEvalError = {
+  name: 'text',
+  error: new Error('Error message'),
+};
 
 const mockDispatch = jest.fn();
 
@@ -24,18 +36,24 @@ jest.mock('../../hooks/useComponentEvalData', () => ({
   })),
 }));
 
+jest.mock('../../hooks/useComponentEvalErrors');
+
 describe('CanvasComponent', () => {
+  const handleId = 'canvas-component-handle';
+  const handleErrorIconId = 'canvas-component-handle-error-icon';
+
   beforeEach(() => {
     jest.clearAllMocks();
 
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       componentInputs: {},
     }));
+    (useComponentEvalErrors as jest.Mock).mockImplementation(() => []);
   });
 
   it('renders children', () => {
     const result = render(
-      <CanvasComponent name={mockName} type={mockType}>
+      <CanvasComponent component={mockComponent}>
         {mockChildren}
       </CanvasComponent>
     );
@@ -45,7 +63,7 @@ describe('CanvasComponent', () => {
   it('forwards ref onto component', () => {
     const ref = createRef<HTMLDivElement>();
     const result = render(
-      <CanvasComponent name={mockName} type={mockType} ref={ref}>
+      <CanvasComponent component={mockComponent} ref={ref}>
         {mockChildren}
       </CanvasComponent>
     );
@@ -56,13 +74,15 @@ describe('CanvasComponent', () => {
     const mockContainerHandleClick = jest.fn();
     const result = render(
       <Box onClick={mockContainerHandleClick}>
-        <CanvasComponent name={mockName} type={mockType}>
+        <CanvasComponent component={mockComponent}>
           {mockChildren}
         </CanvasComponent>
       </Box>
     );
     await userEvent.click(result.getByText(mockChildren));
-    expect(mockDispatch).toHaveBeenCalledWith(focusComponent(mockName));
+    expect(mockDispatch).toHaveBeenCalledWith(
+      focusComponent(mockComponent.name)
+    );
     expect(mockContainerHandleClick).not.toHaveBeenCalled();
   });
 
@@ -70,11 +90,7 @@ describe('CanvasComponent', () => {
     it('passes className to component', () => {
       const mockClassName = 'some-class';
       const result = render(
-        <CanvasComponent
-          name={mockName}
-          type={mockType}
-          className={mockClassName}
-        >
+        <CanvasComponent component={mockComponent} className={mockClassName}>
           {mockChildren}
         </CanvasComponent>
       );
@@ -82,52 +98,143 @@ describe('CanvasComponent', () => {
       expect(component).toHaveClass(mockClassName);
     });
 
-    it('assigns "react-grid-item-focused" class if name is equal to focused component name', () => {
+    describe('focused', () => {
+      it('assigns "react-grid-item-focused" class if name is equal to focused component name', () => {
+        (useAppSelector as jest.Mock).mockImplementation(() => ({
+          componentInputs: {},
+          focusedComponentName: mockComponent.name,
+        }));
+        const result = render(
+          <CanvasComponent component={mockComponent}>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = result.getByText(mockChildren);
+        expect(component).toHaveClass('react-grid-item-focused');
+      });
+
+      it('does not assign "react-grid-item-focused" class if name is not equal to focused component name', () => {
+        const result = render(
+          <CanvasComponent component={mockComponent}>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = result.getByText(mockChildren);
+        expect(component).not.toHaveClass('react-grid-item-focused');
+      });
+    });
+
+    describe('dragging', () => {
+      it('assigns "react-grid-item-dragging" class if name is equal to moving component name', () => {
+        (useAppSelector as jest.Mock).mockImplementation(() => ({
+          componentInputs: {},
+          movingComponentName: mockComponent.name,
+        }));
+        const result = render(
+          <CanvasComponent component={mockComponent}>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = result.getByText(mockChildren);
+        expect(component).toHaveClass('react-grid-item-dragging');
+      });
+
+      it('does not assign "react-grid-item-dragging" class if name is not equal to moving component name', () => {
+        const result = render(
+          <CanvasComponent component={mockComponent}>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = result.getByText(mockChildren);
+        expect(component).not.toHaveClass('react-grid-item-dragging');
+      });
+    });
+
+    describe('error', () => {
+      it('assigns "react-grid-item-error" class if there are eval errors', () => {
+        (useComponentEvalErrors as jest.Mock).mockImplementation(() => [
+          mockComponentEvalError,
+        ]);
+        const result = render(
+          <CanvasComponent component={mockComponent}>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = result.getByText(mockChildren);
+        expect(component).toHaveClass('react-grid-item-error');
+      });
+
+      it('does not assign "react-grid-item-error" class if there are no eval errors', () => {
+        (useComponentEvalErrors as jest.Mock).mockImplementation(() => []);
+        const result = render(
+          <CanvasComponent component={mockComponent}>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = result.getByText(mockChildren);
+        expect(component).not.toHaveClass('react-grid-item-error');
+      });
+    });
+  });
+
+  describe('handle', () => {
+    it('does not render handle if not focused, hovered, or error', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         componentInputs: {},
-        focusedComponentName: mockName,
+        focusedComponentName: undefined,
+        movingComponentName: undefined,
       }));
+      (useComponentEvalErrors as jest.Mock).mockImplementation(() => []);
       const result = render(
-        <CanvasComponent name={mockName} type={mockType}>
+        <CanvasComponent component={mockComponent}>
           {mockChildren}
         </CanvasComponent>
       );
-      const component = result.getByText(mockChildren);
-      expect(component).toHaveClass('react-grid-item-focused');
+      expect(result.queryByTestId(handleId)).toBeNull();
     });
 
-    it('does not assign "react-grid-item-focused" class if name is not equal to focused component name', () => {
-      const result = render(
-        <CanvasComponent name={mockName} type={mockType}>
-          {mockChildren}
-        </CanvasComponent>
-      );
-      const component = result.getByText(mockChildren);
-      expect(component).not.toHaveClass('react-grid-item-focused');
-    });
-
-    it('assigns "react-grid-item-dragging" class if name is equal to moving component name', () => {
+    it('renders handle on focus', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         componentInputs: {},
-        movingComponentName: mockName,
+        focusedComponentName: mockComponent.name,
       }));
       const result = render(
-        <CanvasComponent name={mockName} type={mockType}>
+        <CanvasComponent component={mockComponent}>
           {mockChildren}
         </CanvasComponent>
       );
-      const component = result.getByText(mockChildren);
-      expect(component).toHaveClass('react-grid-item-dragging');
+      expect(result.getByTestId(handleId)).toBeTruthy();
     });
 
-    it('does not assign "react-grid-item-dragging" class if name is not equal to moving component name', () => {
+    it('renders handle on hover', async () => {
       const result = render(
-        <CanvasComponent name={mockName} type={mockType}>
+        <CanvasComponent component={mockComponent}>
           {mockChildren}
         </CanvasComponent>
       );
-      const component = result.getByText(mockChildren);
-      expect(component).not.toHaveClass('react-grid-item-dragging');
+      await userEvent.hover(result.getByText(mockChildren));
+      expect(await result.findByTestId(handleId)).toBeTruthy();
+    });
+
+    it('renders handle if there are eval errors', async () => {
+      (useComponentEvalErrors as jest.Mock).mockImplementation(() => [
+        mockComponentEvalError,
+      ]);
+
+      const result = render(
+        <CanvasComponent component={mockComponent}>
+          {mockChildren}
+        </CanvasComponent>
+      );
+
+      expect(result.getByTestId(handleId)).toBeTruthy();
+      const errorIcon = await result.findByTestId(handleErrorIconId);
+      await userEvent.hover(errorIcon);
+      expect(
+        await result.findByText(
+          `${mockComponentEvalError.name}: ${mockComponentEvalError.error.message}`
+        )
+      );
     });
   });
 
@@ -143,7 +250,7 @@ describe('CanvasComponent', () => {
       'renders $type canvas component',
       ({ type, componentId }: { type: ComponentType; componentId: string }) => {
         const result = render(
-          <CanvasComponent name={mockName} type={type}>
+          <CanvasComponent component={{ ...mockComponent, type }}>
             {mockChildren}
           </CanvasComponent>
         );

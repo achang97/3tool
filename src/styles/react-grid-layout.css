@@ -16,6 +16,7 @@
   align-items: center;
   justify-content: center;
   padding: 10px;
+  border-radius: 4px;
 }
 
 .react-grid-item:not(.react-grid-placeholder):hover {
@@ -112,4 +113,9 @@
   width: var(--resize-handler-size);
   transform: translate(50%, 0);
   cursor: e-resize;
+}
+
+/* Error */
+.react-grid-item-error {
+  background: rgba(var(--mui-palette-error-lightChannel) / 0.2);
 }

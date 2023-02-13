@@ -68,6 +68,20 @@ export const DynamicTextField = ({
     ];
   }, [autocomplete]);
 
+  const className = useMemo(() => {
+    const classes = [];
+
+    if (isFocused) {
+      classes.push('dynamic-focused');
+    }
+
+    if (evalResult?.error) {
+      classes.push('dynamic-error');
+    }
+
+    return classes.join(' ');
+  }, [evalResult?.error, isFocused]);
+
   return (
     <Box
       sx={{ position: 'relative' }}
@@ -81,7 +95,7 @@ export const DynamicTextField = ({
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleChange}
-        className={isFocused ? 'aca-dynamic-preview' : ''}
+        className={className}
       />
       {isFocused && (
         <DynamicTextFieldPreview
