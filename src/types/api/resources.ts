@@ -1,3 +1,8 @@
+export enum ResourceType {
+  SmartContract = 'smartContract',
+  Dune = 'dune',
+}
+
 export type Resource = {
   id: string;
   name: string;
@@ -6,17 +11,12 @@ export type Resource = {
   updatedAt: string;
   numLinkedQueries: number;
   data: {
-    smartContract?: SmartContract;
-    dune?: Dune;
+    [ResourceType.SmartContract]?: SmartContractData;
+    [ResourceType.Dune]?: DuneData;
   };
 };
 
-export enum ResourceType {
-  SmartContract = 'smartContract',
-  Dune = 'dune',
-}
-
-export type SmartContract = {
+export type SmartContractData = {
   chainId: number;
   address: string;
   abi: string;
@@ -25,6 +25,6 @@ export type SmartContract = {
   logicAbi?: string;
 };
 
-export type Dune = {
+export type DuneData = {
   apiKey: string;
 };

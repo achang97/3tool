@@ -1,3 +1,5 @@
+import { EventHandler } from './eventHandlers';
+
 export type Component = {
   name: string;
   type: ComponentType;
@@ -8,6 +10,7 @@ export type Component = {
     h: number;
   };
   data: ComponentData;
+  eventHandlers: EventHandler<ComponentEvent>[];
 };
 
 export enum ComponentType {
@@ -16,6 +19,10 @@ export enum ComponentType {
   NumberInput = 'numberInput',
   Table = 'table',
   Text = 'text',
+}
+
+export enum ComponentEvent {
+  Click = 'click',
 }
 
 export type ComponentData = {

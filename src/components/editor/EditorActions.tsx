@@ -1,11 +1,11 @@
 import { Box, Divider } from '@mui/material';
-import { QueryEditor } from './queries/QueryEditor';
-import { QueryList } from './queries/QueryList';
+import { ActionEditor } from './actions/ActionEditor';
+import { ActionList } from './actions/ActionList';
 
 const HEIGHT = '250px';
 const LIST_WIDTH = '260px';
 
-export const EditorQueryBuilder = () => {
+export const EditorActions = () => {
   return (
     <Box
       sx={{
@@ -17,10 +17,10 @@ export const EditorQueryBuilder = () => {
       }}
     >
       <Box sx={{ width: LIST_WIDTH }}>
-        <QueryList />
+        <ActionList />
       </Box>
       <Divider orientation="vertical" />
-      <QueryEditor />
+      <ActionEditor />
     </Box>
   );
 };

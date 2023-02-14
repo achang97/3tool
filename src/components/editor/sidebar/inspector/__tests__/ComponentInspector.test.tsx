@@ -12,12 +12,14 @@ const mockComponents: Component[] = [
     name: 'button1',
     type: ComponentType.Button,
     layout: mockComponentLayout,
+    eventHandlers: [],
     data: {},
   },
   {
     name: 'button2',
     type: ComponentType.Button,
     layout: mockComponentLayout,
+    eventHandlers: [],
     data: {},
   },
 ];
@@ -121,6 +123,7 @@ describe('ComponentInspector', () => {
           data: {
             [type]: {},
           },
+          eventHandlers: [],
         };
 
         (useActiveTool as jest.Mock).mockImplementation(() => ({
@@ -150,6 +153,7 @@ describe('ComponentInspector', () => {
       data: {
         button: COMPONENT_DATA_TEMPLATES[ComponentType.Button],
       },
+      eventHandlers: [],
     };
 
     (useActiveTool as jest.Mock).mockImplementation(() => ({

@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import { render } from '@testing-library/react';
-import { PageContainer } from '../PageContainer';
+import { FormContainer } from '../FormContainer';
+
+const mockChildren = 'children';
 
 jest.mock('@mui/material', () => {
   const ActualMui = jest.requireActual('@mui/material');
@@ -10,21 +12,19 @@ jest.mock('@mui/material', () => {
   };
 });
 
-const mockChildren = 'children';
-
-describe('PageContainer', () => {
+describe('FormContainer', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders children', () => {
-    const result = render(<PageContainer>{mockChildren}</PageContainer>);
+    const result = render(<FormContainer>{mockChildren}</FormContainer>);
     expect(result.getByText(mockChildren)).toBeTruthy();
   });
 
   it('passes sx prop to Box', () => {
     const mockSx = { width: '1000px' };
-    render(<PageContainer sx={mockSx}>{mockChildren}</PageContainer>);
+    render(<FormContainer sx={mockSx}>{mockChildren}</FormContainer>);
     expect(Box).toHaveBeenCalledWith(
       expect.objectContaining({ sx: expect.objectContaining(mockSx) }),
       {}

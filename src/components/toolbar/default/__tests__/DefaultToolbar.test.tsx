@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { BASE_WINDOW_URL } from '@tests/constants/window';
 import { render } from '@tests/utils/renderWithContext';
 import { silenceConsoleError } from '@tests/utils/silenceConsoleError';
-import { GeneralToolbar } from '../GeneralToolbar';
+import { DefaultToolbar } from '../DefaultToolbar';
 
 const mockLogout = jest.fn();
 const mockUser = { name: 'Andrew' };
@@ -21,7 +21,7 @@ jest.mock('next/router', () => ({
   }),
 }));
 
-describe('GeneralToolbar', () => {
+describe('DefaultToolbar', () => {
   const avatarId = 'general-toolbar-avatar';
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('GeneralToolbar', () => {
   });
 
   it('renders user avatar to open the menu', async () => {
-    const result = render(<GeneralToolbar />);
+    const result = render(<DefaultToolbar />);
 
     const avatar = result.getByTestId(avatarId);
     expect(avatar.textContent).toEqual(mockUser.name[0]);
@@ -39,14 +39,14 @@ describe('GeneralToolbar', () => {
   });
 
   it('renders link to Tools page', () => {
-    const result = render(<GeneralToolbar />);
+    const result = render(<DefaultToolbar />);
 
     const toolsNav = result.getByText('Tools');
     expect(toolsNav.getAttribute('href')).toEqual('/');
   });
 
   it('renders link to Resources page', () => {
-    const result = render(<GeneralToolbar />);
+    const result = render(<DefaultToolbar />);
 
     const resourcesNav = result.getByText('Resources');
     expect(resourcesNav.getAttribute('href')).toEqual('/resources');
@@ -55,7 +55,7 @@ describe('GeneralToolbar', () => {
   it('renders link to Settings page', async () => {
     silenceConsoleError('inside a test was not wrapped in act(...)');
 
-    const result = render(<GeneralToolbar />);
+    const result = render(<DefaultToolbar />);
 
     await userEvent.click(result.getByTestId(avatarId));
 
@@ -68,7 +68,7 @@ describe('GeneralToolbar', () => {
   it('logs out the user and toggles dropdown menu', async () => {
     silenceConsoleError('inside a test was not wrapped in act(...)');
 
-    const result = render(<GeneralToolbar />);
+    const result = render(<DefaultToolbar />);
 
     await userEvent.click(result.getByTestId(avatarId));
 

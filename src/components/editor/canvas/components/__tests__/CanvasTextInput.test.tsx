@@ -42,10 +42,9 @@ describe('CanvasTextInput', () => {
       }));
 
       const result = render(<CanvasTextInput name={mockName} />);
-      expect(result.getByRole('textbox')).toHaveProperty(
-        'placeholder',
-        mockEvalDataValues.placeholder
-      );
+      expect(
+        result.getByPlaceholderText(mockEvalDataValues.placeholder)
+      ).toBeTruthy();
     });
 
     it('label: renders label', () => {
@@ -55,9 +54,7 @@ describe('CanvasTextInput', () => {
       }));
 
       const result = render(<CanvasTextInput name={mockName} />);
-      expect(
-        result.getByText(mockEvalDataValues.label, { selector: 'label' })
-      ).toBeTruthy();
+      expect(result.getByLabelText(mockEvalDataValues.label)).toBeTruthy();
     });
 
     it('disabled: sets text input to be disabled', () => {

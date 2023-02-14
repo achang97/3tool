@@ -1,46 +1,23 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  ReactNode,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from 'react';
 import { CHAINS } from '@app/constants';
 import {
-  Box,
   Checkbox,
   Collapse,
   FormControlLabel,
   MenuItem,
-  SxProps,
   TextField,
 } from '@mui/material';
-import { isAddress } from 'ethers/lib/utils';
 import { mainnet } from 'wagmi';
-import { isJSON } from '@app/utils/string';
 import { Resource, ResourceType } from '@app/types';
 import { useAppSelector } from '@app/redux/hooks';
-import { AddressTextField } from './AddressTextField';
-import { AbiTextField } from './AbiTextField';
-import { useFetchAbi } from '../hooks/useFetchAbi';
+import { isJSON } from '@app/utils/string';
+import { FormContainer } from './FormContainer';
+import { AddressAbiFieldGroup } from './AddressAbiFieldGroup';
+import { useSubmitSmartContract } from '../hooks/useSubmitSmartContract';
 
 type ConfigureContractFormProps = {
   formId: string;
   onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'data'>) => void;
-};
-
-type FormContainerProps = {
-  children: ReactNode;
-  sx?: SxProps;
-};
-
-export const FormContainer = ({ children, sx }: FormContainerProps) => {
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, ...sx }}>
-      {children}
-    </Box>
-  );
 };
 
 export const ConfigureContractForm = ({
@@ -48,78 +25,31 @@ export const ConfigureContractForm = ({
   onSubmit,
 }: ConfigureContractFormProps) => {
   const { activeResource } = useAppSelector((state) => state.resources);
+  const smartContract = useMemo(() => {
+    return activeResource?.data[ResourceType.SmartContract];
+  }, [activeResource?.data]);
 
   const [name, setName] = useState(activeResource?.name ?? '');
   const [chainId, setChainId] = useState<number>(
-    activeResource?.data.smartContract?.chainId ?? mainnet.id
+    smartContract?.chainId ?? mainnet.id
   );
-  const [address, setAddress] = useState(
-    activeResource?.data.smartContract?.address ?? ''
-  );
-  const [abi, setAbi] = useState(activeResource?.data.smartContract?.abi ?? '');
-  const [isProxy, setIsProxy] = useState(
-    activeResource?.data.smartContract?.isProxy ?? false
-  );
+  const [address, setAddress] = useState(smartContract?.address ?? '');
+  const [abi, setAbi] = useState(smartContract?.abi ?? '');
+  const [isProxy, setIsProxy] = useState(smartContract?.isProxy ?? false);
   const [logicAddress, setLogicAddress] = useState(
-    activeResource?.data.smartContract?.logicAddress ?? ''
+    smartContract?.logicAddress ?? ''
   );
-  const [logicAbi, setLogicAbi] = useState(
-    activeResource?.data.smartContract?.logicAbi ?? ''
-  );
+  const [logicAbi, setLogicAbi] = useState(smartContract?.logicAbi ?? '');
 
-  const { error: fetchAbiError, isLoading: isLoadingAbi } = useFetchAbi({
-    abi,
-    address,
-    chainId,
-    onAbiChange: setAbi,
+  const handleSubmitSmartContract = useSubmitSmartContract({
+    name,
+    smartContract: { chainId, address, abi, logicAddress, logicAbi, isProxy },
+    onSubmit,
   });
-  const { error: fetchLogicAbiError, isLoading: isLoadingLogicAbi } =
-    useFetchAbi({
-      abi: logicAbi,
-      address: logicAddress,
-      chainId,
-      onAbiChange: setLogicAbi,
-    });
-
-  const isAbiShown = useMemo(
-    () => isAddress(address) && !fetchAbiError && !isLoadingAbi,
-    [address, fetchAbiError, isLoadingAbi]
-  );
-  const isLogicAbiShown = useMemo(
-    () => isAddress(logicAddress) && !fetchLogicAbiError && !isLoadingLogicAbi,
-    [logicAddress, fetchLogicAbiError, isLoadingLogicAbi]
-  );
 
   const handleNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   }, []);
-
-  const handleAddressChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setAddress(e.target.value);
-      setAbi('');
-    },
-    []
-  );
-
-  const handleAbiChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setAbi(e.target.value);
-  }, []);
-
-  const handleLogicAddressChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setLogicAddress(e.target.value);
-      setLogicAbi('');
-    },
-    []
-  );
-
-  const handleLogicAbiChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setLogicAbi(e.target.value);
-    },
-    []
-  );
 
   const handleNetworkChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -140,36 +70,18 @@ export const ConfigureContractForm = ({
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
-      if (!isAddress(address) || !isJSON(abi)) {
-        return;
-      }
-
-      if (isProxy && (!isAddress(logicAddress) || !isJSON(logicAbi))) {
-        return;
-      }
-
-      onSubmit({
-        type: ResourceType.SmartContract,
-        name,
-        data: {
-          smartContract: {
-            chainId,
-            address,
-            abi,
-            isProxy,
-            logicAddress: isProxy ? logicAddress : undefined,
-            logicAbi: isProxy ? logicAbi : undefined,
-          },
-        },
-      });
+      handleSubmitSmartContract();
     },
-    [onSubmit, name, chainId, address, abi, isProxy, logicAddress, logicAbi]
+    [handleSubmitSmartContract]
   );
 
-  const primaryInputs = useMemo(
-    () => (
-      <>
+  const isLogicSectionShown = useMemo(() => {
+    return isJSON(abi) && isProxy;
+  }, [abi, isProxy]);
+
+  return (
+    <form id={formId} onSubmit={handleSubmit}>
+      <FormContainer>
         <TextField
           label="Name"
           placeholder="Enter contract name"
@@ -194,37 +106,21 @@ export const ConfigureContractForm = ({
             </MenuItem>
           ))}
         </TextField>
-        <AddressTextField
-          value={address}
-          placeholder="Enter contract address"
-          label="Address"
-          onChange={handleAddressChange}
-          fetchAbiError={fetchAbiError}
+        <AddressAbiFieldGroup
+          address={address}
+          abi={abi}
+          chainId={chainId}
+          addressTextFieldProps={{
+            label: 'Address',
+            placeholder: 'Enter contract address',
+            onChange: setAddress,
+          }}
+          abiTextFieldProps={{
+            label: 'ABI',
+            placeholder: 'Enter contract ABI',
+            onChange: setAbi,
+          }}
           required
-        />
-      </>
-    ),
-    [
-      name,
-      handleNameChange,
-      chainId,
-      handleNetworkChange,
-      address,
-      handleAddressChange,
-      fetchAbiError,
-    ]
-  );
-
-  const secondaryInputs = useMemo(
-    () => (
-      <>
-        <AbiTextField
-          value={abi}
-          placeholder="Enter ABI"
-          label="ABI"
-          onChange={handleAbiChange}
-          required
-          fullWidth
         />
         <FormControlLabel
           control={
@@ -240,54 +136,25 @@ export const ConfigureContractForm = ({
           label="This is a proxy contract"
           componentsProps={{ typography: { variant: 'body2' } }}
         />
-      </>
-    ),
-    [abi, handleAbiChange, handleIsProxyChange, isProxy]
-  );
-
-  const proxyInputs = useMemo(
-    () => (
-      <>
-        <AddressTextField
-          value={logicAddress}
-          placeholder="Enter logic contract address"
-          label="Logic Address"
-          onChange={handleLogicAddressChange}
-          fetchAbiError={fetchLogicAbiError}
-          required={isProxy}
-        />
-        <Collapse in={isLogicAbiShown}>
-          <AbiTextField
-            value={logicAbi}
-            placeholder="Enter logic contract ABI"
-            label="Logic ABI"
-            onChange={handleLogicAbiChange}
-            fullWidth
+      </FormContainer>
+      <Collapse in={isLogicSectionShown}>
+        <FormContainer sx={{ marginTop: 1 }}>
+          <AddressAbiFieldGroup
+            address={logicAddress}
+            abi={logicAbi}
+            chainId={chainId}
+            addressTextFieldProps={{
+              label: 'Logic Address',
+              placeholder: 'Enter logic contract address',
+              onChange: setLogicAddress,
+            }}
+            abiTextFieldProps={{
+              label: 'Logic ABI',
+              placeholder: 'Enter logic contract ABI',
+              onChange: setLogicAbi,
+            }}
             required={isProxy}
           />
-        </Collapse>
-      </>
-    ),
-    [
-      fetchLogicAbiError,
-      handleLogicAbiChange,
-      handleLogicAddressChange,
-      isLogicAbiShown,
-      isProxy,
-      logicAbi,
-      logicAddress,
-    ]
-  );
-
-  return (
-    <form id={formId} onSubmit={handleSubmit}>
-      <FormContainer>{primaryInputs}</FormContainer>
-      <Collapse in={isAbiShown}>
-        <FormContainer sx={{ marginTop: 1 }}>
-          <FormContainer>{secondaryInputs}</FormContainer>
-          <Collapse in={isProxy}>
-            <FormContainer>{proxyInputs}</FormContainer>
-          </Collapse>
         </FormContainer>
       </Collapse>
     </form>

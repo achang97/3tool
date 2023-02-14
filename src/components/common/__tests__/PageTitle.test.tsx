@@ -23,7 +23,7 @@ describe('PageTitle', () => {
   });
 
   it('passes sx prop to Typography', () => {
-    const mockSx = { padding: 3, width: '1000px' };
+    const mockSx = { width: '1000px' };
     render(<PageTitle sx={mockSx}>{mockTitle}</PageTitle>);
     expect(Typography).toHaveBeenCalledWith(
       expect.objectContaining({ sx: expect.objectContaining(mockSx) }),

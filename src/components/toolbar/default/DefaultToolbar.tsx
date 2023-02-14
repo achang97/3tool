@@ -1,53 +1,19 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { UserAvatar } from '@app/components/common/UserAvatar';
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tab,
-  Tabs,
-  Typography,
-} from '@mui/material';
+import { IconButton, Menu, MenuItem, Tab, Tabs } from '@mui/material';
 import { Tune, Logout } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ToolbarTemplate } from './ToolbarTemplate';
+import { ToolbarTemplate } from '../common/ToolbarTemplate';
+import { MenuItemContent } from './MenuItemContent';
 
 const AUTHENTICATED_LINKS = [
   { to: '/', text: 'Tools' },
   { to: '/resources', text: 'Resources' },
 ];
 
-type MenuItemOptionProps = {
-  icon: ReactNode;
-  text: ReactNode;
-  color?: string;
-};
-
-const MenuItemContent = ({ icon, text, color }: MenuItemOptionProps) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        width: '150px',
-        fontSize: '0.9rem',
-        color,
-      }}
-    >
-      {icon}
-      <Typography
-        sx={{ marginLeft: 2.5, fontSize: 'inherit', color: 'inherit' }}
-      >
-        {text}
-      </Typography>
-    </Box>
-  );
-};
-
-export const GeneralToolbar = () => {
+export const DefaultToolbar = () => {
   const { logout, user } = useAuth0();
   const { pathname } = useRouter();
 

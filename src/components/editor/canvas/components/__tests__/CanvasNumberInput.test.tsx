@@ -42,10 +42,9 @@ describe('CanvasNumberInput', () => {
       }));
 
       const result = render(<CanvasNumberInput name={mockName} />);
-      expect(result.getByRole('spinbutton')).toHaveProperty(
-        'placeholder',
-        mockEvalDataValues.placeholder
-      );
+      expect(
+        result.getByPlaceholderText(mockEvalDataValues.placeholder)
+      ).toBeTruthy();
     });
 
     it('label: renders label', () => {
@@ -55,9 +54,7 @@ describe('CanvasNumberInput', () => {
       }));
 
       const result = render(<CanvasNumberInput name={mockName} />);
-      expect(
-        result.getByText(mockEvalDataValues.label, { selector: 'label' })
-      ).toBeTruthy();
+      expect(result.getByLabelText(mockEvalDataValues.label)).toBeTruthy();
     });
 
     it('disabled: sets number input to be disabled', () => {

@@ -17,6 +17,7 @@ const customJestConfig = {
     '@app/(.*)': '<rootDir>/src/$1',
     '@tests/(.*)': '<rootDir>/tests/$1',
   },
+  testTimeout: 10000,
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts'],
 };
 

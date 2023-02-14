@@ -27,20 +27,20 @@ describe('ToolThumbnail', () => {
         id={mockId}
         name={mockName}
         updatedAt={mockUpdatedAt}
-        creator={mockCreator}
+        creatorUser={mockCreator}
       />
     );
 
     expect(result.getByText(mockName)).toBeTruthy();
   });
 
-  it('renders avatar for creator', () => {
+  it('renders avatar for creatorUser', () => {
     const result = render(
       <ToolThumbnail
         id={mockId}
         name={mockName}
         updatedAt={mockUpdatedAt}
-        creator={mockCreator}
+        creatorUser={mockCreator}
       />
     );
 
@@ -58,7 +58,7 @@ describe('ToolThumbnail', () => {
         id={mockId}
         name={mockName}
         updatedAt={mockOneMonthAgo}
-        creator={mockCreator}
+        creatorUser={mockCreator}
       />
     );
 
@@ -71,7 +71,7 @@ describe('ToolThumbnail', () => {
         id={mockId}
         name={mockName}
         updatedAt={mockUpdatedAt}
-        creator={mockCreator}
+        creatorUser={mockCreator}
       />
     );
 

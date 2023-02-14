@@ -1,6 +1,7 @@
 import { ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/dom';
+import { mockValidAddress } from '@tests/constants/data';
 import { completeContractForm, submitForm } from '@tests/utils/form';
 import { render } from '@tests/utils/renderWithContext';
 import { Abi } from 'abitype';
@@ -37,7 +38,7 @@ describe('ConfigureResourceForm', () => {
     const contractFields = {
       name: 'Contract',
       chainId: mainnet.id,
-      address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
+      address: mockValidAddress,
     };
 
     await completeContractForm(result, contractFields);

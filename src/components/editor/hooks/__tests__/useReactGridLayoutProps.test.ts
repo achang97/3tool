@@ -22,6 +22,7 @@ const mockComponents: Component[] = [
     name: 'button1',
     type: ComponentType.Button,
     layout: mockComponentLayout,
+    eventHandlers: [],
     data: {},
   },
 ];

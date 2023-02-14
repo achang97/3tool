@@ -7,7 +7,10 @@ import { Resource, ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockSmartContractResource } from '@tests/constants/data';
+import {
+  mockSmartContractResource,
+  mockValidAddresses,
+} from '@tests/constants/data';
 import { completeContractForm } from '@tests/utils/form';
 import { render } from '@tests/utils/renderWithContext';
 import { Abi } from 'abitype';
@@ -56,12 +59,12 @@ describe('Resources', () => {
 
     // Check first row
     expect(result.getByText('Smart contract')).toBeTruthy();
-    expect(result.getByText('Staking Pool Contract')).toBeTruthy();
+    expect(result.getByText(mockResources[0].name)).toBeTruthy();
     expect(
-      result.getByText('(0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3)')
+      result.getByText(`(${mockResources[0].data.smartContract?.address})`)
     ).toBeTruthy();
     expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
-    expect(result.getByText('3')).toBeTruthy();
+    expect(result.getByText(mockResources[0].numLinkedQueries)).toBeTruthy();
   });
 
   it('opens edit dialog and updates smart contract resource', async () => {
@@ -81,7 +84,7 @@ describe('Resources', () => {
       name: '- Edited',
       chainId: goerli.id,
       isProxy: true,
-      logicAddress: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
+      logicAddress: mockValidAddresses[1],
     };
     await completeContractForm(result, contractFields);
 
@@ -125,7 +128,7 @@ describe('Resources', () => {
     const contractFields = {
       name: 'Contract',
       chainId: mainnet.id,
-      address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
+      address: mockValidAddresses[0],
     };
     await completeContractForm(result, contractFields);
 

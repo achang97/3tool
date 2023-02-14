@@ -1,5 +1,6 @@
 import { usePrevious } from '@app/hooks/usePrevious';
 import { getContractAbi } from '@app/utils/contracts';
+import { prettifyJSON } from '@app/utils/string';
 import { isAddress } from 'ethers/lib/utils';
 import { useEffect, useState } from 'react';
 
@@ -11,7 +12,7 @@ type HookArgs = {
 };
 
 type HookReturnType = {
-  error?: string;
+  error?: Error;
   isLoading: boolean;
 };
 
@@ -21,7 +22,7 @@ export const useFetchAbi = ({
   address,
   onAbiChange,
 }: HookArgs): HookReturnType => {
-  const [error, setError] = useState('');
+  const [error, setError] = useState<Error>();
   const [isLoading, setIsLoading] = useState(false);
 
   const prevArgs = usePrevious({ address, chainId });
@@ -32,11 +33,11 @@ export const useFetchAbi = ({
 
       try {
         const fetchedAbi = await getContractAbi(address, chainId);
-        onAbiChange(JSON.stringify(fetchedAbi, null, 2));
-        setError('');
+        onAbiChange(prettifyJSON(fetchedAbi));
+        setError(undefined);
       } catch (e) {
         onAbiChange('');
-        setError((e as Error).message);
+        setError(e as Error);
       }
 
       setIsLoading(false);

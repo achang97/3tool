@@ -7,6 +7,10 @@ export const isJSON = (str: string): boolean => {
   return true;
 };
 
+export const prettifyJSON = (object: unknown): string => {
+  return JSON.stringify(object, null, 2);
+};
+
 export const replaceTokensAtIndices = (
   str: string,
   originalTokens: string[],

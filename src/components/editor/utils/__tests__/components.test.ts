@@ -72,6 +72,7 @@ describe('editor', () => {
         data: {
           [mockType]: COMPONENT_DATA_TEMPLATES[mockType],
         },
+        eventHandlers: [],
       });
     });
   });

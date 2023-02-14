@@ -22,6 +22,7 @@ const mockComponents: Component[] = [
     type: ComponentType.Button,
     name: 'button1',
     layout: mockComponentLayout,
+    eventHandlers: [],
     data: {
       button: {
         ...COMPONENT_DATA_TEMPLATES[ComponentType.Button],
@@ -33,6 +34,7 @@ const mockComponents: Component[] = [
     type: ComponentType.Button,
     name: 'button2',
     layout: mockComponentLayout,
+    eventHandlers: [],
     data: {
       button: {
         ...COMPONENT_DATA_TEMPLATES[ComponentType.Button],

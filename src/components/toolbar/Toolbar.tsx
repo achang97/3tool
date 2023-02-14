@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useRouter } from 'next/router';
-import { GeneralToolbar } from './GeneralToolbar';
+import { DefaultToolbar } from './default/DefaultToolbar';
 
 export const Toolbar = () => {
   const { isAuthenticated } = useAuth0();
@@ -14,5 +14,5 @@ export const Toolbar = () => {
     return null;
   }
 
-  return <GeneralToolbar />;
+  return <DefaultToolbar />;
 };

@@ -42,7 +42,7 @@ export const toolsApi = createApi({
     }),
     updateTool: builder.mutation<
       Tool,
-      Pick<Tool, 'id'> & Partial<Pick<Tool, 'name' | 'components'>>
+      Pick<Tool, 'id'> & Partial<Pick<Tool, 'name' | 'components' | 'actions'>>
     >({
       query: ({ id, ...body }) => ({
         url: `/tools/${id}`,

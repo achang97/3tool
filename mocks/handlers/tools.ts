@@ -8,30 +8,33 @@ const TOOLS: Tool[] = [
     name: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    creator: {
+    creatorUser: {
       name: 'Andrew Chang',
     },
     components: [],
+    actions: [],
   },
   {
     id: '2',
     name: 'Script Dashboard',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    creator: {
+    creatorUser: {
       name: 'Akshay Ramaswamy',
     },
     components: [],
+    actions: [],
   },
   {
     id: '3',
     name: 'Topping Up Nodes',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    creator: {
+    creatorUser: {
       name: 'Chetan Rane',
     },
     components: [],
+    actions: [],
   },
 ];
 
@@ -63,8 +66,9 @@ export const toolHandlers = [
       name: body.name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      creator: { name: 'Andrew Chang' },
+      creatorUser: { name: 'Andrew Chang' },
       components: [],
+      actions: [],
     };
     TOOLS.push(newTool);
 

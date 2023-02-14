@@ -40,6 +40,7 @@ export const createNewComponent = (
     data: {
       [type]: COMPONENT_DATA_TEMPLATES[type],
     },
+    eventHandlers: [],
   };
 
   return baseComponent;

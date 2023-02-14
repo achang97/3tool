@@ -13,14 +13,14 @@ type ToolThumbnailProps = {
   id: string;
   name: string;
   updatedAt: string;
-  creator: User;
+  creatorUser: User;
 };
 
 export const ToolThumbnail = ({
   id,
   name,
   updatedAt,
-  creator,
+  creatorUser,
 }: ToolThumbnailProps) => {
   const { push } = useRouter();
 
@@ -57,7 +57,7 @@ export const ToolThumbnail = ({
             Updated {moment(updatedAt).fromNow()}
           </Typography>
         </Box>
-        <UserAvatar name={creator.name} sx={{ marginLeft: 1 }} />
+        <UserAvatar name={creatorUser.name} sx={{ marginLeft: 1 }} />
       </Box>
     </ThumbnailContainer>
   );

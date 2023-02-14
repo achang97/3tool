@@ -1,6 +1,12 @@
 import { COMPONENT_DATA_TEMPLATES } from '@app/constants';
 import { ComponentType, Resource, ResourceType, Tool } from '@app/types';
 
+export const mockValidAddresses = [
+  '0xf33Cb58287017175CADf990c9e4733823704aA86',
+  '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
+];
+export const mockValidAddress = mockValidAddresses[0];
+
 export const mockSmartContractResource: Resource = {
   id: '1',
   type: ResourceType.SmartContract,
@@ -53,7 +59,7 @@ export const mockTool: Tool = {
   name: 'Tool',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  creator: {
+  creatorUser: {
     name: 'Andrew',
   },
   components: [
@@ -69,8 +75,10 @@ export const mockTool: Tool = {
       data: {
         button: COMPONENT_DATA_TEMPLATES.button,
       },
+      eventHandlers: [],
     },
   ],
+  actions: [],
 };
 
 export const mockComponentLayout = {

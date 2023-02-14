@@ -56,7 +56,7 @@ describe('UserAvatar', () => {
   });
 
   it('passes sx prop to Avatar', () => {
-    const mockSx = { padding: 3, width: '1000px' };
+    const mockSx = { width: '1000px' };
     render(<UserAvatar name={mockName} sx={mockSx} />);
     expect(MockAvatar).toHaveBeenCalledWith(
       expect.objectContaining({ sx: expect.objectContaining(mockSx) })

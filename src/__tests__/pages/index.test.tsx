@@ -9,16 +9,18 @@ const mockTools: Tool[] = [
     name: 'Tool 1',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    creator: { name: 'Andrew Chang' },
+    creatorUser: { name: 'Andrew Chang' },
     components: [],
+    actions: [],
   },
   {
     id: '2',
     name: 'Tool 2',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    creator: { name: 'Andrew Chang' },
+    creatorUser: { name: 'Andrew Chang' },
     components: [],
+    actions: [],
   },
 ];
 
@@ -27,8 +29,9 @@ const mockNewTool: Tool = {
   name: 'Tool 3',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  creator: { name: 'Andrew Chang' },
+  creatorUser: { name: 'Andrew Chang' },
   components: [],
+  actions: [],
 };
 
 const mockPush = jest.fn();

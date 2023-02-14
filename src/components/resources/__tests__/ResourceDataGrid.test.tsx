@@ -58,18 +58,18 @@ describe('ResourceDataGrid', () => {
 
     // Check first row
     expect(result.getByText('Smart contract')).toBeTruthy();
-    expect(result.getByText('Staking Pool Contract')).toBeTruthy();
+    expect(result.getByText(mockResources[0].name)).toBeTruthy();
     expect(
-      result.getByText('(0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3)')
+      result.getByText(`(${mockResources[0].data.smartContract?.address})`)
     ).toBeTruthy();
     expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
-    expect(result.getByText('3')).toBeTruthy();
+    expect(result.getByText(mockResources[0].numLinkedQueries)).toBeTruthy();
 
     // Check second row
     expect(result.getByText('Dune')).toBeTruthy();
-    expect(result.getByText('Dune API')).toBeTruthy();
+    expect(result.getByText(mockResources[1].name)).toBeTruthy();
     expect(result.getByText('Jan 5, 2023 2:33 AM')).toBeTruthy();
-    expect(result.getByText('4')).toBeTruthy();
+    expect(result.getByText(mockResources[1].numLinkedQueries)).toBeTruthy();
   });
 
   it('opens and closes edit dialog', async () => {

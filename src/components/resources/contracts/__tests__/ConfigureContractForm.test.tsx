@@ -1,9 +1,13 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { ResourceType } from '@app/types';
 import { getContractAbi } from '@app/utils/contracts';
+import { prettifyJSON } from '@app/utils/string';
 import { render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockProxySmartContractResource } from '@tests/constants/data';
+import {
+  mockProxySmartContractResource,
+  mockValidAddresses,
+} from '@tests/constants/data';
 import { submitForm } from '@tests/utils/form';
 import { Abi } from 'abitype';
 import { goerli, mainnet } from 'wagmi';
@@ -85,7 +89,7 @@ describe('ConfigureContractForm', () => {
   });
 
   describe('conditional rendering', () => {
-    it('does not render secondary inputs if address and ABI are not supplied', () => {
+    it('does not render logic contract inputs if address and ABI are not supplied', () => {
       const result = render(
         <ConfigureContractForm
           formId={mockFormId}
@@ -93,25 +97,6 @@ describe('ConfigureContractForm', () => {
         />
       );
 
-      expect(result.getByText(/^This is a proxy contract/)).not.toBeVisible();
-      expect(result.getByLabelText(/^Logic Address/)).not.toBeVisible();
-      expect(result.getByLabelText(/^Logic ABI/)).not.toBeVisible();
-    });
-
-    it('renders proxy checkbox if address and ABI are supplied', async () => {
-      const result = render(
-        <ConfigureContractForm
-          formId={mockFormId}
-          onSubmit={mockHandleSubmit}
-        />
-      );
-
-      await userEvent.type(
-        result.getByLabelText(/^Address/),
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
-      );
-
-      expect(result.getByText(/^This is a proxy contract/)).toBeVisible();
       expect(result.getByLabelText(/^Logic Address/)).not.toBeVisible();
       expect(result.getByLabelText(/^Logic ABI/)).not.toBeVisible();
     });
@@ -126,7 +111,7 @@ describe('ConfigureContractForm', () => {
 
       await userEvent.type(
         result.getByLabelText(/^Address/),
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
+        mockValidAddresses[0]
       );
       await userEvent.click(result.getByText(/^This is a proxy contract/));
 
@@ -135,11 +120,7 @@ describe('ConfigureContractForm', () => {
         expect(logicAddressInput).toBeVisible();
       });
 
-      await userEvent.type(
-        logicAddressInput,
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
-      );
-
+      await userEvent.type(logicAddressInput, mockValidAddresses[0]);
       await waitFor(() => {
         expect(result.getByLabelText(/^Logic ABI/)).toBeVisible();
       });
@@ -147,46 +128,6 @@ describe('ConfigureContractForm', () => {
   });
 
   describe('ABI fetching', () => {
-    describe('error', () => {
-      const mockError = 'Error';
-
-      beforeEach(() => {
-        (getContractAbi as jest.Mock).mockImplementation(() => {
-          throw new Error(mockError);
-        });
-      });
-
-      it('displays fetch error for address field', async () => {
-        const result = render(
-          <ConfigureContractForm
-            formId={mockFormId}
-            onSubmit={mockHandleSubmit}
-          />
-        );
-
-        await userEvent.type(
-          result.getByLabelText(/^Address/),
-          '0xf33Cb58287017175CADf990c9e4733823704aA86'
-        );
-        expect(result.getByText(mockError)).toBeTruthy();
-      });
-
-      it('displays fetch error for logic address field', async () => {
-        const result = render(
-          <ConfigureContractForm
-            formId={mockFormId}
-            onSubmit={mockHandleSubmit}
-          />
-        );
-
-        await userEvent.type(
-          result.getByLabelText(/^Logic Address/),
-          '0xf33Cb58287017175CADf990c9e4733823704aA86'
-        );
-        expect(result.getByText(mockError)).toBeTruthy();
-      });
-    });
-
     describe('updates', () => {
       const mockAbi: Abi = [
         {
@@ -205,48 +146,6 @@ describe('ConfigureContractForm', () => {
         (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
       });
 
-      it('updates ABI when address is changed', async () => {
-        const result = render(
-          <ConfigureContractForm
-            formId={mockFormId}
-            onSubmit={mockHandleSubmit}
-          />
-        );
-
-        const addressInput = result.getByLabelText(/^Address/);
-        await userEvent.clear(addressInput);
-        await userEvent.type(
-          addressInput,
-          '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3'
-        );
-
-        expect(getContractAbi).toHaveBeenCalledTimes(1);
-        expect(result.getByLabelText(/^ABI/)).toHaveValue(
-          JSON.stringify(mockAbi, null, 2)
-        );
-      });
-
-      it('updates logic ABI when logic address is changed', async () => {
-        const result = render(
-          <ConfigureContractForm
-            formId={mockFormId}
-            onSubmit={mockHandleSubmit}
-          />
-        );
-
-        const logicAddressInput = result.getByLabelText(/^Logic Address/);
-        await userEvent.clear(logicAddressInput);
-        await userEvent.type(
-          logicAddressInput,
-          '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3'
-        );
-
-        expect(getContractAbi).toHaveBeenCalledTimes(1);
-        expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
-          JSON.stringify(mockAbi, null, 2)
-        );
-      });
-
       it('updates ABI and logic ABI when chainId is changed', async () => {
         const result = render(
           <ConfigureContractForm
@@ -260,10 +159,10 @@ describe('ConfigureContractForm', () => {
 
         expect(getContractAbi).toHaveBeenCalledTimes(2);
         expect(result.getByLabelText(/^ABI/)).toHaveValue(
-          JSON.stringify(mockAbi, null, 2)
+          prettifyJSON(mockAbi)
         );
         expect(result.getByLabelText(/^Logic ABI/)).toHaveValue(
-          JSON.stringify(mockAbi, null, 2)
+          prettifyJSON(mockAbi)
         );
       });
     });
@@ -311,7 +210,7 @@ describe('ConfigureContractForm', () => {
       await userEvent.type(result.getByLabelText(/^Name/), 'New Contract');
       await userEvent.type(
         result.getByLabelText(/^Address/),
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
+        mockValidAddresses[0]
       );
       await userEvent.type(result.getByLabelText(/^ABI/), 'Invalid JSON');
 
@@ -330,7 +229,7 @@ describe('ConfigureContractForm', () => {
       await userEvent.type(result.getByLabelText(/^Name/), 'New Contract');
       await userEvent.type(
         result.getByLabelText(/^Address/),
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
+        mockValidAddresses[0]
       );
 
       await userEvent.click(result.getByTestId(proxyCheckboxId));
@@ -354,13 +253,13 @@ describe('ConfigureContractForm', () => {
       await userEvent.type(result.getByLabelText(/^Name/), 'New Contract');
       await userEvent.type(
         result.getByLabelText(/^Address/),
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
+        mockValidAddresses[0]
       );
 
       await userEvent.click(result.getByTestId(proxyCheckboxId));
       await userEvent.type(
         result.getByLabelText(/^Logic Address/),
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
+        mockValidAddresses[1]
       );
       await userEvent.type(result.getByLabelText(/^Logic ABI/), 'Invalid JSON');
 
@@ -383,13 +282,13 @@ describe('ConfigureContractForm', () => {
 
       await userEvent.type(
         result.getByLabelText(/^Address/),
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
+        mockValidAddresses[0]
       );
 
       await userEvent.click(result.getByTestId(proxyCheckboxId));
       await userEvent.type(
         result.getByLabelText(/^Logic Address/),
-        '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3'
+        mockValidAddresses[1]
       );
 
       submitForm(result, mockFormId);
@@ -400,10 +299,10 @@ describe('ConfigureContractForm', () => {
           data: {
             smartContract: {
               chainId: goerli.id,
-              address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
+              address: mockValidAddresses[0],
               abi: '[]',
               isProxy: true,
-              logicAddress: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
+              logicAddress: mockValidAddresses[1],
               logicAbi: '[]',
             },
           },
@@ -426,7 +325,7 @@ describe('ConfigureContractForm', () => {
 
       await userEvent.type(
         result.getByLabelText(/^Address/),
-        '0xf33Cb58287017175CADf990c9e4733823704aA86'
+        mockValidAddresses[0]
       );
 
       submitForm(result, mockFormId);
@@ -437,7 +336,7 @@ describe('ConfigureContractForm', () => {
           data: {
             smartContract: {
               chainId: goerli.id,
-              address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
+              address: mockValidAddresses[0],
               abi: '[]',
               isProxy: false,
               logicAddress: undefined,

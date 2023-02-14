@@ -64,7 +64,7 @@ describe('tools', () => {
   describe('useUpdateToolMutation', () => {
     it('calls fetch to PUT /tools/:id', async () => {
       const mockId = '1';
-      const mockBody: Pick<Tool, 'name' | 'components'> = {
+      const mockBody: Pick<Tool, 'name' | 'components' | 'actions'> = {
         name: 'New Tool',
         components: [
           {
@@ -76,9 +76,11 @@ describe('tools', () => {
               x: 1,
               y: 1,
             },
+            eventHandlers: [],
             data: {},
           },
         ],
+        actions: [],
       };
       const { result } = renderHook(() => useUpdateToolMutation());
       const [updateTool] = result.current;

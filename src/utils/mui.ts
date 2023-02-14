@@ -298,6 +298,7 @@ export const theme = extendTheme({
       styleOverrides: {
         root: {
           height: '40px',
+          overflow: 'hidden',
         },
         sizeSmall: {
           height: '32px',

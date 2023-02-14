@@ -1,12 +1,12 @@
 import { getContractAbi } from '@app/utils/contracts';
 import { renderHook, waitFor } from '@testing-library/react';
+import { mockValidAddress } from '@tests/constants/data';
 import { mainnet } from 'wagmi';
 import { useFetchAbi } from '../useFetchAbi';
 
 jest.mock('@app/utils/contracts');
 
 const mockHandleAbiChange = jest.fn();
-const mockAddress = '0xf33Cb58287017175CADf990c9e4733823704aA86';
 const mockChainId = mainnet.id;
 
 describe('useFetchAbi', () => {
@@ -33,7 +33,7 @@ describe('useFetchAbi', () => {
         useFetchAbi({
           abi: '[]',
           chainId: mockChainId,
-          address: mockAddress,
+          address: mockValidAddress,
           onAbiChange: mockHandleAbiChange,
         })
       );
@@ -41,7 +41,7 @@ describe('useFetchAbi', () => {
       rerender({
         abi: '',
         chainId: mockChainId,
-        address: mockAddress,
+        address: mockValidAddress,
         onAbiChange: mockHandleAbiChange,
       });
 
@@ -53,7 +53,7 @@ describe('useFetchAbi', () => {
         useFetchAbi({
           abi: '[]',
           chainId: mockChainId,
-          address: mockAddress,
+          address: mockValidAddress,
           onAbiChange: mockHandleAbiChange,
         })
       );
@@ -74,7 +74,7 @@ describe('useFetchAbi', () => {
         useFetchAbi({
           abi: '',
           chainId: mainnet.id,
-          address: mockAddress,
+          address: mockValidAddress,
           onAbiChange: mockHandleAbiChange,
         })
       );
@@ -86,29 +86,29 @@ describe('useFetchAbi', () => {
       });
     });
 
-    it('sets error to empty string', async () => {
+    it('sets error to undefined', async () => {
       const { result } = renderHook(() =>
         useFetchAbi({
           abi: '',
           chainId: mainnet.id,
-          address: mockAddress,
+          address: mockValidAddress,
           onAbiChange: mockHandleAbiChange,
         })
       );
 
       await waitFor(() => {
         expect(mockHandleAbiChange).toHaveBeenCalled();
-        expect(result.current.error).toEqual('');
+        expect(result.current.error).toBeUndefined();
       });
     });
   });
 
   describe('error', () => {
-    const mockError = 'Error';
+    const mockError = new Error('Error');
 
     beforeEach(() => {
       (getContractAbi as jest.Mock).mockImplementation(() => {
-        throw new Error(mockError);
+        throw mockError;
       });
     });
 
@@ -117,7 +117,7 @@ describe('useFetchAbi', () => {
         useFetchAbi({
           abi: '',
           chainId: mainnet.id,
-          address: mockAddress,
+          address: mockValidAddress,
           onAbiChange: mockHandleAbiChange,
         })
       );
@@ -132,7 +132,7 @@ describe('useFetchAbi', () => {
         useFetchAbi({
           abi: '',
           chainId: mainnet.id,
-          address: mockAddress,
+          address: mockValidAddress,
           onAbiChange: mockHandleAbiChange,
         })
       );
@@ -153,7 +153,7 @@ describe('useFetchAbi', () => {
         useFetchAbi({
           abi: '',
           chainId: mainnet.id,
-          address: mockAddress,
+          address: mockValidAddress,
           onAbiChange: mockHandleAbiChange,
         })
       );

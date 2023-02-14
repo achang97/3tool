@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import Head from 'next/head';
 import { EditorCanvas } from '@app/components/editor/EditorCanvas';
 import { EditorSidebar } from '@app/components/editor/EditorSidebar';
-import { EditorQueryBuilder } from '@app/components/editor/EditorQueryBuilder';
+import { EditorActions } from '@app/components/editor/EditorActions';
 import { getTitle } from '@app/utils/window';
 import { EditorSnackbar } from '@app/components/editor/EditorSnackbar';
 import { GetServerSideProps } from 'next';
@@ -10,8 +10,8 @@ import { wrapper } from '@app/redux/store';
 import { getRunningQueriesThunk, getToolById } from '@app/redux/services/tools';
 import { Tool } from '@app/types';
 import { ActiveToolProvider } from '@app/components/editor/contexts/ActiveToolContext';
-import { ToolEditorToolbar } from '@app/components/toolbar/ToolEditorToolbar';
 import { PageContainer } from '@app/components/common/PageContainer';
+import { ToolEditorToolbar } from '@app/components/toolbar/editor/ToolEditorToolbar';
 
 type EditorProps = {
   tool: Tool;
@@ -37,7 +37,7 @@ const Editor = ({ tool }: EditorProps) => {
                 }}
               >
                 <EditorCanvas />
-                <EditorQueryBuilder />
+                <EditorActions />
               </Box>
               <EditorSidebar />
               <EditorSnackbar />

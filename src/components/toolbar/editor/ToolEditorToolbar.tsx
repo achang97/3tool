@@ -6,9 +6,9 @@ import { focusToolSettings } from '@app/redux/features/editorSlice';
 import { isSuccessfulApiResponse } from '@app/utils/api';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { ToolbarTemplate } from './ToolbarTemplate';
-import { EditableTextField } from '../common/EditableTextField';
-import { useActiveTool } from '../editor/hooks/useActiveTool';
+import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
+import { EditableTextField } from '@app/components/common/EditableTextField';
+import { ToolbarTemplate } from '../common/ToolbarTemplate';
 
 export const ToolEditorToolbar = () => {
   const dispatch = useAppDispatch();

@@ -1,35 +1,15 @@
 import { ReactNode } from 'react';
-import { Box, BoxProps } from '@mui/material';
+import { Box } from '@mui/material';
 import logo from '@app/resources/images/logo.svg';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ToolbarSection } from './ToolbarSection';
 
 type ToolbarTemplateProps = {
   left?: ReactNode;
   middle?: ReactNode;
   right?: ReactNode;
   testId?: string;
-};
-
-type ToolbarSectionProps = {
-  sx?: BoxProps['sx'];
-  children: ReactNode;
-};
-
-const ToolbarSection = ({ sx, children }: ToolbarSectionProps) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flex: 1,
-        alignItems: 'center',
-        height: '100%',
-        ...sx,
-      }}
-    >
-      {children}
-    </Box>
-  );
 };
 
 export const ToolbarTemplate = ({
