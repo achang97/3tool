@@ -1,13 +1,14 @@
 import { DragEvent, ReactNode, useCallback, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
+import _ from 'lodash';
 import { ComponentType } from '@app/types';
 import { useAppSelector, useAppDispatch } from '@app/redux/hooks';
 import {
   startCreateComponentDrag,
   endCreateComponentDrag,
 } from '@app/redux/features/editorSlice';
-import { getNewComponentName } from '../../utils/components';
 import { useActiveTool } from '../../hooks/useActiveTool';
+import { createNameWithPrefix } from '../../utils/names';
 
 type DraggableComponentProps = {
   type: ComponentType;
@@ -38,7 +39,7 @@ export const DraggableComponent = ({
       dispatch(
         startCreateComponentDrag({
           type,
-          name: getNewComponentName(type, tool.components),
+          name: createNameWithPrefix(type, _.map(tool.components, 'name')),
         })
       );
     },

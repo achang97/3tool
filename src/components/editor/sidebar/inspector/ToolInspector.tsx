@@ -10,7 +10,7 @@ export const ToolInspector = () => {
       data-testid="tool-inspector"
       sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
     >
-      <InspectorEditableName value="tool" icon={<Web />} editable={false} />
+      <InspectorEditableName value="tool" icon={<Web />} isEditable={false} />
       <Box sx={{ overflow: 'auto', minHeight: 0 }}>
         <InspectorSection title="Libraries">
           <Box>

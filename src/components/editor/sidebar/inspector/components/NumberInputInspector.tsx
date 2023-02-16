@@ -11,7 +11,7 @@ export const NumberInputInspector = ({
   const { evalData } = useComponentEvalData<ComponentType.NumberInput>(name);
 
   const numberInputData = useMemo(() => {
-    return data[ComponentType.NumberInput];
+    return data.numberInput;
   }, [data]);
 
   const config: BaseInspectorSectionProps[] = useMemo(() => {

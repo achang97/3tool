@@ -50,7 +50,7 @@ export const ToolThumbnail = ({
         }}
       >
         <Box>
-          <Typography variant="subtitle1" sx={{ ...lineClamp(1) }}>
+          <Typography variant="subtitle1" sx={lineClamp(1)}>
             {name}
           </Typography>
           <Typography variant="caption" color="text.tertiary">

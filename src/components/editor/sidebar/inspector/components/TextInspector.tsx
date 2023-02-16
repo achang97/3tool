@@ -11,7 +11,7 @@ export const TextInspector = ({
   const { evalData } = useComponentEvalData<ComponentType.Text>(name);
 
   const textData = useMemo(() => {
-    return data[ComponentType.Text];
+    return data.text;
   }, [data]);
 
   const config: BaseInspectorSectionProps[] = useMemo(() => {

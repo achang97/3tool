@@ -1,6 +1,5 @@
 import { Component, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import { mockComponentLayout } from '@tests/constants/data';
 import { useComponentDataDepGraph } from '../useComponentDataDepGraph';
 
 describe('useComponentDataDepGraph', () => {
@@ -10,7 +9,6 @@ describe('useComponentDataDepGraph', () => {
         {
           name: 'button1',
           type: ComponentType.Button,
-          layout: mockComponentLayout,
           data: {
             button: {
               text: '{{ textInput1.value }}',
@@ -21,7 +19,6 @@ describe('useComponentDataDepGraph', () => {
         {
           name: 'textInput1',
           type: ComponentType.TextInput,
-          layout: mockComponentLayout,
           data: {
             textInput: {
               defaultValue: '{{ textInput1.value }}',
@@ -50,7 +47,6 @@ describe('useComponentDataDepGraph', () => {
         {
           name: 'button1',
           type: ComponentType.Button,
-          layout: mockComponentLayout,
           data: {
             button: {
               text: '{{ button1.asdfasdf }}',
@@ -71,7 +67,6 @@ describe('useComponentDataDepGraph', () => {
         {
           name: 'button1',
           type: ComponentType.Button,
-          layout: mockComponentLayout,
           data: {
             button: {
               text: '',
@@ -90,7 +85,6 @@ describe('useComponentDataDepGraph', () => {
         {
           name: 'table1',
           type: ComponentType.Table,
-          layout: mockComponentLayout,
           data: {
             table: {
               columnHeaderNames: {
@@ -117,7 +111,6 @@ describe('useComponentDataDepGraph', () => {
         {
           name: 'button1',
           type: ComponentType.Button,
-          layout: mockComponentLayout,
           data: {
             button: {
               text: '{{ table1.columnHeaderNamesByIndex[0].test }}',
@@ -127,7 +120,6 @@ describe('useComponentDataDepGraph', () => {
         {
           name: 'table1',
           type: ComponentType.Table,
-          layout: mockComponentLayout,
           data: {
             table: {
               columnHeaderNamesByIndex: [{ test: 1 }],

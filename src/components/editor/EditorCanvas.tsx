@@ -1,5 +1,5 @@
 import {
-  blurComponentFocus,
+  blurComponent,
   focusToolSettings,
 } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
@@ -12,7 +12,7 @@ export const EditorCanvas = () => {
   const dispatch = useAppDispatch();
 
   const handleCanvasClick = useCallback(() => {
-    dispatch(blurComponentFocus());
+    dispatch(blurComponent());
   }, [dispatch]);
 
   const handleToolClick = useCallback(

@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { EditorCanvas } from '@app/components/editor/EditorCanvas';
 import { EditorSidebar } from '@app/components/editor/EditorSidebar';
 import { EditorActions } from '@app/components/editor/EditorActions';
-import { getTitle } from '@app/utils/window';
+import { createTitle } from '@app/utils/window';
 import { EditorSnackbar } from '@app/components/editor/EditorSnackbar';
 import { GetServerSideProps } from 'next';
 import { wrapper } from '@app/redux/store';
@@ -21,7 +21,7 @@ const Editor = ({ tool }: EditorProps) => {
   return (
     <>
       <Head>
-        <title>{getTitle(`${tool.name} | Editor `)}</title>
+        <title>{createTitle(`${tool.name} | Editor `)}</title>
       </Head>
       <main>
         <ActiveToolProvider tool={tool}>

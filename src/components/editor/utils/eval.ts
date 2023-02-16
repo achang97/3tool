@@ -1,6 +1,6 @@
 import { GLOBAL_LIBRARIES } from '@app/constants';
 import { ComponentFieldType } from '@app/types';
-import { parseDynamicTerms } from './codeMirror';
+import { parseDynamicTerms } from './javascript';
 
 const getValidTypes = (
   type: ComponentFieldType | ComponentFieldType[]

@@ -73,7 +73,7 @@ describe('InspectorEditableName', () => {
         onSubmit={mockHandleSubmit}
         icon={mockIcon}
         subtitle={mockSubtitle}
-        editable={false}
+        isEditable={false}
       />
     );
 

@@ -40,8 +40,14 @@ export const ToolEditorToolbar = () => {
       <EditableTextField
         value={tool.name}
         onSubmit={handleUpdateToolName}
-        TypographyProps={{ sx: { whiteSpace: 'nowrap' } }}
-        TextFieldProps={{ fullWidth: true }}
+        TypographyProps={{
+          sx: {
+            whiteSpace: 'nowrap',
+            width: 'fit-content',
+            margin: 'auto',
+            paddingRight: 2.5,
+          },
+        }}
       />
     );
   }, [handleUpdateToolName, tool.name]);

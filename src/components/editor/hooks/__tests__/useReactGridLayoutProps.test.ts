@@ -119,7 +119,7 @@ describe('useReactGridLayoutProps', () => {
       const { result } = renderHook(() => useReactGridLayoutProps());
 
       expect(result.current.droppingItem).toMatchObject(
-        COMPONENT_CONFIGS[ComponentType.Button].dimensions
+        COMPONENT_CONFIGS.button.dimensions
       );
     });
   });

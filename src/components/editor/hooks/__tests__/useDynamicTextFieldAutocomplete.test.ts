@@ -1,6 +1,6 @@
 import { ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import { createCompletionContext } from '@tests/utils/codeMirror';
+import { createCompletionContext } from '@tests/utils/codemirror';
 import { ComponentEvalDataValuesMap } from '../useComponentEvalDataMaps';
 import { useDynamicTextFieldAutocomplete } from '../useDynamicTextFieldAutocomplete';
 

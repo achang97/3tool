@@ -2,7 +2,6 @@ import {
   alpha,
   experimental_extendTheme as extendTheme,
   createTheme,
-  SxProps,
 } from '@mui/material/styles';
 import { gridClasses } from '@mui/x-data-grid';
 
@@ -342,11 +341,11 @@ export const theme = extendTheme({
   },
 });
 
-export const lineClamp = (numLines: number): SxProps => {
+export const lineClamp = (numLines: number) => {
   return {
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
     display: '-webkit-box',
+    textOverflow: 'ellipsis',
     WebkitLineClamp: numLines,
     WebkitBoxOrient: 'vertical',
   };

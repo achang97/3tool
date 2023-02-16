@@ -1,10 +1,8 @@
 import { Component } from '@app/types';
 import _ from 'lodash';
 import { useMemo } from 'react';
-import {
-  flattenComponentDataFields,
-  parseComponentFieldName,
-} from '../utils/components';
+import { getComponentData } from '../utils/components';
+import { flattenObjectFields } from '../utils/javascript';
 import { useComponentEvalData } from './useComponentEvalData';
 
 export type ComponentEvalError = {
@@ -20,23 +18,14 @@ export const useComponentEvalErrors = (
   const evalErrors = useMemo(() => {
     const errors: ComponentEvalError[] = [];
 
-    flattenComponentDataFields(component).forEach((field) => {
-      if (!field.isLeaf) {
-        return;
-      }
-
-      const { fieldName } = parseComponentFieldName(field.name);
-      if (!fieldName) {
-        return;
-      }
-
-      const fieldEvalData = _.get(evalData, fieldName);
+    flattenObjectFields(getComponentData(component)).forEach((field) => {
+      const fieldEvalData = _.get(evalData, field.name);
       if (!fieldEvalData || !(fieldEvalData.error instanceof Error)) {
         return;
       }
 
       errors.push({
-        name: fieldName,
+        name: field.name,
         error: fieldEvalData.error,
       });
     });

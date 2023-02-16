@@ -4,8 +4,8 @@ import { useCallback, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { DepGraph, DepGraphCycleError } from 'dependency-graph';
 import { useAppSelector } from '@app/redux/hooks';
-import { getComponentData, parseComponentFieldName } from '../utils/components';
 import { evalExpression, EvalResult } from '../utils/eval';
+import { parseObjectVariable } from '../utils/javascript';
 
 type HookArgs = {
   components: Component[];
@@ -58,15 +58,18 @@ export const useComponentEvalDataMaps = ({
 
   const getNodeEvalResult = useCallback(
     (nodeName: string, evalArgs: Record<string, unknown>) => {
-      const { componentName, fieldName, rootFieldName } =
-        parseComponentFieldName(nodeName);
+      const {
+        objectName: componentName,
+        fieldName,
+        rootFieldName,
+      } = parseObjectVariable(nodeName);
 
       if (!fieldName || !rootFieldName) {
         return undefined;
       }
 
       const component = componentMap[componentName];
-      const expression = _.get(getComponentData(component), fieldName);
+      const expression = _.get(component.data[component.type], fieldName);
       const rootFieldType = _.get(
         COMPONENT_DATA_TYPES[component.type],
         rootFieldName

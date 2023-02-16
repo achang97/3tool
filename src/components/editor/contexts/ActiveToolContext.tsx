@@ -30,7 +30,7 @@ const DEFAULT_STATE = {
 export type ActiveToolState = {
   tool: Tool;
   updateTool: (
-    update: Partial<Pick<Tool, 'name' | 'components'>>
+    update: Partial<Pick<Tool, 'name' | 'components' | 'actions'>>
   ) => Promise<ApiResponse<Tool> | undefined>;
   componentDataDepGraph: DepGraph<string>;
   componentEvalDataMap: ComponentEvalDataMap;

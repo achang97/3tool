@@ -1,6 +1,7 @@
 import { ErrorOutline } from '@mui/icons-material';
 import { Box, SxProps, Tooltip } from '@mui/material';
 import { useMemo } from 'react';
+import { lineClamp } from '@app/utils/mui';
 import { ComponentEvalError } from '../hooks/useComponentEvalErrors';
 
 type CanvasComponentHandleProps = {
@@ -37,6 +38,7 @@ export const CanvasComponentHandle = ({
   return (
     <Box
       sx={{
+        maxWidth: '100%',
         display: 'flex',
         alignItems: 'center',
         gap: 0.5,
@@ -53,7 +55,7 @@ export const CanvasComponentHandle = ({
       className={CANVAS_COMPONENT_HANDLE_CLASSNAME}
       data-testid="canvas-component-handle"
     >
-      {name}
+      <Box sx={{ ...lineClamp(1), display: 'block' }}>{name}</Box>
       {errorMessage && (
         <Tooltip title={errorMessage} placement="top">
           <ErrorOutline

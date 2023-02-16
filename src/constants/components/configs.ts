@@ -1,9 +1,9 @@
 import { ComponentType } from '@app/types';
-import buttonIcon from '@app/resources/icons/button.svg';
-import textInputIcon from '@app/resources/icons/text-input.svg';
-import numberInputIcon from '@app/resources/icons/number-input.svg';
-import textIcon from '@app/resources/icons/text.svg';
-import tableIcon from '@app/resources/icons/table.svg';
+import buttonIcon from '@app/resources/icons/components/button.svg';
+import textInputIcon from '@app/resources/icons/components/text-input.svg';
+import numberInputIcon from '@app/resources/icons/components/number-input.svg';
+import textIcon from '@app/resources/icons/components/text.svg';
+import tableIcon from '@app/resources/icons/components/table.svg';
 
 type ComponentConfig = {
   label: string;

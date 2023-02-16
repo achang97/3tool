@@ -25,6 +25,9 @@ type EditorState = {
 
   // Sidebar
   sidebarView: SidebarViewType;
+
+  // Actions
+  focusedActionName?: string;
 };
 
 const initialState: EditorState = {
@@ -56,7 +59,7 @@ export const editorSlice = createSlice({
       state.focusedComponentName = action.payload;
       state.sidebarView = SidebarViewType.Inspector;
     },
-    blurComponentFocus: (state) => {
+    blurComponent: (state) => {
       state.focusedComponentName = undefined;
       state.sidebarView = SidebarViewType.Components;
     },
@@ -66,6 +69,14 @@ export const editorSlice = createSlice({
     },
     setSidebarView: (state, action: PayloadAction<SidebarViewType>) => {
       state.sidebarView = action.payload;
+    },
+
+    // Actions
+    focusAction: (state, action: PayloadAction<string>) => {
+      state.focusedActionName = action.payload;
+    },
+    blurAction: (state) => {
+      state.focusedActionName = undefined;
     },
 
     // Global messages
@@ -84,10 +95,12 @@ export const {
   startMoveComponentDrag,
   endMoveComponentDrag,
   focusComponent,
-  blurComponentFocus,
+  blurComponent,
   focusToolSettings,
-  setSnackbarMessage,
   setSidebarView,
+  focusAction,
+  blurAction,
+  setSnackbarMessage,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

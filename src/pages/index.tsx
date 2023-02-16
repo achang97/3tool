@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { Grid } from '@mui/material';
-import { getTitle } from '@app/utils/window';
+import { createTitle } from '@app/utils/window';
 import { useGetToolsQuery } from '@app/redux/services/tools';
 import { ToolThumbnail } from '@app/components/tools/ToolThumbnail';
 import { CreateToolThumbnail } from '@app/components/tools/CreateToolThumbnail';
@@ -15,7 +15,7 @@ const Tools = () => {
   return (
     <>
       <Head>
-        <title>{getTitle('Tools')}</title>
+        <title>{createTitle('Tools')}</title>
       </Head>
       <main>
         <PageContainer>

@@ -1,11 +1,12 @@
 import { Component } from '@app/types';
 import { DepGraph } from 'dependency-graph';
+import _ from 'lodash';
 import { useMemo } from 'react';
-import { parseDynamicTerms } from '../utils/codeMirror';
+import { getComponentData } from '../utils/components';
 import {
-  flattenComponentDataFields,
-  getComponentTokens,
-} from '../utils/components';
+  flattenObjectFields,
+  parseDynamicTermVariables,
+} from '../utils/javascript';
 
 type ComponentDataDepGraph = DepGraph<string>;
 
@@ -19,7 +20,10 @@ export const useComponentDataDepGraph = (
     components.forEach((component) => {
       graph.addNode(component.name);
 
-      flattenComponentDataFields(component).forEach((field) => {
+      flattenObjectFields(getComponentData(component), {
+        prefix: component.name,
+        onlyLeaves: false,
+      }).forEach((field) => {
         if (!field.parent) {
           return;
         }
@@ -34,24 +38,19 @@ export const useComponentDataDepGraph = (
 
     // Add dependencies
     components.forEach((component) => {
-      flattenComponentDataFields(component).forEach((field) => {
-        if (!field.isLeaf) {
-          return;
-        }
+      flattenObjectFields(getComponentData(component), {
+        prefix: component.name,
+      }).forEach((field) => {
+        const componentTokens = parseDynamicTermVariables(
+          field.value,
+          _.map(components, 'name')
+        );
 
-        const dynamicTerms = parseDynamicTerms(field.value);
-
-        dynamicTerms.forEach((dynamicTerm) => {
-          const componentTokens = getComponentTokens(
-            dynamicTerm.expression,
-            components
-          );
-          componentTokens.forEach((componentToken) => {
-            if (!graph.hasNode(componentToken.name)) {
-              graph.addNode(componentToken.name);
-            }
-            graph.addDependency(field.name, componentToken.name);
-          });
+        componentTokens.forEach((componentToken) => {
+          if (!graph.hasNode(componentToken)) {
+            graph.addNode(componentToken);
+          }
+          graph.addDependency(field.name, componentToken);
         });
       });
     });

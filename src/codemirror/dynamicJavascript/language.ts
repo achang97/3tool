@@ -1,4 +1,4 @@
-import { parser } from '@app/codeMirror/dynamicJavascriptParser';
+import { parser } from '@app/codemirror/dynamicJavascript/parser';
 import { javascriptLanguage } from '@codemirror/lang-javascript';
 import { LRLanguage } from '@codemirror/language';
 import { parseMixed } from '@lezer/common';

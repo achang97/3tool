@@ -8,11 +8,13 @@ import {
   startMoveComponentDrag,
   endMoveComponentDrag,
   focusComponent,
-  blurComponentFocus,
+  blurComponent,
   focusToolSettings,
   setSnackbarMessage,
   setSidebarView,
   SnackbarMessage,
+  focusAction,
+  blurAction,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -120,11 +122,11 @@ describe('editorSlice', () => {
         });
       });
 
-      it('blurComponentFocus: unsets focused component name and changes sidebar view to Components', async () => {
+      it('blurComponent: unsets focused component name and changes sidebar view to Components', async () => {
         const { result, dispatch } = renderHooks();
 
         act(() => {
-          dispatch(blurComponentFocus());
+          dispatch(blurComponent());
         });
         await waitFor(() => {
           expect(result.current.focusedComponentName).toBeUndefined();
@@ -159,6 +161,38 @@ describe('editorSlice', () => {
           });
         }
       );
+    });
+
+    describe('actions', () => {
+      it('focusAction: sets focused action name', async () => {
+        const mockActionName = 'action';
+        const { result, dispatch } = renderHooks();
+
+        act(() => {
+          dispatch(focusAction(mockActionName));
+        });
+        await waitFor(() => {
+          expect(result.current.focusedActionName).toEqual(mockActionName);
+        });
+      });
+
+      it('blurAction: sets focused action name to undefined', async () => {
+        const { result, dispatch } = renderHooks();
+
+        act(() => {
+          dispatch(focusAction('action'));
+        });
+        await waitFor(() => {
+          expect(result.current.focusedActionName).not.toBeUndefined();
+        });
+
+        act(() => {
+          dispatch(blurAction());
+        });
+        await waitFor(() => {
+          expect(result.current.focusedActionName).toBeUndefined();
+        });
+      });
     });
 
     describe('alerts', () => {

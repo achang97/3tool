@@ -3,26 +3,21 @@ import { COMPONENT_CONFIGS, COMPONENT_DATA_TEMPLATES } from '@app/constants';
 import { Component, ComponentType } from '@app/types';
 import { render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockComponentLayout } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { ComponentInspector } from '../ComponentInspector';
 
-const mockComponents: Component[] = [
+const mockComponents = [
   {
     name: 'button1',
     type: ComponentType.Button,
-    layout: mockComponentLayout,
-    eventHandlers: [],
     data: {},
   },
   {
     name: 'button2',
     type: ComponentType.Button,
-    layout: mockComponentLayout,
-    eventHandlers: [],
     data: {},
   },
-];
+] as unknown as Component[];
 const mockComponent = mockComponents[0];
 
 const mockUpdateTool = jest.fn();
@@ -53,7 +48,7 @@ describe('ComponentInspector', () => {
 
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: {
-        mockComponents,
+        components: mockComponents,
       },
       updateTool: mockUpdateTool,
       componentEvalDataMap: {},
@@ -93,13 +88,11 @@ describe('ComponentInspector', () => {
       const result = render(<ComponentInspector component={mockComponent} />);
 
       await userEvent.click(result.getByText('Delete'));
-      expect(result.getByTestId('delete-component-button-dialog')).toBeTruthy();
+      expect(result.getByTestId('delete-dialog')).toBeTruthy();
 
       await userEvent.click(result.getByText('Confirm'));
       await waitFor(() => {
-        expect(
-          result.queryByTestId('delete-component-button-dialog')
-        ).toBeNull();
+        expect(result.queryByTestId('delete-dialog')).toBeNull();
         expect(mockDeleteComponent).toHaveBeenCalled();
       });
     });
@@ -116,15 +109,13 @@ describe('ComponentInspector', () => {
     `(
       'renders $type inspector',
       ({ type, inspectorId }: { type: ComponentType; inspectorId: string }) => {
-        const mockActiveComponent: Component = {
+        const mockActiveComponent = {
           name: 'Name',
           type,
-          layout: mockComponentLayout,
           data: {
             [type]: {},
           },
-          eventHandlers: [],
-        };
+        } as Component;
 
         (useActiveTool as jest.Mock).mockImplementation(() => ({
           tool: {
@@ -146,15 +137,13 @@ describe('ComponentInspector', () => {
   });
 
   it('calls API to update components with debounce of 300 ms', async () => {
-    const mockActiveComponent: Component = {
+    const mockActiveComponent = {
       name: 'Name',
       type: ComponentType.Button,
-      layout: mockComponentLayout,
       data: {
-        button: COMPONENT_DATA_TEMPLATES[ComponentType.Button],
+        button: COMPONENT_DATA_TEMPLATES.button,
       },
-      eventHandlers: [],
-    };
+    } as Component;
 
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: {
@@ -181,9 +170,7 @@ describe('ComponentInspector', () => {
     // don't work properly here for some reason).
     expect(mockUpdateTool).not.toHaveBeenCalled();
     await waitFor(() => {
-      const newExpectedText = `${newInputValue}${
-        COMPONENT_DATA_TEMPLATES[ComponentType.Button].text
-      }`;
+      const newExpectedText = `${newInputValue}${COMPONENT_DATA_TEMPLATES.button.text}`;
 
       expect(mockUpdateTool).toHaveBeenCalledWith({
         components: [

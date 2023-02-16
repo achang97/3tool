@@ -1,7 +1,7 @@
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
 import {
-  blurComponentFocus,
+  blurComponent,
   focusToolSettings,
 } from '@app/redux/features/editorSlice';
 import { mockTool } from '@tests/constants/data';
@@ -35,7 +35,7 @@ describe('EditorCanvas', () => {
     const result = render(<EditorCanvas />);
 
     await userEvent.click(result.getByTestId('editor-canvas'));
-    expect(mockDispatch).toHaveBeenCalledWith(blurComponentFocus());
+    expect(mockDispatch).toHaveBeenCalledWith(blurComponent());
   });
 
   it('focuses tool settings on tool text click', async () => {
@@ -43,7 +43,7 @@ describe('EditorCanvas', () => {
 
     await userEvent.click(result.getByText('tool'));
     expect(mockDispatch).toHaveBeenCalledWith(focusToolSettings());
-    expect(mockDispatch).not.toHaveBeenCalledWith(blurComponentFocus());
+    expect(mockDispatch).not.toHaveBeenCalledWith(blurComponent());
   });
 
   it('renders canvas toolbar', () => {

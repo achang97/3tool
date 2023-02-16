@@ -7,31 +7,12 @@ import { syntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';
 import _ from 'lodash';
 
-export const parseDynamicTerms = (
-  expression: string
-): {
-  group: string;
-  expression: string;
-  start: number;
-}[] => {
-  const dynamicJavascriptRegex = /{{(?<={{)\s*(.*?)\s*(?=}})}}/g;
-  return [...expression.matchAll(dynamicJavascriptRegex)].map((group) => {
-    const start = group.index ?? 0;
-
-    return {
-      group: group[0],
-      expression: group[1],
-      start,
-    };
-  });
-};
-
-export const getSnippetTemplate = (str: string): string => {
+export const createAutocompleteSnippetTemplate = (str: string): string => {
   return `${str}#{1}`;
 };
 
-export const generateSnippets = (data: unknown): Completion[] => {
-  const generateSnippetsHelper = (
+export const createAutocompleteSnippets = (data: unknown): Completion[] => {
+  const createAutocompleteSnippetsHelper = (
     prefix: string,
     value: unknown,
     snippets: Completion[]
@@ -46,10 +27,13 @@ export const generateSnippets = (data: unknown): Completion[] => {
         detail = typeof value;
       }
 
-      const newSnippet = snippetCompletion(getSnippetTemplate(prefix), {
-        label: prefix,
-        detail,
-      });
+      const newSnippet = snippetCompletion(
+        createAutocompleteSnippetTemplate(prefix),
+        {
+          label: prefix,
+          detail,
+        }
+      );
       snippets.push(newSnippet);
     }
 
@@ -62,16 +46,20 @@ export const generateSnippets = (data: unknown): Completion[] => {
     }
 
     Object.entries(value).forEach(([entryKey, entryVal]) => {
-      generateSnippetsHelper(`${prefix}.${entryKey}`, entryVal, snippets);
+      createAutocompleteSnippetsHelper(
+        `${prefix}.${entryKey}`,
+        entryVal,
+        snippets
+      );
     });
   };
 
   const snippets: Completion[] = [];
-  generateSnippetsHelper('', data, snippets);
+  createAutocompleteSnippetsHelper('', data, snippets);
   return snippets;
 };
 
-export const getTokenFromContext = (
+export const parseTokenFromContext = (
   context: CompletionContext
 ): {
   token: string;

@@ -1,5 +1,5 @@
 import { resetComponentInput } from '@app/redux/features/activeToolSlice';
-import { blurComponentFocus } from '@app/redux/features/editorSlice';
+import { blurComponent } from '@app/redux/features/editorSlice';
 import { Component } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import {
@@ -74,7 +74,7 @@ describe('useDeleteComponent', () => {
     it('blurs and resets component if deletion succeeds', async () => {
       const { result } = renderHook(() => useDeleteComponent(mockName));
       await result.current();
-      expect(mockDispatch).toHaveBeenCalledWith(blurComponentFocus());
+      expect(mockDispatch).toHaveBeenCalledWith(blurComponent());
       expect(mockDispatch).toHaveBeenCalledWith(resetComponentInput(mockName));
     });
   });

@@ -11,7 +11,7 @@ export const TableInspector = ({
   const { evalData } = useComponentEvalData<ComponentType.Table>(name);
 
   const tableData = useMemo(() => {
-    return data[ComponentType.Table];
+    return data.table;
   }, [data]);
 
   const config: BaseInspectorSectionProps[] = useMemo(() => {

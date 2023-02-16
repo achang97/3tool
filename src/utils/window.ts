@@ -1,3 +1,3 @@
-export const getTitle = (title: string): string => {
+export const createTitle = (title: string): string => {
   return `${title} | ACA Labs`;
 };

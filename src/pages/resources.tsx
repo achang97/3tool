@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { Box } from '@mui/material';
-import { getTitle } from '@app/utils/window';
+import { createTitle } from '@app/utils/window';
 import { PageTitle } from '@app/components/common/PageTitle';
 import { PageContainer } from '@app/components/common/PageContainer';
 import { ResourceDataGrid } from '@app/components/resources/ResourceDataGrid';
@@ -10,7 +10,7 @@ const Resources = () => {
   return (
     <>
       <Head>
-        <title>{getTitle('Resource Library')}</title>
+        <title>{createTitle('Resource Library')}</title>
       </Head>
       <main>
         <PageContainer>

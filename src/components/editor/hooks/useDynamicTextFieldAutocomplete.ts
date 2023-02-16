@@ -11,10 +11,10 @@ import _ from 'lodash';
 import { useCallback, useMemo } from 'react';
 import {
   readAsModule,
-  generateSnippets,
-  getTokenFromContext,
-  getSnippetTemplate,
-} from '../utils/codeMirror';
+  createAutocompleteSnippets,
+  parseTokenFromContext,
+  createAutocompleteSnippetTemplate,
+} from '../utils/codemirror';
 import { useActiveTool } from './useActiveTool';
 
 const GLOBAL_LIBRARY_MAP = _.chain(GLOBAL_LIBRARIES)
@@ -51,17 +51,20 @@ export const useDynamicTextFieldAutocomplete = (): CompletionSource => {
     const options: Completion[] = [];
 
     GLOBAL_LIBRARIES.forEach(({ importName, library }) => {
-      const librarySnippet = snippetCompletion(getSnippetTemplate(importName), {
-        label: importName,
-        detail: typeof library,
-        boost: 1,
-      });
+      const librarySnippet = snippetCompletion(
+        createAutocompleteSnippetTemplate(importName),
+        {
+          label: importName,
+          detail: typeof library,
+          boost: 1,
+        }
+      );
       options.push(librarySnippet);
     });
 
     Object.entries(componentEvalDataValuesMap).forEach(([componentName]) => {
       const componentSnippet = snippetCompletion(
-        getSnippetTemplate(componentName),
+        createAutocompleteSnippetTemplate(componentName),
         {
           label: componentName,
           detail: 'component',
@@ -76,7 +79,7 @@ export const useDynamicTextFieldAutocomplete = (): CompletionSource => {
 
   const getAutocompleteOptions = useCallback(
     (context: CompletionContext): CompletionResult => {
-      const currToken = getTokenFromContext(context);
+      const currToken = parseTokenFromContext(context);
 
       if (!currToken) {
         return { from: context.pos, options: [] };
@@ -89,7 +92,7 @@ export const useDynamicTextFieldAutocomplete = (): CompletionSource => {
       const currValue = _.get(lookupMap, currToken.token);
       return {
         from: currToken.from,
-        options: generateSnippets(currValue),
+        options: createAutocompleteSnippets(currValue),
       };
     },
     [rootOptions, lookupMap]

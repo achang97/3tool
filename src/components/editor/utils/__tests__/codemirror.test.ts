@@ -1,72 +1,22 @@
-import { createCompletionContext } from '@tests/utils/codeMirror';
+import { createCompletionContext } from '@tests/utils/codemirror';
 import {
-  generateSnippets,
-  getSnippetTemplate,
-  getTokenFromContext,
-  parseDynamicTerms,
+  createAutocompleteSnippets,
+  createAutocompleteSnippetTemplate,
+  parseTokenFromContext,
   readAsModule,
-} from '../codeMirror';
+} from '../codemirror';
 
-describe('codeMirror', () => {
-  describe('parseDynamicTerms', () => {
-    it('parses single term', () => {
-      const result = parseDynamicTerms('{{ button1.text }}');
-      expect(result).toEqual([
-        {
-          group: '{{ button1.text }}',
-          expression: 'button1.text',
-          start: 0,
-        },
-      ]);
-    });
-
-    it('parses multiple terms', () => {
-      const result = parseDynamicTerms(
-        '{{ button1.text }} {{   textInput1.value   }}'
-      );
-      expect(result).toEqual([
-        {
-          group: '{{ button1.text }}',
-          expression: 'button1.text',
-          start: 0,
-        },
-        {
-          group: '{{   textInput1.value   }}',
-          expression: 'textInput1.value',
-          start: 19,
-        },
-      ]);
-    });
-
-    it('parses complex expression terms', () => {
-      const result = parseDynamicTerms(
-        '  {{ button1.text + 1 / 5 + textInput.value }}  '
-      );
-      expect(result).toEqual([
-        {
-          group: '{{ button1.text + 1 / 5 + textInput.value }}',
-          expression: 'button1.text + 1 / 5 + textInput.value',
-          start: 2,
-        },
-      ]);
-    });
-
-    it('returns empty array if no terms are found', () => {
-      const result = parseDynamicTerms('There are no dynamic terms');
-      expect(result).toEqual([]);
-    });
-  });
-
-  describe('getSnippetTemplate', () => {
+describe('codemirror', () => {
+  describe('createAutocompleteSnippetTemplate', () => {
     it('appends "#{1}" suffix to given string', () => {
-      const result = getSnippetTemplate('test');
+      const result = createAutocompleteSnippetTemplate('test');
       expect(result).toEqual('test#{1}');
     });
   });
 
-  describe('generateSnippets', () => {
+  describe('createAutocompleteSnippets', () => {
     it('recurses through data object and creates autocomplete snippets', () => {
-      const result = generateSnippets({
+      const result = createAutocompleteSnippets({
         object1: {
           field1: [1, 2, 3],
           object2: {
@@ -117,11 +67,11 @@ describe('codeMirror', () => {
     });
   });
 
-  describe('getTokenFromContext', () => {
+  describe('parseTokenFromContext', () => {
     describe('dynamic', () => {
       it('returns null if cursor is after invalid floating period', () => {
         const completionContext = createCompletionContext('{{ a . }}', 6);
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toBeNull();
       });
 
@@ -130,7 +80,7 @@ describe('codeMirror', () => {
           '{{ table1.data[0]b }}',
           18
         );
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toBeNull();
       });
 
@@ -139,13 +89,13 @@ describe('codeMirror', () => {
           '{{ table1.data[]b }}',
           17
         );
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toBeNull();
       });
 
       it('returns root token if expression is empty', () => {
         const completionContext = createCompletionContext('{{}}', 2);
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toEqual({
           token: '',
           from: 2,
@@ -158,7 +108,7 @@ describe('codeMirror', () => {
           '{{ button1|| }}',
           12
         );
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toEqual({
           token: '',
           from: 12,
@@ -168,7 +118,7 @@ describe('codeMirror', () => {
 
       it('returns root token if there are no periods in discovered token', () => {
         const completionContext = createCompletionContext('{{ button1 }}', 10);
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toEqual({
           token: 'button1',
           from: 3,
@@ -181,7 +131,7 @@ describe('codeMirror', () => {
           '{{ table1.data[0].em }}',
           20
         );
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toEqual({
           token: 'table1.data[0]',
           from: 17,
@@ -193,7 +143,7 @@ describe('codeMirror', () => {
     describe('javascript', () => {
       it('returns root token if expression is empty', () => {
         const completionContext = createCompletionContext('', 0, false);
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toEqual({
           token: '',
           from: 0,
@@ -203,7 +153,7 @@ describe('codeMirror', () => {
 
       it('returns root token from 0-index', () => {
         const completionContext = createCompletionContext('button1', 7, false);
-        const result = getTokenFromContext(completionContext);
+        const result = parseTokenFromContext(completionContext);
         expect(result).toEqual({
           token: 'button1',
           from: 0,

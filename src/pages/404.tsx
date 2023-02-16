@@ -1,14 +1,14 @@
 import Head from 'next/head';
 import { Box, Button, Typography } from '@mui/material';
 import { WebAssetOff } from '@mui/icons-material';
-import { getTitle } from '@app/utils/window';
+import { createTitle } from '@app/utils/window';
 import Link from 'next/link';
 
 const Error404 = () => {
   return (
     <>
       <Head>
-        <title>{getTitle('404 Error')}</title>
+        <title>{createTitle('404 Error')}</title>
       </Head>
       <main>
         <Box

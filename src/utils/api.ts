@@ -1,4 +1,4 @@
-import { ApiError, ApiResponse } from '@app/types';
+import { ApiError, ApiResponse, ApiSuccessResponse } from '@app/types';
 import { SerializedError } from '@reduxjs/toolkit';
 
 export const parseApiError = (error: ApiError | SerializedError): string => {
@@ -13,8 +13,8 @@ export const parseApiError = (error: ApiError | SerializedError): string => {
   return 'Something went wrong. Please try again.';
 };
 
-export const isSuccessfulApiResponse = (
+export const isSuccessfulApiResponse = <T extends {}>(
   response: ApiResponse | undefined
-): boolean => {
+): response is ApiSuccessResponse<T> => {
   return Boolean(response && 'data' in response);
 };

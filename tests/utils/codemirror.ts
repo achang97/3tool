@@ -1,4 +1,4 @@
-import { dynamicJavascriptLanguage } from '@app/codeMirror/dynamicJavascriptLanguage';
+import { dynamicJavascriptLanguage } from '@app/codemirror/dynamicJavascript/language';
 import { CompletionContext } from '@codemirror/autocomplete';
 import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
 import { EditorState } from '@codemirror/state';

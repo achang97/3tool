@@ -8,12 +8,12 @@ import { ReactNode } from 'react';
 type InspectorEditableNameProps = {
   icon: ReactNode;
   subtitle?: string;
-} & Pick<EditableTextFieldProps, 'value' | 'onSubmit' | 'editable'>;
+} & Pick<EditableTextFieldProps, 'value' | 'onSubmit' | 'isEditable'>;
 
 export const InspectorEditableName = ({
   value,
   onSubmit,
-  editable,
+  isEditable,
   icon,
   subtitle,
 }: InspectorEditableNameProps) => {
@@ -30,15 +30,22 @@ export const InspectorEditableName = ({
       }}
     >
       <Box
-        sx={{ display: 'flex', alignItems: 'center', gap: 1, height: '35px' }}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          flex: 1,
+          minWidth: 0,
+        }}
       >
         {icon}
         <EditableTextField
           value={value}
           onSubmit={onSubmit}
-          editable={editable}
+          isEditable={isEditable}
           TypographyProps={{ variant: 'body2' }}
           TextFieldProps={{ size: 'small' }}
+          height={35}
         />
       </Box>
       {subtitle && (

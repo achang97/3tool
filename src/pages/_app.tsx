@@ -22,7 +22,7 @@ import { initFetch } from '@app/utils/global';
 
 import '@app/styles/globals.css';
 import '@app/styles/react-grid-layout.css';
-import '@app/styles/code-mirror.css';
+import '@app/styles/codemirror.css';
 
 // Start MSW on the server
 if (MSW_API) {

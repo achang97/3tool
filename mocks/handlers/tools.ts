@@ -98,6 +98,7 @@ export const toolHandlers = [
 
     if (body.name) tool.name = body.name;
     if (body.components) tool.components = body.components;
+    if (body.actions) tool.actions = body.actions;
     tool.updatedAt = new Date().toISOString();
 
     return res(ctx.status(200), ctx.json<Tool>(tool));

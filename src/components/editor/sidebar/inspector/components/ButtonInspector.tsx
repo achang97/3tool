@@ -11,7 +11,7 @@ export const ButtonInspector = ({
   const { evalData } = useComponentEvalData<ComponentType.Button>(name);
 
   const buttonData = useMemo(() => {
-    return data[ComponentType.Button];
+    return data.button;
   }, [data]);
 
   const config: BaseInspectorSectionProps[] = useMemo(() => {

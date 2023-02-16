@@ -12,6 +12,7 @@ export const EditorActions = () => {
         height: HEIGHT,
         display: 'flex',
         boxShadow: 3,
+        flexShrink: 0,
         // NOTE: Removes the overlapping shadow on the right side of the container.
         clipPath: 'inset(-5px 0px -5px -5px)',
       }}

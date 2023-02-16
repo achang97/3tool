@@ -3,7 +3,7 @@ import { EditorView, ViewUpdate } from '@codemirror/view';
 import { useCallback, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
-import { dynamicJavascriptLanguage } from '@app/codeMirror/dynamicJavascriptLanguage';
+import { dynamicJavascriptLanguage } from '@app/codemirror/dynamicJavascript/language';
 import { FormFieldLabel } from '@app/components/common/FormFieldLabel';
 import { useDynamicTextFieldAutocomplete } from '../hooks/useDynamicTextFieldAutocomplete';
 import { useDynamicTextFieldPreview } from '../hooks/useDynamicTextFieldPreview';

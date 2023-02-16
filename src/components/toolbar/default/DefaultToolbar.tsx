@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { UserAvatar } from '@app/components/common/UserAvatar';
 import { IconButton, Menu, MenuItem, Tab, Tabs } from '@mui/material';
 import { Tune, Logout } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMenuState } from '@app/hooks/useMenuState';
 import { ToolbarTemplate } from '../common/ToolbarTemplate';
 import { MenuItemContent } from './MenuItemContent';
 
@@ -17,22 +18,7 @@ export const DefaultToolbar = () => {
   const { logout, user } = useAuth0();
   const { pathname } = useRouter();
 
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-
-  const menuOpen = useMemo(() => {
-    return Boolean(menuAnchor);
-  }, [menuAnchor]);
-
-  const handleMenuOpen = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setMenuAnchor(event.currentTarget);
-    },
-    []
-  );
-
-  const handleMenuClose = useCallback(() => {
-    setMenuAnchor(null);
-  }, []);
+  const { isMenuOpen, menuAnchor, onMenuOpen, onMenuClose } = useMenuState();
 
   const handleLogout = useCallback(() => {
     logout({ returnTo: window.location.origin });
@@ -66,19 +52,15 @@ export const DefaultToolbar = () => {
   const right = useMemo(() => {
     return (
       <>
-        <IconButton
-          onClick={handleMenuOpen}
-          data-testid="general-toolbar-avatar"
-        >
+        <IconButton onClick={onMenuOpen} data-testid="general-toolbar-avatar">
           <UserAvatar name={user?.name} size={40} />
         </IconButton>
         <Menu
           anchorEl={menuAnchor}
-          open={menuOpen}
-          onClose={handleMenuClose}
-          onClick={handleMenuClose}
+          open={isMenuOpen}
+          onClose={onMenuClose}
+          onClick={onMenuClose}
           data-testid="general-toolbar-menu"
-          sx={{ padding: 2 }}
         >
           <MenuItem
             component={Link}
@@ -100,14 +82,7 @@ export const DefaultToolbar = () => {
         </Menu>
       </>
     );
-  }, [
-    handleMenuOpen,
-    handleMenuClose,
-    handleLogout,
-    user,
-    menuOpen,
-    menuAnchor,
-  ]);
+  }, [onMenuOpen, user, menuAnchor, isMenuOpen, onMenuClose, handleLogout]);
 
   return (
     <ToolbarTemplate middle={middle} right={right} testId="general-toolbar" />

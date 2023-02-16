@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { mainnet } from 'wagmi';
-import { Resource, ResourceType } from '@app/types';
+import { Resource } from '@app/types';
 import { useAppSelector } from '@app/redux/hooks';
 import { isJSON } from '@app/utils/string';
 import { FormContainer } from './FormContainer';
@@ -26,7 +26,7 @@ export const ConfigureContractForm = ({
 }: ConfigureContractFormProps) => {
   const { activeResource } = useAppSelector((state) => state.resources);
   const smartContract = useMemo(() => {
-    return activeResource?.data[ResourceType.SmartContract];
+    return activeResource?.data.smartContract;
   }, [activeResource?.data]);
 
   const [name, setName] = useState(activeResource?.name ?? '');

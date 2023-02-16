@@ -8,6 +8,7 @@ type HookArgs = {
   smartContract: Required<SmartContractData>;
   onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'data'>) => void;
 };
+
 export const useSubmitSmartContract = ({
   name,
   smartContract,
