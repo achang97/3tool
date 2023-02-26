@@ -31,11 +31,7 @@ export const useToolEvalDataMaps = ({
   });
 
   const elementMap = useMemo(() => {
-    return _.chain(elements)
-      .map('fields')
-      .flatten()
-      .keyBy('name')
-      .value();
+    return _.chain(elements).map('fields').flatten().keyBy('name').value();
   }, [elements]);
 
   const getNodeEvalResult = useCallback(
