@@ -1,19 +1,14 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { BaseComponentInspectorProps } from '@app/types';
+import { BaseComponentInspectorProps, ComponentType } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 
 const DATA_TYPES = COMPONENT_DATA_TYPES.numberInput;
 
 export const NumberInputInspector = ({
-  name,
   data,
   onUpdateData,
-}: BaseComponentInspectorProps) => {
-  const numberInputData = useMemo(() => {
-    return data.numberInput;
-  }, [data]);
-
+}: BaseComponentInspectorProps<ComponentType.NumberInput>) => {
   const config: BaseInspectorSectionProps[] = useMemo(() => {
     return [
       {
@@ -22,7 +17,7 @@ export const NumberInputInspector = ({
           {
             field: 'defaultValue',
             label: 'Default Value',
-            value: numberInputData?.defaultValue,
+            value: data?.defaultValue,
             data: {
               text: {
                 type: DATA_TYPES.defaultValue,
@@ -32,7 +27,7 @@ export const NumberInputInspector = ({
           {
             field: 'placeholder',
             label: 'Placeholder',
-            value: numberInputData?.placeholder,
+            value: data?.placeholder,
             data: {
               text: {
                 type: DATA_TYPES.placeholder,
@@ -47,7 +42,7 @@ export const NumberInputInspector = ({
           {
             field: 'label',
             label: 'Label',
-            value: numberInputData?.label,
+            value: data?.label,
             data: {
               text: {
                 type: DATA_TYPES.label,
@@ -62,7 +57,7 @@ export const NumberInputInspector = ({
           {
             field: 'disabled',
             label: 'Disabled',
-            value: numberInputData?.disabled,
+            value: data?.disabled,
             data: {
               text: {
                 type: DATA_TYPES.disabled,
@@ -77,7 +72,7 @@ export const NumberInputInspector = ({
           {
             field: 'required',
             label: 'Required',
-            value: numberInputData?.required,
+            value: data?.required,
             data: {
               text: {
                 type: DATA_TYPES.required,
@@ -87,7 +82,7 @@ export const NumberInputInspector = ({
           {
             field: 'minimum',
             label: 'Minimum',
-            value: numberInputData?.minimum,
+            value: data?.minimum,
             data: {
               text: {
                 type: DATA_TYPES.minimum,
@@ -97,7 +92,7 @@ export const NumberInputInspector = ({
           {
             field: 'maximum',
             label: 'Maximum',
-            value: numberInputData?.maximum,
+            value: data?.maximum,
             data: {
               text: {
                 type: DATA_TYPES.maximum,
@@ -107,11 +102,10 @@ export const NumberInputInspector = ({
         ],
       },
     ];
-  }, [numberInputData]);
+  }, [data]);
 
   return (
     <BaseInspector
-      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="number-input-inspector"

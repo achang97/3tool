@@ -6,7 +6,6 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { BaseInspector, BaseInspectorSectionProps } from '../BaseInspector';
 
-const mockName = 'Name';
 const mockHandleUpdateData = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
@@ -32,69 +31,11 @@ describe('BaseInspector', () => {
     ];
 
     const result = render(
-      <BaseInspector
-        name={mockName}
-        config={mockConfig}
-        onUpdateData={mockHandleUpdateData}
-      />
+      <BaseInspector config={mockConfig} onUpdateData={mockHandleUpdateData} />
     );
 
     expect(result.getByText('Section 1')).toBeTruthy();
     expect(result.getByText('Section 2')).toBeTruthy();
-  });
-
-  it('rerenders on name change', () => {
-    const mockConfig: BaseInspectorSectionProps[] = [
-      {
-        title: 'Section 1',
-        fields: [
-          {
-            field: 'text',
-            label: 'Text',
-            value: 'hello',
-            data: {
-              text: {
-                type: 'string',
-              },
-            },
-          },
-        ],
-      },
-    ];
-    const result = render(
-      <BaseInspector
-        name={mockName}
-        config={mockConfig}
-        onUpdateData={mockHandleUpdateData}
-      />
-    );
-    expect(result.getByText('hello')).toBeTruthy();
-
-    const mockUpdatedConfig: BaseInspectorSectionProps[] = [
-      {
-        title: 'Section 1',
-        fields: [
-          {
-            field: 'text',
-            label: 'Text',
-            value: 'hello!',
-            data: {
-              text: {
-                type: 'string',
-              },
-            },
-          },
-        ],
-      },
-    ];
-    result.rerender(
-      <BaseInspector
-        name={`${mockName}_1`}
-        config={mockUpdatedConfig}
-        onUpdateData={mockHandleUpdateData}
-      />
-    );
-    expect(result.getByText('hello!')).toBeTruthy();
   });
 
   it('renders nothing if field data is empty', () => {
@@ -112,11 +53,7 @@ describe('BaseInspector', () => {
       },
     ];
     const result = render(
-      <BaseInspector
-        name={mockName}
-        config={mockConfig}
-        onUpdateData={mockHandleUpdateData}
-      />
+      <BaseInspector config={mockConfig} onUpdateData={mockHandleUpdateData} />
     );
     expect(result.queryByText('Text')).toBeNull();
     expect(result.queryByText('hello')).toBeNull();
@@ -154,7 +91,6 @@ describe('BaseInspector', () => {
 
       const result = render(
         <BaseInspector
-          name={mockName}
           config={mockConfig}
           onUpdateData={mockHandleUpdateData}
         />
@@ -195,7 +131,6 @@ describe('BaseInspector', () => {
 
       const result = render(
         <BaseInspector
-          name={mockName}
           config={mockConfig}
           onUpdateData={mockHandleUpdateData}
         />

@@ -1,5 +1,5 @@
 import { CodeMirror } from '@app/components/editor/common/CodeMirror';
-import { BaseComponentInspectorProps, FieldType } from '@app/types';
+import { FieldType } from '@app/types';
 import { Box } from '@mui/material';
 import _ from 'lodash';
 import { useCallback } from 'react';
@@ -29,14 +29,12 @@ export type BaseInspectorFieldProps = {
 };
 
 type BaseInspectorProps = {
-  name: string;
   config: BaseInspectorSectionProps[];
-  onUpdateData: BaseComponentInspectorProps['onUpdateData'];
+  onUpdateData: (update: Record<string, unknown>) => void;
   testId?: string;
 };
 
 export const BaseInspector = ({
-  name,
   config,
   onUpdateData,
   testId,
@@ -86,7 +84,7 @@ export const BaseInspector = ({
   );
 
   return (
-    <Box data-testid={testId} key={name}>
+    <Box data-testid={testId}>
       {config.map((section) => (
         <InspectorSection key={section.title} title={section.title}>
           {section.fields.map((field) => (

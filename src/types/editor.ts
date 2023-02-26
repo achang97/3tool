@@ -1,4 +1,4 @@
-import { Action, ActionType, Component } from './api';
+import { Action, ActionType, Component, ComponentType } from './api';
 
 export enum SidebarViewType {
   Inspector = 'inspector',
@@ -18,16 +18,12 @@ export type BaseCanvasComponentProps = {
   name: string;
 };
 
-export type BaseComponentInspectorProps = {
-  name: string;
-  data: Component['data'];
-  onUpdateData: (update: RecursivePartial<ValueOf<Component['data']>>) => void;
+export type BaseComponentInspectorProps<T extends ComponentType> = {
+  data: Component['data'][T];
+  onUpdateData: (update: RecursivePartial<Component['data'][T]>) => void;
 };
 
-export type BaseActionEditorProps = {
-  // NOTE: We need this field for editor views that aggregate multiple
-  // types (Smart Contract Read/Write).
-  type: ActionType;
-  data: Action['data'];
-  onUpdateData: (update: RecursivePartial<ValueOf<Action['data']>>) => void;
+export type BaseActionEditorProps<T extends ActionType> = {
+  data: Action['data'][T];
+  onUpdateData: (update: RecursivePartial<Action['data'][T]>) => void;
 };

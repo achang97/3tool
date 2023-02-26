@@ -1,19 +1,14 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { BaseComponentInspectorProps } from '@app/types';
+import { BaseComponentInspectorProps, ComponentType } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 
 const DATA_TYPES = COMPONENT_DATA_TYPES.table;
 
 export const TableInspector = ({
-  name,
   data,
   onUpdateData,
-}: BaseComponentInspectorProps) => {
-  const tableData = useMemo(() => {
-    return data.table;
-  }, [data]);
-
+}: BaseComponentInspectorProps<ComponentType.Table>) => {
   const config: BaseInspectorSectionProps[] = useMemo(() => {
     return [
       {
@@ -22,7 +17,7 @@ export const TableInspector = ({
           {
             field: 'data',
             label: 'Data',
-            value: tableData?.data,
+            value: data?.data,
             data: {
               text: {
                 type: DATA_TYPES.data,
@@ -32,7 +27,7 @@ export const TableInspector = ({
           {
             field: 'emptyMessage',
             label: 'Empty message',
-            value: tableData?.emptyMessage,
+            value: data?.emptyMessage,
             data: {
               text: {
                 type: DATA_TYPES.emptyMessage,
@@ -47,7 +42,7 @@ export const TableInspector = ({
           {
             field: 'multiselect',
             label: 'Enable multi-row selection',
-            value: tableData?.multiselect,
+            value: data?.multiselect,
             data: {
               text: {
                 type: DATA_TYPES.multiselect,
@@ -57,11 +52,10 @@ export const TableInspector = ({
         ],
       },
     ];
-  }, [tableData]);
+  }, [data]);
 
   return (
     <BaseInspector
-      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="table-inspector"

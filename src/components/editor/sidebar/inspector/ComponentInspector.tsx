@@ -25,10 +25,9 @@ type ComponentInspectorProps = {
 
 const DEBOUNCE_TIME_MS = 300;
 
-const COMPONENT_INSPECTOR_MAP: Record<
-  ComponentType,
-  FC<BaseComponentInspectorProps>
-> = {
+const COMPONENT_INSPECTOR_MAP: {
+  [KeyType in ComponentType]: FC<BaseComponentInspectorProps<KeyType>>;
+} = {
   [ComponentType.Button]: ButtonInspector,
   [ComponentType.TextInput]: TextInputInspector,
   [ComponentType.NumberInput]: NumberInputInspector,
@@ -65,14 +64,12 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
 
   const dataInspector = useMemo(() => {
     const TypedInspector = COMPONENT_INSPECTOR_MAP[component.type];
-    if (!TypedInspector) {
-      return null;
-    }
-
     return (
       <TypedInspector
+        key={component.name}
         name={component.name}
-        data={component.data}
+        // @ts-ignore We know that this accesses the correct data key
+        data={component.data[component.type]}
         onUpdateData={debouncedHandleUpdateData}
       />
     );

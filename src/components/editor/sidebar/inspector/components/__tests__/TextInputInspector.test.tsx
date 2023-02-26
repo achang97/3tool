@@ -7,17 +7,14 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { TextInputInspector } from '../TextInputInspector';
 
-const mockName = 'Name';
-const mockData: Component['data'] = {
-  textInput: {
-    defaultValue: 'Default Value',
-    placeholder: 'Placeholder',
-    label: 'Label',
-    disabled: 'disabled',
-    required: 'required',
-    minLength: '1',
-    maxLength: '5',
-  },
+const mockData: Component['data']['textInput'] = {
+  defaultValue: 'Default Value',
+  placeholder: 'Placeholder',
+  label: 'Label',
+  disabled: 'disabled',
+  required: 'required',
+  minLength: '1',
+  maxLength: '5',
 };
 
 const mockHandleUpdateData = jest.fn();
@@ -42,7 +39,6 @@ describe('TextInputInspector', () => {
     it('renders "Basic" title', () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -53,7 +49,6 @@ describe('TextInputInspector', () => {
     it('defaultValue: renders "Default Value" text field', async () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -62,7 +57,7 @@ describe('TextInputInspector', () => {
       await validateDynamicInputField(result, 'Basic', {
         field: 'defaultValue',
         label: 'Default Value',
-        value: mockData.textInput?.defaultValue,
+        value: mockData.defaultValue,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.textInput.defaultValue },
       });
@@ -71,7 +66,6 @@ describe('TextInputInspector', () => {
     it('placeholder: renders "Placeholder" text field', async () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -80,7 +74,7 @@ describe('TextInputInspector', () => {
       await validateDynamicInputField(result, 'Basic', {
         field: 'placeholder',
         label: 'Placeholder',
-        value: mockData.textInput?.placeholder,
+        value: mockData.placeholder,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.textInput.placeholder },
       });
@@ -91,7 +85,6 @@ describe('TextInputInspector', () => {
     it('renders "Label" title', () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -102,7 +95,6 @@ describe('TextInputInspector', () => {
     it('label: renders "Label" text field', async () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -111,7 +103,7 @@ describe('TextInputInspector', () => {
       await validateDynamicInputField(result, 'Label', {
         field: 'label',
         label: 'Label',
-        value: mockData.textInput?.label,
+        value: mockData.label,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.textInput.label },
       });
@@ -122,7 +114,6 @@ describe('TextInputInspector', () => {
     it('renders "Interaction" title', () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -133,7 +124,6 @@ describe('TextInputInspector', () => {
     it('disabled: renders "Disabled" text field', async () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -142,7 +132,7 @@ describe('TextInputInspector', () => {
       await validateDynamicInputField(result, 'Interaction', {
         field: 'disabled',
         label: 'Disabled',
-        value: mockData.textInput?.disabled,
+        value: mockData.disabled,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.textInput.disabled },
       });
@@ -153,7 +143,6 @@ describe('TextInputInspector', () => {
     it('renders "Validation" title', () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -164,7 +153,6 @@ describe('TextInputInspector', () => {
     it('required: renders "Required" text field', async () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -173,7 +161,7 @@ describe('TextInputInspector', () => {
       await validateDynamicInputField(result, 'Validation', {
         field: 'required',
         label: 'Required',
-        value: mockData.textInput?.required,
+        value: mockData.required,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.textInput.required },
       });
@@ -182,7 +170,6 @@ describe('TextInputInspector', () => {
     it('minLength: renders "Min Length" text field', async () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -191,7 +178,7 @@ describe('TextInputInspector', () => {
       await validateDynamicInputField(result, 'Validation', {
         field: 'minLength',
         label: 'Min Length',
-        value: mockData.textInput?.minLength,
+        value: mockData.minLength,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.textInput.minLength },
       });
@@ -200,7 +187,6 @@ describe('TextInputInspector', () => {
     it('maxLength: renders "Max Length" text field', async () => {
       const result = render(
         <TextInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -209,7 +195,7 @@ describe('TextInputInspector', () => {
       await validateDynamicInputField(result, 'Validation', {
         field: 'maxLength',
         label: 'Max Length',
-        value: mockData.textInput?.maxLength,
+        value: mockData.maxLength,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.textInput.maxLength },
       });

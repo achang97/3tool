@@ -1,19 +1,14 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { BaseComponentInspectorProps } from '@app/types';
+import { BaseComponentInspectorProps, ComponentType } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 
 const DATA_TYPES = COMPONENT_DATA_TYPES.button;
 
 export const ButtonInspector = ({
-  name,
   data,
   onUpdateData,
-}: BaseComponentInspectorProps) => {
-  const buttonData = useMemo(() => {
-    return data.button;
-  }, [data]);
-
+}: BaseComponentInspectorProps<ComponentType.Button>) => {
   const config: BaseInspectorSectionProps[] = useMemo(() => {
     return [
       {
@@ -22,7 +17,7 @@ export const ButtonInspector = ({
           {
             field: 'text',
             label: 'Text',
-            value: buttonData?.text,
+            value: data?.text,
             data: {
               text: {
                 type: DATA_TYPES.text,
@@ -37,7 +32,7 @@ export const ButtonInspector = ({
           {
             field: 'disabled',
             label: 'Disabled',
-            value: buttonData?.disabled,
+            value: data?.disabled,
             data: {
               text: {
                 type: DATA_TYPES.disabled,
@@ -47,7 +42,7 @@ export const ButtonInspector = ({
           {
             field: 'loading',
             label: 'Loading',
-            value: buttonData?.loading,
+            value: data?.loading,
             data: {
               text: {
                 type: DATA_TYPES.loading,
@@ -57,11 +52,10 @@ export const ButtonInspector = ({
         ],
       },
     ];
-  }, [buttonData]);
+  }, [data]);
 
   return (
     <BaseInspector
-      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="button-inspector"

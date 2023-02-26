@@ -1,10 +1,10 @@
 import { CodeMirror } from '@app/components/editor/common/CodeMirror';
-import { BaseActionEditorProps } from '@app/types';
+import { TransformableData } from '@app/types';
 import { useCallback } from 'react';
 
 type TransformerProps = {
   value?: string;
-  onUpdateData: BaseActionEditorProps['onUpdateData'];
+  onUpdateData: (update: RecursivePartial<TransformableData>) => void;
 };
 
 export const Transformer = ({ value, onUpdateData }: TransformerProps) => {

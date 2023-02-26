@@ -121,17 +121,6 @@ describe('ComponentInspector', () => {
           eventHandlers: [],
         } as unknown as Component;
 
-        (useActiveTool as jest.Mock).mockImplementation(() => ({
-          tool: {
-            components: [mockActiveComponent],
-            actions: [],
-          },
-          updateTool: mockUpdateTool,
-          evalDataMap: {},
-          evalDataValuesMap: {},
-          dataDepGraph: new DepGraph<string>(),
-        }));
-
         const result = render(
           <ComponentInspector component={mockActiveComponent} />
         );
@@ -139,6 +128,40 @@ describe('ComponentInspector', () => {
         expect(result.getByTestId(inspectorId)).toBeTruthy();
       }
     );
+
+    it('rerenders on name change', () => {
+      const mockActiveComponent = {
+        name: 'Name',
+        type: ComponentType.Button,
+        data: {
+          button: {
+            text: 'hello',
+          },
+        },
+        eventHandlers: [],
+      } as unknown as Component;
+
+      const result = render(
+        <ComponentInspector component={mockActiveComponent} />
+      );
+      expect(result.getByText('hello')).toBeTruthy();
+
+      const mockNewActiveComponent = {
+        name: 'New Name',
+        type: ComponentType.Button,
+        data: {
+          button: {
+            text: 'hello new!',
+          },
+        },
+        eventHandlers: [],
+      } as unknown as Component;
+
+      result.rerender(
+        <ComponentInspector component={mockNewActiveComponent} />
+      );
+      expect(result.getByText('hello new!')).toBeTruthy();
+    });
   });
 
   it('calls API to update components with debounce of 300 ms', async () => {

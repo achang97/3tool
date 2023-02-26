@@ -7,13 +7,10 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { ButtonInspector } from '../ButtonInspector';
 
-const mockName = 'Name';
-const mockData: Component['data'] = {
-  button: {
-    text: 'text',
-    disabled: 'disabled',
-    loading: 'loading',
-  },
+const mockData: Component['data']['button'] = {
+  text: 'text',
+  disabled: 'disabled',
+  loading: 'loading',
 };
 
 const mockHandleUpdateData = jest.fn();
@@ -37,28 +34,20 @@ describe('ButtonInspector', () => {
   describe('Basic', () => {
     it('renders "Basic" title', () => {
       const result = render(
-        <ButtonInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <ButtonInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
       validateSection(result, 'Basic');
     });
 
     it('text: renders "Text" text field', async () => {
       const result = render(
-        <ButtonInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <ButtonInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
 
       await validateDynamicInputField(result, 'Basic', {
         field: 'text',
         label: 'Text',
-        value: mockData.button?.text,
+        value: mockData.text,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.button.text },
       });
@@ -68,28 +57,20 @@ describe('ButtonInspector', () => {
   describe('Interaction', () => {
     it('renders "Interaction" title', () => {
       const result = render(
-        <ButtonInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <ButtonInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
       validateSection(result, 'Interaction');
     });
 
     it('disabled: renders "Disabled" text field', async () => {
       const result = render(
-        <ButtonInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <ButtonInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
 
       await validateDynamicInputField(result, 'Interaction', {
         field: 'disabled',
         label: 'Disabled',
-        value: mockData.button?.disabled,
+        value: mockData.disabled,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.button.disabled },
       });
@@ -97,17 +78,13 @@ describe('ButtonInspector', () => {
 
     it('loading: renders "Loading" text field', async () => {
       const result = render(
-        <ButtonInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <ButtonInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
 
       await validateDynamicInputField(result, 'Interaction', {
         field: 'loading',
         label: 'Loading',
-        value: mockData.button?.loading,
+        value: mockData.loading,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.button.loading },
       });

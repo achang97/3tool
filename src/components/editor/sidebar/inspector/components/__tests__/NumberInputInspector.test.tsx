@@ -7,17 +7,14 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { NumberInputInspector } from '../NumberInputInspector';
 
-const mockName = 'Name';
-const mockData: Component['data'] = {
-  numberInput: {
-    defaultValue: 'Default Value',
-    placeholder: 'Placeholder',
-    label: 'Label',
-    disabled: 'disabled',
-    required: 'required',
-    minimum: '1',
-    maximum: '5',
-  },
+const mockData: Component['data']['numberInput'] = {
+  defaultValue: 'Default Value',
+  placeholder: 'Placeholder',
+  label: 'Label',
+  disabled: 'disabled',
+  required: 'required',
+  minimum: '1',
+  maximum: '5',
 };
 
 const mockHandleUpdateData = jest.fn();
@@ -42,7 +39,6 @@ describe('NumberInputInspector', () => {
     it('renders "Basic" title', () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -53,7 +49,6 @@ describe('NumberInputInspector', () => {
     it('defaultValue: renders "Default Value" number field', async () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -62,7 +57,7 @@ describe('NumberInputInspector', () => {
       await validateDynamicInputField(result, 'Basic', {
         field: 'defaultValue',
         label: 'Default Value',
-        value: mockData.numberInput?.defaultValue,
+        value: mockData.defaultValue,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.numberInput.defaultValue },
       });
@@ -71,7 +66,6 @@ describe('NumberInputInspector', () => {
     it('placeholder: renders "Placeholder" number field', async () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -80,7 +74,7 @@ describe('NumberInputInspector', () => {
       await validateDynamicInputField(result, 'Basic', {
         field: 'placeholder',
         label: 'Placeholder',
-        value: mockData.numberInput?.placeholder,
+        value: mockData.placeholder,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.numberInput.placeholder },
       });
@@ -91,7 +85,6 @@ describe('NumberInputInspector', () => {
     it('renders "Label" title', () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -102,7 +95,6 @@ describe('NumberInputInspector', () => {
     it('label: renders "Label" number field', async () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -111,7 +103,7 @@ describe('NumberInputInspector', () => {
       await validateDynamicInputField(result, 'Label', {
         field: 'label',
         label: 'Label',
-        value: mockData.numberInput?.label,
+        value: mockData.label,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.numberInput.label },
       });
@@ -122,7 +114,6 @@ describe('NumberInputInspector', () => {
     it('renders "Interaction" title', () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -133,7 +124,6 @@ describe('NumberInputInspector', () => {
     it('disabled: renders "Disabled" number field', async () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -142,7 +132,7 @@ describe('NumberInputInspector', () => {
       await validateDynamicInputField(result, 'Interaction', {
         field: 'disabled',
         label: 'Disabled',
-        value: mockData.numberInput?.disabled,
+        value: mockData.disabled,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.numberInput.disabled },
       });
@@ -153,7 +143,6 @@ describe('NumberInputInspector', () => {
     it('renders "Validation" title', () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -164,7 +153,6 @@ describe('NumberInputInspector', () => {
     it('required: renders "Required" number field', async () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -173,7 +161,7 @@ describe('NumberInputInspector', () => {
       await validateDynamicInputField(result, 'Validation', {
         field: 'required',
         label: 'Required',
-        value: mockData.numberInput?.required,
+        value: mockData.required,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.numberInput.required },
       });
@@ -182,7 +170,6 @@ describe('NumberInputInspector', () => {
     it('minimum: renders "Minimum" number field', async () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -191,7 +178,7 @@ describe('NumberInputInspector', () => {
       await validateDynamicInputField(result, 'Validation', {
         field: 'minimum',
         label: 'Minimum',
-        value: mockData.numberInput?.minimum,
+        value: mockData.minimum,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.numberInput.minimum },
       });
@@ -200,7 +187,6 @@ describe('NumberInputInspector', () => {
     it('maximum: renders "Maximum" number field', async () => {
       const result = render(
         <NumberInputInspector
-          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -209,7 +195,7 @@ describe('NumberInputInspector', () => {
       await validateDynamicInputField(result, 'Validation', {
         field: 'maximum',
         label: 'Maximum',
-        value: mockData.numberInput?.maximum,
+        value: mockData.maximum,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.numberInput.maximum },
       });

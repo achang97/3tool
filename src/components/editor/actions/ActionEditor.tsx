@@ -1,9 +1,9 @@
 import { updateFocusedAction } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
-import { Action, ActionType, BaseActionEditorProps } from '@app/types';
+import { Action, ActionType } from '@app/types';
 import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Tab, Tabs } from '@mui/material';
-import { useMemo, FC, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { SaveRunButton } from './editor/common/SaveRunButton';
 import { JavascriptEditor } from './editor/general/JavascriptEditor';
 import { SmartContractEditor } from './editor/general/SmartContractEditor';
@@ -17,12 +17,6 @@ enum ActionTabType {
   General = 'general',
   ResponseHandler = 'responseHandler',
 }
-
-const ACTION_EDITOR_MAP: Record<ActionType, FC<BaseActionEditorProps>> = {
-  [ActionType.Javascript]: JavascriptEditor,
-  [ActionType.SmartContractRead]: SmartContractEditor,
-  [ActionType.SmartContractWrite]: SmartContractEditor,
-};
 
 export const ActionEditor = ({ action }: ActionEditorProps) => {
   const dispatch = useAppDispatch();
@@ -45,17 +39,24 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
   );
 
   const typedEditor = useMemo(() => {
-    const TypedEditor = ACTION_EDITOR_MAP[action.type];
-
-    return (
-      <TypedEditor
-        key={action.name}
-        type={action.type}
-        data={action.data}
-        onUpdateData={handleUpdateData}
-      />
-    );
-  }, [action.data, action.name, action.type, handleUpdateData]);
+    switch (action.type) {
+      case ActionType.Javascript: {
+        return (
+          <JavascriptEditor
+            data={action.data.javascript}
+            onUpdateData={handleUpdateData}
+          />
+        );
+      }
+      // NOTE: We use a switch / case here instead of the map pattern in ComponentInspector.tsx
+      // due to the SmartContractEditor needing to support 2 unique types and data objects.
+      case ActionType.SmartContractRead:
+      case ActionType.SmartContractWrite:
+        return <SmartContractEditor />;
+      default:
+        return null;
+    }
+  }, [action.data, action.type, handleUpdateData]);
 
   const tabs = useMemo(
     () => [

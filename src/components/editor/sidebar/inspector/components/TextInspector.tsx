@@ -1,19 +1,14 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { BaseComponentInspectorProps } from '@app/types';
+import { BaseComponentInspectorProps, ComponentType } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 
 const DATA_TYPES = COMPONENT_DATA_TYPES.text;
 
 export const TextInspector = ({
-  name,
   data,
   onUpdateData,
-}: BaseComponentInspectorProps) => {
-  const textData = useMemo(() => {
-    return data.text;
-  }, [data]);
-
+}: BaseComponentInspectorProps<ComponentType.Text>) => {
   const config: BaseInspectorSectionProps[] = useMemo(() => {
     return [
       {
@@ -22,7 +17,7 @@ export const TextInspector = ({
           {
             field: 'value',
             label: 'Value',
-            value: textData?.value,
+            value: data?.value,
             data: {
               text: {
                 type: DATA_TYPES.value,
@@ -37,7 +32,7 @@ export const TextInspector = ({
           {
             field: 'horizontalAlignment',
             label: 'Horizontal Alignment',
-            value: textData?.horizontalAlignment,
+            value: data?.horizontalAlignment,
             data: {
               enum: {
                 options: [
@@ -60,11 +55,10 @@ export const TextInspector = ({
         ],
       },
     ];
-  }, [textData]);
+  }, [data]);
 
   return (
     <BaseInspector
-      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="text-inspector"

@@ -7,15 +7,12 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { TableInspector } from '../TableInspector';
 
-const mockName = 'Name';
-const mockData: Component['data'] = {
-  table: {
-    data: '[1]',
-    emptyMessage: 'Empty Message',
-    multiselect: 'multiselect',
-    columnHeaderNames: {},
-    columnHeadersByIndex: [],
-  },
+const mockData: Component['data']['table'] = {
+  data: '[1]',
+  emptyMessage: 'Empty Message',
+  multiselect: 'multiselect',
+  columnHeaderNames: {},
+  columnHeadersByIndex: [],
 };
 
 const mockHandleUpdateData = jest.fn();
@@ -39,28 +36,20 @@ describe('TableInspector', () => {
   describe('Data', () => {
     it('renders "Data" title', () => {
       const result = render(
-        <TableInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
       validateSection(result, 'Data');
     });
 
     it('data: renders "Data" text field', async () => {
       const result = render(
-        <TableInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
 
       await validateDynamicInputField(result, 'Data', {
         field: 'data',
         label: 'Data',
-        value: mockData.table?.data,
+        value: mockData.data,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.table.data },
       });
@@ -68,17 +57,13 @@ describe('TableInspector', () => {
 
     it('emptyMessage: renders "Empty message" text field', async () => {
       const result = render(
-        <TableInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
 
       await validateDynamicInputField(result, 'Data', {
         field: 'emptyMessage',
         label: 'Empty message',
-        value: mockData.table?.emptyMessage,
+        value: mockData.emptyMessage,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.table.emptyMessage },
       });
@@ -88,28 +73,20 @@ describe('TableInspector', () => {
   describe('Row selection', () => {
     it('renders "Row selection" title', () => {
       const result = render(
-        <TableInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
       validateSection(result, 'Row selection');
     });
 
     it('multiselect: renders "Enable multi-row selection" text field', async () => {
       const result = render(
-        <TableInspector
-          name={mockName}
-          data={mockData}
-          onUpdateData={mockHandleUpdateData}
-        />
+        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
       );
 
       await validateDynamicInputField(result, 'Row selection', {
         field: 'multiselect',
         label: 'Enable multi-row selection',
-        value: mockData.table?.multiselect,
+        value: mockData.multiselect,
         onChange: mockHandleUpdateData,
         config: { type: COMPONENT_DATA_TYPES.table.multiselect },
       });

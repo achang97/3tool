@@ -1,19 +1,14 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { BaseComponentInspectorProps } from '@app/types';
+import { BaseComponentInspectorProps, ComponentType } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 
 const DATA_TYPES = COMPONENT_DATA_TYPES.textInput;
 
 export const TextInputInspector = ({
-  name,
   data,
   onUpdateData,
-}: BaseComponentInspectorProps) => {
-  const textInputData = useMemo(() => {
-    return data.textInput;
-  }, [data]);
-
+}: BaseComponentInspectorProps<ComponentType.TextInput>) => {
   const config: BaseInspectorSectionProps[] = useMemo(() => {
     return [
       {
@@ -22,7 +17,7 @@ export const TextInputInspector = ({
           {
             field: 'defaultValue',
             label: 'Default Value',
-            value: textInputData?.defaultValue,
+            value: data?.defaultValue,
             data: {
               text: {
                 type: DATA_TYPES.defaultValue,
@@ -32,7 +27,7 @@ export const TextInputInspector = ({
           {
             field: 'placeholder',
             label: 'Placeholder',
-            value: textInputData?.placeholder,
+            value: data?.placeholder,
             data: {
               text: {
                 type: DATA_TYPES.placeholder,
@@ -47,7 +42,7 @@ export const TextInputInspector = ({
           {
             field: 'label',
             label: 'Label',
-            value: textInputData?.label,
+            value: data?.label,
             data: {
               text: {
                 type: DATA_TYPES.label,
@@ -62,7 +57,7 @@ export const TextInputInspector = ({
           {
             field: 'disabled',
             label: 'Disabled',
-            value: textInputData?.disabled,
+            value: data?.disabled,
             data: {
               text: {
                 type: DATA_TYPES.disabled,
@@ -77,7 +72,7 @@ export const TextInputInspector = ({
           {
             field: 'required',
             label: 'Required',
-            value: textInputData?.required,
+            value: data?.required,
             data: {
               text: {
                 type: DATA_TYPES.required,
@@ -87,7 +82,7 @@ export const TextInputInspector = ({
           {
             field: 'minLength',
             label: 'Min Length',
-            value: textInputData?.minLength,
+            value: data?.minLength,
             data: {
               text: {
                 type: DATA_TYPES.minLength,
@@ -97,7 +92,7 @@ export const TextInputInspector = ({
           {
             field: 'maxLength',
             label: 'Max Length',
-            value: textInputData?.maxLength,
+            value: data?.maxLength,
             data: {
               text: {
                 type: DATA_TYPES.maxLength,
@@ -107,11 +102,10 @@ export const TextInputInspector = ({
         ],
       },
     ];
-  }, [textInputData]);
+  }, [data]);
 
   return (
     <BaseInspector
-      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="text-input-inspector"

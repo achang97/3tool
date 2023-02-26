@@ -60,9 +60,6 @@ export const CanvasComponent = forwardRef(
 
     const typedComponent = useMemo(() => {
       const TypedComponent = CANVAS_COMPONENT_MAP[component.type];
-      if (!TypedComponent) {
-        return null;
-      }
       return <TypedComponent name={component.name} />;
     }, [component.name, component.type]);
 

@@ -1,17 +1,13 @@
 import { CodeMirror } from '@app/components/editor/common/CodeMirror';
-import { BaseActionEditorProps } from '@app/types';
+import { ActionType, BaseActionEditorProps } from '@app/types';
 import { Box } from '@mui/material';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { Transformer } from './Transformer';
 
 export const JavascriptEditor = ({
   data,
   onUpdateData,
-}: BaseActionEditorProps) => {
-  const javascriptData = useMemo(() => {
-    return data.javascript;
-  }, [data.javascript]);
-
+}: BaseActionEditorProps<ActionType.Javascript>) => {
   const handleCodeChange = useCallback(
     (code: string) => {
       onUpdateData({ code });
@@ -26,15 +22,12 @@ export const JavascriptEditor = ({
     >
       <CodeMirror
         label="JS Code (JavaScript)"
-        value={javascriptData?.code}
+        value={data?.code}
         onChange={handleCodeChange}
         language="javascript"
         showLineNumbers
       />
-      <Transformer
-        value={javascriptData?.transformer}
-        onUpdateData={onUpdateData}
-      />
+      <Transformer value={data?.transformer} onUpdateData={onUpdateData} />
     </Box>
   );
 };
