@@ -1,15 +1,15 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { BaseComponentInspectorProps, ComponentType } from '@app/types';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { BaseComponentInspectorProps } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
+
+const DATA_TYPES = COMPONENT_DATA_TYPES.numberInput;
 
 export const NumberInputInspector = ({
   name,
   data,
-  onUpdate,
+  onUpdateData,
 }: BaseComponentInspectorProps) => {
-  const { evalData } = useComponentEvalData<ComponentType.NumberInput>(name);
-
   const numberInputData = useMemo(() => {
     return data.numberInput;
   }, [data]);
@@ -25,7 +25,7 @@ export const NumberInputInspector = ({
             value: numberInputData?.defaultValue,
             data: {
               text: {
-                evalResult: evalData.defaultValue,
+                type: DATA_TYPES.defaultValue,
               },
             },
           },
@@ -35,7 +35,7 @@ export const NumberInputInspector = ({
             value: numberInputData?.placeholder,
             data: {
               text: {
-                evalResult: evalData.placeholder,
+                type: DATA_TYPES.placeholder,
               },
             },
           },
@@ -50,7 +50,7 @@ export const NumberInputInspector = ({
             value: numberInputData?.label,
             data: {
               text: {
-                evalResult: evalData.label,
+                type: DATA_TYPES.label,
               },
             },
           },
@@ -65,7 +65,7 @@ export const NumberInputInspector = ({
             value: numberInputData?.disabled,
             data: {
               text: {
-                evalResult: evalData.disabled,
+                type: DATA_TYPES.disabled,
               },
             },
           },
@@ -80,7 +80,7 @@ export const NumberInputInspector = ({
             value: numberInputData?.required,
             data: {
               text: {
-                evalResult: evalData.required,
+                type: DATA_TYPES.required,
               },
             },
           },
@@ -90,7 +90,7 @@ export const NumberInputInspector = ({
             value: numberInputData?.minimum,
             data: {
               text: {
-                evalResult: evalData.minimum,
+                type: DATA_TYPES.minimum,
               },
             },
           },
@@ -100,21 +100,20 @@ export const NumberInputInspector = ({
             value: numberInputData?.maximum,
             data: {
               text: {
-                evalResult: evalData.maximum,
+                type: DATA_TYPES.maximum,
               },
             },
           },
         ],
       },
     ];
-  }, [evalData, numberInputData]);
+  }, [numberInputData]);
 
   return (
     <BaseInspector
-      type={ComponentType.NumberInput}
       name={name}
       config={config}
-      onUpdate={onUpdate}
+      onUpdateData={onUpdateData}
       testId="number-input-inspector"
     />
   );

@@ -24,6 +24,7 @@ describe('EditableTextField', () => {
   const textId = 'editable-text-field-view';
   const inputId = 'editable-text-field-edit';
   const editIconId = 'editable-text-field-edit-icon';
+  const disabledIconId = 'editable-text-field-disabled-icon';
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -60,22 +61,41 @@ describe('EditableTextField', () => {
 
   describe('edit icon', () => {
     it('shows edit icon if editable and hovering', async () => {
-      const result = render(<EditableTextField value={mockValue} />);
+      const result = render(<EditableTextField value={mockValue} showIcon />);
       await userEvent.hover(result.getByTestId(textId));
       expect(result.getByTestId(editIconId)).toBeVisible();
     });
 
-    it('does not show edit icon if not editable and hovering', async () => {
+    it('shows disabled icon if not editable and hovering', async () => {
       const result = render(
-        <EditableTextField value={mockValue} isEditable={false} />
+        <EditableTextField value={mockValue} isEditable={false} showIcon />
       );
+      await userEvent.hover(result.getByTestId(textId));
+      expect(result.getByTestId(disabledIconId)).toBeVisible();
+    });
+
+    it('does not show edit icon if not hovering', async () => {
+      const result = render(<EditableTextField value={mockValue} showIcon />);
+      expect(result.getByTestId(editIconId)).not.toBeVisible();
+    });
+
+    it('does not show edit icon if showIcon is false', async () => {
+      const result = render(<EditableTextField value={mockValue} />);
       await userEvent.hover(result.getByTestId(textId));
       expect(result.getByTestId(editIconId)).not.toBeVisible();
     });
 
-    it('does not show edit icon if not hovering', async () => {
-      const result = render(<EditableTextField value={mockValue} />);
-      expect(result.getByTestId(editIconId)).not.toBeVisible();
+    it('shows tooltip if hovering over edit icon', async () => {
+      const mockTooltip = 'This is a test tooltip';
+      const result = render(
+        <EditableTextField
+          value={mockValue}
+          iconTooltip={mockTooltip}
+          showIcon
+        />
+      );
+      await userEvent.hover(result.getByTestId(editIconId));
+      expect(await result.findByText(mockTooltip)).toBeVisible();
     });
   });
 

@@ -24,7 +24,7 @@ export const CreateResourceButton = () => {
         Add new resource
       </Button>
       <CreateResourceDialog
-        open={isCreateDialogOpen}
+        isOpen={isCreateDialogOpen}
         onClose={handleCreateDialogClose}
       />
     </>

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { ComponentType, SidebarViewType } from '@app/types';
+import { Action, ActionType, ComponentType, SidebarViewType } from '@app/types';
 import { waitFor, act } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
 import {
@@ -10,11 +10,10 @@ import {
   focusComponent,
   blurComponent,
   focusToolSettings,
-  setSnackbarMessage,
   setSidebarView,
-  SnackbarMessage,
   focusAction,
   blurAction,
+  updateFocusedAction,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -164,57 +163,69 @@ describe('editorSlice', () => {
     });
 
     describe('actions', () => {
-      it('focusAction: sets focused action name', async () => {
-        const mockActionName = 'action';
+      it('focusAction: sets focused action', async () => {
+        const mockAction = {
+          name: 'action1',
+          type: ActionType.Javascript,
+        } as Action;
         const { result, dispatch } = renderHooks();
 
         act(() => {
-          dispatch(focusAction(mockActionName));
+          dispatch(focusAction(mockAction));
         });
         await waitFor(() => {
-          expect(result.current.focusedActionName).toEqual(mockActionName);
+          expect(result.current.focusedAction).toEqual(mockAction);
         });
       });
 
-      it('blurAction: sets focused action name to undefined', async () => {
+      it('blurAction: sets focused action to undefined', async () => {
         const { result, dispatch } = renderHooks();
 
         act(() => {
-          dispatch(focusAction('action'));
+          dispatch(
+            focusAction({
+              name: 'action1',
+              type: ActionType.Javascript,
+            } as Action)
+          );
         });
         await waitFor(() => {
-          expect(result.current.focusedActionName).not.toBeUndefined();
+          expect(result.current.focusedAction).not.toBeUndefined();
         });
 
         act(() => {
           dispatch(blurAction());
         });
         await waitFor(() => {
-          expect(result.current.focusedActionName).toBeUndefined();
+          expect(result.current.focusedAction).toBeUndefined();
         });
       });
-    });
 
-    describe('alerts', () => {
-      it('setSnackbarMessage: sets snackbar message object to given value', async () => {
+      it('updateFocusedAction: updates focused action by merging payload', async () => {
         const { result, dispatch } = renderHooks();
 
-        const snackbarMessage: SnackbarMessage = {
-          type: 'success',
-          message: 'Hello',
-        };
-        act(() => {
-          dispatch(setSnackbarMessage(snackbarMessage));
-        });
-        await waitFor(() => {
-          expect(result.current.snackbarMessage).toEqual(snackbarMessage);
-        });
+        const mockAction = {
+          name: 'action1',
+          type: ActionType.Javascript,
+          data: {},
+        } as Action;
 
         act(() => {
-          dispatch(setSnackbarMessage(undefined));
+          dispatch(focusAction(mockAction));
+        });
+        act(() => {
+          dispatch(
+            updateFocusedAction({ data: { javascript: { code: 'code' } } })
+          );
         });
         await waitFor(() => {
-          expect(result.current.snackbarMessage).toBeUndefined();
+          expect(result.current.focusedAction).toEqual({
+            name: 'action1',
+            type: ActionType.Javascript,
+            data: {
+              javascript: { code: 'code' },
+            },
+          });
         });
       });
     });

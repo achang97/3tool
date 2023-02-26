@@ -26,7 +26,7 @@ describe('BaseResourceDialog', () => {
         title={mockTitle}
         onClose={mockHandleClose}
         onSubmit={mockHandleSubmit}
-        open={false}
+        isOpen={false}
         testId={mockTestId}
       />
     );
@@ -39,7 +39,7 @@ describe('BaseResourceDialog', () => {
         title={mockTitle}
         onClose={mockHandleClose}
         onSubmit={mockHandleSubmit}
-        open
+        isOpen
         testId={mockTestId}
       />
     );
@@ -54,7 +54,7 @@ describe('BaseResourceDialog', () => {
         title={mockTitle}
         onClose={mockHandleClose}
         onSubmit={mockHandleSubmit}
-        open
+        isOpen
         testId={mockTestId}
       />
     );
@@ -74,7 +74,7 @@ describe('BaseResourceDialog', () => {
         title={mockTitle}
         onClose={mockHandleClose}
         onSubmit={mockHandleSubmit}
-        open
+        isOpen
         error={mockError}
         testId={mockTestId}
       />
@@ -91,7 +91,7 @@ describe('BaseResourceDialog', () => {
         title={mockTitle}
         onClose={mockHandleClose}
         onSubmit={mockHandleSubmit}
-        open
+        isOpen
         testId={mockTestId}
       />
     );

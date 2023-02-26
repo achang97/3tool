@@ -1,6 +1,5 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { ComponentData, ComponentType } from '@app/types';
-import { mockEvalResult } from '@tests/constants/eval';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { Component } from '@app/types';
 import {
   validateDynamicInputField,
   validateSection,
@@ -9,7 +8,7 @@ import { render } from '@tests/utils/renderWithContext';
 import { NumberInputInspector } from '../NumberInputInspector';
 
 const mockName = 'Name';
-const mockData: ComponentData = {
+const mockData: Component['data'] = {
   numberInput: {
     defaultValue: 'Default Value',
     placeholder: 'Placeholder',
@@ -21,16 +20,22 @@ const mockData: ComponentData = {
   },
 };
 
-const mockHandleUpdate = jest.fn();
+const mockHandleUpdateData = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useComponentEvalData');
+jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
+  useCodeMirrorPreview: jest.fn(() => ({})),
+}));
+
+jest.mock(
+  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
+  () => ({
+    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+  })
+);
 
 describe('NumberInputInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-      evalData: {},
-    }));
   });
 
   describe('Basic', () => {
@@ -39,57 +44,45 @@ describe('NumberInputInspector', () => {
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Basic');
     });
 
     it('defaultValue: renders "Default Value" number field', async () => {
-      const mockEvalData = { defaultValue: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Basic', {
-        type: ComponentType.NumberInput,
         field: 'defaultValue',
         label: 'Default Value',
         value: mockData.numberInput?.defaultValue,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.defaultValue,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.numberInput.defaultValue },
       });
     });
 
     it('placeholder: renders "Placeholder" number field', async () => {
-      const mockEvalData = { placeholder: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Basic', {
-        type: ComponentType.NumberInput,
         field: 'placeholder',
         label: 'Placeholder',
         value: mockData.numberInput?.placeholder,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.placeholder,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.numberInput.placeholder },
       });
     });
   });
@@ -100,33 +93,27 @@ describe('NumberInputInspector', () => {
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Label');
     });
 
     it('label: renders "Label" number field', async () => {
-      const mockEvalData = { label: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Label', {
-        type: ComponentType.NumberInput,
         field: 'label',
         label: 'Label',
         value: mockData.numberInput?.label,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.label,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.numberInput.label },
       });
     });
   });
@@ -137,33 +124,27 @@ describe('NumberInputInspector', () => {
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Interaction');
     });
 
     it('disabled: renders "Disabled" number field', async () => {
-      const mockEvalData = { disabled: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Interaction', {
-        type: ComponentType.NumberInput,
         field: 'disabled',
         label: 'Disabled',
         value: mockData.numberInput?.disabled,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.disabled,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.numberInput.disabled },
       });
     });
   });
@@ -174,81 +155,63 @@ describe('NumberInputInspector', () => {
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Validation');
     });
 
     it('required: renders "Required" number field', async () => {
-      const mockEvalData = { required: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Validation', {
-        type: ComponentType.NumberInput,
         field: 'required',
         label: 'Required',
         value: mockData.numberInput?.required,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.required,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.numberInput.required },
       });
     });
 
     it('minimum: renders "Minimum" number field', async () => {
-      const mockEvalData = { minimum: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Validation', {
-        type: ComponentType.NumberInput,
         field: 'minimum',
         label: 'Minimum',
         value: mockData.numberInput?.minimum,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.minimum,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.numberInput.minimum },
       });
     });
 
     it('maximum: renders "Maximum" number field', async () => {
-      const mockEvalData = { maximum: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <NumberInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Validation', {
-        type: ComponentType.NumberInput,
         field: 'maximum',
         label: 'Maximum',
         value: mockData.numberInput?.maximum,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.maximum,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.numberInput.maximum },
       });
     });
   });

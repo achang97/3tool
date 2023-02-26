@@ -1,22 +1,8 @@
-import { GLOBAL_LIBRARIES } from '@app/constants';
-import { ComponentFieldType } from '@app/types';
-import { parseDynamicTerms } from './javascript';
+import { FieldType } from '@app/types';
+import { parseDeclaredVariables, parseDynamicTerms } from './javascript';
 
-const getValidTypes = (
-  type: ComponentFieldType | ComponentFieldType[]
-): ComponentFieldType[] => {
-  return Array.isArray(type) ? type : [type];
-};
-
-export const stringifyByType = (
-  value: unknown,
-  type: ComponentFieldType | ComponentFieldType[]
-): string => {
-  const isArrayOrObject = getValidTypes(type).find(
-    (validType) => validType === 'array' || validType === 'object'
-  );
-
-  if (isArrayOrObject) {
+export const stringifyByType = (value: unknown, type: FieldType): string => {
+  if (type === 'array' || type === 'object') {
     return JSON.stringify(value);
   }
 
@@ -27,20 +13,14 @@ export const stringifyByType = (
   return value.toString();
 };
 
-const evalWithArgs = (
+export const evalWithArgs = (
   expression: string,
-  args: Record<string, unknown>
+  args: Record<string, unknown>,
+  hasReturnValue: boolean
 ): unknown => {
-  const componentArgNames = Object.keys(args);
-  const libraryArgNames = GLOBAL_LIBRARIES.map(({ importName }) => importName);
-  const allArgNames = [...componentArgNames, ...libraryArgNames];
-
-  const libraryArgs = GLOBAL_LIBRARIES.reduce(
-    (currArgs, { importName, library }) => {
-      currArgs[importName] = library;
-      return currArgs;
-    },
-    {} as Record<string, unknown>
+  const redeclaredVariables = parseDeclaredVariables(expression);
+  const argNames = Object.keys(args).filter(
+    (arg) => !redeclaredVariables.includes(arg)
   );
 
   const trimmedExpression = expression.trim();
@@ -51,14 +31,14 @@ const evalWithArgs = (
   try {
     // eslint-disable-next-line @typescript-eslint/no-implied-eval
     const evalFn = new Function(
-      `{ ${allArgNames.join(', ')} }`,
-      `return (${trimmedExpression})`
+      `{ ${argNames.join(', ')} }`,
+      hasReturnValue ? trimmedExpression : `return (${trimmedExpression})`
     );
-    return evalFn({ ...libraryArgs, ...args });
+    return evalFn(args);
   } catch (e) {
     const error = e as Error;
-    if (error.message === "Unexpected token ')'") {
-      throw new Error(`Invalid JS syntax: '${trimmedExpression}'`);
+    if (!hasReturnValue && error.message === "Unexpected token ')'") {
+      throw new Error(`Invalid JavaScript syntax: '${trimmedExpression}'`);
     }
     throw error;
   }
@@ -66,7 +46,7 @@ const evalWithArgs = (
 
 const evalDynamicTerms = (
   expression: string,
-  type: ComponentFieldType | ComponentFieldType[],
+  type: FieldType,
   dynamicArgs: Record<string, unknown>
 ): string => {
   const dynamicTerms = parseDynamicTerms(expression);
@@ -75,7 +55,7 @@ const evalDynamicTerms = (
   const isDynamicExpression =
     dynamicTerms.length === 1 && dynamicTerms[0].group === expression.trim();
   if (isDynamicExpression) {
-    const result = evalWithArgs(dynamicTerms[0].expression, dynamicArgs);
+    const result = evalWithArgs(dynamicTerms[0].expression, dynamicArgs, false);
     return stringifyByType(result, type);
   }
 
@@ -83,13 +63,26 @@ const evalDynamicTerms = (
 
   for (let i = 0; i < dynamicTerms.length; i++) {
     const dynamicTerm = dynamicTerms[i];
-    const groupResult = evalWithArgs(dynamicTerm.expression, dynamicArgs);
+    const groupResult = evalWithArgs(
+      dynamicTerm.expression,
+      dynamicArgs,
+      false
+    );
     const groupResultStr = stringifyByType(groupResult, type);
 
     result = result.replace(dynamicTerm.group, groupResultStr);
   }
 
   return result;
+};
+
+const getValue = (expression: string): unknown => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval
+    return new Function(`return ${expression}`)();
+  } catch {
+    return expression;
+  }
 };
 
 const getValueType = (value: unknown) => {
@@ -104,63 +97,51 @@ const getValueType = (value: unknown) => {
   return typeof value;
 };
 
-const evalAsType = (
-  expression: string,
-  type: ComponentFieldType | ComponentFieldType[]
-): unknown => {
-  const validTypes = getValidTypes(type);
-
-  let value: unknown = expression;
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval
-    value = new Function(`return ${value}`)();
-  } catch (e) {
-    // Do nothing
-  }
-
+// TODO: We should probably avoid evaluating by default, as this results in output
+// being logged to the console for expressions like "console.log(1)".
+const evalAsType = (expression: string, type: FieldType): unknown => {
+  const value = getValue(expression);
   const valueType = getValueType(value);
 
   // Any
-  if (validTypes.includes('any')) {
+  if (type === 'any') {
     return value;
   }
 
   // Number
   if (
-    validTypes.includes('number') &&
+    type === 'number' &&
     ['number', 'null', 'undefined'].includes(valueType)
   ) {
     return value;
   }
 
   // Array
-  if (validTypes.includes('array') && valueType === 'array') {
+  if (type === 'array' && valueType === 'array') {
     return value;
   }
 
   // Object
-  if (validTypes.includes('object') && valueType === 'object') {
+  if (type === 'object' && valueType === 'object') {
     return value;
   }
 
   // Boolean
-  if (validTypes.includes('boolean')) {
+  if (type === 'boolean') {
     return Boolean(value);
   }
 
   // String
-  if (validTypes.includes('string')) {
+  if (type === 'string') {
     return expression;
   }
 
-  if (validTypes.includes('nested')) {
+  if (type === 'nested') {
     throw new Error('Unable to evaluate nested value');
   }
 
   throw new Error(
-    `Expected value of type '${validTypes.join(
-      ' | '
-    )}', received value of type '${valueType}'`
+    `Expected value of type '${type}', received value of type '${valueType}'`
   );
 };
 
@@ -170,16 +151,13 @@ export type EvalResult<ValueType = unknown> = {
   error?: Error;
 };
 
-export const evalExpression = (
+export const evalDynamicExpression = (
   expression: string,
-  type: ComponentFieldType | ComponentFieldType[],
-  dynamicArgs?: Record<string, unknown>
+  type: FieldType,
+  dynamicArgs: Record<string, unknown>
 ): EvalResult => {
   try {
-    const parsedExpression = dynamicArgs
-      ? evalDynamicTerms(expression, type, dynamicArgs)
-      : expression;
-
+    const parsedExpression = evalDynamicTerms(expression, type, dynamicArgs);
     return {
       parsedExpression,
       value: evalAsType(parsedExpression, type),

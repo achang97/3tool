@@ -8,7 +8,7 @@ import {
   endCreateComponentDrag,
 } from '@app/redux/features/editorSlice';
 import { useActiveTool } from '../../hooks/useActiveTool';
-import { createNameWithPrefix } from '../../utils/names';
+import { createNameWithPrefix } from '../../utils/elements';
 
 type DraggableComponentProps = {
   type: ComponentType;

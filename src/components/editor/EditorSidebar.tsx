@@ -34,7 +34,15 @@ export const EditorSidebar = () => {
   );
 
   return (
-    <Box sx={{ width: WIDTH, display: 'flex', flexDirection: 'column' }}>
+    <Box
+      sx={{
+        width: WIDTH,
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        minHeight: 0,
+      }}
+    >
       <Box
         sx={{
           borderBottom: 1,

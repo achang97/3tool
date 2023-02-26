@@ -25,7 +25,7 @@ export const CreateToolThumbnail = () => {
           New tool
         </Button>
       </ThumbnailContainer>
-      <CreateToolDialog open={isDialogOpen} onClose={handleDialogClose} />
+      <CreateToolDialog isOpen={isDialogOpen} onClose={handleDialogClose} />
     </>
   );
 };

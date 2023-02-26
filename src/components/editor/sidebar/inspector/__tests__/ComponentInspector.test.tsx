@@ -11,11 +11,13 @@ const mockComponents = [
     name: 'button1',
     type: ComponentType.Button,
     data: {},
+    eventHandlers: [],
   },
   {
     name: 'button2',
     type: ComponentType.Button,
     data: {},
+    eventHandlers: [],
   },
 ] as unknown as Component[];
 const mockComponent = mockComponents[0];
@@ -27,12 +29,12 @@ const mockDispatch = jest.fn();
 
 jest.mock('../../../hooks/useActiveTool');
 
-jest.mock('../../../hooks/useUpdateComponentName', () => ({
-  useUpdateComponentName: jest.fn(() => mockUpdateComponentName),
+jest.mock('../../../hooks/useComponentUpdateName', () => ({
+  useComponentUpdateName: jest.fn(() => mockUpdateComponentName),
 }));
 
-jest.mock('../../../hooks/useDeleteComponent', () => ({
-  useDeleteComponent: jest.fn(() => mockDeleteComponent),
+jest.mock('../../../hooks/useComponentDelete', () => ({
+  useComponentDelete: jest.fn(() => mockDeleteComponent),
 }));
 
 jest.mock('@app/redux/hooks', () => ({
@@ -49,11 +51,12 @@ describe('ComponentInspector', () => {
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: {
         components: mockComponents,
+        actions: [],
       },
       updateTool: mockUpdateTool,
-      componentEvalDataMap: {},
-      componentEvalDataValuesMap: {},
-      componentDataDepGraph: new DepGraph<string>(),
+      evalDataMap: {},
+      evalDataValuesMap: {},
+      dataDepGraph: new DepGraph<string>(),
     }));
   });
 
@@ -115,16 +118,18 @@ describe('ComponentInspector', () => {
           data: {
             [type]: {},
           },
-        } as Component;
+          eventHandlers: [],
+        } as unknown as Component;
 
         (useActiveTool as jest.Mock).mockImplementation(() => ({
           tool: {
             components: [mockActiveComponent],
+            actions: [],
           },
           updateTool: mockUpdateTool,
-          componentEvalDataMap: {},
-          componentEvalDataValuesMap: {},
-          componentDataDepGraph: new DepGraph<string>(),
+          evalDataMap: {},
+          evalDataValuesMap: {},
+          dataDepGraph: new DepGraph<string>(),
         }));
 
         const result = render(
@@ -143,25 +148,27 @@ describe('ComponentInspector', () => {
       data: {
         button: COMPONENT_DATA_TEMPLATES.button,
       },
-    } as Component;
+      eventHandlers: [],
+    } as unknown as Component;
 
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: {
         components: [mockActiveComponent],
+        actions: [],
       },
       updateTool: mockUpdateTool,
-      componentEvalDataMap: {},
-      componentEvalDataValuesMap: {},
-      componentDataDepGraph: new DepGraph<string>(),
+      evalDataMap: {},
+      evalDataValuesMap: {},
+      dataDepGraph: new DepGraph<string>(),
     }));
 
     const result = render(
       <ComponentInspector component={mockActiveComponent} />
     );
 
-    const textInput = within(
-      result.getByTestId('dynamic-text-field-Text')
-    ).getByRole('textbox');
+    const textInput = within(result.getByTestId('code-mirror-Text')).getByRole(
+      'textbox'
+    );
     const newInputValue = 'h';
     await userEvent.type(textInput, newInputValue);
 

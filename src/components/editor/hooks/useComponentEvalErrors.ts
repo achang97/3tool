@@ -1,9 +1,9 @@
 import { Component } from '@app/types';
 import _ from 'lodash';
 import { useMemo } from 'react';
-import { getComponentData } from '../utils/components';
-import { flattenObjectFields } from '../utils/javascript';
+import { EvalResult } from '../utils/eval';
 import { useComponentEvalData } from './useComponentEvalData';
+import { useElementFlattenFields } from './useElementFlattenFields';
 
 export type ComponentEvalError = {
   name: string;
@@ -14,12 +14,16 @@ export const useComponentEvalErrors = (
   component: Component
 ): ComponentEvalError[] => {
   const { evalData } = useComponentEvalData(component.name);
+  const flattenElement = useElementFlattenFields({
+    includePrefix: false,
+    onlyLeaves: true,
+  });
 
   const evalErrors = useMemo(() => {
     const errors: ComponentEvalError[] = [];
 
-    flattenObjectFields(getComponentData(component)).forEach((field) => {
-      const fieldEvalData = _.get(evalData, field.name);
+    flattenElement(component).fields.forEach((field) => {
+      const fieldEvalData: EvalResult = _.get(evalData, field.name);
       if (!fieldEvalData || !(fieldEvalData.error instanceof Error)) {
         return;
       }
@@ -31,7 +35,7 @@ export const useComponentEvalErrors = (
     });
 
     return errors;
-  }, [component, evalData]);
+  }, [component, evalData, flattenElement]);
 
   return evalErrors;
 };

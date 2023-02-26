@@ -1,15 +1,15 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { BaseComponentInspectorProps, ComponentType } from '@app/types';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { BaseComponentInspectorProps } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
+
+const DATA_TYPES = COMPONENT_DATA_TYPES.textInput;
 
 export const TextInputInspector = ({
   name,
   data,
-  onUpdate,
+  onUpdateData,
 }: BaseComponentInspectorProps) => {
-  const { evalData } = useComponentEvalData<ComponentType.TextInput>(name);
-
   const textInputData = useMemo(() => {
     return data.textInput;
   }, [data]);
@@ -25,7 +25,7 @@ export const TextInputInspector = ({
             value: textInputData?.defaultValue,
             data: {
               text: {
-                evalResult: evalData.defaultValue,
+                type: DATA_TYPES.defaultValue,
               },
             },
           },
@@ -35,7 +35,7 @@ export const TextInputInspector = ({
             value: textInputData?.placeholder,
             data: {
               text: {
-                evalResult: evalData.placeholder,
+                type: DATA_TYPES.placeholder,
               },
             },
           },
@@ -50,7 +50,7 @@ export const TextInputInspector = ({
             value: textInputData?.label,
             data: {
               text: {
-                evalResult: evalData.label,
+                type: DATA_TYPES.label,
               },
             },
           },
@@ -65,7 +65,7 @@ export const TextInputInspector = ({
             value: textInputData?.disabled,
             data: {
               text: {
-                evalResult: evalData.disabled,
+                type: DATA_TYPES.disabled,
               },
             },
           },
@@ -80,7 +80,7 @@ export const TextInputInspector = ({
             value: textInputData?.required,
             data: {
               text: {
-                evalResult: evalData.required,
+                type: DATA_TYPES.required,
               },
             },
           },
@@ -90,7 +90,7 @@ export const TextInputInspector = ({
             value: textInputData?.minLength,
             data: {
               text: {
-                evalResult: evalData.minLength,
+                type: DATA_TYPES.minLength,
               },
             },
           },
@@ -100,21 +100,20 @@ export const TextInputInspector = ({
             value: textInputData?.maxLength,
             data: {
               text: {
-                evalResult: evalData.maxLength,
+                type: DATA_TYPES.maxLength,
               },
             },
           },
         ],
       },
     ];
-  }, [evalData, textInputData]);
+  }, [textInputData]);
 
   return (
     <BaseInspector
-      type={ComponentType.TextInput}
       name={name}
       config={config}
-      onUpdate={onUpdate}
+      onUpdateData={onUpdateData}
       testId="text-input-inspector"
     />
   );

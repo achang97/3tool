@@ -15,9 +15,9 @@ jest.mock('../hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
     tool: mockTool,
     updateTool: mockUpdateTool,
-    componentEvalDataMap: {},
-    componentEvalDataValuesMap: {},
-    componentDataDepGraph: new DepGraph<string>(),
+    evalDataMap: {},
+    evalDataValuesMap: {},
+    dataDepGraph: new DepGraph<string>(),
   })),
 }));
 

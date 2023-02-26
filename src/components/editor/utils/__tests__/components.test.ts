@@ -1,7 +1,7 @@
 import { COMPONENT_DATA_TEMPLATES } from '@app/constants';
-import { Component, ComponentType } from '@app/types';
+import { ComponentType } from '@app/types';
 import { Layout } from 'react-grid-layout';
-import { createNewComponent, getComponentData } from '../components';
+import { createNewComponent } from '../components';
 
 describe('editor', () => {
   describe('createNewComponent', () => {
@@ -34,30 +34,6 @@ describe('editor', () => {
         },
         eventHandlers: [],
       });
-    });
-  });
-
-  describe('getComponentData', () => {
-    it('returns type-specific data field', () => {
-      const result = getComponentData({
-        type: ComponentType.Button,
-        data: {
-          [ComponentType.Button]: {
-            text: 'hello',
-          },
-        },
-      } as Component);
-      expect(result).toEqual({
-        text: 'hello',
-      });
-    });
-
-    it('returns empty object as default', () => {
-      const result = getComponentData({
-        type: ComponentType.Button,
-        data: {},
-      } as Component);
-      expect(result).toEqual({});
     });
   });
 });

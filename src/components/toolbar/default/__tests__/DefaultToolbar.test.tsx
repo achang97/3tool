@@ -22,7 +22,7 @@ jest.mock('next/router', () => ({
 }));
 
 describe('DefaultToolbar', () => {
-  const avatarId = 'general-toolbar-avatar';
+  const avatarId = 'default-toolbar-avatar';
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -35,7 +35,7 @@ describe('DefaultToolbar', () => {
     expect(avatar.textContent).toEqual(mockUser.name[0]);
 
     await userEvent.click(avatar);
-    expect(await result.findByTestId('general-toolbar-menu')).toBeTruthy();
+    expect(await result.findByTestId('default-toolbar-menu')).toBeTruthy();
   });
 
   it('renders link to Tools page', () => {
@@ -59,7 +59,7 @@ describe('DefaultToolbar', () => {
 
     await userEvent.click(result.getByTestId(avatarId));
 
-    const settingsNav = await result.findByTestId('general-toolbar-settings');
+    const settingsNav = await result.findByTestId('default-toolbar-settings');
 
     expect(settingsNav.getAttribute('href')).toEqual('/settings');
     expect(settingsNav).toHaveTextContent('Settings');

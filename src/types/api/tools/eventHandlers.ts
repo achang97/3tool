@@ -4,14 +4,14 @@ export enum EventHandlerType {
 }
 
 export type ActionData = {
-  actionName: string;
+  actionId: string;
 };
 
 export type UrlData = {
   url: string;
 };
 
-export type EventHandler<T> = {
+export type EventHandler<T = unknown> = {
   event: T;
   type: EventHandlerType;
   data: {

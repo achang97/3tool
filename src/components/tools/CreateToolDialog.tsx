@@ -20,12 +20,15 @@ import {
 
 type CreateToolDialogProps = {
   onClose: () => void;
-  open: boolean;
+  isOpen: boolean;
 };
 
 const FORM_ID = 'create-tool-form';
 
-export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
+export const CreateToolDialog = ({
+  onClose,
+  isOpen,
+}: CreateToolDialogProps) => {
   const [name, setName] = useState('');
 
   const [createTool, { data: newTool, isLoading, error }] =
@@ -59,7 +62,7 @@ export const CreateToolDialog = ({ onClose, open }: CreateToolDialogProps) => {
   return (
     <Dialog
       onClose={onClose}
-      open={open}
+      open={isOpen}
       fullWidth
       data-testid="create-tool-dialog"
     >

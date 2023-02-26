@@ -1,4 +1,4 @@
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, TextField, Tooltip, Typography } from '@mui/material';
 import type { TextFieldProps, TypographyProps } from '@mui/material';
 import {
   ChangeEvent,
@@ -9,13 +9,15 @@ import {
   useMemo,
 } from 'react';
 import { useIsHovered } from '@app/hooks/useIsHovered';
-import { Edit } from '@mui/icons-material';
+import { Edit, EditOff } from '@mui/icons-material';
 import _ from 'lodash';
 import { lineClamp } from '@app/utils/mui';
 
 export type EditableTextFieldProps = {
   value: string;
   isEditable?: boolean;
+  showIcon?: boolean;
+  iconTooltip?: string;
   onSubmit?: (newTextField: string) => void;
   height?: number;
   TextFieldProps?: TextFieldProps;
@@ -26,6 +28,8 @@ export const EditableTextField = ({
   value,
   onSubmit,
   isEditable = true,
+  showIcon,
+  iconTooltip,
   height,
   TextFieldProps,
   TypographyProps,
@@ -78,13 +82,36 @@ export const EditableTextField = ({
     return isEditing && isEditable;
   }, [isEditing, isEditable]);
 
+  const hoverIcon = useMemo(() => {
+    const HoverIcon = isEditable ? Edit : EditOff;
+    const testId = isEditable
+      ? 'editable-text-field-edit-icon'
+      : 'editable-text-field-disabled-icon';
+
+    return (
+      <Tooltip title={iconTooltip}>
+        <HoverIcon
+          fontSize="inherit"
+          data-testid={testId}
+          sx={{
+            visibility: isHovered && showIcon ? 'visible' : 'hidden',
+            position: 'absolute',
+            right: '3px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }}
+        />
+      </Tooltip>
+    );
+  }, [iconTooltip, isEditable, isHovered, showIcon]);
+
   return (
     <Box
       sx={{ minWidth: 0, flex: 1 }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {isTextField ? (
+      {isTextField && (
         <TextField
           value={localValue}
           onChange={handleInputChange}
@@ -98,7 +125,8 @@ export const EditableTextField = ({
           sx={{ height, ...TextFieldProps?.sx }}
           {...TextFieldProps}
         />
-      ) : (
+      )}
+      {!isTextField && (
         <Typography
           {...TypographyProps}
           onClick={handleToggleEditMode}
@@ -133,17 +161,7 @@ export const EditableTextField = ({
           >
             {value}
           </Typography>
-          <Edit
-            fontSize="inherit"
-            data-testid="editable-text-field-edit-icon"
-            sx={{
-              visibility: isHovered && isEditable ? 'visible' : 'hidden',
-              position: 'absolute',
-              right: '3px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-            }}
-          />
+          {hoverIcon}
         </Typography>
       )}
     </Box>

@@ -1,164 +1,190 @@
 import { createCompletionContext } from '@tests/utils/codemirror';
 import {
+  createAutocompleteSnippet,
   createAutocompleteSnippets,
-  createAutocompleteSnippetTemplate,
   parseTokenFromContext,
   readAsModule,
 } from '../codemirror';
 
 describe('codemirror', () => {
-  describe('createAutocompleteSnippetTemplate', () => {
-    it('appends "#{1}" suffix to given string', () => {
-      const result = createAutocompleteSnippetTemplate('test');
-      expect(result).toEqual('test#{1}');
+  describe('createAutocompleteSnippet', () => {
+    it('returns snippet with specified label', () => {
+      const result = createAutocompleteSnippet('label', 1);
+      expect(result.label).toEqual('label');
+    });
+
+    it('returns snippet with specified boost', () => {
+      const result = createAutocompleteSnippet('label', 1, { boost: 100 });
+      expect(result.boost).toEqual(100);
+    });
+
+    describe('detail', () => {
+      it('returns snippet with specified detail', () => {
+        const result = createAutocompleteSnippet('label', 1, {
+          detail: 'test',
+        });
+        expect(result.detail).toEqual('test');
+      });
+
+      it('returns snippet with "array" detail', () => {
+        const result = createAutocompleteSnippet('label', [1]);
+        expect(result.detail).toEqual('array');
+      });
+
+      it('returns snippet with "null" detail', () => {
+        const result = createAutocompleteSnippet('label', null);
+        expect(result.detail).toEqual('null');
+      });
+
+      it('returns snippet with automatically fetched type detail', () => {
+        const result = createAutocompleteSnippet('label', 1);
+        expect(result.detail).toEqual('number');
+      });
     });
   });
 
   describe('createAutocompleteSnippets', () => {
-    it('recurses through data object and creates autocomplete snippets', () => {
+    it('recurses through objects', () => {
       const result = createAutocompleteSnippets({
         object1: {
-          field1: [1, 2, 3],
           object2: {
-            field2: 4,
+            field1: 4,
           },
         },
-        field3: undefined,
-        field4: null,
-        field5: 'string',
       });
-      expect(result).toEqual([
+      expect(result).toMatchObject([
         {
           label: '.object1',
           detail: 'object',
-          apply: expect.any(Function),
-        },
-        {
-          label: '.object1.field1',
-          detail: 'array',
-          apply: expect.any(Function),
+          boost: undefined,
         },
         {
           label: '.object1.object2',
           detail: 'object',
-          apply: expect.any(Function),
+          boost: undefined,
         },
         {
-          label: '.object1.object2.field2',
+          label: '.object1.object2.field1',
           detail: 'number',
-          apply: expect.any(Function),
+          boost: undefined,
         },
+      ]);
+    });
+
+    it('does not recurse through array', () => {
+      const result = createAutocompleteSnippets({
+        field1: [1, 2, 3],
+      });
+      expect(result).toMatchObject([
         {
-          label: '.field3',
-          detail: 'undefined',
-          apply: expect.any(Function),
+          label: '.field1',
+          detail: 'array',
         },
+      ]);
+    });
+
+    it('includes null and undefined fields', () => {
+      const result = createAutocompleteSnippets({
+        field1: null,
+        field2: undefined,
+      });
+      expect(result).toMatchObject([
         {
-          label: '.field4',
+          label: '.field1',
           detail: 'null',
-          apply: expect.any(Function),
         },
         {
-          label: '.field5',
+          label: '.field2',
+          detail: 'undefined',
+        },
+      ]);
+    });
+
+    it('includes root-level fields', () => {
+      const result = createAutocompleteSnippets({
+        field1: 'hello',
+      });
+      expect(result).toMatchObject([
+        {
+          label: '.field1',
           detail: 'string',
-          apply: expect.any(Function),
+        },
+      ]);
+    });
+
+    it('assigns the given boost value to all snippets', () => {
+      const result = createAutocompleteSnippets(
+        {
+          field1: 'hello',
+          field2: 2,
+        },
+        { boost: 100 }
+      );
+      expect(result).toMatchObject([
+        {
+          label: '.field1',
+          detail: 'string',
+          boost: 100,
+        },
+        {
+          label: '.field2',
+          detail: 'number',
+          boost: 100,
         },
       ]);
     });
   });
 
   describe('parseTokenFromContext', () => {
-    describe('dynamic', () => {
-      it('returns null if cursor is after invalid floating period', () => {
-        const completionContext = createCompletionContext('{{ a . }}', 6);
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toBeNull();
-      });
+    it('returns null if cursor is after invalid floating period', () => {
+      const completionContext = createCompletionContext('a .', 3, false);
+      const result = parseTokenFromContext(completionContext);
+      expect(result).toBeNull();
+    });
 
-      it('returns null if cursor follows completed expression', () => {
-        const completionContext = createCompletionContext(
-          '{{ table1.data[0]b }}',
-          18
-        );
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toBeNull();
-      });
+    it('returns null if expression is empty', () => {
+      const completionContext = createCompletionContext('', 0, false);
+      const result = parseTokenFromContext(completionContext);
+      expect(result).toBeNull();
+    });
 
-      it('returns null if cursor follows invalid JavaScript', () => {
-        const completionContext = createCompletionContext(
-          '{{ table1.data[]b }}',
-          17
-        );
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toBeNull();
-      });
+    it('returns null if beginning new expression', () => {
+      const completionContext = createCompletionContext('button1||', 9, false);
+      const result = parseTokenFromContext(completionContext);
+      expect(result).toBeNull();
+    });
 
-      it('returns root token if expression is empty', () => {
-        const completionContext = createCompletionContext('{{}}', 2);
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toEqual({
-          token: '',
-          from: 2,
-          isRoot: true,
-        });
-      });
+    it('returns root token if cursor follows completed expression', () => {
+      const completionContext = createCompletionContext(
+        'table1.data[0]b',
+        15,
+        false
+      );
+      const result = parseTokenFromContext(completionContext);
+      expect(result).toEqual({ from: 14, isRoot: true, token: 'b' });
+    });
 
-      it('returns root token if beginning new expression', () => {
-        const completionContext = createCompletionContext(
-          '{{ button1|| }}',
-          12
-        );
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toEqual({
-          token: '',
-          from: 12,
-          isRoot: true,
-        });
-      });
-
-      it('returns root token if there are no periods in discovered token', () => {
-        const completionContext = createCompletionContext('{{ button1 }}', 10);
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toEqual({
-          token: 'button1',
-          from: 3,
-          isRoot: true,
-        });
-      });
-
-      it('returns non-root substring of token up until last period', () => {
-        const completionContext = createCompletionContext(
-          '{{ table1.data[0].em }}',
-          20
-        );
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toEqual({
-          token: 'table1.data[0]',
-          from: 17,
-          isRoot: false,
-        });
+    it('returns root token if there are no periods in discovered token', () => {
+      const completionContext = createCompletionContext('button1', 7, false);
+      const result = parseTokenFromContext(completionContext);
+      expect(result).toEqual({
+        token: 'button1',
+        from: 0,
+        isRoot: true,
       });
     });
 
-    describe('javascript', () => {
-      it('returns root token if expression is empty', () => {
-        const completionContext = createCompletionContext('', 0, false);
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toEqual({
-          token: '',
-          from: 0,
-          isRoot: true,
-        });
-      });
-
-      it('returns root token from 0-index', () => {
-        const completionContext = createCompletionContext('button1', 7, false);
-        const result = parseTokenFromContext(completionContext);
-        expect(result).toEqual({
-          token: 'button1',
-          from: 0,
-          isRoot: true,
-        });
+    it('returns non-root substring of token up until last period', () => {
+      const completionContext = createCompletionContext(
+        'table1.data[0].em',
+        17,
+        false
+      );
+      const result = parseTokenFromContext(completionContext);
+      expect(result).toEqual({
+        token: 'table1.data[0]',
+        from: 14,
+        isRoot: false,
       });
     });
   });

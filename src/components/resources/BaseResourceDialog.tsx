@@ -14,7 +14,7 @@ import { ConfigureResourceForm } from './ConfigureResourceForm';
 
 type BaseResourceDialogProps = {
   title: string;
-  open: boolean;
+  isOpen: boolean;
   onSubmit: (resource: Pick<Resource, 'type' | 'name' | 'data'>) => void;
   onClose: () => void;
   error?: ApiError | SerializedError;
@@ -26,7 +26,7 @@ const FORM_ID = 'resource-form';
 
 export const BaseResourceDialog = ({
   title,
-  open,
+  isOpen,
   onSubmit,
   onClose,
   error,
@@ -53,7 +53,7 @@ export const BaseResourceDialog = ({
   }, [errorMessage]);
 
   return (
-    <Dialog onClose={onClose} open={open} fullWidth data-testid={testId}>
+    <Dialog onClose={onClose} open={isOpen} fullWidth data-testid={testId}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <ConfigureResourceForm formId={FORM_ID} onSubmit={handleSubmit} />

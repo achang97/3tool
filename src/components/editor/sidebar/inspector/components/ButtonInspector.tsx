@@ -1,15 +1,15 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { BaseComponentInspectorProps, ComponentType } from '@app/types';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { BaseComponentInspectorProps } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
+
+const DATA_TYPES = COMPONENT_DATA_TYPES.button;
 
 export const ButtonInspector = ({
   name,
   data,
-  onUpdate,
+  onUpdateData,
 }: BaseComponentInspectorProps) => {
-  const { evalData } = useComponentEvalData<ComponentType.Button>(name);
-
   const buttonData = useMemo(() => {
     return data.button;
   }, [data]);
@@ -25,7 +25,7 @@ export const ButtonInspector = ({
             value: buttonData?.text,
             data: {
               text: {
-                evalResult: evalData.text,
+                type: DATA_TYPES.text,
               },
             },
           },
@@ -40,7 +40,7 @@ export const ButtonInspector = ({
             value: buttonData?.disabled,
             data: {
               text: {
-                evalResult: evalData.disabled,
+                type: DATA_TYPES.disabled,
               },
             },
           },
@@ -50,21 +50,20 @@ export const ButtonInspector = ({
             value: buttonData?.loading,
             data: {
               text: {
-                evalResult: evalData.loading,
+                type: DATA_TYPES.loading,
               },
             },
           },
         ],
       },
     ];
-  }, [evalData, buttonData]);
+  }, [buttonData]);
 
   return (
     <BaseInspector
-      type={ComponentType.Button}
       name={name}
       config={config}
-      onUpdate={onUpdate}
+      onUpdateData={onUpdateData}
       testId="button-inspector"
     />
   );

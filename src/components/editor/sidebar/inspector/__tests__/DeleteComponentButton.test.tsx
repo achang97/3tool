@@ -7,8 +7,8 @@ const mockDependents = ['textInput1.text', 'table1.data'];
 
 const mockDeleteComponent = jest.fn();
 
-jest.mock('../../../hooks/useDeleteComponent', () => ({
-  useDeleteComponent: jest.fn(() => mockDeleteComponent),
+jest.mock('../../../hooks/useComponentDelete', () => ({
+  useComponentDelete: jest.fn(() => mockDeleteComponent),
 }));
 
 jest.mock('../../../hooks/useElementDependentFields', () => ({

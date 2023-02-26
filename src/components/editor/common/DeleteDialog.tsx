@@ -11,14 +11,14 @@ import { useElementDependentFields } from '../hooks/useElementDependentFields';
 
 type DeleteDialogProps = {
   name: string;
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
   onDelete: () => Promise<boolean>;
 };
 
 export const DeleteDialog = ({
   name,
-  open,
+  isOpen,
   onClose,
   onDelete,
 }: DeleteDialogProps) => {
@@ -33,7 +33,12 @@ export const DeleteDialog = ({
   }, [onClose, onDelete]);
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth data-testid="delete-dialog">
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      fullWidth
+      data-testid="delete-dialog"
+    >
       <DialogTitle>Are you sure you want to delete {name}?</DialogTitle>
       {dependents.length !== 0 && (
         <DialogContent data-testid="delete-dialog-content">

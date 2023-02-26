@@ -1,5 +1,4 @@
-import { EvalResult } from '@app/components/editor/utils/eval';
-import { ComponentType } from '@app/types';
+import { FieldType } from '@app/types';
 import {
   validateDynamicInputField,
   validateEnumField,
@@ -8,8 +7,18 @@ import { render } from '@tests/utils/renderWithContext';
 import { BaseInspector, BaseInspectorSectionProps } from '../BaseInspector';
 
 const mockName = 'Name';
-const mockType = ComponentType.Button;
-const mockHandleUpdate = jest.fn();
+const mockHandleUpdateData = jest.fn();
+
+jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
+  useCodeMirrorPreview: jest.fn(() => ({})),
+}));
+
+jest.mock(
+  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
+  () => ({
+    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+  })
+);
 
 describe('BaseInspector', () => {
   beforeEach(() => {
@@ -25,9 +34,8 @@ describe('BaseInspector', () => {
     const result = render(
       <BaseInspector
         name={mockName}
-        type={mockType}
         config={mockConfig}
-        onUpdate={mockHandleUpdate}
+        onUpdateData={mockHandleUpdateData}
       />
     );
 
@@ -46,10 +54,7 @@ describe('BaseInspector', () => {
             value: 'hello',
             data: {
               text: {
-                evalResult: {
-                  parsedExpression: 'hello',
-                  value: 'hello',
-                },
+                type: 'string',
               },
             },
           },
@@ -59,9 +64,8 @@ describe('BaseInspector', () => {
     const result = render(
       <BaseInspector
         name={mockName}
-        type={mockType}
         config={mockConfig}
-        onUpdate={mockHandleUpdate}
+        onUpdateData={mockHandleUpdateData}
       />
     );
     expect(result.getByText('hello')).toBeTruthy();
@@ -76,10 +80,7 @@ describe('BaseInspector', () => {
             value: 'hello!',
             data: {
               text: {
-                evalResult: {
-                  parsedExpression: 'hello!',
-                  value: 'hello!',
-                },
+                type: 'string',
               },
             },
           },
@@ -89,9 +90,8 @@ describe('BaseInspector', () => {
     result.rerender(
       <BaseInspector
         name={`${mockName}_1`}
-        type={mockType}
         config={mockUpdatedConfig}
-        onUpdate={mockHandleUpdate}
+        onUpdateData={mockHandleUpdateData}
       />
     );
     expect(result.getByText('hello!')).toBeTruthy();
@@ -114,9 +114,8 @@ describe('BaseInspector', () => {
     const result = render(
       <BaseInspector
         name={mockName}
-        type={mockType}
         config={mockConfig}
-        onUpdate={mockHandleUpdate}
+        onUpdateData={mockHandleUpdateData}
       />
     );
     expect(result.queryByText('Text')).toBeNull();
@@ -156,29 +155,26 @@ describe('BaseInspector', () => {
       const result = render(
         <BaseInspector
           name={mockName}
-          type={mockType}
           config={mockConfig}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateEnumField(result, 'Section 1', {
-        type: mockType,
         field: 'text',
         label: 'Text',
         value: 1,
-        options: mockOptions,
-        onChange: mockHandleUpdate,
+        onChange: mockHandleUpdateData,
+        config: {
+          options: mockOptions,
+        },
       });
     });
   });
 
   describe('text', () => {
     it('renders text field if text data is defined', async () => {
-      const mockEvalResult: EvalResult = {
-        parsedExpression: 'hello',
-        value: 'hello',
-      };
+      const mockInputType: FieldType = 'string';
       const mockConfig: BaseInspectorSectionProps[] = [
         {
           title: 'Section 1',
@@ -189,7 +185,7 @@ describe('BaseInspector', () => {
               value: '{{ something }}',
               data: {
                 text: {
-                  evalResult: mockEvalResult,
+                  type: mockInputType,
                 },
               },
             },
@@ -200,19 +196,19 @@ describe('BaseInspector', () => {
       const result = render(
         <BaseInspector
           name={mockName}
-          type={mockType}
           config={mockConfig}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Section 1', {
-        type: mockType,
         field: 'text',
         label: 'Text',
         value: '{{ something }}',
-        evalResult: mockEvalResult,
-        onChange: mockHandleUpdate,
+        onChange: mockHandleUpdateData,
+        config: {
+          type: mockInputType,
+        },
       });
     });
   });

@@ -1,6 +1,5 @@
-import { DynamicTextField } from '@app/components/editor/common/DynamicTextField';
-import { EvalResult } from '@app/components/editor/utils/eval';
-import { ComponentData, ComponentType } from '@app/types';
+import { CodeMirror } from '@app/components/editor/common/CodeMirror';
+import { BaseComponentInspectorProps, FieldType } from '@app/types';
 import { Box } from '@mui/material';
 import _ from 'lodash';
 import { useCallback } from 'react';
@@ -18,7 +17,7 @@ export type BaseInspectorFieldProps = {
   value?: any;
   data: {
     text?: {
-      evalResult?: EvalResult;
+      type: FieldType;
     };
     enum?: {
       options: {
@@ -31,27 +30,24 @@ export type BaseInspectorFieldProps = {
 
 type BaseInspectorProps = {
   name: string;
-  type: ComponentType;
   config: BaseInspectorSectionProps[];
-  onUpdate: (update: RecursivePartial<ComponentData>) => void;
+  onUpdateData: BaseComponentInspectorProps['onUpdateData'];
   testId?: string;
 };
 
 export const BaseInspector = ({
   name,
-  type,
   config,
-  onUpdate,
+  onUpdateData,
   testId,
 }: BaseInspectorProps) => {
   const handleUpdate = useCallback(
     (field: string, newValue: unknown) => {
       const update = {};
       _.set(update, field, newValue);
-
-      onUpdate({ [type]: update });
+      onUpdateData(update);
     },
-    [onUpdate, type]
+    [onUpdateData]
   );
 
   const renderSectionField = useCallback(
@@ -73,11 +69,13 @@ export const BaseInspector = ({
 
       if (field.data.text) {
         return (
-          <DynamicTextField
+          <CodeMirror
             label={field.label}
             value={field.value}
-            evalResult={field.data.text.evalResult}
+            type={field.data.text.type}
+            language="text"
             onChange={handleUpdateField}
+            isAutosaved
           />
         );
       }
@@ -88,16 +86,11 @@ export const BaseInspector = ({
   );
 
   return (
-    <Box data-testid={testId}>
+    <Box data-testid={testId} key={name}>
       {config.map((section) => (
-        <InspectorSection
-          key={`${name}.${section.title}`}
-          title={section.title}
-        >
+        <InspectorSection key={section.title} title={section.title}>
           {section.fields.map((field) => (
-            <Box key={`${name}.${field.field}`}>
-              {renderSectionField(field)}
-            </Box>
+            <Box key={field.field}>{renderSectionField(field)}</Box>
           ))}
         </InspectorSection>
       ))}

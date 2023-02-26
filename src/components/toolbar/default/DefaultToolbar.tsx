@@ -1,13 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { UserAvatar } from '@app/components/common/UserAvatar';
-import { IconButton, Menu, MenuItem, Tab, Tabs } from '@mui/material';
+import { IconButton, Menu, Tab, Tabs } from '@mui/material';
 import { Tune, Logout } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMenuState } from '@app/hooks/useMenuState';
+import { MenuItem } from '@app/components/common/MenuItem';
 import { ToolbarTemplate } from '../common/ToolbarTemplate';
-import { MenuItemContent } from './MenuItemContent';
 
 const AUTHENTICATED_LINKS = [
   { to: '/', text: 'Tools' },
@@ -52,7 +52,7 @@ export const DefaultToolbar = () => {
   const right = useMemo(() => {
     return (
       <>
-        <IconButton onClick={onMenuOpen} data-testid="general-toolbar-avatar">
+        <IconButton onClick={onMenuOpen} data-testid="default-toolbar-avatar">
           <UserAvatar name={user?.name} size={40} />
         </IconButton>
         <Menu
@@ -60,31 +60,26 @@ export const DefaultToolbar = () => {
           open={isMenuOpen}
           onClose={onMenuClose}
           onClick={onMenuClose}
-          data-testid="general-toolbar-menu"
+          data-testid="default-toolbar-menu"
         >
           <MenuItem
-            component={Link}
+            icon={<Tune fontSize="inherit" />}
+            label="Settings"
             href="/settings"
-            data-testid="general-toolbar-settings"
-          >
-            <MenuItemContent
-              icon={<Tune fontSize="inherit" />}
-              text="Settings"
-            />
-          </MenuItem>
-          <MenuItem onClick={handleLogout}>
-            <MenuItemContent
-              icon={<Logout fontSize="inherit" />}
-              text="Logout"
-              color="error.main"
-            />
-          </MenuItem>
+            testId="default-toolbar-settings"
+          />
+          <MenuItem
+            icon={<Logout fontSize="inherit" />}
+            label="Logout"
+            color="error.main"
+            onClick={handleLogout}
+          />
         </Menu>
       </>
     );
   }, [onMenuOpen, user, menuAnchor, isMenuOpen, onMenuClose, handleLogout]);
 
   return (
-    <ToolbarTemplate middle={middle} right={right} testId="general-toolbar" />
+    <ToolbarTemplate middle={middle} right={right} testId="default-toolbar" />
   );
 };

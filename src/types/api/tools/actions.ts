@@ -11,16 +11,20 @@ export enum ActionEvent {
   Error = 'error',
 }
 
-type JavascriptData = {
+export type TransformableData<T = {}> = {
+  transformer: string;
+} & T;
+
+type JavascriptData = TransformableData<{
   code: string;
-};
+}>;
 
-type SmartContractBaseData = {
+type SmartContractBaseData = TransformableData<{
   resourceId: string;
-};
+}>;
 
-export type SmartContractReadData = SmartContractBaseData;
-export type SmartContractWriteData = SmartContractBaseData;
+type SmartContractReadData = SmartContractBaseData;
+type SmartContractWriteData = SmartContractBaseData;
 
 export type Action = {
   name: string;

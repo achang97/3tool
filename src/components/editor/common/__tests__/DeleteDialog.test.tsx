@@ -19,13 +19,13 @@ describe('DeleteDialog', () => {
     jest.clearAllMocks();
   });
 
-  it('does not render dialog if open is false', () => {
+  it('does not render dialog if isOpen is false', () => {
     const result = render(
       <DeleteDialog
         name={mockName}
         onClose={mockHandleClose}
         onDelete={mockHandleDelete}
-        open={false}
+        isOpen={false}
       />
     );
     expect(result.queryByTestId(dialogId)).toBeNull();
@@ -37,7 +37,7 @@ describe('DeleteDialog', () => {
         name={mockName}
         onClose={mockHandleClose}
         onDelete={mockHandleDelete}
-        open
+        isOpen
       />
     );
     expect(result.getByText(`Are you sure you want to delete ${mockName}?`));
@@ -49,7 +49,7 @@ describe('DeleteDialog', () => {
         name={mockName}
         onClose={mockHandleClose}
         onDelete={mockHandleDelete}
-        open
+        isOpen
       />
     );
     expect(result.getByTestId(dialogContentId)).toHaveTextContent(
@@ -63,7 +63,7 @@ describe('DeleteDialog', () => {
         name={mockName}
         onClose={mockHandleClose}
         onDelete={mockHandleDelete}
-        open
+        isOpen
       />
     );
 
@@ -80,7 +80,7 @@ describe('DeleteDialog', () => {
         name={mockName}
         onClose={mockHandleClose}
         onDelete={mockHandleDelete}
-        open
+        isOpen
       />
     );
 
@@ -97,7 +97,7 @@ describe('DeleteDialog', () => {
         name={mockName}
         onClose={mockHandleClose}
         onDelete={mockHandleDelete}
-        open
+        isOpen
       />
     );
 

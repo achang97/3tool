@@ -15,13 +15,21 @@ jest.mock('../../hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
     tool: mockTool,
     updateTool: mockUpdateTool,
-    componentEvalDataMap: {},
-    componentEvalDataValuesMap: {},
-    componentDataDepGraph: new DepGraph<string>(),
+    evalDataMap: {},
+    evalDataValuesMap: {},
+    dataDepGraph: new DepGraph<string>(),
   })),
 }));
 
+jest.mock('../../hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
+
 describe('Inspector', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders component inspector if there is a focused component', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       focusedComponentName: mockTool.components[0].name,

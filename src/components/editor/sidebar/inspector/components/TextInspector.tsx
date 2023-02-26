@@ -1,15 +1,15 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { BaseComponentInspectorProps, ComponentType } from '@app/types';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { BaseComponentInspectorProps } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
+
+const DATA_TYPES = COMPONENT_DATA_TYPES.text;
 
 export const TextInspector = ({
   name,
   data,
-  onUpdate,
+  onUpdateData,
 }: BaseComponentInspectorProps) => {
-  const { evalData } = useComponentEvalData<ComponentType.Text>(name);
-
   const textData = useMemo(() => {
     return data.text;
   }, [data]);
@@ -25,7 +25,7 @@ export const TextInspector = ({
             value: textData?.value,
             data: {
               text: {
-                evalResult: evalData.value,
+                type: DATA_TYPES.value,
               },
             },
           },
@@ -60,14 +60,13 @@ export const TextInspector = ({
         ],
       },
     ];
-  }, [evalData, textData]);
+  }, [textData]);
 
   return (
     <BaseInspector
-      type={ComponentType.Text}
       name={name}
       config={config}
-      onUpdate={onUpdate}
+      onUpdateData={onUpdateData}
       testId="text-inspector"
     />
   );

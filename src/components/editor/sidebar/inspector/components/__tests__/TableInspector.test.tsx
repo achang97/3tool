@@ -1,6 +1,5 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { ComponentData, ComponentType } from '@app/types';
-import { mockEvalResult } from '@tests/constants/eval';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { Component } from '@app/types';
 import {
   validateDynamicInputField,
   validateSection,
@@ -9,7 +8,7 @@ import { render } from '@tests/utils/renderWithContext';
 import { TableInspector } from '../TableInspector';
 
 const mockName = 'Name';
-const mockData: ComponentData = {
+const mockData: Component['data'] = {
   table: {
     data: '[1]',
     emptyMessage: 'Empty Message',
@@ -19,16 +18,22 @@ const mockData: ComponentData = {
   },
 };
 
-const mockHandleUpdate = jest.fn();
+const mockHandleUpdateData = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useComponentEvalData');
+jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
+  useCodeMirrorPreview: jest.fn(() => ({})),
+}));
+
+jest.mock(
+  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
+  () => ({
+    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+  })
+);
 
 describe('TableInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-      evalData: {},
-    }));
   });
 
   describe('Data', () => {
@@ -37,57 +42,45 @@ describe('TableInspector', () => {
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Data');
     });
 
     it('data: renders "Data" text field', async () => {
-      const mockEvalData = { data: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Data', {
-        type: ComponentType.Table,
         field: 'data',
         label: 'Data',
         value: mockData.table?.data,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.data,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.table.data },
       });
     });
 
     it('emptyMessage: renders "Empty message" text field', async () => {
-      const mockEvalData = { emptyMessage: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Data', {
-        type: ComponentType.Table,
         field: 'emptyMessage',
         label: 'Empty message',
         value: mockData.table?.emptyMessage,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.emptyMessage,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.table.emptyMessage },
       });
     });
   });
@@ -98,33 +91,27 @@ describe('TableInspector', () => {
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Row selection');
     });
 
     it('multiselect: renders "Enable multi-row selection" text field', async () => {
-      const mockEvalData = { multiselect: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Row selection', {
-        type: ComponentType.Table,
         field: 'multiselect',
         label: 'Enable multi-row selection',
         value: mockData.table?.multiselect,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.multiselect,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.table.multiselect },
       });
     });
   });

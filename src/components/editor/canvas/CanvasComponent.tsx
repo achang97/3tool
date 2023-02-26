@@ -58,7 +58,7 @@ export const CanvasComponent = forwardRef(
       return component.name === movingComponentName;
     }, [component.name, movingComponentName]);
 
-    const getComponent = useCallback(() => {
+    const typedComponent = useMemo(() => {
       const TypedComponent = CANVAS_COMPONENT_MAP[component.type];
       if (!TypedComponent) {
         return null;
@@ -102,12 +102,12 @@ export const CanvasComponent = forwardRef(
         tabIndex={0}
         className={compositeClassName}
         onClick={handleClick}
-        data-testid={component.name}
+        data-testid={`canvas-component-${component.name}`}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         {...rest}
       >
-        {getComponent()}
+        {typedComponent}
         {children}
         {isHandleShown && (
           <CanvasComponentHandle name={component.name} errors={errors} />

@@ -40,6 +40,7 @@ export const ToolEditorToolbar = () => {
       <EditableTextField
         value={tool.name}
         onSubmit={handleUpdateToolName}
+        showIcon
         TypographyProps={{
           sx: {
             whiteSpace: 'nowrap',

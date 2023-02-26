@@ -2,7 +2,7 @@ import { Box, Divider, Typography } from '@mui/material';
 import { useActiveTool } from '../hooks/useActiveTool';
 import { EmptyPlaceholder } from './common/EmptyPlaceholder';
 import { ActionListItem } from './list/ActionListItem';
-import { NewActionButton } from './list/NewActionButton';
+import { CreateActionButton } from './list/CreateActionButton';
 
 export const ActionList = () => {
   const { tool } = useActiveTool();
@@ -25,10 +25,10 @@ export const ActionList = () => {
           paddingX: 2,
         }}
       >
-        <Typography variant="subtitle1">Action list</Typography>
-        <NewActionButton />
+        <Typography variant="subtitle2">Action list</Typography>
+        <CreateActionButton />
       </Box>
-      <Divider sx={{ marginY: 1, marginX: 2 }} />
+      <Divider sx={{ margin: 1, marginX: 2 }} />
       <Box
         sx={{
           display: 'flex',
@@ -42,11 +42,7 @@ export const ActionList = () => {
           <EmptyPlaceholder> No created actions </EmptyPlaceholder>
         )}
         {tool.actions.map((action) => (
-          <ActionListItem
-            key={action.name}
-            name={action.name}
-            type={action.type}
-          />
+          <ActionListItem key={action.name} action={action} />
         ))}
       </Box>
     </Box>

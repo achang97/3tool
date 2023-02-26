@@ -31,13 +31,13 @@ describe('CreateResourceDialog', () => {
 
   it('does not render dialog', () => {
     const result = render(
-      <CreateResourceDialog onClose={mockHandleClose} open={false} />
+      <CreateResourceDialog onClose={mockHandleClose} isOpen={false} />
     );
     expect(result.queryByTestId('create-resource-dialog')).toBeNull();
   });
 
   it('calls onClose when dialog is closed', async () => {
-    render(<CreateResourceDialog onClose={mockHandleClose} open />);
+    render(<CreateResourceDialog onClose={mockHandleClose} isOpen />);
 
     await userEvent.keyboard('[Escape]');
     expect(mockHandleClose).toHaveBeenCalled();
@@ -45,7 +45,7 @@ describe('CreateResourceDialog', () => {
 
   it('renders title', () => {
     const result = render(
-      <CreateResourceDialog onClose={mockHandleClose} open />
+      <CreateResourceDialog onClose={mockHandleClose} isOpen />
     );
     expect(result.getByText('Add Resource')).toBeTruthy();
   });
@@ -64,7 +64,7 @@ describe('CreateResourceDialog', () => {
     ]);
 
     const result = render(
-      <CreateResourceDialog onClose={mockHandleClose} open />
+      <CreateResourceDialog onClose={mockHandleClose} isOpen />
     );
     expect(result.getByText('Mock Error')).toBeTruthy();
   });
@@ -74,7 +74,7 @@ describe('CreateResourceDialog', () => {
     (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
 
     const result = render(
-      <CreateResourceDialog onClose={mockHandleClose} open />
+      <CreateResourceDialog onClose={mockHandleClose} isOpen />
     );
     const contractFields = {
       name: 'Contract',
@@ -107,7 +107,7 @@ describe('CreateResourceDialog', () => {
       { data: {} },
     ]);
 
-    render(<CreateResourceDialog onClose={mockHandleClose} open />);
+    render(<CreateResourceDialog onClose={mockHandleClose} isOpen />);
 
     await waitFor(() => {
       expect(mockHandleClose).toHaveBeenCalled();

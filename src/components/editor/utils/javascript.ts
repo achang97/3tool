@@ -1,12 +1,25 @@
-import { Identifier, VariableDeclarator, MemberExpression } from '@babel/types';
+import {
+  Identifier,
+  VariableDeclarator,
+  MemberExpression,
+  FunctionDeclaration,
+  CallExpression,
+} from '@babel/types';
 import { Node } from 'acorn';
+import _ from 'lodash';
 import MagicString from 'magic-string';
 
 const acorn = require('acorn');
 const walk = require('acorn-walk');
 
+const FUNCTION_TOKENS = ['() => {', '}'];
+
 export const acornParse = (expression: string): Node => {
   return acorn.parse(expression, { ecmaVersion: 'latest' });
+};
+
+const withFunction = (expression: string): string => {
+  return `${FUNCTION_TOKENS[0]}${expression}${FUNCTION_TOKENS[1]}`;
 };
 
 export const parseDynamicTerms = (
@@ -32,12 +45,12 @@ export const parseObjectVariable = (
   field: string
 ): {
   objectName: string;
-  rootFieldName?: string;
-  fieldName?: string;
+  rootFieldName: string;
+  fieldName: string;
 } => {
   const firstPeriodIndex = field.indexOf('.');
   if (firstPeriodIndex === -1) {
-    return { objectName: field };
+    return { objectName: field, rootFieldName: '', fieldName: '' };
   }
 
   const objectName = field.substring(0, firstPeriodIndex);
@@ -97,9 +110,21 @@ export const parseVariables = (
   const variables = new Set<string>();
 
   try {
-    const tree = acornParse(expression);
+    const tree = acornParse(withFunction(expression));
 
     walk.recursive(tree, null, {
+      CallExpression: (callExpression: CallExpression) => {
+        let node: unknown = callExpression;
+        while (_.get(node, 'callee.object')) {
+          node = _.get(node, 'callee.object');
+        }
+        const fieldName = parseMemberExpressionName(node as MemberExpression);
+        const { objectName } = parseObjectVariable(fieldName);
+
+        if (includedVariableNames.includes(objectName)) {
+          variables.add(fieldName);
+        }
+      },
       MemberExpression: (memberExpression: MemberExpression) => {
         const fieldName = parseMemberExpressionName(memberExpression);
         const { objectName } = parseObjectVariable(fieldName);
@@ -140,29 +165,51 @@ export const parseDynamicTermVariables = (
   return [...variables];
 };
 
+export const parseDeclaredVariables = (expression: string): string[] => {
+  const variables = new Set<string>();
+
+  try {
+    const tree = acornParse(withFunction(expression));
+    walk.recursive(tree, null, {
+      FunctionDeclaration: (functionDeclaration: FunctionDeclaration) => {
+        const name = functionDeclaration.id?.name;
+        if (name) {
+          variables.add(name);
+        }
+      },
+      VariableDeclarator: (variableDeclarator: VariableDeclarator) => {
+        const name =
+          'name' in variableDeclarator.id ? variableDeclarator.id.name : '';
+        if (name) {
+          variables.add(name);
+        }
+      },
+    });
+  } catch {
+    // Do nothing
+  }
+
+  return [...variables];
+};
+
 export const replaceVariableName = (
   expression: string,
   prevVariableName: string,
   newVariableName: string
 ) => {
   const newExpression = new MagicString(expression);
-  let hasRedeclared = false;
+  const redeclaredVariables = parseDeclaredVariables(expression);
 
   try {
-    const tree = acornParse(expression);
+    const tree = acornParse(withFunction(expression));
 
     walk.recursive(tree, null, {
-      VariableDeclarator: (node: VariableDeclarator) => {
-        if ('name' in node.id && node.id.name === prevVariableName) {
-          hasRedeclared = true;
-        }
-      },
       Identifier: (identifier: Identifier) => {
         const { name, start } = identifier;
         if (name === prevVariableName && typeof start === 'number') {
           newExpression.update(
-            start,
-            start + prevVariableName.length,
+            start - FUNCTION_TOKENS[0].length,
+            start - FUNCTION_TOKENS[0].length + prevVariableName.length,
             newVariableName
           );
         }
@@ -172,7 +219,7 @@ export const replaceVariableName = (
     // Do nothing
   }
 
-  if (hasRedeclared) {
+  if (redeclaredVariables.includes(prevVariableName)) {
     return expression;
   }
   return newExpression.toString();
@@ -194,7 +241,7 @@ export const replaceDynamicTermVariableName = (
     );
     newExpression.update(
       dynamicTerm.start,
-      dynamicTerm.group.length,
+      dynamicTerm.start + dynamicTerm.group.length,
       `{{${newDynamicTerm}}}`
     );
   });
@@ -211,9 +258,9 @@ export type FlatField = {
 
 export const flattenObjectFields = (
   object: Object | undefined,
-  { prefix, onlyLeaves = true }: { prefix?: string; onlyLeaves?: boolean } = {}
+  { prefix, onlyLeaves }: { prefix?: string; onlyLeaves?: boolean } = {}
 ): FlatField[] => {
-  const getComponentDataFieldsHelper = (
+  const flattenObjectFieldsHelper = (
     name: string | undefined,
     parent: string | undefined,
     value: unknown,
@@ -239,14 +286,14 @@ export const flattenObjectFields = (
 
     if (Array.isArray(value)) {
       value.forEach((fieldElem, i) => {
-        getComponentDataFieldsHelper(`${name}[${i}]`, name, fieldElem, fields);
+        flattenObjectFieldsHelper(`${name}[${i}]`, name, fieldElem, fields);
       });
       return;
     }
 
     if (typeof value === 'object') {
       Object.entries(value).forEach(([fieldKey, fieldVal]) => {
-        getComponentDataFieldsHelper(
+        flattenObjectFieldsHelper(
           name ? `${name}.${fieldKey}` : fieldKey,
           name,
           fieldVal,
@@ -257,6 +304,20 @@ export const flattenObjectFields = (
   };
 
   const fields: FlatField[] = [];
-  getComponentDataFieldsHelper(prefix, undefined, object, fields);
+  flattenObjectFieldsHelper(prefix, undefined, object, fields);
   return fields;
+};
+
+export const getPrototypeFunctions = (value: unknown): Function[] => {
+  if (!value) {
+    return [];
+  }
+
+  const prototype = Object.getPrototypeOf(value);
+  const functionNames = Object.getOwnPropertyNames(prototype);
+
+  return _.chain(functionNames)
+    .filter((name) => name !== 'constructor' && !name.startsWith('__'))
+    .map((name) => _.get(prototype, name))
+    .value();
 };

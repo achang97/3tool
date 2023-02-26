@@ -7,7 +7,7 @@ import { CanvasDroppable } from '../CanvasDroppable';
 
 const mockUpdateTool = jest.fn();
 
-const mockComponents: Component[] = [
+const mockComponents = [
   {
     name: 'button1',
     type: ComponentType.Button,
@@ -15,7 +15,7 @@ const mockComponents: Component[] = [
     eventHandlers: [],
     data: {},
   },
-];
+] as unknown as Component[];
 
 jest.mock('../../hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
@@ -23,9 +23,9 @@ jest.mock('../../hooks/useActiveTool', () => ({
       components: mockComponents,
     },
     updateTool: mockUpdateTool,
-    componentDataDepGraph: new DepGraph<string>(),
-    componentEvalDataMap: {},
-    componentEvalDataValuesMap: {},
+    dataDepGraph: new DepGraph<string>(),
+    evalDataMap: {},
+    evalDataValuesMap: {},
   })),
 }));
 
@@ -36,8 +36,12 @@ jest.mock('../../hooks/useComponentEvalData', () => ({
 }));
 
 describe('CanvasDroppable', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders tool components', () => {
     const result = render(<CanvasDroppable />);
-    expect(result.getByTestId('button1')).toBeTruthy();
+    expect(result.getByTestId('canvas-component-button1')).toBeTruthy();
   });
 });

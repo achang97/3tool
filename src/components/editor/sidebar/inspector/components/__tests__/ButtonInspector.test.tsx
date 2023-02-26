@@ -1,6 +1,5 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { ComponentData, ComponentType } from '@app/types';
-import { mockEvalResult } from '@tests/constants/eval';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { Component } from '@app/types';
 import {
   validateDynamicInputField,
   validateSection,
@@ -9,7 +8,7 @@ import { render } from '@tests/utils/renderWithContext';
 import { ButtonInspector } from '../ButtonInspector';
 
 const mockName = 'Name';
-const mockData: ComponentData = {
+const mockData: Component['data'] = {
   button: {
     text: 'text',
     disabled: 'disabled',
@@ -17,16 +16,22 @@ const mockData: ComponentData = {
   },
 };
 
-const mockHandleUpdate = jest.fn();
+const mockHandleUpdateData = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useComponentEvalData');
+jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
+  useCodeMirrorPreview: jest.fn(() => ({})),
+}));
+
+jest.mock(
+  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
+  () => ({
+    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+  })
+);
 
 describe('ButtonInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-      evalData: {},
-    }));
   });
 
   describe('Basic', () => {
@@ -35,33 +40,27 @@ describe('ButtonInspector', () => {
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Basic');
     });
 
     it('text: renders "Text" text field', async () => {
-      const mockEvalData = { text: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Basic', {
-        type: ComponentType.Button,
         field: 'text',
         label: 'Text',
         value: mockData.button?.text,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.text,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.button.text },
       });
     });
   });
@@ -72,57 +71,45 @@ describe('ButtonInspector', () => {
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Interaction');
     });
 
     it('disabled: renders "Disabled" text field', async () => {
-      const mockEvalData = { disabled: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Interaction', {
-        type: ComponentType.Button,
         field: 'disabled',
         label: 'Disabled',
         value: mockData.button?.disabled,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.disabled,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.button.disabled },
       });
     });
 
     it('loading: renders "Loading" text field', async () => {
-      const mockEvalData = { loading: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Interaction', {
-        type: ComponentType.Button,
         field: 'loading',
         label: 'Loading',
         value: mockData.button?.loading,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.loading,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.button.loading },
       });
     });
   });

@@ -5,11 +5,10 @@ import Image from 'next/image';
 import {
   BaseComponentInspectorProps,
   Component,
-  ComponentData,
   ComponentType,
 } from '@app/types';
 import _ from 'lodash';
-import { InspectorEditableName } from './InspectorEditableName';
+import { InspectorHeader } from './InspectorHeader';
 import { useActiveTool } from '../../hooks/useActiveTool';
 import { DeleteComponentButton } from './DeleteComponentButton';
 import { InspectorSection } from './InspectorSection';
@@ -17,7 +16,7 @@ import { ButtonInspector } from './components/ButtonInspector';
 import { TextInputInspector } from './components/TextInputInspector';
 import { TextInspector } from './components/TextInspector';
 import { NumberInputInspector } from './components/NumberInputInspector';
-import { useUpdateComponentName } from '../../hooks/useUpdateComponentName';
+import { useComponentUpdateName } from '../../hooks/useComponentUpdateName';
 import { TableInspector } from './components/TableInspector';
 
 type ComponentInspectorProps = {
@@ -40,7 +39,7 @@ const COMPONENT_INSPECTOR_MAP: Record<
 export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
   const { tool, updateTool } = useActiveTool();
 
-  const handleUpdateName = useUpdateComponentName(component.name);
+  const handleUpdateName = useComponentUpdateName(component.name);
 
   const handleUpdateComponent = useCallback(
     async (update: RecursivePartial<Component>) => {
@@ -56,10 +55,13 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
   );
 
   const debouncedHandleUpdateData = useMemo(() => {
-    return _.debounce((update: RecursivePartial<ComponentData>) => {
-      handleUpdateComponent({ data: update });
-    }, DEBOUNCE_TIME_MS);
-  }, [handleUpdateComponent]);
+    return _.debounce(
+      (update: RecursivePartial<ValueOf<Component['data']>>) => {
+        handleUpdateComponent({ data: { [component.type]: update } });
+      },
+      DEBOUNCE_TIME_MS
+    );
+  }, [component.type, handleUpdateComponent]);
 
   const dataInspector = useMemo(() => {
     const TypedInspector = COMPONENT_INSPECTOR_MAP[component.type];
@@ -71,7 +73,7 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
       <TypedInspector
         name={component.name}
         data={component.data}
-        onUpdate={debouncedHandleUpdateData}
+        onUpdateData={debouncedHandleUpdateData}
       />
     );
   }, [component, debouncedHandleUpdateData]);
@@ -81,7 +83,7 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
       data-testid="component-inspector"
       sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
     >
-      <InspectorEditableName
+      <InspectorHeader
         icon={
           <Image
             style={{ height: '20px', width: '20px' }}
@@ -89,9 +91,10 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
             alt=""
           />
         }
+        title={component.name}
         subtitle={COMPONENT_CONFIGS[component.type].label}
-        value={component.name}
         onSubmit={handleUpdateName}
+        isEditable
       />
       <Box sx={{ overflow: 'auto', minHeight: 0 }}>
         {dataInspector}

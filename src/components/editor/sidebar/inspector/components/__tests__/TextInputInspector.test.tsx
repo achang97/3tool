@@ -1,6 +1,5 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { ComponentData, ComponentType } from '@app/types';
-import { mockEvalResult } from '@tests/constants/eval';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { Component } from '@app/types';
 import {
   validateDynamicInputField,
   validateSection,
@@ -9,7 +8,7 @@ import { render } from '@tests/utils/renderWithContext';
 import { TextInputInspector } from '../TextInputInspector';
 
 const mockName = 'Name';
-const mockData: ComponentData = {
+const mockData: Component['data'] = {
   textInput: {
     defaultValue: 'Default Value',
     placeholder: 'Placeholder',
@@ -21,16 +20,22 @@ const mockData: ComponentData = {
   },
 };
 
-const mockHandleUpdate = jest.fn();
+const mockHandleUpdateData = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useComponentEvalData');
+jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
+  useCodeMirrorPreview: jest.fn(() => ({})),
+}));
+
+jest.mock(
+  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
+  () => ({
+    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+  })
+);
 
 describe('TextInputInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-      evalData: {},
-    }));
   });
 
   describe('Basic', () => {
@@ -39,57 +44,45 @@ describe('TextInputInspector', () => {
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Basic');
     });
 
     it('defaultValue: renders "Default Value" text field', async () => {
-      const mockEvalData = { defaultValue: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Basic', {
-        type: ComponentType.TextInput,
         field: 'defaultValue',
         label: 'Default Value',
         value: mockData.textInput?.defaultValue,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.defaultValue,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.textInput.defaultValue },
       });
     });
 
     it('placeholder: renders "Placeholder" text field', async () => {
-      const mockEvalData = { placeholder: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Basic', {
-        type: ComponentType.TextInput,
         field: 'placeholder',
         label: 'Placeholder',
         value: mockData.textInput?.placeholder,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.placeholder,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.textInput.placeholder },
       });
     });
   });
@@ -100,33 +93,27 @@ describe('TextInputInspector', () => {
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Label');
     });
 
     it('label: renders "Label" text field', async () => {
-      const mockEvalData = { label: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Label', {
-        type: ComponentType.TextInput,
         field: 'label',
         label: 'Label',
         value: mockData.textInput?.label,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.label,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.textInput.label },
       });
     });
   });
@@ -137,33 +124,27 @@ describe('TextInputInspector', () => {
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Interaction');
     });
 
     it('disabled: renders "Disabled" text field', async () => {
-      const mockEvalData = { disabled: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Interaction', {
-        type: ComponentType.TextInput,
         field: 'disabled',
         label: 'Disabled',
         value: mockData.textInput?.disabled,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.disabled,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.textInput.disabled },
       });
     });
   });
@@ -174,81 +155,63 @@ describe('TextInputInspector', () => {
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Validation');
     });
 
     it('required: renders "Required" text field', async () => {
-      const mockEvalData = { required: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Validation', {
-        type: ComponentType.TextInput,
         field: 'required',
         label: 'Required',
         value: mockData.textInput?.required,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.required,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.textInput.required },
       });
     });
 
     it('minLength: renders "Min Length" text field', async () => {
-      const mockEvalData = { minLength: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Validation', {
-        type: ComponentType.TextInput,
         field: 'minLength',
         label: 'Min Length',
         value: mockData.textInput?.minLength,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.minLength,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.textInput.minLength },
       });
     });
 
     it('maxLength: renders "Max Length" text field', async () => {
-      const mockEvalData = { maxLength: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TextInputInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Validation', {
-        type: ComponentType.TextInput,
         field: 'maxLength',
         label: 'Max Length',
         value: mockData.textInput?.maxLength,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.maxLength,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.textInput.maxLength },
       });
     });
   });

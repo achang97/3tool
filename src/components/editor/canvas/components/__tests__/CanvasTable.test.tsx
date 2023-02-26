@@ -14,6 +14,10 @@ jest.mock('@app/redux/hooks', () => ({
 }));
 
 describe('CanvasTable', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('props', () => {
     describe('data', () => {
       describe('columns', () => {

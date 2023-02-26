@@ -7,6 +7,8 @@ import {
   parseVariables,
   flattenObjectFields,
   parseDynamicTermVariables,
+  getPrototypeFunctions,
+  parseDeclaredVariables,
 } from '../javascript';
 
 const acorn = require('acorn');
@@ -75,6 +77,8 @@ describe('javascript', () => {
       const result = parseObjectVariable('button1');
       expect(result).toEqual({
         objectName: 'button1',
+        rootFieldName: '',
+        fieldName: '',
       });
     });
 
@@ -106,6 +110,23 @@ describe('javascript', () => {
     });
   });
 
+  describe('parseDeclaredVariables', () => {
+    it('parses function declarators', () => {
+      const result = parseDeclaredVariables('function test() {}');
+      expect(result).toEqual(['test']);
+    });
+
+    it('parses variable declarators', () => {
+      const result = parseDeclaredVariables('const test = 4;');
+      expect(result).toEqual(['test']);
+    });
+
+    it('parses declarators in expression with return statement', () => {
+      const result = parseDeclaredVariables('const test = 4; return test;');
+      expect(result).toEqual(['test']);
+    });
+  });
+
   describe('replaceVariableName', () => {
     it('replaces all variable references in expression', () => {
       const result = replaceVariableName(
@@ -116,6 +137,15 @@ describe('javascript', () => {
       expect(result).toEqual('newButton + newButton.text');
     });
 
+    it('replaces terms in expression with return statement', () => {
+      const result = replaceVariableName(
+        'return button1.text',
+        'button1',
+        'newButton'
+      );
+      expect(result).toEqual('return newButton.text');
+    });
+
     it('does not replace variable references if a variable of the same name has been declared', () => {
       const result = replaceVariableName(
         'const button1 = test; console.log(button1.text);',
@@ -124,6 +154,17 @@ describe('javascript', () => {
       );
       expect(result).toEqual(
         'const button1 = test; console.log(button1.text);'
+      );
+    });
+
+    it('does not replace variable references if a function of the same name has been declared', () => {
+      const result = replaceVariableName(
+        'function button1() {}; console.log(button1.text);',
+        'button1',
+        'newButton'
+      );
+      expect(result).toEqual(
+        'function button1() {}; console.log(button1.text);'
       );
     });
   });
@@ -138,6 +179,15 @@ describe('javascript', () => {
       expect(result).toEqual('{{ newButton + newButton.text }}');
     });
 
+    it('replaces variable references within multiple dynamic terms', () => {
+      const result = replaceDynamicTermVariableName(
+        '{{ button1.text }} {{ button1.disabled }}',
+        'button1',
+        'newButton'
+      );
+      expect(result).toEqual('{{ newButton.text }} {{ newButton.disabled }}');
+    });
+
     it('does not replace variable references outside of dynamic terms', () => {
       const result = replaceDynamicTermVariableName(
         'button1 + button1.text',
@@ -149,6 +199,11 @@ describe('javascript', () => {
   });
 
   describe('parseVariables', () => {
+    it('replaces parsed nodes from expression with return statement', () => {
+      const result = parseVariables('return button1.text', ['button1']);
+      expect(result).toEqual(['button1.text']);
+    });
+
     it('returns parsed MemberExpression nodes from expression', () => {
       const result = parseVariables('button1.test + button2.test.nested', [
         'button1',
@@ -178,6 +233,18 @@ describe('javascript', () => {
     it('excludes parsed Identifier nodes from expression if not in valid variable names', () => {
       const result = parseVariables('button2', ['button1']);
       expect(result).toEqual([]);
+    });
+
+    it('removes single call expression from the end of a variable', () => {
+      const result = parseVariables('button2.text.toString()', ['button2']);
+      expect(result).toEqual(['button2.text']);
+    });
+
+    it('removes multiple call expressions from the end of a variable', () => {
+      const result = parseVariables('button2.text.toString().toString()', [
+        'button2',
+      ]);
+      expect(result).toEqual(['button2.text']);
     });
 
     it('excludes duplicates', () => {
@@ -227,106 +294,40 @@ describe('javascript', () => {
     });
 
     describe('prefix', () => {
-      describe('without prefix', () => {
-        it('returns root-level fields', () => {
-          const result = flattenObjectFields({
-            field: '1',
-          });
-          expect(result).toEqual([
-            {
-              name: 'field',
-              value: '1',
-              parent: undefined,
-              isLeaf: true,
-            },
-          ]);
+      it('returns fields without prefix', () => {
+        const result = flattenObjectFields({
+          field: '1',
         });
-
-        it('descends into arrays', () => {
-          const result = flattenObjectFields({
-            array: ['1'],
-          });
-          expect(result).toEqual([
-            {
-              name: 'array[0]',
-              value: '1',
-              parent: 'array',
-              isLeaf: true,
-            },
-          ]);
-        });
-
-        it('descends into objects', () => {
-          const result = flattenObjectFields({
-            array: { field: '1' },
-          });
-          expect(result).toEqual([
-            {
-              name: 'array.field',
-              value: '1',
-              parent: 'array',
-              isLeaf: true,
-            },
-          ]);
-        });
+        expect(result).toEqual([
+          {
+            name: 'field',
+            value: '1',
+            parent: undefined,
+            isLeaf: true,
+          },
+        ]);
       });
 
-      describe('with prefix', () => {
-        it('returns root-level fields', () => {
-          const result = flattenObjectFields(
-            {
-              field: '1',
-            },
-            { prefix: 'prefix' }
-          );
-          expect(result).toEqual([
-            {
-              name: 'prefix.field',
-              value: '1',
-              parent: 'prefix',
-              isLeaf: true,
-            },
-          ]);
-        });
-
-        it('descends into arrays', () => {
-          const result = flattenObjectFields(
-            {
-              array: ['1'],
-            },
-            { prefix: 'prefix' }
-          );
-          expect(result).toEqual([
-            {
-              name: 'prefix.array[0]',
-              value: '1',
-              parent: 'prefix.array',
-              isLeaf: true,
-            },
-          ]);
-        });
-
-        it('descends into objects', () => {
-          const result = flattenObjectFields(
-            {
-              array: { field: '1' },
-            },
-            { prefix: 'prefix' }
-          );
-          expect(result).toEqual([
-            {
-              name: 'prefix.array.field',
-              value: '1',
-              parent: 'prefix.array',
-              isLeaf: true,
-            },
-          ]);
-        });
+      it('returns fields with prefix', () => {
+        const result = flattenObjectFields(
+          {
+            field: '1',
+          },
+          { prefix: 'prefix' }
+        );
+        expect(result).toEqual([
+          {
+            name: 'prefix.field',
+            value: '1',
+            parent: 'prefix',
+            isLeaf: true,
+          },
+        ]);
       });
     });
 
     describe('onlyLeaves', () => {
-      it('includes non-leaf fields', () => {
+      it('includes leaf fields', () => {
         const result = flattenObjectFields({
           field: '1',
         });
@@ -385,6 +386,39 @@ describe('javascript', () => {
           },
         ]);
       });
+    });
+  });
+
+  describe('getPrototypeFunctions', () => {
+    it('returns empty array if value is undefined', () => {
+      const result = getPrototypeFunctions(undefined);
+      expect(result).toEqual([]);
+    });
+
+    it('excludes constructor from returned prototype functions', () => {
+      const result = getPrototypeFunctions(2);
+      expect(result).toEqual([
+        Number.prototype.toExponential,
+        Number.prototype.toFixed,
+        Number.prototype.toPrecision,
+        Number.prototype.toString,
+        Number.prototype.valueOf,
+        Number.prototype.toLocaleString,
+      ]);
+    });
+
+    it('excludes functions with "__" prefix', () => {
+      const result = getPrototypeFunctions(2);
+      /* eslint-disable no-underscore-dangle, no-restricted-properties */
+      // @ts-ignore
+      expect(result).not.toContain(Object.prototype.__defineGetter__);
+      // @ts-ignore
+      expect(result).not.toContain(Object.prototype.__defineSetter__);
+      // @ts-ignore
+      expect(result).not.toContain(Object.prototype.__lookupGetter__);
+      // @ts-ignore
+      expect(result).not.toContain(Object.prototype.__lookupSetter__);
+      /* eslint-enable no-underscore-dangle, no-restricted-properties */
     });
   });
 });

@@ -1,7 +1,6 @@
 import Editor, { getServerSideProps } from '@app/pages/editor/[id]';
 import { getToolById } from '@app/redux/services/tools';
 import { store } from '@app/redux/store';
-import userEvent from '@testing-library/user-event';
 import { mockTool } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
 import { GetServerSidePropsContext } from 'next';
@@ -34,31 +33,14 @@ describe('Editor/Id', () => {
   });
 
   describe('page', () => {
-    it('renders editor toolbar', () => {
+    it('renders tool editor toolbar', () => {
       const result = render(<Editor tool={mockTool} />);
-      expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
+      expect(result.getByTestId('tool-editor-toolbar')).toBeTruthy();
     });
 
-    it('renders editor sidebar', async () => {
+    it('renders editor', () => {
       const result = render(<Editor tool={mockTool} />);
-
-      // Default view should be the component picker
-      expect(await result.findByTestId('component-picker')).toBeTruthy();
-
-      await userEvent.click(result.getByText('Inspector'));
-      expect(await result.findByTestId('inspector')).toBeTruthy();
-
-      await userEvent.click(result.getByText('Components'));
-      expect(await result.findByTestId('component-picker')).toBeTruthy();
-    });
-
-    it('renders editor canvas and components', async () => {
-      const result = render(<Editor tool={mockTool} />);
-
-      expect(await result.findByTestId('editor-canvas')).toBeTruthy();
-      mockTool.components.forEach((component) => {
-        expect(result.getByTestId(component.name)).toBeTruthy();
-      });
+      expect(result.getByTestId('editor')).toBeTruthy();
     });
   });
 

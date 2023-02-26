@@ -1,15 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { ComponentType, SidebarViewType } from '@app/types';
+import { Action, ComponentType, SidebarViewType } from '@app/types';
+import _ from 'lodash';
 
 type NewComponent = {
   name: string;
   type: ComponentType;
-};
-
-export type SnackbarMessage = {
-  type: 'success' | 'error';
-  message: string;
 };
 
 type EditorState = {
@@ -20,14 +16,11 @@ type EditorState = {
   movingComponentName?: string;
   focusedComponentName?: string;
 
-  // Global messages
-  snackbarMessage?: SnackbarMessage;
-
   // Sidebar
   sidebarView: SidebarViewType;
 
   // Actions
-  focusedActionName?: string;
+  focusedAction?: Action;
 };
 
 const initialState: EditorState = {
@@ -72,19 +65,17 @@ export const editorSlice = createSlice({
     },
 
     // Actions
-    focusAction: (state, action: PayloadAction<string>) => {
-      state.focusedActionName = action.payload;
+    focusAction: (state, action: PayloadAction<Action>) => {
+      state.focusedAction = action.payload;
     },
     blurAction: (state) => {
-      state.focusedActionName = undefined;
+      state.focusedAction = undefined;
     },
-
-    // Global messages
-    setSnackbarMessage: (
+    updateFocusedAction: (
       state,
-      action: PayloadAction<SnackbarMessage | undefined>
+      action: PayloadAction<RecursivePartial<Action>>
     ) => {
-      state.snackbarMessage = action.payload;
+      _.merge(state.focusedAction, action.payload);
     },
   },
 });
@@ -100,7 +91,7 @@ export const {
   setSidebarView,
   focusAction,
   blurAction,
-  setSnackbarMessage,
+  updateFocusedAction,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

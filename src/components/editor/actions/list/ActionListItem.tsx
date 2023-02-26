@@ -1,41 +1,55 @@
 import { EditableTextField } from '@app/components/common/EditableTextField';
+import { MenuItem } from '@app/components/common/MenuItem';
 import { ACTION_CONFIGS } from '@app/constants/actions';
 import { useMenuState } from '@app/hooks/useMenuState';
 import { focusAction } from '@app/redux/features/editorSlice';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { ActionType } from '@app/types';
+import { Action } from '@app/types';
 import { MoreVert } from '@mui/icons-material';
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, IconButton, Menu } from '@mui/material';
 import Image from 'next/image';
 import { useCallback, useMemo, useState } from 'react';
 import { DeleteDialog } from '../../common/DeleteDialog';
-import { useDeleteAction } from '../../hooks/useDeleteAction';
-import { useUpdateActionName } from '../../hooks/useUpdateActionName';
+import { useActionConfirmDiscard } from '../../hooks/useActionConfirmDiscard';
+import { useActionDelete } from '../../hooks/useActionDelete';
+import { useActionIsEditing } from '../../hooks/useActionIsEditing';
+import { useActionUpdateName } from '../../hooks/useActionUpdateName';
 
 type ActionListItemProps = {
-  name: string;
-  type: ActionType;
+  action: Action;
 };
 
-export const ActionListItem = ({ name, type }: ActionListItemProps) => {
-  const { icon, label } = ACTION_CONFIGS[type];
+export const ActionListItem = ({ action }: ActionListItemProps) => {
+  const { icon, label } = ACTION_CONFIGS[action.type];
 
   const dispatch = useAppDispatch();
-  const { focusedActionName } = useAppSelector((state) => state.editor);
+  const { focusedAction } = useAppSelector((state) => state.editor);
 
   const { isMenuOpen, menuAnchor, onMenuClose, onMenuOpen } = useMenuState();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const handleUpdateActionName = useUpdateActionName(name);
-  const handleDeleteAction = useDeleteAction(name);
+  const handleUpdateActionName = useActionUpdateName(action.name);
+  const handleDeleteAction = useActionDelete(action.name);
+  const isEditingFocusedAction = useActionIsEditing();
+  const confirmDiscard = useActionConfirmDiscard();
 
   const isFocused = useMemo(() => {
-    return focusedActionName === name;
-  }, [focusedActionName, name]);
+    return focusedAction?.name === action.name;
+  }, [focusedAction, action.name]);
+
+  const isNameEditable = useMemo(() => {
+    return isFocused && !isEditingFocusedAction;
+  }, [isEditingFocusedAction, isFocused]);
 
   const handleFocusClick = useCallback(() => {
-    dispatch(focusAction(name));
-  }, [dispatch, name]);
+    if (isFocused) {
+      return;
+    }
+    if (!confirmDiscard()) {
+      return;
+    }
+    dispatch(focusAction(action));
+  }, [isFocused, confirmDiscard, dispatch, action]);
 
   const handleDeleteDialogOpen = useCallback(() => {
     setIsDeleteDialogOpen(true);
@@ -57,6 +71,7 @@ export const ActionListItem = ({ name, type }: ActionListItemProps) => {
           cursor: 'pointer',
         }}
         onClick={handleFocusClick}
+        data-testid={`action-list-item-${action.name}`}
       >
         <Image alt={label} src={icon} />
         <Box
@@ -67,12 +82,18 @@ export const ActionListItem = ({ name, type }: ActionListItemProps) => {
           }}
         >
           <EditableTextField
-            value={name}
-            isEditable={isFocused}
+            value={action.name}
+            isEditable={isNameEditable}
+            showIcon={isFocused}
             TextFieldProps={{ size: 'small' }}
             TypographyProps={{ variant: 'body2' }}
             height={30}
             onSubmit={handleUpdateActionName}
+            iconTooltip={
+              !isNameEditable
+                ? 'You must save any changes before this can be renamed.'
+                : ''
+            }
           />
         </Box>
         <IconButton
@@ -88,16 +109,16 @@ export const ActionListItem = ({ name, type }: ActionListItemProps) => {
           onClose={onMenuClose}
           onClick={onMenuClose}
         >
-          <MenuItem onClick={handleDeleteDialogOpen}>
-            <Typography variant="body2" color="error.main">
-              Delete
-            </Typography>
-          </MenuItem>
+          <MenuItem
+            onClick={handleDeleteDialogOpen}
+            color="error.main"
+            label="Delete"
+          />
         </Menu>
       </Box>
       <DeleteDialog
-        name={name}
-        open={isDeleteDialogOpen}
+        name={action.name}
+        isOpen={isDeleteDialogOpen}
         onClose={handleDeleteDialogClose}
         onDelete={handleDeleteAction}
       />

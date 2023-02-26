@@ -14,6 +14,10 @@ const mockHandleEditClick = jest.fn();
 const mockResources: Resource[] = [mockSmartContractResource];
 
 describe('useDataGridProps', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('rows', () => {
     it('returns empty array if resources is undefined', () => {
       const { result } = renderHook(() =>

@@ -5,12 +5,12 @@ import { BaseResourceDialog } from './BaseResourceDialog';
 
 type CreateResourceDialogProps = {
   onClose: () => void;
-  open: boolean;
+  isOpen: boolean;
 };
 
 export const CreateResourceDialog = ({
   onClose,
-  open,
+  isOpen,
 }: CreateResourceDialogProps) => {
   const [createResource, { isLoading, error, data: newResource }] =
     useCreateResourceMutation();
@@ -33,7 +33,7 @@ export const CreateResourceDialog = ({
       title="Add Resource"
       testId="create-resource-dialog"
       onClose={onClose}
-      open={open}
+      isOpen={isOpen}
       onSubmit={handleCreateResource}
       error={error}
       isLoading={isLoading}

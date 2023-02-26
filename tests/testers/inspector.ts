@@ -1,13 +1,9 @@
-import { DynamicTextFieldProps } from '@app/components/editor/common/DynamicTextField';
-import {
-  Preview,
-  useDynamicTextFieldPreview,
-} from '@app/components/editor/hooks/useDynamicTextFieldPreview';
+import { CodeMirrorProps } from '@app/components/editor/common/CodeMirror';
+import { useCodeMirrorPreview } from '@app/components/editor/hooks/useCodeMirrorPreview';
 import { InspectorEnumFieldProps } from '@app/components/editor/sidebar/inspector/fields/InspectorEnumField';
-import { EvalResult } from '@app/components/editor/utils/eval';
-import { ComponentType } from '@app/types';
-import { renderHook, RenderResult, within } from '@testing-library/react';
+import { RenderResult, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import _ from 'lodash';
 
 export const validateSection = (result: RenderResult, title: string) => {
   expect(result.getByText(title, { selector: 'h6' })).toBeTruthy();
@@ -23,16 +19,28 @@ const getFieldContainer = (
   return field;
 };
 
-type ValidateEnumFieldProps = Omit<InspectorEnumFieldProps, 'onChange'> & {
+type BaseValidateProps<T> = {
   field: string;
-  type: ComponentType;
+  label: string;
+  value: any;
   onChange: jest.Mock;
+  config: T;
+};
+
+type ValidateEnumFieldProps = BaseValidateProps<
+  Pick<InspectorEnumFieldProps, 'options'>
+>;
+
+const createUpdateObject = (field: string, value: unknown) => {
+  const update = {};
+  _.set(update, field, value);
+  return update;
 };
 
 export const validateEnumField = async (
   result: RenderResult,
   sectionTitle: string,
-  { label, value, options, field, type, onChange }: ValidateEnumFieldProps
+  { label, value, field, onChange, config: { options } }: ValidateEnumFieldProps
 ) => {
   const container = getFieldContainer(
     result,
@@ -56,31 +64,18 @@ export const validateEnumField = async (
     if (value === option.value) {
       expect(onChange).not.toHaveBeenCalled();
     } else {
-      expect(onChange).toHaveBeenCalledWith({
-        [type]: {
-          [field]: option.value,
-        },
-      });
+      expect(onChange).toHaveBeenCalledWith(
+        createUpdateObject(field, option.value)
+      );
     }
 
     onChange.mockClear();
   }
 };
 
-type ValidateDynamicInputFieldProps = Omit<
-  DynamicTextFieldProps,
-  'onChange' | 'evalResult'
-> & {
-  field: string;
-  type: ComponentType;
-  onChange: jest.Mock;
-  evalResult: EvalResult;
-};
-
-const getPreviewFromEval = (evalResult: EvalResult): Preview => {
-  const { result } = renderHook(() => useDynamicTextFieldPreview(evalResult));
-  return result.current;
-};
+type ValidateDynamicInputFieldProps = BaseValidateProps<
+  Pick<CodeMirrorProps, 'type'>
+>;
 
 export const validateDynamicInputField = async (
   result: RenderResult,
@@ -88,16 +83,15 @@ export const validateDynamicInputField = async (
   {
     label,
     value,
-    evalResult,
     field,
-    type,
     onChange,
+    config: { type: inputType },
   }: ValidateDynamicInputFieldProps
 ) => {
   const container = getFieldContainer(
     result,
     sectionTitle,
-    `dynamic-text-field-${label}`
+    `code-mirror-${label}`
   );
 
   expect(container.getByText(label, { selector: 'label' })).toBeTruthy();
@@ -107,26 +101,16 @@ export const validateDynamicInputField = async (
     expect(input).toHaveTextContent(value);
   }
 
+  expect(useCodeMirrorPreview as jest.Mock).toHaveBeenCalledWith({
+    type: inputType,
+    isDynamic: true,
+    expression: value,
+  });
+
   const inputText = 'h';
   await userEvent.type(input, inputText);
 
-  const previewData = getPreviewFromEval(evalResult);
-  const previewElement = within(
-    container.getByTestId('dynamic-test-field-preview')
+  expect(onChange).toHaveBeenCalledWith(
+    createUpdateObject(field, `${inputText}${value}`)
   );
-
-  if (previewData.message) {
-    expect(
-      previewElement.getByText(previewData.message.toString())
-    ).toBeTruthy();
-  }
-  if (previewData.type) {
-    expect(previewElement.getByText(previewData.type)).toBeTruthy();
-  }
-
-  expect(onChange).toHaveBeenCalledWith({
-    [type]: {
-      [field]: `${inputText}${value}`,
-    },
-  });
 };

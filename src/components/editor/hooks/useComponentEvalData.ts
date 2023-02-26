@@ -24,15 +24,15 @@ type HookReturnType<T extends ComponentType> = {
 export const useComponentEvalData = <T extends ComponentType>(
   name: string
 ): HookReturnType<T> => {
-  const { componentEvalDataMap, componentEvalDataValuesMap } = useActiveTool();
+  const { evalDataMap, evalDataValuesMap } = useActiveTool();
 
   const evalData = useMemo(() => {
-    return (componentEvalDataMap[name] as EvalData<T>) ?? {};
-  }, [componentEvalDataMap, name]);
+    return (evalDataMap[name] as EvalData<T>) ?? {};
+  }, [evalDataMap, name]);
 
   const evalDataValues = useMemo(() => {
-    return (componentEvalDataValuesMap[name] as EvalDataValues<T>) ?? {};
-  }, [componentEvalDataValuesMap, name]);
+    return (evalDataValuesMap[name] as EvalDataValues<T>) ?? {};
+  }, [evalDataValuesMap, name]);
 
   return { evalData, evalDataValues };
 };

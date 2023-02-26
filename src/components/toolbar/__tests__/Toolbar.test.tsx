@@ -12,7 +12,7 @@ jest.mock('next/router', () => ({
 }));
 
 describe('Toolbar', () => {
-  const generalToolbarId = 'general-toolbar';
+  const defaultToolbarId = 'default-toolbar';
 
   it('renders nothing if user is unauthenticated', () => {
     (useAuth0 as jest.Mock).mockImplementation(() => ({
@@ -57,6 +57,6 @@ describe('Toolbar', () => {
     }));
 
     const result = render(<Toolbar />);
-    expect(result.getByTestId(generalToolbarId)).toBeTruthy();
+    expect(result.getByTestId(defaultToolbarId)).toBeTruthy();
   });
 });

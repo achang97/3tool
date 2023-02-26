@@ -6,6 +6,10 @@ import { useSubmitSmartContract } from '../useSubmitSmartContract';
 const mockHandleSubmit = jest.fn();
 
 describe('useSubmitSmartContract', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('validation', () => {
     it('does not call onSubmit if name is not supplied', async () => {
       const { result } = renderHook(() =>

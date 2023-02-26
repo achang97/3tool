@@ -4,14 +4,14 @@ import { useComponentEvalData } from '../useComponentEvalData';
 
 jest.mock('../useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
-    componentEvalDataMap: {
+    evalDataMap: {
       button1: {
         text: {
           value: 'hello',
         },
       },
     },
-    componentEvalDataValuesMap: {
+    evalDataValuesMap: {
       button1: {
         text: 'hello',
       },

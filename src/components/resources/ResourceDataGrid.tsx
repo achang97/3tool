@@ -70,7 +70,7 @@ export const ResourceDataGrid = ({
       />
       {activeResource && (
         <EditResourceDialog
-          open={!!activeResource}
+          isOpen={!!activeResource}
           resourceId={activeResource.id}
           onClose={handleEditDialogClose}
         />

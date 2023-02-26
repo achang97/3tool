@@ -1,5 +1,3 @@
-import { setSnackbarMessage } from '@app/redux/features/editorSlice';
-import { useAppDispatch } from '@app/redux/hooks';
 import { useUpdateToolMutation } from '@app/redux/services/tools';
 import { ApiResponse, Tool } from '@app/types';
 import { parseApiError } from '@app/utils/api';
@@ -13,18 +11,19 @@ import React, {
   useState,
 } from 'react';
 import {
-  useComponentEvalDataMaps,
-  ComponentEvalDataMap,
-  ComponentEvalDataValuesMap,
-} from '../hooks/useComponentEvalDataMaps';
-import { useComponentDataDepGraph } from '../hooks/useComponentDataDepGraph';
+  useToolEvalDataMaps,
+  ToolEvalDataMap,
+  ToolEvalDataValuesMap,
+} from '../hooks/useToolEvalDataMaps';
+import { useToolDataDepGraph } from '../hooks/useToolDataDepGraph';
+import { useEnqueueSnackbar } from '../hooks/useEnqueueSnackbar';
 
 const DEFAULT_STATE = {
   tool: {} as Tool,
   updateTool: async () => undefined,
-  componentDataDepGraph: new DepGraph<string>(),
-  componentEvalDataMap: {},
-  componentEvalDataValuesMap: {},
+  dataDepGraph: new DepGraph<string>(),
+  evalDataMap: {},
+  evalDataValuesMap: {},
 };
 
 export type ActiveToolState = {
@@ -32,9 +31,9 @@ export type ActiveToolState = {
   updateTool: (
     update: Partial<Pick<Tool, 'name' | 'components' | 'actions'>>
   ) => Promise<ApiResponse<Tool> | undefined>;
-  componentDataDepGraph: DepGraph<string>;
-  componentEvalDataMap: ComponentEvalDataMap;
-  componentEvalDataValuesMap: ComponentEvalDataValuesMap;
+  dataDepGraph: DepGraph<string>;
+  evalDataMap: ToolEvalDataMap;
+  evalDataValuesMap: ToolEvalDataValuesMap;
 };
 
 export const ActiveToolContext = createContext<ActiveToolState>(DEFAULT_STATE);
@@ -52,29 +51,21 @@ export const ActiveToolProvider = ({
   const [updateTool, { error: updateError, data: updatedTool }] =
     useUpdateToolMutation();
 
-  const componentDataDepGraph = useComponentDataDepGraph(activeTool.components);
+  const { dataDepGraph, cyclePath } = useToolDataDepGraph(activeTool);
+  const enqueueSnackbar = useEnqueueSnackbar();
 
-  const {
-    componentEvalDataMap,
-    componentEvalDataValuesMap,
-    error: evalError,
-  } = useComponentEvalDataMaps({
-    components: activeTool.components,
-    componentDataDepGraph,
+  const { evalDataMap, evalDataValuesMap } = useToolEvalDataMaps({
+    tool: activeTool,
+    dataDepGraph,
   });
-
-  const dispatch = useAppDispatch();
 
   const displayErrorSnackbar = useCallback(
     (error: string) => {
-      dispatch(
-        setSnackbarMessage({
-          type: 'error',
-          message: error,
-        })
-      );
+      enqueueSnackbar(error, {
+        variant: 'error',
+      });
     },
-    [dispatch]
+    [enqueueSnackbar]
   );
 
   useEffect(() => {
@@ -84,10 +75,10 @@ export const ActiveToolProvider = ({
   }, [displayErrorSnackbar, updateError]);
 
   useEffect(() => {
-    if (evalError) {
-      displayErrorSnackbar(evalError.message);
+    if (cyclePath) {
+      displayErrorSnackbar(`Dependency Cycle Found: ${cyclePath.join(' → ')}`);
     }
-  }, [displayErrorSnackbar, evalError]);
+  }, [cyclePath, displayErrorSnackbar]);
 
   useEffect(() => {
     if (updatedTool) {
@@ -109,16 +100,16 @@ export const ActiveToolProvider = ({
     return {
       tool: activeTool,
       updateTool: updateActiveTool,
-      componentDataDepGraph,
-      componentEvalDataMap,
-      componentEvalDataValuesMap,
+      dataDepGraph,
+      evalDataMap,
+      evalDataValuesMap,
     };
   }, [
     activeTool,
     updateActiveTool,
-    componentDataDepGraph,
-    componentEvalDataMap,
-    componentEvalDataValuesMap,
+    dataDepGraph,
+    evalDataMap,
+    evalDataValuesMap,
   ]);
 
   return (

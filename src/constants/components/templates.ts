@@ -1,49 +1,44 @@
-import {
-  ButtonData,
-  ComponentData,
-  ComponentType,
-  NumberInputData,
-  TableData,
-  TextData,
-  TextInputData,
-} from '@app/types';
+import { Component, ComponentType } from '@app/types';
 
-export type ComponentDataTemplates = {
-  [KeyType in ComponentType]: NonNullable<ComponentData[KeyType]>;
+type ComponentDataTemplate<T extends ComponentType> = Component['data'][T];
+type ComponentDataTemplates = {
+  [KeyType in ComponentType]: NonNullable<Component['data'][KeyType]>;
 };
 
-export const BUTTON_DATA_TEMPLATE: ButtonData = {
+const BUTTON_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.Button> = {
   text: 'Button',
   disabled: '',
   loading: '',
 };
 
-export const TEXT_INPUT_DATA_TEMPLATE: TextInputData = {
-  defaultValue: '',
-  placeholder: 'Enter value',
-  label: 'Label',
-  disabled: '',
-  required: '',
-  minLength: '',
-  maxLength: '',
-};
+const TEXT_INPUT_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.TextInput> =
+  {
+    defaultValue: '',
+    placeholder: 'Enter value',
+    label: 'Label',
+    disabled: '',
+    required: '',
+    minLength: '',
+    maxLength: '',
+  };
 
-export const NUMBER_INPUT_DATA_TEMPLATE: NumberInputData = {
-  defaultValue: '0',
-  placeholder: 'Enter value',
-  label: 'Label',
-  disabled: '',
-  required: '',
-  minimum: '',
-  maximum: '',
-};
+const NUMBER_INPUT_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.NumberInput> =
+  {
+    defaultValue: '0',
+    placeholder: 'Enter value',
+    label: 'Label',
+    disabled: '',
+    required: '',
+    minimum: '',
+    maximum: '',
+  };
 
-export const TEXT_DATA_TEMPLATE: TextData = {
+const TEXT_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.Text> = {
   value: 'Hello!',
   horizontalAlignment: 'left',
 };
 
-export const TABLE_DATA_TEMPLATE: TableData = {
+const TABLE_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.Table> = {
   data: `
 [{
   "id": 1,

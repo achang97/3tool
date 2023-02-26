@@ -1,15 +1,15 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { BaseComponentInspectorProps, ComponentType } from '@app/types';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { BaseComponentInspectorProps } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
+
+const DATA_TYPES = COMPONENT_DATA_TYPES.table;
 
 export const TableInspector = ({
   name,
   data,
-  onUpdate,
+  onUpdateData,
 }: BaseComponentInspectorProps) => {
-  const { evalData } = useComponentEvalData<ComponentType.Table>(name);
-
   const tableData = useMemo(() => {
     return data.table;
   }, [data]);
@@ -25,7 +25,7 @@ export const TableInspector = ({
             value: tableData?.data,
             data: {
               text: {
-                evalResult: evalData.data,
+                type: DATA_TYPES.data,
               },
             },
           },
@@ -35,7 +35,7 @@ export const TableInspector = ({
             value: tableData?.emptyMessage,
             data: {
               text: {
-                evalResult: evalData.emptyMessage,
+                type: DATA_TYPES.emptyMessage,
               },
             },
           },
@@ -50,21 +50,20 @@ export const TableInspector = ({
             value: tableData?.multiselect,
             data: {
               text: {
-                evalResult: evalData.multiselect,
+                type: DATA_TYPES.multiselect,
               },
             },
           },
         ],
       },
     ];
-  }, [evalData, tableData]);
+  }, [tableData]);
 
   return (
     <BaseInspector
-      type={ComponentType.Table}
       name={name}
       config={config}
-      onUpdate={onUpdate}
+      onUpdateData={onUpdateData}
       testId="table-inspector"
     />
   );

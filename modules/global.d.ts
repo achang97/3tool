@@ -19,6 +19,8 @@ type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
 
+type ValueOf<T> = T[keyof T];
+
 declare module '*.png';
 declare module '*.jpg';
 declare module '*.svg';

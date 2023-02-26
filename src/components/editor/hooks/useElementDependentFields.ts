@@ -1,42 +1,32 @@
-import { useCallback, useMemo } from 'react';
-import { getComponentData } from '../utils/components';
-import {
-  flattenObjectFields,
-  parseDynamicTermVariables,
-} from '../utils/javascript';
+import _ from 'lodash';
+import { useMemo } from 'react';
+import { parseDynamicTermVariables, parseVariables } from '../utils/javascript';
 import { useActiveTool } from './useActiveTool';
+import { useToolFlattenedElements } from './useToolFlattenedElements';
 
+// TODO (Optimization): Bring this to the top level as a map?
 export const useElementDependentFields = (name: string): string[] => {
   const { tool } = useActiveTool();
-
-  const addComponentDependents = useCallback(
-    (dependents: Set<string>) => {
-      tool.components.forEach((component) => {
-        if (component.name === name) {
-          return;
-        }
-
-        flattenObjectFields(getComponentData(component), {
-          prefix: component.name,
-        }).forEach((field) => {
-          const variables = parseDynamicTermVariables(field.value, [name]);
-          if (variables.length !== 0) {
-            dependents.add(field.name);
-          }
-        });
-      });
-    },
-    [name, tool.components]
-  );
+  const elements = useToolFlattenedElements({
+    tool,
+    onlyLeaves: true,
+    includePrefix: true,
+  });
 
   const dependents = useMemo(() => {
-    const uniqueDependents = new Set<string>();
+    return _.chain(elements)
+      .map('fields')
+      .flatten()
+      .filter((field) => {
+        const variables = field.isJavascript
+          ? parseVariables(field.value, [name])
+          : parseDynamicTermVariables(field.value, [name]);
 
-    // TODO: Add action dependents
-    addComponentDependents(uniqueDependents);
-
-    return [...uniqueDependents];
-  }, [addComponentDependents]);
+        return variables.length !== 0;
+      })
+      .map('name')
+      .value();
+  }, [elements, name]);
 
   return dependents;
 };

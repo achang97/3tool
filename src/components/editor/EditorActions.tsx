@@ -1,11 +1,15 @@
+import { useAppSelector } from '@app/redux/hooks';
 import { Box, Divider } from '@mui/material';
 import { ActionEditor } from './actions/ActionEditor';
 import { ActionList } from './actions/ActionList';
+import { EmptyPlaceholder } from './actions/common/EmptyPlaceholder';
 
 const HEIGHT = '250px';
 const LIST_WIDTH = '260px';
 
 export const EditorActions = () => {
+  const { focusedAction } = useAppSelector((state) => state.editor);
+
   return (
     <Box
       sx={{
@@ -21,7 +25,15 @@ export const EditorActions = () => {
         <ActionList />
       </Box>
       <Divider orientation="vertical" />
-      <ActionEditor />
+      <Box sx={{ flex: 1 }}>
+        {focusedAction ? (
+          <ActionEditor action={focusedAction} />
+        ) : (
+          <Box sx={{ padding: 2, height: '100%' }}>
+            <EmptyPlaceholder>Select an action to edit</EmptyPlaceholder>
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };

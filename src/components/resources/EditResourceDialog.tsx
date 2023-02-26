@@ -5,13 +5,13 @@ import { BaseResourceDialog } from './BaseResourceDialog';
 
 type EditResourceDialogProps = {
   onClose: () => void;
-  open: boolean;
+  isOpen: boolean;
   resourceId: string;
 };
 
 export const EditResourceDialog = ({
   onClose,
-  open,
+  isOpen,
   resourceId,
 }: EditResourceDialogProps) => {
   const [updateResource, { isLoading, error, data: updatedResource }] =
@@ -35,7 +35,7 @@ export const EditResourceDialog = ({
       title="Edit Resource"
       testId="edit-resource-dialog"
       onClose={onClose}
-      open={open}
+      isOpen={isOpen}
       onSubmit={handleUpdateResource}
       error={error}
       isLoading={isLoading}

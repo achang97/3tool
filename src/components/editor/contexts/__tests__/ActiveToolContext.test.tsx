@@ -1,26 +1,25 @@
-import { setSnackbarMessage } from '@app/redux/features/editorSlice';
 import { useUpdateToolMutation } from '@app/redux/services/tools';
 import { ApiError } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { ReactElement, useContext } from 'react';
+import { useToolDataDepGraph } from '../../hooks/useToolDataDepGraph';
 import {
-  ComponentEvalDataMap,
-  ComponentEvalDataValuesMap,
-  useComponentEvalDataMaps,
-} from '../../hooks/useComponentEvalDataMaps';
+  ToolEvalDataMap,
+  ToolEvalDataValuesMap,
+} from '../../hooks/useToolEvalDataMaps';
 import { ActiveToolContext, ActiveToolProvider } from '../ActiveToolContext';
 
-const mockDispatch = jest.fn();
 const mockUpdateTool = jest.fn();
+const mockEnqueueSnackbar = jest.fn();
 
-const mockComponentDataDepGraph = new DepGraph<string>();
-mockComponentDataDepGraph.addNode('button1');
-mockComponentDataDepGraph.addNode('button2');
-mockComponentDataDepGraph.addDependency('button1', 'button2');
+const mockElementDataDepGraph = new DepGraph<string>();
+mockElementDataDepGraph.addNode('button1');
+mockElementDataDepGraph.addNode('button2');
+mockElementDataDepGraph.addDependency('button1', 'button2');
 
-const mockComponentEvalDataMap: ComponentEvalDataMap = {
+const mockElementEvalDataMap: ToolEvalDataMap = {
   button1: {
     text: {
       parsedExpression: 'hello',
@@ -28,21 +27,24 @@ const mockComponentEvalDataMap: ComponentEvalDataMap = {
     },
   },
 };
-const mockComponentEvalDataValuesMap: ComponentEvalDataValuesMap = {
+const mockElementEvalDataValuesMap: ToolEvalDataValuesMap = {
   button1: {
     text: 'hello',
   },
 };
 
-jest.mock('@app/redux/hooks', () => ({
-  useAppDispatch: jest.fn(() => mockDispatch),
+jest.mock('../../hooks/useToolDataDepGraph');
+
+jest.mock('../../hooks/useToolEvalDataMaps', () => ({
+  useToolEvalDataMaps: jest.fn(() => ({
+    evalDataMap: mockElementEvalDataMap,
+    evalDataValuesMap: mockElementEvalDataValuesMap,
+  })),
 }));
 
-jest.mock('../../hooks/useComponentDataDepGraph', () => ({
-  useComponentDataDepGraph: jest.fn(() => mockComponentDataDepGraph),
+jest.mock('../../hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
-
-jest.mock('../../hooks/useComponentEvalDataMaps');
 
 jest.mock('@app/redux/services/tools');
 
@@ -54,9 +56,8 @@ describe('ActiveToolContext', () => {
       mockUpdateTool,
       {},
     ]);
-    (useComponentEvalDataMaps as jest.Mock).mockImplementation(() => ({
-      componentEvalDataMap: mockComponentEvalDataMap,
-      componentEvalDataValuesMap: mockComponentEvalDataValuesMap,
+    (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
+      dataDepGraph: mockElementDataDepGraph,
     }));
 
     mockUpdateTool.mockClear();
@@ -67,47 +68,47 @@ describe('ActiveToolContext', () => {
     expect(result.current).toEqual({
       tool: {},
       updateTool: expect.any(Function),
-      componentDataDepGraph: {
+      dataDepGraph: {
         nodes: {},
         outgoingEdges: {},
         incomingEdges: {},
         circular: undefined,
       },
-      componentEvalDataMap: {},
-      componentEvalDataValuesMap: {},
+      evalDataMap: {},
+      evalDataValuesMap: {},
     });
   });
 
-  it('returns componentDataDepGraph', () => {
+  it('returns dataDepGraph', () => {
+    (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
+      dataDepGraph: mockElementDataDepGraph,
+    }));
+
     const { result } = renderHook(() => useContext(ActiveToolContext), {
       wrapper: ({ children }: { children: ReactElement }) => (
         <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
       ),
     });
-    expect(result.current.componentDataDepGraph).toEqual(
-      mockComponentDataDepGraph
-    );
+    expect(result.current.dataDepGraph).toEqual(mockElementDataDepGraph);
   });
 
-  it('returns componentEvalDataMap', () => {
+  it('returns evalDataMap', () => {
     const { result } = renderHook(() => useContext(ActiveToolContext), {
       wrapper: ({ children }: { children: ReactElement }) => (
         <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
       ),
     });
-    expect(result.current.componentEvalDataMap).toEqual(
-      mockComponentEvalDataMap
-    );
+    expect(result.current.evalDataMap).toEqual(mockElementEvalDataMap);
   });
 
-  it('returns componentEvalDataValuesMap', () => {
+  it('returns evalDataValuesMap', () => {
     const { result } = renderHook(() => useContext(ActiveToolContext), {
       wrapper: ({ children }: { children: ReactElement }) => (
         <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
       ),
     });
-    expect(result.current.componentEvalDataValuesMap).toEqual(
-      mockComponentEvalDataValuesMap
+    expect(result.current.evalDataValuesMap).toEqual(
+      mockElementEvalDataValuesMap
     );
   });
 
@@ -168,7 +169,7 @@ describe('ActiveToolContext', () => {
         ),
       });
 
-      expect(mockDispatch).not.toHaveBeenCalled();
+      expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
     });
 
     it('displays error snackbar if update fails', () => {
@@ -189,17 +190,15 @@ describe('ActiveToolContext', () => {
         ),
       });
 
-      expect(mockDispatch).toHaveBeenCalledWith(
-        setSnackbarMessage({
-          type: 'error',
-          message: mockApiError.data!.message,
-        })
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+        mockApiError.data!.message,
+        { variant: 'error' }
       );
     });
 
-    it('does not display error snackbar if evaluation succeeds', () => {
-      (useComponentEvalDataMaps as jest.Mock).mockImplementation(() => ({
-        error: undefined,
+    it('does not display error snackbar if there is no cycle in dependency graph', () => {
+      (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
+        cyclePath: undefined,
       }));
 
       renderHook(() => useContext(ActiveToolContext), {
@@ -208,13 +207,12 @@ describe('ActiveToolContext', () => {
         ),
       });
 
-      expect(mockDispatch).not.toHaveBeenCalled();
+      expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
     });
 
-    it('displays error snackbar if evaluation fails', () => {
-      const mockErrorMessage = 'Error Message';
-      (useComponentEvalDataMaps as jest.Mock).mockImplementation(() => ({
-        error: new Error(mockErrorMessage),
+    it('displays error snackbar if there is cycle in dependency graph', () => {
+      (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
+        cyclePath: ['button1.text', 'button1.disabled', 'button1.text'],
       }));
 
       renderHook(() => useContext(ActiveToolContext), {
@@ -223,11 +221,11 @@ describe('ActiveToolContext', () => {
         ),
       });
 
-      expect(mockDispatch).toHaveBeenCalledWith(
-        setSnackbarMessage({
-          type: 'error',
-          message: mockErrorMessage,
-        })
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+        'Dependency Cycle Found: button1.text → button1.disabled → button1.text',
+        {
+          variant: 'error',
+        }
       );
     });
   });

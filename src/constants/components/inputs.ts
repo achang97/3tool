@@ -11,36 +11,36 @@ export type ComponentInputs = {
   [ComponentType.Table]: TableInput;
 };
 
-export type TextInputInput = {
+type TextInputInput = {
   value: string;
 };
 
-export type NumberInputInput = {
+type NumberInputInput = {
   value: number;
 };
 
-export type TableInput = {
+type TableInput = {
   selectedRows: unknown[];
 };
 
-export type NoInput = {};
+type NoInput = {};
 
 /**
  * Constants
  */
-export const TEXT_INPUT_INPUT_TEMPLATE: TextInputInput = {
+const TEXT_INPUT_INPUT_TEMPLATE: TextInputInput = {
   value: '',
 };
 
-export const NUMBER_INPUT_INPUT_TEMPLATE: NumberInputInput = {
+const NUMBER_INPUT_INPUT_TEMPLATE: NumberInputInput = {
   value: 0,
 };
 
-export const TABLE_INPUT_TEMPLATE: TableInput = {
+const TABLE_INPUT_TEMPLATE: TableInput = {
   selectedRows: [],
 };
 
-export const NO_INPUT_TEMPLATE: NoInput = {};
+const NO_INPUT_TEMPLATE: NoInput = {};
 
 export const COMPONENT_INPUT_TEMPLATES: ComponentInputs = {
   [ComponentType.Button]: NO_INPUT_TEMPLATE,

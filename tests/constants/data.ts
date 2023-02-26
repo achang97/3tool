@@ -1,5 +1,11 @@
 import { COMPONENT_DATA_TEMPLATES } from '@app/constants';
-import { ComponentType, Resource, ResourceType, Tool } from '@app/types';
+import {
+  ActionType,
+  ComponentType,
+  Resource,
+  ResourceType,
+  Tool,
+} from '@app/types';
 
 export const mockValidAddresses = [
   '0xf33Cb58287017175CADf990c9e4733823704aA86',
@@ -78,7 +84,19 @@ export const mockTool: Tool = {
       eventHandlers: [],
     },
   ],
-  actions: [],
+  actions: [
+    {
+      name: 'action1',
+      type: ActionType.Javascript,
+      data: {
+        javascript: {
+          code: 'return 1',
+          transformer: '',
+        },
+      },
+      eventHandlers: [],
+    },
+  ],
 };
 
 export const mockComponentLayout = {

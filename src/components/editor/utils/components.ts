@@ -19,7 +19,3 @@ export const createNewComponent = (
 
   return baseComponent;
 };
-
-export const getComponentData = (component: Component) => {
-  return component.data[component.type] ?? {};
-};

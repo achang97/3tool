@@ -36,7 +36,7 @@ describe('EditResourceDialog', () => {
       <EditResourceDialog
         resourceId={mockResourceId}
         onClose={mockHandleClose}
-        open={false}
+        isOpen={false}
       />
     );
     expect(result.queryByTestId('create-resource-dialog')).toBeNull();
@@ -47,7 +47,7 @@ describe('EditResourceDialog', () => {
       <EditResourceDialog
         resourceId={mockResourceId}
         onClose={mockHandleClose}
-        open
+        isOpen
       />
     );
 
@@ -60,7 +60,7 @@ describe('EditResourceDialog', () => {
       <EditResourceDialog
         resourceId={mockResourceId}
         onClose={mockHandleClose}
-        open
+        isOpen
       />
     );
     expect(result.getByText('Edit Resource')).toBeTruthy();
@@ -83,7 +83,7 @@ describe('EditResourceDialog', () => {
       <EditResourceDialog
         resourceId={mockResourceId}
         onClose={mockHandleClose}
-        open
+        isOpen
       />
     );
     expect(result.getByText('Mock Error')).toBeTruthy();
@@ -97,7 +97,7 @@ describe('EditResourceDialog', () => {
       <EditResourceDialog
         resourceId={mockResourceId}
         onClose={mockHandleClose}
-        open
+        isOpen
       />
     );
     const contractFields = {
@@ -136,7 +136,7 @@ describe('EditResourceDialog', () => {
       <EditResourceDialog
         resourceId={mockResourceId}
         onClose={mockHandleClose}
-        open
+        isOpen
       />
     );
 

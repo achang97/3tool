@@ -1,4 +1,4 @@
-import { Component, ComponentType } from '@app/types';
+import { ActionType, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import { useActiveTool } from '../useActiveTool';
 import { useElementDependentFields } from '../useElementDependentFields';
@@ -6,90 +6,87 @@ import { useElementDependentFields } from '../useElementDependentFields';
 jest.mock('../useActiveTool');
 
 describe('useElementDependentFields', () => {
-  describe('component data', () => {
-    it('ignores dependent fields within given component', () => {
-      const mockComponents = [
-        {
-          type: ComponentType.Button,
-          name: 'button1',
-          data: {
-            button: {
-              text: '{{ button1.disabled }}',
-              disabled: '',
-            },
-          },
-        },
-      ] as Component[];
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-      (useActiveTool as jest.Mock).mockImplementation(() => ({
-        tool: { components: mockComponents },
-      }));
-
-      const { result } = renderHook(() => useElementDependentFields('button1'));
-      expect(result.current).toEqual([]);
-    });
-
-    it('resolves duplicate dependents', () => {
-      const mockComponents = [
-        {
-          type: ComponentType.Button,
-          name: 'button1',
-          data: {
-            button: {
-              text: '{{ button2.text }} {{ button2.disabled }}',
-            },
-          },
-        },
-        {
-          type: ComponentType.Button,
-          name: 'button2',
-          data: {
-            button: {
-              text: '',
-              disabled: '',
-            },
-          },
-        },
-      ] as Component[];
-
-      (useActiveTool as jest.Mock).mockImplementation(() => ({
-        tool: { components: mockComponents },
-      }));
-
-      const { result } = renderHook(() => useElementDependentFields('button2'));
-      expect(result.current).toEqual(['button1.text']);
-    });
-
-    it('includes nested dependencies of other components', () => {
-      const mockComponents = [
-        {
-          type: ComponentType.Button,
-          name: 'button1',
-          data: {
-            button: {
-              text: '',
-            },
-          },
-        },
-        {
-          type: ComponentType.Table,
-          name: 'table1',
-          data: {
-            table: {
-              columnHeaderNames: {
-                id: '{{ button1.text }}',
+  it('returns empty array if there are no dependent fields', () => {
+    (useActiveTool as jest.Mock).mockImplementation(() => ({
+      tool: {
+        components: [
+          {
+            type: ComponentType.Button,
+            name: 'button1',
+            data: {
+              button: {
+                text: 'text',
               },
             },
+            eventHandlers: [],
           },
-        },
-      ] as Component[];
+        ],
+        actions: [],
+      },
+    }));
 
-      (useActiveTool as jest.Mock).mockImplementation(() => ({
-        tool: { components: mockComponents },
-      }));
+    const { result } = renderHook(() => useElementDependentFields('button1'));
+    expect(result.current).toEqual([]);
+  });
 
-      const { result } = renderHook(() => useElementDependentFields('button1'));
-      expect(result.current).toEqual(['table1.columnHeaderNames.id']);
-    });
+  it('returns dependencies from dynamic fields', () => {
+    (useActiveTool as jest.Mock).mockImplementation(() => ({
+      tool: {
+        components: [
+          {
+            type: ComponentType.Button,
+            name: 'button1',
+            data: {
+              button: {
+                text: '{{ button1.text }} {{ button1.disabled }}',
+              },
+            },
+            eventHandlers: [],
+          },
+        ],
+        actions: [],
+      },
+    }));
+
+    const { result } = renderHook(() => useElementDependentFields('button1'));
+    expect(result.current).toEqual(['button1.text']);
+  });
+
+  it('returns dependencies from JavaScript fields', () => {
+    (useActiveTool as jest.Mock).mockImplementation(() => ({
+      tool: {
+        components: [
+          {
+            type: ComponentType.Button,
+            name: 'button1',
+            data: {
+              button: {
+                text: 'text',
+              },
+            },
+            eventHandlers: [],
+          },
+        ],
+        actions: [
+          {
+            type: ActionType.Javascript,
+            name: 'action1',
+            data: {
+              javascript: {
+                code: 'return button1.text',
+              },
+            },
+            eventHandlers: [],
+          },
+        ],
+      },
+    }));
+
+    const { result } = renderHook(() => useElementDependentFields('button1'));
+    expect(result.current).toEqual(['action1.code']);
   });
 });

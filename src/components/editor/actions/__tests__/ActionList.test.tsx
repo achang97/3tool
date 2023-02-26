@@ -2,7 +2,7 @@ import { mockTool } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
 import { Action, ActionType } from '@app/types';
-import { ACTION_CONFIGS } from '@app/constants/actions';
+import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants/actions';
 import { useActiveTool } from '../../hooks/useActiveTool';
 import { ActionList } from '../ActionList';
 
@@ -12,20 +12,29 @@ const mockActions = [
   {
     type: ActionType.Javascript,
     name: 'action1',
+    eventHandlers: [],
   },
   {
     type: ActionType.SmartContractRead,
     name: 'action2',
+    eventHandlers: [],
   },
-] as Action[];
+] as unknown as Action[];
 
 jest.mock('../../hooks/useActiveTool');
+jest.mock('../../hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
 
 describe('ActionList', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useActiveTool as jest.Mock).mockImplementation(() => ({
-      tool: { ...mockTool, actions: mockActions },
+      tool: {
+        ...mockTool,
+        actions: mockActions,
+        components: [],
+      },
       updateTool: mockUpdateTool,
     }));
   });
@@ -49,7 +58,7 @@ describe('ActionList', () => {
           type: mockType,
           name: 'action3',
           data: {
-            [mockType]: {},
+            [mockType]: ACTION_DATA_TEMPLATES[mockType],
           },
           eventHandlers: [],
         },

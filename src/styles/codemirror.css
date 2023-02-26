@@ -51,6 +51,11 @@
   padding: 0 0.75em;
 }
 
+.cm-placeholder {
+  color: 'inherit';
+  opacity: var(--mui-opacity-inputPlaceholder);
+}
+
 /* Error */
 .dynamic-error .cm-editor {
   border-color: var(--mui-palette-error-light);

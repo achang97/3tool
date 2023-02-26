@@ -20,6 +20,7 @@ jest.mock('@mui/material', () => {
 
 describe('UserAvatar', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     MockAvatar.mockClear();
   });
 

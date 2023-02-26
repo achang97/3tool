@@ -28,22 +28,26 @@ describe('CreateToolDialog', () => {
     ]);
   });
 
-  it('does not render dialog if open is false', () => {
+  it('does not render dialog if isOpen is false', () => {
     const result = render(
-      <CreateToolDialog onClose={mockHandleClose} open={false} />
+      <CreateToolDialog onClose={mockHandleClose} isOpen={false} />
     );
 
     expect(result.queryByTestId('create-tool-dialog')).toBeNull();
   });
 
   it('renders dialog title', () => {
-    const result = render(<CreateToolDialog onClose={mockHandleClose} open />);
+    const result = render(
+      <CreateToolDialog onClose={mockHandleClose} isOpen />
+    );
 
     expect(result.getByText('Create new tool')).toBeTruthy();
   });
 
   it('does not call API to create tool if no tool name is provided', async () => {
-    const result = render(<CreateToolDialog onClose={mockHandleClose} open />);
+    const result = render(
+      <CreateToolDialog onClose={mockHandleClose} isOpen />
+    );
 
     const submitButton = result.getByText('Create tool');
     expect(() => userEvent.click(submitButton)).rejects.toThrow(
@@ -56,7 +60,9 @@ describe('CreateToolDialog', () => {
   it('calls API to create tool on submit click', async () => {
     const mockName = 'New Tool Name';
 
-    const result = render(<CreateToolDialog onClose={mockHandleClose} open />);
+    const result = render(
+      <CreateToolDialog onClose={mockHandleClose} isOpen />
+    );
 
     const input = result.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, mockName);
@@ -74,7 +80,7 @@ describe('CreateToolDialog', () => {
       {},
     ]);
 
-    render(<CreateToolDialog onClose={mockHandleClose} open />);
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     expect(mockPush).not.toHaveBeenCalled();
   });
@@ -86,7 +92,7 @@ describe('CreateToolDialog', () => {
       { data: mockNewTool },
     ]);
 
-    render(<CreateToolDialog onClose={mockHandleClose} open />);
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledTimes(1);
@@ -108,7 +114,9 @@ describe('CreateToolDialog', () => {
       { error: mockError },
     ]);
 
-    const result = render(<CreateToolDialog onClose={mockHandleClose} open />);
+    const result = render(
+      <CreateToolDialog onClose={mockHandleClose} isOpen />
+    );
     expect(result.getByText('Mock Error Message')).toBeTruthy();
   });
 });

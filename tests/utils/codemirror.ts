@@ -1,4 +1,4 @@
-import { dynamicJavascriptLanguage } from '@app/codemirror/dynamicJavascript/language';
+import { dynamicTextLanguage } from '@app/codemirror/dynamicTextLanguage';
 import { CompletionContext } from '@codemirror/autocomplete';
 import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
 import { EditorState } from '@codemirror/state';
@@ -6,12 +6,12 @@ import { EditorState } from '@codemirror/state';
 export const createCompletionContext = (
   doc: string,
   pos: number,
-  dynamic = true
+  isDynamic: boolean
 ): CompletionContext => {
   const state = EditorState.create({
     doc,
-    extensions: dynamic
-      ? [dynamicJavascriptLanguage, javascript().support]
+    extensions: isDynamic
+      ? [dynamicTextLanguage, javascript().support]
       : [javascriptLanguage],
   });
   return new CompletionContext(state, pos, false);

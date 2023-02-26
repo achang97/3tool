@@ -1,6 +1,5 @@
-import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { ComponentData, ComponentType } from '@app/types';
-import { mockEvalResult } from '@tests/constants/eval';
+import { COMPONENT_DATA_TYPES } from '@app/constants';
+import { Component } from '@app/types';
 import {
   validateDynamicInputField,
   validateEnumField,
@@ -10,23 +9,29 @@ import { render } from '@tests/utils/renderWithContext';
 import { TextInspector } from '../TextInspector';
 
 const mockName = 'Name';
-const mockData: ComponentData = {
+const mockData: Component['data'] = {
   text: {
     value: 'value',
     horizontalAlignment: 'left',
   },
 };
 
-const mockHandleUpdate = jest.fn();
+const mockHandleUpdateData = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useComponentEvalData');
+jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
+  useCodeMirrorPreview: jest.fn(() => ({})),
+}));
+
+jest.mock(
+  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
+  () => ({
+    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+  })
+);
 
 describe('TextInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-      evalData: {},
-    }));
   });
 
   describe('Basic', () => {
@@ -35,33 +40,27 @@ describe('TextInspector', () => {
         <TextInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Basic');
     });
 
     it('value: renders "Value" text field', async () => {
-      const mockEvalData = { value: mockEvalResult };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalData: mockEvalData,
-      }));
-
       const result = render(
         <TextInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateDynamicInputField(result, 'Basic', {
-        type: ComponentType.Text,
         field: 'value',
         label: 'Value',
         value: mockData.text?.value,
-        onChange: mockHandleUpdate,
-        evalResult: mockEvalData.value,
+        onChange: mockHandleUpdateData,
+        config: { type: COMPONENT_DATA_TYPES.text.value },
       });
     });
   });
@@ -72,7 +71,7 @@ describe('TextInspector', () => {
         <TextInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
       validateSection(result, 'Layout');
@@ -83,30 +82,31 @@ describe('TextInspector', () => {
         <TextInspector
           name={mockName}
           data={mockData}
-          onUpdate={mockHandleUpdate}
+          onUpdateData={mockHandleUpdateData}
         />
       );
 
       await validateEnumField(result, 'Layout', {
-        type: ComponentType.Text,
         field: 'horizontalAlignment',
         label: 'Horizontal Alignment',
         value: mockData.text?.horizontalAlignment,
-        onChange: mockHandleUpdate,
-        options: [
-          {
-            label: 'Left',
-            value: 'left',
-          },
-          {
-            label: 'Center',
-            value: 'center',
-          },
-          {
-            label: 'Right',
-            value: 'right',
-          },
-        ],
+        onChange: mockHandleUpdateData,
+        config: {
+          options: [
+            {
+              label: 'Left',
+              value: 'left',
+            },
+            {
+              label: 'Center',
+              value: 'center',
+            },
+            {
+              label: 'Right',
+              value: 'right',
+            },
+          ],
+        },
       });
     });
   });

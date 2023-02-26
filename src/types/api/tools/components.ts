@@ -1,5 +1,13 @@
 import { EventHandler } from './eventHandlers';
 
+export enum ComponentType {
+  Button = 'button',
+  TextInput = 'textInput',
+  NumberInput = 'numberInput',
+  Table = 'table',
+  Text = 'text',
+}
+
 export type Component = {
   name: string;
   type: ComponentType;
@@ -9,37 +17,27 @@ export type Component = {
     w: number;
     h: number;
   };
-  data: ComponentData;
+  data: {
+    [ComponentType.Button]?: ButtonData;
+    [ComponentType.TextInput]?: TextInputData;
+    [ComponentType.NumberInput]?: NumberInputData;
+    [ComponentType.Text]?: TextData;
+    [ComponentType.Table]?: TableData;
+  };
   eventHandlers: EventHandler<ComponentEvent>[];
 };
-
-export enum ComponentType {
-  Button = 'button',
-  TextInput = 'textInput',
-  NumberInput = 'numberInput',
-  Table = 'table',
-  Text = 'text',
-}
 
 export enum ComponentEvent {
   Click = 'click',
 }
 
-export type ComponentData = {
-  [ComponentType.Button]?: ButtonData;
-  [ComponentType.TextInput]?: TextInputData;
-  [ComponentType.NumberInput]?: NumberInputData;
-  [ComponentType.Text]?: TextData;
-  [ComponentType.Table]?: TableData;
-};
-
-export type ButtonData = {
+type ButtonData = {
   text: string;
   disabled: string;
   loading: string;
 };
 
-export type TextInputData = {
+type TextInputData = {
   defaultValue: string;
   placeholder: string;
   label: string;
@@ -49,7 +47,7 @@ export type TextInputData = {
   maxLength: string;
 };
 
-export type NumberInputData = {
+type NumberInputData = {
   defaultValue: string;
   placeholder: string;
   label: string;
@@ -59,12 +57,12 @@ export type NumberInputData = {
   maximum: string;
 };
 
-export type TextData = {
+type TextData = {
   value: string;
   horizontalAlignment: 'left' | 'center' | 'right';
 };
 
-export type TableData = {
+type TableData = {
   data: string;
   emptyMessage: string;
   multiselect: string;

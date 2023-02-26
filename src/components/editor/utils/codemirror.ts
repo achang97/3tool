@@ -7,34 +7,40 @@ import { syntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';
 import _ from 'lodash';
 
-export const createAutocompleteSnippetTemplate = (str: string): string => {
-  return `${str}#{1}`;
+export const createAutocompleteSnippet = (
+  label: string,
+  value: unknown,
+  { boost, detail }: { boost?: number; detail?: string } = {}
+): Completion => {
+  let customDetail: string;
+  if (detail) {
+    customDetail = detail;
+  } else if (Array.isArray(value)) {
+    customDetail = 'array';
+  } else if (value === null) {
+    customDetail = 'null';
+  } else {
+    customDetail = typeof value;
+  }
+
+  return snippetCompletion(`${label}#{1}`, {
+    label,
+    detail: customDetail,
+    boost,
+  });
 };
 
-export const createAutocompleteSnippets = (data: unknown): Completion[] => {
+export const createAutocompleteSnippets = (
+  data: unknown,
+  { boost }: { boost?: number } = {}
+): Completion[] => {
   const createAutocompleteSnippetsHelper = (
     prefix: string,
     value: unknown,
     snippets: Completion[]
   ) => {
     if (prefix) {
-      let detail: string;
-      if (Array.isArray(value)) {
-        detail = 'array';
-      } else if (value === null) {
-        detail = 'null';
-      } else {
-        detail = typeof value;
-      }
-
-      const newSnippet = snippetCompletion(
-        createAutocompleteSnippetTemplate(prefix),
-        {
-          label: prefix,
-          detail,
-        }
-      );
-      snippets.push(newSnippet);
+      snippets.push(createAutocompleteSnippet(prefix, value, { boost }));
     }
 
     if (value === null || value === undefined) {
@@ -84,11 +90,6 @@ export const parseTokenFromContext = (
       return '';
     }
 
-    const prevChar = context.state.sliceDoc(node.from - 1, node.from);
-    if (node.from !== 0 && prevChar !== ' ' && !node.prevSibling) {
-      return null;
-    }
-
     const prefix =
       node.from === node.prevSibling?.to
         ? getTokenHelper(node.prevSibling)
@@ -106,7 +107,7 @@ export const parseTokenFromContext = (
   const prevNode = tree.resolveInner(context.pos, -1);
   const token = getTokenHelper(prevNode);
 
-  if (token === null || token === '.') {
+  if (!token || token === '.') {
     return null;
   }
 

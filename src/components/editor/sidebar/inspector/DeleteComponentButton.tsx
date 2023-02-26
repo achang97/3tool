@@ -2,7 +2,7 @@ import { Delete } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { useCallback, useState } from 'react';
 import { DeleteDialog } from '../../common/DeleteDialog';
-import { useDeleteComponent } from '../../hooks/useDeleteComponent';
+import { useComponentDelete } from '../../hooks/useComponentDelete';
 
 type DeleteComponentButtonProps = {
   name: string;
@@ -11,7 +11,7 @@ type DeleteComponentButtonProps = {
 export const DeleteComponentButton = ({ name }: DeleteComponentButtonProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleDeleteComponent = useDeleteComponent(name);
+  const handleDeleteComponent = useComponentDelete(name);
 
   const handleDialogOpen = useCallback(() => {
     setIsDialogOpen(true);
@@ -28,7 +28,7 @@ export const DeleteComponentButton = ({ name }: DeleteComponentButtonProps) => {
       </Button>
       <DeleteDialog
         name={name}
-        open={isDialogOpen}
+        isOpen={isDialogOpen}
         onClose={handleDialogClose}
         onDelete={handleDeleteComponent}
       />

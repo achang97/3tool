@@ -1,24 +1,22 @@
-import { ComponentFieldType, ComponentData, ComponentType } from '@app/types';
+import { FieldType, ComponentType, Component } from '@app/types';
 
 /**
  * Constants (used for args in evaluation)
  */
-export type ComponentDataType<T extends ComponentType> = {
-  [FieldType in keyof NonNullable<ComponentData[T]>]:
-    | ComponentFieldType
-    | ComponentFieldType[];
+type ComponentDataType<T extends ComponentType> = {
+  [KeyType in keyof NonNullable<Component['data'][T]>]: FieldType;
 };
-export type ComponentDataTypes = {
+type ComponentDataTypes = {
   [KeyType in ComponentType]: ComponentDataType<KeyType>;
 };
 
-export const ButtonDataTypes: ComponentDataType<ComponentType.Button> = {
+const BUTTON_DATA_TYPES: ComponentDataType<ComponentType.Button> = {
   text: 'string',
   disabled: 'boolean',
   loading: 'boolean',
 };
 
-export const TextInputDataTypes: ComponentDataType<ComponentType.TextInput> = {
+const TEXT_INPUT_DATA_TYPES: ComponentDataType<ComponentType.TextInput> = {
   defaultValue: 'string',
   placeholder: 'string',
   label: 'string',
@@ -28,23 +26,22 @@ export const TextInputDataTypes: ComponentDataType<ComponentType.TextInput> = {
   maxLength: 'number',
 };
 
-export const NumberInputDataTypes: ComponentDataType<ComponentType.NumberInput> =
-  {
-    defaultValue: 'number',
-    placeholder: 'string',
-    label: 'string',
-    disabled: 'boolean',
-    required: 'boolean',
-    minimum: 'number',
-    maximum: 'number',
-  };
+const NUMBER_INPUT_DATA_TYPES: ComponentDataType<ComponentType.NumberInput> = {
+  defaultValue: 'number',
+  placeholder: 'string',
+  label: 'string',
+  disabled: 'boolean',
+  required: 'boolean',
+  minimum: 'number',
+  maximum: 'number',
+};
 
-export const TextDataTypes: ComponentDataType<ComponentType.Text> = {
+const TEXT_DATA_TYPES: ComponentDataType<ComponentType.Text> = {
   value: 'string',
   horizontalAlignment: 'string',
 };
 
-export const TableDataTypes: ComponentDataType<ComponentType.Table> = {
+const TABLE_DATA_TYPES: ComponentDataType<ComponentType.Table> = {
   data: 'array',
   emptyMessage: 'string',
   multiselect: 'boolean',
@@ -53,11 +50,11 @@ export const TableDataTypes: ComponentDataType<ComponentType.Table> = {
 };
 
 export const COMPONENT_DATA_TYPES: ComponentDataTypes = {
-  [ComponentType.Button]: ButtonDataTypes,
-  [ComponentType.TextInput]: TextInputDataTypes,
-  [ComponentType.NumberInput]: NumberInputDataTypes,
-  [ComponentType.Text]: TextDataTypes,
-  [ComponentType.Table]: TableDataTypes,
+  [ComponentType.Button]: BUTTON_DATA_TYPES,
+  [ComponentType.TextInput]: TEXT_INPUT_DATA_TYPES,
+  [ComponentType.NumberInput]: NUMBER_INPUT_DATA_TYPES,
+  [ComponentType.Text]: TEXT_DATA_TYPES,
+  [ComponentType.Table]: TABLE_DATA_TYPES,
 };
 
 /**
@@ -71,13 +68,13 @@ export type ComponentEvalData = {
   [ComponentType.Table]?: TableEvalData;
 };
 
-export type ButtonEvalData = {
+type ButtonEvalData = {
   text: string;
   disabled: boolean;
   loading: boolean;
 };
 
-export type TextInputEvalData = {
+type TextInputEvalData = {
   defaultValue: string;
   placeholder: string;
   label: string;
@@ -87,7 +84,7 @@ export type TextInputEvalData = {
   maxLength: number;
 };
 
-export type NumberInputEvalData = {
+type NumberInputEvalData = {
   defaultValue: number;
   placeholder: string;
   label: string;
@@ -97,12 +94,12 @@ export type NumberInputEvalData = {
   maximum: number;
 };
 
-export type TextEvalData = {
+type TextEvalData = {
   value: string;
   horizontalAlignment: 'left' | 'center' | 'right';
 };
 
-export type TableEvalData = {
+type TableEvalData = {
   data: unknown[];
   emptyMessage: string;
   multiselect: boolean;
