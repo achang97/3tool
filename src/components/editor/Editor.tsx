@@ -3,10 +3,12 @@ import { useMemo } from 'react';
 import { EditorActions } from './EditorActions';
 import { EditorCanvas } from './EditorCanvas';
 import { EditorSidebar } from './EditorSidebar';
+import { useActionQueueExecutor } from './hooks/useActionQueueExecutor';
 import { useToolElementNames } from './hooks/useToolElementNames';
 
 export const Editor = () => {
-  const elementNames = useToolElementNames();
+  const { elementNames } = useToolElementNames();
+  useActionQueueExecutor();
 
   const rerenderKey = useMemo(() => {
     return elementNames.join('|');

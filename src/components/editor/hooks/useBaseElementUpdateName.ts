@@ -23,7 +23,7 @@ export const useBaseElementUpdateName = ({
   const enqueueSnackbar = useEnqueueSnackbar();
   const { updateTool } = useActiveTool();
 
-  const elementNames = useToolElementNames();
+  const { elementNames } = useToolElementNames();
   const createReferenceUpdate = useToolUpdateReference();
 
   const validateName = useCallback(

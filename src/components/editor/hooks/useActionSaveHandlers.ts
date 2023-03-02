@@ -14,14 +14,14 @@ type HookReturnType = {
 export const useActionSaveHandlers = (): HookReturnType => {
   const { tool, updateTool } = useActiveTool();
   const { focusedAction } = useAppSelector((state) => state.editor);
-  const handleBaseExecuteAction = useActionExecute();
+  const baseExecuteAction = useActionExecute();
 
   const executeAction = useCallback(() => {
     if (!focusedAction) {
       return;
     }
-    handleBaseExecuteAction(focusedAction);
-  }, [focusedAction, handleBaseExecuteAction]);
+    baseExecuteAction(focusedAction);
+  }, [focusedAction, baseExecuteAction]);
 
   const saveAction = useCallback(async () => {
     return updateTool({

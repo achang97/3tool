@@ -1,7 +1,6 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { ComponentType } from '@app/types';
 import { render } from '@testing-library/react';
-import { mockTool } from '@tests/constants/data';
 import { DraggableComponent } from '../DraggableComponent';
 
 const mockDispatch = jest.fn();
@@ -10,8 +9,8 @@ const mockIcon = 'Icon';
 const mockLabel = 'Label';
 const mockComponentType = ComponentType.Button;
 
-jest.mock('../../../hooks/useActiveTool', () => ({
-  useActiveTool: jest.fn(() => ({ tool: mockTool })),
+jest.mock('../../../hooks/useToolElementNames', () => ({
+  useToolElementNames: jest.fn(() => ({ elementNames: [] })),
 }));
 
 jest.mock('@app/redux/hooks', () => ({

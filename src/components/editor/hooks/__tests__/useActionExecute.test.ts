@@ -1,28 +1,13 @@
-import { ActionResult } from '@app/constants';
 import { setActionResult } from '@app/redux/features/activeToolSlice';
 import { Action, ActionType } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import { executeAction } from '../../utils/actions';
 import { useActionExecute } from '../useActionExecute';
-
-const mockAction = {
-  name: 'action1',
-  type: ActionType.Javascript,
-  data: { javascript: { code: '1', transformer: '' } },
-} as Action;
-
-const mockEvalArgs = {
-  button1: {
-    text: 'hello',
-  },
-};
+import { useEvalArgs } from '../useEvalArgs';
 
 const mockEnqueueSnackbar = jest.fn();
 const mockDispatch = jest.fn();
 
-jest.mock('../useEvalArgs', () => ({
-  useEvalArgs: jest.fn(() => mockEvalArgs),
-}));
+jest.mock('../useEvalArgs');
 
 jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => mockDispatch),
@@ -32,61 +17,125 @@ jest.mock('../useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
 
-jest.mock('../../utils/actions');
-
 describe('useActionExecute', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (executeAction as jest.Mock).mockImplementation(() => ({}));
-  });
-
-  it('executes action with action and eval args', () => {
-    const { result } = renderHook(() => useActionExecute());
-
-    result.current(mockAction);
-    expect(executeAction).toHaveBeenCalledWith(mockAction, mockEvalArgs);
-  });
-
-  it('dispatches action to set the action result', () => {
-    const mockResult: ActionResult = {
-      data: 'data',
-      error: 'error',
-    };
-    (executeAction as jest.Mock).mockImplementation(() => mockResult);
-
-    const { result } = renderHook(() => useActionExecute());
-
-    result.current(mockAction);
-    expect(mockDispatch).toHaveBeenCalledWith(
-      setActionResult({ name: mockAction.name, result: mockResult })
-    );
-  });
-
-  it('enqueues error snackbar on error', () => {
-    (executeAction as jest.Mock).mockImplementation(() => ({
-      error: 'error',
+    (useEvalArgs as jest.Mock).mockImplementation(() => ({
+      staticEvalArgs: {},
     }));
-
-    const { result } = renderHook(() => useActionExecute());
-
-    result.current(mockAction);
-    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-      `Failed to execute ${mockAction.name}`,
-      { variant: 'error' }
-    );
   });
 
-  it('enqueues success snackbar on success', () => {
-    (executeAction as jest.Mock).mockImplementation(() => ({
-      data: 'data',
-    }));
+  describe('execution', () => {
+    describe('javascript', () => {
+      it('executes javascript action with static eval args', async () => {
+        (useEvalArgs as jest.Mock).mockImplementation(() => ({
+          staticEvalArgs: {
+            button1: {
+              text: 'hello',
+            },
+          },
+        }));
+        const { result } = renderHook(() => useActionExecute());
 
-    const { result } = renderHook(() => useActionExecute());
+        const actionResult = await result.current({
+          type: ActionType.Javascript,
+          data: {
+            javascript: { code: 'return button1.text', transformer: '' },
+          },
+        } as Action);
+        expect(actionResult.data).toEqual('hello');
+      });
+    });
 
-    result.current(mockAction);
-    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-      `Executed ${mockAction.name}`,
-      { variant: 'success' }
-    );
+    describe('transformer', () => {
+      it('transforms data from first execution step with static eval args', async () => {
+        (useEvalArgs as jest.Mock).mockImplementation(() => ({
+          staticEvalArgs: {
+            button1: {
+              text: 'hello',
+            },
+          },
+        }));
+        const { result } = renderHook(() => useActionExecute());
+
+        const actionResult = await result.current({
+          type: ActionType.Javascript,
+          data: {
+            javascript: {
+              code: 'return "world"',
+              // eslint-disable-next-line no-template-curly-in-string
+              transformer: 'return `${button1.text} ${data}!`',
+            },
+          },
+        } as Action);
+        expect(actionResult.data).toEqual('hello world!');
+      });
+    });
+
+    describe('error', () => {
+      it('returns error message', async () => {
+        const { result } = renderHook(() => useActionExecute());
+
+        const actionResult = await result.current({
+          type: ActionType.Javascript,
+          data: { javascript: { code: 'asdf', transformer: '' } },
+        } as Action);
+        expect(actionResult).toEqual({
+          data: undefined,
+          error: 'asdf is not defined',
+        });
+      });
+    });
+
+    describe('response handling', () => {
+      it('dispatches action to set the action result', async () => {
+        const { result } = renderHook(() => useActionExecute());
+
+        const actionResult = await result.current({
+          name: 'action1',
+          type: ActionType.Javascript,
+          data: {
+            javascript: { code: 'return 1', transformer: '' },
+          },
+        } as Action);
+
+        expect(mockDispatch).toHaveBeenCalledWith(
+          setActionResult({ name: 'action1', result: actionResult })
+        );
+      });
+
+      it('enqueues error snackbar on error', async () => {
+        const { result } = renderHook(() => useActionExecute());
+
+        await result.current({
+          name: 'action1',
+          type: ActionType.Javascript,
+          data: {
+            javascript: { code: 'asdf', transformer: '' },
+          },
+        } as Action);
+
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+          'Failed to execute action1',
+          { variant: 'error' }
+        );
+      });
+
+      it('enqueues success snackbar on success', async () => {
+        const { result } = renderHook(() => useActionExecute());
+
+        await result.current({
+          name: 'action1',
+          type: ActionType.Javascript,
+          data: {
+            javascript: { code: 'return 1', transformer: '' },
+          },
+        } as Action);
+
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Executed action1', {
+          variant: 'success',
+        });
+      });
+    });
   });
 });

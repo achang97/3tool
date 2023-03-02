@@ -3,6 +3,7 @@ import { mockTool } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
 import { DepGraph } from 'dependency-graph';
 import { Editor } from '../Editor';
+import { useActionQueueExecutor } from '../hooks/useActionQueueExecutor';
 
 jest.mock('../hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
@@ -17,6 +18,8 @@ jest.mock('../hooks/useActiveTool', () => ({
 jest.mock('../hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => jest.fn()),
 }));
+
+jest.mock('../hooks/useActionQueueExecutor');
 
 describe('Editor', () => {
   beforeEach(() => {
@@ -66,5 +69,11 @@ describe('Editor', () => {
       result.getByTestId(`action-list-item-${mockTool.actions[0].name}`)
     );
     expect(result.getByTestId('action-editor')).toBeTruthy();
+  });
+
+  it('starts action queue executor', () => {
+    render(<Editor />);
+
+    expect(useActionQueueExecutor as jest.Mock).toHaveBeenCalled();
   });
 });

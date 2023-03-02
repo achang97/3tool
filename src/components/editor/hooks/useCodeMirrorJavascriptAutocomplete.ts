@@ -1,4 +1,3 @@
-import { GLOBAL_LIBRARIES } from '@app/constants';
 import {
   CompletionContext,
   CompletionResult,
@@ -11,8 +10,8 @@ import {
   parseTokenFromContext,
   createAutocompleteSnippet,
 } from '../utils/codemirror';
-import { useActiveTool } from './useActiveTool';
 import { useEvalArgs } from './useEvalArgs';
+import { useToolElementNames } from './useToolElementNames';
 
 export const BOOST_CONFIG = {
   global: 2,
@@ -24,32 +23,32 @@ export const BOOST_CONFIG = {
 export const useCodeMirrorJavascriptAutocomplete = (
   isDynamic: boolean
 ): CompletionSource => {
-  const evalArgs = useEvalArgs();
-  const { tool } = useActiveTool();
+  const { dynamicEvalArgs, staticEvalArgs } = useEvalArgs();
+  const { actionNames, componentNames } = useToolElementNames();
+
+  const evalArgs = useMemo(() => {
+    return isDynamic ? dynamicEvalArgs : staticEvalArgs;
+  }, [dynamicEvalArgs, isDynamic, staticEvalArgs]);
 
   const rootOptions = useMemo(() => {
-    const librarySnippets = GLOBAL_LIBRARIES.map(({ importName, library }) => {
-      return createAutocompleteSnippet(importName, library, {
-        boost: BOOST_CONFIG.global,
+    return Object.entries(evalArgs).map(([name, value]) => {
+      let boost: number = BOOST_CONFIG.global;
+      let detail: string | undefined;
+
+      if (actionNames.includes(name)) {
+        boost = BOOST_CONFIG.element;
+        detail = 'action';
+      } else if (componentNames.includes(name)) {
+        boost = BOOST_CONFIG.element;
+        detail = 'component';
+      }
+
+      return createAutocompleteSnippet(name, value, {
+        boost,
+        detail,
       });
     });
-
-    const componentSnippets = tool.components.map((component) => {
-      return createAutocompleteSnippet(component.name, component, {
-        detail: 'component',
-        boost: BOOST_CONFIG.element,
-      });
-    });
-
-    const actionSnippets = tool.actions.map((action) => {
-      return createAutocompleteSnippet(action.name, action, {
-        detail: 'action',
-        boost: BOOST_CONFIG.element,
-      });
-    });
-
-    return [...librarySnippets, ...componentSnippets, ...actionSnippets];
-  }, [tool.actions, tool.components]);
+  }, [actionNames, componentNames, evalArgs]);
 
   const getAutocompleteOptions = useCallback(
     (context: CompletionContext): CompletionResult => {

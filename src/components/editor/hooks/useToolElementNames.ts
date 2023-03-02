@@ -2,15 +2,26 @@ import _ from 'lodash';
 import { useMemo } from 'react';
 import { useActiveTool } from './useActiveTool';
 
-export const useToolElementNames = (): string[] => {
+type HookReturnType = {
+  componentNames: string[];
+  actionNames: string[];
+  elementNames: string[];
+};
+
+export const useToolElementNames = (): HookReturnType => {
   const { tool } = useActiveTool();
 
-  const elementNames = useMemo(() => {
-    return _.concat(
-      _.map(tool.components, 'name'),
-      _.map(tool.actions, 'name')
-    );
-  }, [tool.actions, tool.components]);
+  const componentNames = useMemo(() => {
+    return _.map(tool.components, 'name');
+  }, [tool.components]);
 
-  return elementNames;
+  const actionNames = useMemo(() => {
+    return _.map(tool.actions, 'name');
+  }, [tool.actions]);
+
+  const elementNames = useMemo(() => {
+    return _.concat(componentNames, actionNames);
+  }, [actionNames, componentNames]);
+
+  return { componentNames, actionNames, elementNames };
 };

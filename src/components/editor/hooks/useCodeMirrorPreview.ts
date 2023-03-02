@@ -20,21 +20,20 @@ export const useCodeMirrorPreview = ({
   isDynamic,
   expression = '',
 }: HookArgs): Preview | null => {
-  const evalArgs = useEvalArgs();
+  // NOTE: We pass isDynamic as true instead of the given variable value, as we never
+  // want to include static eval args (like action functions and utils).
+  const { dynamicEvalArgs } = useEvalArgs();
 
-  const evalResult = useMemo(() => {
+  const previewData: Preview | null = useMemo(() => {
     if (!isDynamic) {
       return null;
     }
-    return evalDynamicExpression(expression, type, evalArgs);
-  }, [evalArgs, expression, isDynamic, type]);
 
-  const previewData: Preview | null = useMemo(() => {
-    if (!evalResult) {
-      return null;
-    }
-
-    const { value, parsedExpression, error } = evalResult;
+    const { value, parsedExpression, error } = evalDynamicExpression(
+      expression,
+      type,
+      dynamicEvalArgs
+    );
 
     if (error) {
       return {
@@ -73,7 +72,7 @@ export const useCodeMirrorPreview = ({
     }
 
     return successPreview;
-  }, [evalResult]);
+  }, [dynamicEvalArgs, expression, isDynamic, type]);
 
   return previewData;
 };

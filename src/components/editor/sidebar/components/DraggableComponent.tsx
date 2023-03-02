@@ -1,14 +1,13 @@
 import { DragEvent, ReactNode, useCallback, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
-import _ from 'lodash';
 import { ComponentType } from '@app/types';
 import { useAppSelector, useAppDispatch } from '@app/redux/hooks';
 import {
   startCreateComponentDrag,
   endCreateComponentDrag,
 } from '@app/redux/features/editorSlice';
-import { useActiveTool } from '../../hooks/useActiveTool';
 import { createNameWithPrefix } from '../../utils/elements';
+import { useToolElementNames } from '../../hooks/useToolElementNames';
 
 type DraggableComponentProps = {
   type: ComponentType;
@@ -21,7 +20,7 @@ export const DraggableComponent = ({
   icon,
   type,
 }: DraggableComponentProps) => {
-  const { tool } = useActiveTool();
+  const { componentNames } = useToolElementNames();
   const { newComponent } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
@@ -39,11 +38,11 @@ export const DraggableComponent = ({
       dispatch(
         startCreateComponentDrag({
           type,
-          name: createNameWithPrefix(type, _.map(tool.components, 'name')),
+          name: createNameWithPrefix(type, componentNames),
         })
       );
     },
-    [dispatch, hiddenImage, tool.components, type]
+    [dispatch, hiddenImage, componentNames, type]
   );
 
   const handleDragEnd = useCallback(() => {

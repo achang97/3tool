@@ -1,6 +1,8 @@
 import { FieldType } from '@app/types';
 import { parseDeclaredVariables, parseDynamicTerms } from './javascript';
 
+const AsyncFunction = Object.getPrototypeOf(async () => {}).constructor;
+
 export const stringifyByType = (value: unknown, type: FieldType): string => {
   if (type === 'array' || type === 'object') {
     return JSON.stringify(value);
@@ -13,10 +15,11 @@ export const stringifyByType = (value: unknown, type: FieldType): string => {
   return value.toString();
 };
 
-export const evalWithArgs = (
+const baseEvalWithArgs = (
   expression: string,
   args: Record<string, unknown>,
-  hasReturnValue: boolean
+  hasReturnValue: boolean,
+  FunctionConstructor: FunctionConstructor
 ): unknown => {
   const redeclaredVariables = parseDeclaredVariables(expression);
   const argNames = Object.keys(args).filter(
@@ -29,8 +32,7 @@ export const evalWithArgs = (
   }
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval
-    const evalFn = new Function(
+    const evalFn = new FunctionConstructor(
       `{ ${argNames.join(', ')} }`,
       hasReturnValue ? trimmedExpression : `return (${trimmedExpression})`
     );
@@ -42,6 +44,22 @@ export const evalWithArgs = (
     }
     throw error;
   }
+};
+
+const evalWithArgs = (
+  expression: string,
+  args: Record<string, unknown>,
+  hasReturnValue: boolean
+): unknown => {
+  return baseEvalWithArgs(expression, args, hasReturnValue, Function);
+};
+
+export const asyncEvalWithArgs = async (
+  expression: string,
+  args: Record<string, unknown>,
+  hasReturnValue: boolean
+): Promise<unknown> => {
+  return baseEvalWithArgs(expression, args, hasReturnValue, AsyncFunction);
 };
 
 const evalDynamicTerms = (

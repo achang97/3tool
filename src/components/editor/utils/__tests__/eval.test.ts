@@ -1,4 +1,8 @@
-import { evalDynamicExpression, evalWithArgs, stringifyByType } from '../eval';
+import {
+  evalDynamicExpression,
+  asyncEvalWithArgs,
+  stringifyByType,
+} from '../eval';
 
 describe('eval', () => {
   describe('stringifyByType', () => {
@@ -28,14 +32,14 @@ describe('eval', () => {
     });
   });
 
-  describe('evalWithArgs', () => {
-    it('returns undefined if expression if empty', () => {
-      const result = evalWithArgs(' ', {}, false);
+  describe('asyncEvalWithArgs', () => {
+    it('returns undefined if expression if empty', async () => {
+      const result = await asyncEvalWithArgs(' ', {}, false);
       expect(result).toBeUndefined();
     });
 
-    it('excludes variable args that have been redeclared', () => {
-      const result = evalWithArgs(
+    it('excludes variable args that have been redeclared', async () => {
+      const result = await asyncEvalWithArgs(
         'const button1 = { text: 5 }; return button1.text;',
         { button1: { text: 'hello' } },
         true
@@ -43,35 +47,48 @@ describe('eval', () => {
       expect(result).toEqual(5);
     });
 
+    it('supports async / await syntax', async () => {
+      const result = await asyncEvalWithArgs(
+        'await new Promise((res) => setTimeout(res, 500)); return 1;',
+        {},
+        true
+      );
+      expect(result).toEqual(1);
+    });
+
     describe('has return value', () => {
-      it('evaluates function without added return keyword', () => {
-        const result = evalWithArgs('const test = 5; return 5;', {}, true);
+      it('evaluates function without added return keyword', async () => {
+        const result = await asyncEvalWithArgs(
+          'const test = 5; return 5;',
+          {},
+          true
+        );
         expect(result).toEqual(5);
       });
 
-      it('does not override "Unexpected token" error', () => {
-        expect(() => evalWithArgs('++', {}, true)).toThrowError(
-          "Unexpected token '}'"
-        );
+      it('does not override "Unexpected token" error', async () => {
+        expect(async () =>
+          asyncEvalWithArgs('++', {}, true)
+        ).rejects.toThrowError("Unexpected token '}'");
       });
     });
 
     describe('no return value', () => {
-      it('evaluates function with added return keyword', () => {
-        const result = evalWithArgs('5 + 5', {}, false);
+      it('evaluates function with added return keyword', async () => {
+        const result = await asyncEvalWithArgs('5 + 5', {}, false);
         expect(result).toEqual(10);
       });
 
-      it('overrides "Unexpected token" error', () => {
-        expect(() => evalWithArgs('++', {}, false)).toThrowError(
-          "Invalid JavaScript syntax: '++'"
-        );
+      it('overrides "Unexpected token" error', async () => {
+        expect(async () =>
+          asyncEvalWithArgs('++', {}, false)
+        ).rejects.toThrowError("Invalid JavaScript syntax: '++'");
       });
 
-      it('does not override error', () => {
-        expect(() => evalWithArgs('asdf', {}, false)).toThrowError(
-          'asdf is not defined'
-        );
+      it('does not override error', async () => {
+        expect(async () =>
+          asyncEvalWithArgs('asdf', {}, false)
+        ).rejects.toThrowError('asdf is not defined');
       });
     });
   });

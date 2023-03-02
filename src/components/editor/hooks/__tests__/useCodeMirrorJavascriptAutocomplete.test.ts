@@ -1,7 +1,6 @@
 import { ActionType, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import { createCompletionContext } from '@tests/utils/codemirror';
-import { ToolEvalDataValuesMap } from '../useToolEvalDataMaps';
 import {
   BOOST_CONFIG,
   useCodeMirrorJavascriptAutocomplete,
@@ -17,7 +16,7 @@ const mockActions = [
   { name: 'action2', type: ActionType.SmartContractRead },
 ];
 
-const mockEvalArgs: ToolEvalDataValuesMap = {
+const mockDynamicEvalArgs = {
   textInput1: {
     defaultValue: 'hello',
   },
@@ -26,6 +25,21 @@ const mockEvalArgs: ToolEvalDataValuesMap = {
     columnHeaderNames: {
       email: 'New Email',
     },
+  },
+  action1: {
+    data: 'action1',
+  },
+  action2: {
+    data: 'action2',
+  },
+  _: {
+    add: jest.fn(),
+  },
+};
+const mockStaticEvalArgs = {
+  ...mockDynamicEvalArgs,
+  utils: {
+    openUrl: jest.fn(),
   },
 };
 
@@ -39,54 +53,86 @@ jest.mock('../useActiveTool', () => ({
 }));
 
 jest.mock('../useEvalArgs', () => ({
-  useEvalArgs: jest.fn(() => mockEvalArgs),
+  useEvalArgs: jest.fn(() => ({
+    dynamicEvalArgs: mockDynamicEvalArgs,
+    staticEvalArgs: mockStaticEvalArgs,
+  })),
 }));
 
 const mockRootOptions = [
-  {
-    label: 'ethers',
-    detail: 'object',
-    boost: BOOST_CONFIG.global,
-  },
-  {
-    label: '_',
-    detail: 'function',
-    boost: BOOST_CONFIG.global,
-  },
-  {
-    label: 'moment',
-    detail: 'function',
-    boost: BOOST_CONFIG.global,
-  },
-  {
-    label: 'Web3',
-    detail: 'undefined',
-    boost: BOOST_CONFIG.global,
-  },
-  {
-    label: 'textInput1',
-    detail: 'component',
-    boost: BOOST_CONFIG.element,
-  },
-  {
-    label: 'table1',
-    detail: 'component',
-    boost: BOOST_CONFIG.element,
-  },
-  {
-    label: 'action1',
-    detail: 'action',
-    boost: BOOST_CONFIG.element,
-  },
-  {
-    label: 'action2',
-    detail: 'action',
-    boost: BOOST_CONFIG.element,
-  },
+  { label: 'textInput1', detail: 'component', boost: BOOST_CONFIG.element },
+  { label: 'table1', detail: 'component', boost: BOOST_CONFIG.element },
+  { label: 'action1', detail: 'action', boost: BOOST_CONFIG.element },
+  { label: 'action2', detail: 'action', boost: BOOST_CONFIG.element },
+  { label: '_', detail: 'object', boost: BOOST_CONFIG.global },
 ];
 
 describe('useCodeMirrorJavascriptAutocomplete', () => {
+  describe('root options', () => {
+    it('assigns "action" detail and element boost for action', () => {
+      const { result } = renderHook(() =>
+        useCodeMirrorJavascriptAutocomplete(true)
+      );
+
+      const completionContext = createCompletionContext('{{}}', 2, true);
+      // @ts-ignore options field exists on result
+      expect(result.current(completionContext)?.options).toContainEqual(
+        expect.objectContaining({
+          label: 'action1',
+          detail: 'action',
+          boost: BOOST_CONFIG.element,
+        })
+      );
+    });
+
+    it('assigns "component" detail and element boost for component', () => {
+      const { result } = renderHook(() =>
+        useCodeMirrorJavascriptAutocomplete(true)
+      );
+      const completionContext = createCompletionContext('{{}}', 2, true);
+      // @ts-ignore options field exists on result
+      expect(result.current(completionContext)?.options).toContainEqual(
+        expect.objectContaining({
+          label: 'textInput1',
+          detail: 'component',
+          boost: BOOST_CONFIG.element,
+        })
+      );
+    });
+
+    it('assigns default detail and global boost for global object', () => {
+      const { result } = renderHook(() =>
+        useCodeMirrorJavascriptAutocomplete(true)
+      );
+      const completionContext = createCompletionContext('{{}}', 2, true);
+      // @ts-ignore options field exists on result
+      expect(result.current(completionContext)?.options).toContainEqual(
+        expect.objectContaining({
+          label: '_',
+          detail: 'object',
+          boost: BOOST_CONFIG.global,
+        })
+      );
+    });
+  });
+
   describe('dynamic', () => {
+    it('does not recognize static eval args', () => {
+      const { result } = renderHook(() =>
+        useCodeMirrorJavascriptAutocomplete(true)
+      );
+
+      const completionContext = createCompletionContext(
+        '{{ utils. }}',
+        9,
+        true
+      );
+      expect(result.current(completionContext)).toEqual({
+        from: 8,
+        options: [],
+      });
+    });
+
     describe('empty options', () => {
       it('returns empty options if cursor is after invalid floating period', () => {
         const { result } = renderHook(() =>
@@ -242,7 +288,28 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
     });
   });
 
-  describe('javascript', () => {
+  describe('not dynamic', () => {
+    it('recognizes static eval args', () => {
+      const { result } = renderHook(() =>
+        useCodeMirrorJavascriptAutocomplete(false)
+      );
+
+      const completionContext = createCompletionContext(
+        '{{ utils. }}',
+        9,
+        false
+      );
+      expect(result.current(completionContext)).toMatchObject({
+        from: 8,
+        options: [
+          {
+            label: '.openUrl',
+            boost: BOOST_CONFIG.field,
+          },
+        ],
+      });
+    });
+
     it('returns empty options if expression is empty', () => {
       const { result } = renderHook(() =>
         useCodeMirrorJavascriptAutocomplete(false)

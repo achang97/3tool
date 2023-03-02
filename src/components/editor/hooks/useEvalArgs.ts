@@ -2,11 +2,14 @@ import { COMPONENT_INPUT_TEMPLATES } from '@app/constants';
 import { ACTION_RESULT_TEMPLATE } from '@app/constants/actions';
 import _ from 'lodash';
 import { useMemo } from 'react';
+import { utils } from '../utils/public';
+import { useActionFunctions } from './useActionFunctions';
 import { useActiveTool } from './useActiveTool';
 import { useBaseEvalArgs } from './useBaseEvalArgs';
 
 export const useEvalArgs = () => {
   const baseEvalArgs = useBaseEvalArgs();
+  const actionFunctions = useActionFunctions();
 
   const { tool, evalDataValuesMap } = useActiveTool();
 
@@ -38,7 +41,7 @@ export const useEvalArgs = () => {
       .value();
   }, [tool.actions]);
 
-  const evalArgs = useMemo(() => {
+  const dynamicEvalArgs = useMemo(() => {
     return _.merge(
       {},
       defaultComponentInputs,
@@ -49,13 +52,17 @@ export const useEvalArgs = () => {
       evalDataValuesMap
     );
   }, [
-    baseEvalArgs,
-    evalDataValuesMap,
     defaultComponentInputs,
     defaultComponentEvents,
     defaultActionResults,
     defaultActionEvents,
+    baseEvalArgs,
+    evalDataValuesMap,
   ]);
 
-  return evalArgs;
+  const staticEvalArgs = useMemo(() => {
+    return _.merge({}, dynamicEvalArgs, actionFunctions, { utils });
+  }, [actionFunctions, dynamicEvalArgs]);
+
+  return { dynamicEvalArgs, staticEvalArgs };
 };

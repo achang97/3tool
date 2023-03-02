@@ -1,7 +1,19 @@
 import { renderHook } from '@tests/utils/renderWithContext';
 import { useCodeMirrorPreview } from '../useCodeMirrorPreview';
+import { useEvalArgs } from '../useEvalArgs';
+
+jest.mock('../useEvalArgs', () => ({
+  useEvalArgs: jest.fn(),
+}));
 
 describe('useCodeMirrorPreview', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useEvalArgs as jest.Mock).mockImplementation(() => ({
+      dynamicEvalArgs: {},
+    }));
+  });
+
   it('returns null if isDynamic is false', () => {
     const { result } = renderHook(() =>
       useCodeMirrorPreview({
@@ -24,6 +36,28 @@ describe('useCodeMirrorPreview', () => {
     expect(result.current).toEqual({
       alertType: 'error',
       message: 'asdf is not defined',
+    });
+  });
+
+  it('reads values from dynamic eval args', () => {
+    (useEvalArgs as jest.Mock).mockImplementation(() => ({
+      dynamicEvalArgs: {
+        button1: {
+          text: 'hello',
+        },
+      },
+    }));
+    const { result } = renderHook(() =>
+      useCodeMirrorPreview({
+        type: 'string',
+        isDynamic: true,
+        expression: '{{ button1.text }}',
+      })
+    );
+    expect(result.current).toEqual({
+      type: 'string',
+      alertType: 'success',
+      message: '"hello"',
     });
   });
 

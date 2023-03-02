@@ -18,6 +18,7 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 window.confirm = jest.fn();
+window.open = jest.fn();
 
 document.createRange = () => {
   const range = new Range();

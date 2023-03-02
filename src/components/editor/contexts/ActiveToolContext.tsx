@@ -87,7 +87,7 @@ export const ActiveToolProvider = ({
   }, [updatedTool]);
 
   const updateActiveTool = useCallback(
-    async (update: Partial<Pick<Tool, 'name' | 'components'>>) => {
+    async (update: Partial<Pick<Tool, 'name' | 'components' | 'actions'>>) => {
       return updateTool({
         id: activeTool.id,
         ...update,

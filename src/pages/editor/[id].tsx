@@ -9,6 +9,7 @@ import { PageContainer } from '@app/components/common/PageContainer';
 import { ToolEditorToolbar } from '@app/components/toolbar/editor/ToolEditorToolbar';
 import { ToolSnackbarProvider } from '@app/components/editor/contexts/ToolSnackbarProvider';
 import { Editor } from '@app/components/editor/Editor';
+import { ActionQueueProvider } from '@app/components/editor/contexts/ActionQueueContext';
 
 type EditorPageProps = {
   tool: Tool;
@@ -23,10 +24,12 @@ const EditorPage = ({ tool }: EditorPageProps) => {
       <main>
         <ToolSnackbarProvider>
           <ActiveToolProvider tool={tool}>
-            <PageContainer sx={{ padding: 0 }}>
-              <ToolEditorToolbar />
-              <Editor />
-            </PageContainer>
+            <ActionQueueProvider>
+              <PageContainer sx={{ padding: 0 }}>
+                <ToolEditorToolbar />
+                <Editor />
+              </PageContainer>
+            </ActionQueueProvider>
           </ActiveToolProvider>
         </ToolSnackbarProvider>
       </main>
