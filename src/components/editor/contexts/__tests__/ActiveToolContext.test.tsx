@@ -8,44 +8,19 @@ import { useToolDataDepGraph } from '../../hooks/useToolDataDepGraph';
 import {
   ToolEvalDataMap,
   ToolEvalDataValuesMap,
+  useToolEvalDataMaps,
 } from '../../hooks/useToolEvalDataMaps';
 import { ActiveToolContext, ActiveToolProvider } from '../ActiveToolContext';
 
 const mockUpdateTool = jest.fn();
 const mockEnqueueSnackbar = jest.fn();
 
-const mockElementDataDepGraph = new DepGraph<string>();
-mockElementDataDepGraph.addNode('button1');
-mockElementDataDepGraph.addNode('button2');
-mockElementDataDepGraph.addDependency('button1', 'button2');
-
-const mockElementEvalDataMap: ToolEvalDataMap = {
-  button1: {
-    text: {
-      parsedExpression: 'hello',
-      value: 'hello',
-    },
-  },
-};
-const mockElementEvalDataValuesMap: ToolEvalDataValuesMap = {
-  button1: {
-    text: 'hello',
-  },
-};
-
-jest.mock('../../hooks/useToolDataDepGraph');
-
-jest.mock('../../hooks/useToolEvalDataMaps', () => ({
-  useToolEvalDataMaps: jest.fn(() => ({
-    evalDataMap: mockElementEvalDataMap,
-    evalDataValuesMap: mockElementEvalDataValuesMap,
-  })),
-}));
-
 jest.mock('../../hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
 
+jest.mock('../../hooks/useToolDataDepGraph');
+jest.mock('../../hooks/useToolEvalDataMaps');
 jest.mock('@app/redux/services/tools');
 
 describe('ActiveToolContext', () => {
@@ -56,10 +31,9 @@ describe('ActiveToolContext', () => {
       mockUpdateTool,
       {},
     ]);
-    (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
-      dataDepGraph: mockElementDataDepGraph,
-    }));
 
+    (useToolEvalDataMaps as jest.Mock).mockImplementation(() => ({}));
+    (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({}));
     mockUpdateTool.mockClear();
   });
 
@@ -68,48 +42,11 @@ describe('ActiveToolContext', () => {
     expect(result.current).toEqual({
       tool: {},
       updateTool: expect.any(Function),
-      dataDepGraph: {
-        nodes: {},
-        outgoingEdges: {},
-        incomingEdges: {},
-        circular: undefined,
-      },
+      dataDepGraph: new DepGraph<string>(),
+      dataDepCycles: {},
       evalDataMap: {},
       evalDataValuesMap: {},
     });
-  });
-
-  it('returns dataDepGraph', () => {
-    (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
-      dataDepGraph: mockElementDataDepGraph,
-    }));
-
-    const { result } = renderHook(() => useContext(ActiveToolContext), {
-      wrapper: ({ children }: { children: ReactElement }) => (
-        <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-      ),
-    });
-    expect(result.current.dataDepGraph).toEqual(mockElementDataDepGraph);
-  });
-
-  it('returns evalDataMap', () => {
-    const { result } = renderHook(() => useContext(ActiveToolContext), {
-      wrapper: ({ children }: { children: ReactElement }) => (
-        <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-      ),
-    });
-    expect(result.current.evalDataMap).toEqual(mockElementEvalDataMap);
-  });
-
-  it('returns evalDataValuesMap', () => {
-    const { result } = renderHook(() => useContext(ActiveToolContext), {
-      wrapper: ({ children }: { children: ReactElement }) => (
-        <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-      ),
-    });
-    expect(result.current.evalDataValuesMap).toEqual(
-      mockElementEvalDataValuesMap
-    );
   });
 
   it('returns given tool prop as tool before any updates', () => {
@@ -121,42 +58,121 @@ describe('ActiveToolContext', () => {
     expect(result.current.tool).toEqual(mockTool);
   });
 
-  it('returns updated tool as tool after successful update', () => {
-    const mockUpdatedTool = {
-      ...mockTool,
-      name: 'Updated Tool Name',
-    };
-    (useUpdateToolMutation as jest.Mock).mockImplementation(() => [
-      mockUpdateTool,
-      { data: mockUpdatedTool },
-    ]);
+  describe('dep graph', () => {
+    it('returns dataDepGraph', () => {
+      const mockElementDataDepGraph = new DepGraph<string>();
+      mockElementDataDepGraph.addNode('button1');
+      mockElementDataDepGraph.addNode('button2');
+      mockElementDataDepGraph.addDependency('button1', 'button2');
 
-    const { result } = renderHook(() => useContext(ActiveToolContext), {
-      wrapper: ({ children }: { children: ReactElement }) => (
-        <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-      ),
+      (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
+        dataDepGraph: mockElementDataDepGraph,
+      }));
+
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
+        wrapper: ({ children }: { children: ReactElement }) => (
+          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
+        ),
+      });
+      expect(result.current.dataDepGraph).toEqual(mockElementDataDepGraph);
     });
 
-    expect(result.current.tool).toEqual(mockUpdatedTool);
+    it('returns dataDepGraph', () => {
+      const mockDataDepCycles = {
+        'button1.text': ['1', '2'],
+      };
+      (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
+        dataDepCycles: mockDataDepCycles,
+      }));
+
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
+        wrapper: ({ children }: { children: ReactElement }) => (
+          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
+        ),
+      });
+      expect(result.current.dataDepCycles).toEqual(mockDataDepCycles);
+    });
   });
 
-  it('updateTool calls API to update tool with original tool id', () => {
-    const { result } = renderHook(() => useContext(ActiveToolContext), {
-      wrapper: ({ children }: { children: ReactElement }) => (
-        <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-      ),
+  describe('eval maps', () => {
+    it('returns evalDataValuesMap', () => {
+      const mockElementEvalDataValuesMap: ToolEvalDataValuesMap = {
+        button1: {
+          text: 'hello',
+        },
+      };
+      (useToolEvalDataMaps as jest.Mock).mockImplementation(() => ({
+        evalDataValuesMap: mockElementEvalDataValuesMap,
+      }));
+
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
+        wrapper: ({ children }: { children: ReactElement }) => (
+          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
+        ),
+      });
+      expect(result.current.evalDataValuesMap).toEqual(
+        mockElementEvalDataValuesMap
+      );
     });
 
-    const mockToolUpdate = { name: 'Updated Tool Name' };
-    result.current.updateTool(mockToolUpdate);
+    it('returns evalDataMap', () => {
+      const mockElementEvalDataMap: ToolEvalDataMap = {
+        button1: {
+          text: {
+            parsedExpression: 'hello',
+            value: 'hello',
+          },
+        },
+      };
+      (useToolEvalDataMaps as jest.Mock).mockImplementation(() => ({
+        evalDataMap: mockElementEvalDataMap,
+      }));
 
-    expect(mockUpdateTool).toHaveBeenCalledWith({
-      id: mockTool.id,
-      ...mockToolUpdate,
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
+        wrapper: ({ children }: { children: ReactElement }) => (
+          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
+        ),
+      });
+      expect(result.current.evalDataMap).toEqual(mockElementEvalDataMap);
     });
   });
 
-  describe('error', () => {
+  describe('update', () => {
+    it('returns updated tool as tool after successful update', () => {
+      const mockUpdatedTool = {
+        ...mockTool,
+        name: 'Updated Tool Name',
+      };
+      (useUpdateToolMutation as jest.Mock).mockImplementation(() => [
+        mockUpdateTool,
+        { data: mockUpdatedTool },
+      ]);
+
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
+        wrapper: ({ children }: { children: ReactElement }) => (
+          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
+        ),
+      });
+
+      expect(result.current.tool).toEqual(mockUpdatedTool);
+    });
+
+    it('updateTool calls API to update tool with original tool id', () => {
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
+        wrapper: ({ children }: { children: ReactElement }) => (
+          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
+        ),
+      });
+
+      const mockToolUpdate = { name: 'Updated Tool Name' };
+      result.current.updateTool(mockToolUpdate);
+
+      expect(mockUpdateTool).toHaveBeenCalledWith({
+        id: mockTool.id,
+        ...mockToolUpdate,
+      });
+    });
+
     it('does not display error snackbar if update succeeds', () => {
       (useUpdateToolMutation as jest.Mock).mockImplementation(() => [
         mockUpdateTool,
@@ -193,39 +209,6 @@ describe('ActiveToolContext', () => {
       expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
         mockApiError.data!.message,
         { variant: 'error' }
-      );
-    });
-
-    it('does not display error snackbar if there is no cycle in dependency graph', () => {
-      (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
-        cyclePath: undefined,
-      }));
-
-      renderHook(() => useContext(ActiveToolContext), {
-        wrapper: ({ children }: { children: ReactElement }) => (
-          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-        ),
-      });
-
-      expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
-    });
-
-    it('displays error snackbar if there is cycle in dependency graph', () => {
-      (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({
-        cyclePath: ['button1.text', 'button1.disabled', 'button1.text'],
-      }));
-
-      renderHook(() => useContext(ActiveToolContext), {
-        wrapper: ({ children }: { children: ReactElement }) => (
-          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-        ),
-      });
-
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-        'Dependency Cycle Found: button1.text → button1.disabled → button1.text',
-        {
-          variant: 'error',
-        }
       );
     });
   });

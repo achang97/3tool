@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { ActionResult } from '@app/constants/actions';
+import { ActionResult } from '@app/constants';
 
 type ToolState = {
   // Component inputs

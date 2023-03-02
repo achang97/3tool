@@ -8,6 +8,7 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { TextInspector } from '../TextInspector';
 
+const mockName = 'name';
 const mockData: Component['data']['text'] = {
   value: 'value',
   horizontalAlignment: 'left',
@@ -26,6 +27,10 @@ jest.mock(
   })
 );
 
+jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
+
 describe('TextInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -34,14 +39,22 @@ describe('TextInspector', () => {
   describe('Basic', () => {
     it('renders "Basic" title', () => {
       const result = render(
-        <TextInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TextInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
       validateSection(result, 'Basic');
     });
 
     it('value: renders "Value" text field', async () => {
       const result = render(
-        <TextInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TextInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
 
       await validateDynamicInputField(result, 'Basic', {
@@ -57,14 +70,22 @@ describe('TextInspector', () => {
   describe('Layout', () => {
     it('renders "Layout" title', () => {
       const result = render(
-        <TextInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TextInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
       validateSection(result, 'Layout');
     });
 
     it('horizontalAlignment: renders "Horizontal Alignment" enum field', async () => {
       const result = render(
-        <TextInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TextInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
 
       await validateEnumField(result, 'Layout', {

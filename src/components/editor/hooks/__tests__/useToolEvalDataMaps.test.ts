@@ -9,12 +9,13 @@ jest.mock('../useBaseEvalArgs');
 describe('useToolEvalDataMaps', () => {
   const renderTestHook = (tool: Tool) => {
     const { result } = renderHook(() => useToolDataDepGraph(tool));
-    const { dataDepGraph } = result.current;
+    const { dataDepGraph, dataDepCycles } = result.current;
 
     return renderHook(() =>
       useToolEvalDataMaps({
         tool,
         dataDepGraph,
+        dataDepCycles,
       })
     );
   };
@@ -46,6 +47,36 @@ describe('useToolEvalDataMaps', () => {
       expect(result.current.evalDataMap).toEqual({
         button1: {
           text: { error: new Error('button1 is not defined') },
+        },
+      });
+      expect(result.current.evalDataValuesMap).toEqual({
+        button1: {
+          text: undefined,
+        },
+      });
+    });
+
+    it('returns error for cycles', () => {
+      const mockTool = {
+        components: [
+          {
+            name: 'button1',
+            type: ComponentType.Button,
+            data: {
+              button: {
+                text: '{{ button1.text }}',
+              },
+            },
+            eventHandlers: [],
+          },
+        ],
+        actions: [],
+      } as unknown as Tool;
+      const { result } = renderTestHook(mockTool);
+
+      expect(result.current.evalDataMap).toEqual({
+        button1: {
+          text: { error: new Error('contains cycle') },
         },
       });
       expect(result.current.evalDataValuesMap).toEqual({

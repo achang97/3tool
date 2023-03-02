@@ -37,6 +37,10 @@ jest.mock('../../../hooks/useComponentDelete', () => ({
   useComponentDelete: jest.fn(() => mockDeleteComponent),
 }));
 
+jest.mock('../../../hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
+
 jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => mockDispatch),
   useAppSelector: jest.fn(() => ({
@@ -57,6 +61,7 @@ describe('ComponentInspector', () => {
       evalDataMap: {},
       evalDataValuesMap: {},
       dataDepGraph: new DepGraph<string>(),
+      dataDepCycles: {},
     }));
   });
 
@@ -183,6 +188,7 @@ describe('ComponentInspector', () => {
       evalDataMap: {},
       evalDataValuesMap: {},
       dataDepGraph: new DepGraph<string>(),
+      dataDepCycles: {},
     }));
 
     const result = render(

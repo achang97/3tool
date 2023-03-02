@@ -183,8 +183,8 @@ describe('useToolDataDepGraph', () => {
     });
   });
 
-  describe('cyclePath', () => {
-    it('detects cycle path', () => {
+  describe('dataDepCles', () => {
+    it('detects cycle paths', () => {
       const { result } = renderHook(() =>
         useToolDataDepGraph({
           components: [
@@ -203,11 +203,15 @@ describe('useToolDataDepGraph', () => {
           actions: [],
         } as unknown as Tool)
       );
-      expect(result.current.cyclePath).toEqual([
-        'button1.text',
-        'button1.disabled',
-        'button1.text',
-      ]);
+
+      expect(result.current.dataDepCycles).toEqual({
+        'button1.text': ['button1.text', 'button1.disabled', 'button1.text'],
+        'button1.disabled': [
+          'button1.disabled',
+          'button1.text',
+          'button1.disabled',
+        ],
+      });
     });
 
     it('returns circular dep graph that can be safely operated on', () => {

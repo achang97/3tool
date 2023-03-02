@@ -7,6 +7,7 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { TableInspector } from '../TableInspector';
 
+const mockName = 'name';
 const mockData: Component['data']['table'] = {
   data: '[1]',
   emptyMessage: 'Empty Message',
@@ -28,6 +29,10 @@ jest.mock(
   })
 );
 
+jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
+
 describe('TableInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -36,14 +41,22 @@ describe('TableInspector', () => {
   describe('Data', () => {
     it('renders "Data" title', () => {
       const result = render(
-        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TableInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
       validateSection(result, 'Data');
     });
 
     it('data: renders "Data" text field', async () => {
       const result = render(
-        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TableInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
 
       await validateDynamicInputField(result, 'Data', {
@@ -57,7 +70,11 @@ describe('TableInspector', () => {
 
     it('emptyMessage: renders "Empty message" text field', async () => {
       const result = render(
-        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TableInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
 
       await validateDynamicInputField(result, 'Data', {
@@ -73,14 +90,22 @@ describe('TableInspector', () => {
   describe('Row selection', () => {
     it('renders "Row selection" title', () => {
       const result = render(
-        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TableInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
       validateSection(result, 'Row selection');
     });
 
     it('multiselect: renders "Enable multi-row selection" text field', async () => {
       const result = render(
-        <TableInspector data={mockData} onUpdateData={mockHandleUpdateData} />
+        <TableInspector
+          name={mockName}
+          data={mockData}
+          onUpdateData={mockHandleUpdateData}
+        />
       );
 
       await validateDynamicInputField(result, 'Row selection', {

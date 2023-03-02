@@ -19,6 +19,7 @@ export type BaseCanvasComponentProps = {
 };
 
 export type BaseComponentInspectorProps<T extends ComponentType> = {
+  name: string;
   data: Component['data'][T];
   onUpdateData: (update: RecursivePartial<Component['data'][T]>) => void;
 };

@@ -9,6 +9,7 @@ import { useToolFlattenedElements } from './useToolFlattenedElements';
 type HookArgs = {
   tool: Tool;
   dataDepGraph: DepGraph<string>;
+  dataDepCycles: Record<string, string[]>;
 };
 
 type HookReturnType = {
@@ -22,8 +23,9 @@ export type ToolEvalDataValuesMap = Record<string, Record<string, unknown>>;
 export const useToolEvalDataMaps = ({
   tool,
   dataDepGraph,
+  dataDepCycles,
 }: HookArgs): HookReturnType => {
-  const baseEvalArgs = useBaseEvalArgs();
+  const baseEvalArgs = useBaseEvalArgs(tool);
   const elements = useToolFlattenedElements({
     tool,
     includePrefix: true,
@@ -46,9 +48,15 @@ export const useToolEvalDataMaps = ({
           value: element.value,
         };
       }
+      if (dataDepCycles[nodeName]) {
+        return {
+          error: new Error('contains cycle'),
+        };
+      }
+
       return evalDynamicExpression(element.value, element.evalType, evalArgs);
     },
-    [elementMap]
+    [elementMap, dataDepCycles]
   );
 
   const evalMaps = useMemo(() => {

@@ -1,5 +1,5 @@
 import { useActionConfirmDiscard } from '@app/components/editor/hooks/useActionConfirmDiscard';
-import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants/actions';
+import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants';
 import { focusAction } from '@app/redux/features/editorSlice';
 import { Action, ActionType } from '@app/types';
 import { render } from '@testing-library/react';

@@ -7,6 +7,7 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { TextInputInspector } from '../TextInputInspector';
 
+const mockName = 'name';
 const mockData: Component['data']['textInput'] = {
   defaultValue: 'Default Value',
   placeholder: 'Placeholder',
@@ -30,6 +31,10 @@ jest.mock(
   })
 );
 
+jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
+
 describe('TextInputInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -39,6 +44,7 @@ describe('TextInputInspector', () => {
     it('renders "Basic" title', () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -49,6 +55,7 @@ describe('TextInputInspector', () => {
     it('defaultValue: renders "Default Value" text field', async () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -66,6 +73,7 @@ describe('TextInputInspector', () => {
     it('placeholder: renders "Placeholder" text field', async () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -85,6 +93,7 @@ describe('TextInputInspector', () => {
     it('renders "Label" title', () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -95,6 +104,7 @@ describe('TextInputInspector', () => {
     it('label: renders "Label" text field', async () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -114,6 +124,7 @@ describe('TextInputInspector', () => {
     it('renders "Interaction" title', () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -124,6 +135,7 @@ describe('TextInputInspector', () => {
     it('disabled: renders "Disabled" text field', async () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -143,6 +155,7 @@ describe('TextInputInspector', () => {
     it('renders "Validation" title', () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -153,6 +166,7 @@ describe('TextInputInspector', () => {
     it('required: renders "Required" text field', async () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -170,6 +184,7 @@ describe('TextInputInspector', () => {
     it('minLength: renders "Min Length" text field', async () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -187,6 +202,7 @@ describe('TextInputInspector', () => {
     it('maxLength: renders "Max Length" text field', async () => {
       const result = render(
         <TextInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />

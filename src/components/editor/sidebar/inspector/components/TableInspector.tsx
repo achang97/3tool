@@ -6,6 +6,7 @@ import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 const DATA_TYPES = COMPONENT_DATA_TYPES.table;
 
 export const TableInspector = ({
+  name,
   data,
   onUpdateData,
 }: BaseComponentInspectorProps<ComponentType.Table>) => {
@@ -56,6 +57,7 @@ export const TableInspector = ({
 
   return (
     <BaseInspector
+      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="table-inspector"

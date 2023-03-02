@@ -6,6 +6,7 @@ import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 const DATA_TYPES = COMPONENT_DATA_TYPES.text;
 
 export const TextInspector = ({
+  name,
   data,
   onUpdateData,
 }: BaseComponentInspectorProps<ComponentType.Text>) => {
@@ -59,6 +60,7 @@ export const TextInspector = ({
 
   return (
     <BaseInspector
+      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="text-inspector"

@@ -1,6 +1,6 @@
 import { EditableTextField } from '@app/components/common/EditableTextField';
 import { MenuItem } from '@app/components/common/MenuItem';
-import { ACTION_CONFIGS } from '@app/constants/actions';
+import { ACTION_CONFIGS } from '@app/constants';
 import { useMenuState } from '@app/hooks/useMenuState';
 import { focusAction } from '@app/redux/features/editorSlice';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';

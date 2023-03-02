@@ -3,8 +3,8 @@ import { Button, Box, Menu } from '@mui/material';
 import { useCallback } from 'react';
 import Image from 'next/image';
 import _ from 'lodash';
-import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants/actions';
-import { Action, ActionType } from '@app/types';
+import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants';
+import { Action, ActionType, ApiResponse, Tool } from '@app/types';
 import { useMenuState } from '@app/hooks/useMenuState';
 import { useAppDispatch } from '@app/redux/hooks';
 import { focusAction } from '@app/redux/features/editorSlice';
@@ -21,6 +21,17 @@ export const CreateActionButton = () => {
   const dispatch = useAppDispatch();
   const { isMenuOpen, menuAnchor, onMenuOpen, onMenuClose } = useMenuState();
   const confirmDiscard = useActionConfirmDiscard();
+
+  const handleCreateResponse = useCallback(
+    (response: ApiResponse<Tool> | undefined, newAction: Action) => {
+      if (!isSuccessfulApiResponse(response)) {
+        return;
+      }
+
+      dispatch(focusAction(newAction));
+    },
+    [dispatch]
+  );
 
   const handleCreateAction = useCallback(
     async (type: ActionType) => {
@@ -40,12 +51,9 @@ export const CreateActionButton = () => {
         actions: [...tool.actions, newAction],
       });
 
-      if (!isSuccessfulApiResponse(response)) {
-        return;
-      }
-      dispatch(focusAction(newAction));
+      handleCreateResponse(response, newAction);
     },
-    [confirmDiscard, dispatch, tool.actions, updateTool]
+    [confirmDiscard, handleCreateResponse, tool.actions, updateTool]
   );
 
   return (

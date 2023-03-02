@@ -7,6 +7,7 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { NumberInputInspector } from '../NumberInputInspector';
 
+const mockName = 'name';
 const mockData: Component['data']['numberInput'] = {
   defaultValue: 'Default Value',
   placeholder: 'Placeholder',
@@ -30,6 +31,10 @@ jest.mock(
   })
 );
 
+jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
+
 describe('NumberInputInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -39,6 +44,7 @@ describe('NumberInputInspector', () => {
     it('renders "Basic" title', () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -49,6 +55,7 @@ describe('NumberInputInspector', () => {
     it('defaultValue: renders "Default Value" number field', async () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -66,6 +73,7 @@ describe('NumberInputInspector', () => {
     it('placeholder: renders "Placeholder" number field', async () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -85,6 +93,7 @@ describe('NumberInputInspector', () => {
     it('renders "Label" title', () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -95,6 +104,7 @@ describe('NumberInputInspector', () => {
     it('label: renders "Label" number field', async () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -114,6 +124,7 @@ describe('NumberInputInspector', () => {
     it('renders "Interaction" title', () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -124,6 +135,7 @@ describe('NumberInputInspector', () => {
     it('disabled: renders "Disabled" number field', async () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -143,6 +155,7 @@ describe('NumberInputInspector', () => {
     it('renders "Validation" title', () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -153,6 +166,7 @@ describe('NumberInputInspector', () => {
     it('required: renders "Required" number field', async () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -170,6 +184,7 @@ describe('NumberInputInspector', () => {
     it('minimum: renders "Minimum" number field', async () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />
@@ -187,6 +202,7 @@ describe('NumberInputInspector', () => {
     it('maximum: renders "Maximum" number field', async () => {
       const result = render(
         <NumberInputInspector
+          name={mockName}
           data={mockData}
           onUpdateData={mockHandleUpdateData}
         />

@@ -1,6 +1,3 @@
-import { COMPONENT_INPUT_TEMPLATES } from '@app/constants';
-import { ACTION_RESULT_TEMPLATE } from '@app/constants/actions';
-import { Action, ActionType, Component, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { utils } from '../../utils/public';
@@ -55,42 +52,6 @@ describe('useEvalArgs', () => {
       expect(result.current.staticEvalArgs).toMatchObject(
         mockElementEvalDataValuesMap
       );
-    });
-
-    it('includes entries from default component inputs', () => {
-      const mockComponents = [
-        { name: 'textInput1', type: ComponentType.TextInput },
-      ] as Component[];
-      (useActiveTool as jest.Mock).mockImplementation(() => ({
-        tool: { components: mockComponents },
-        evalDataValuesMap: {},
-      }));
-
-      const { result } = renderHook(() => useEvalArgs());
-      expect(result.current.dynamicEvalArgs).toMatchObject({
-        textInput1: COMPONENT_INPUT_TEMPLATES.textInput,
-      });
-      expect(result.current.staticEvalArgs).toMatchObject({
-        textInput1: COMPONENT_INPUT_TEMPLATES.textInput,
-      });
-    });
-
-    it('includes entries from default action results', () => {
-      const mockActions = [
-        { name: 'action1', type: ActionType.Javascript },
-      ] as Action[];
-      (useActiveTool as jest.Mock).mockImplementation(() => ({
-        tool: { actions: mockActions },
-        evalDataValuesMap: {},
-      }));
-
-      const { result } = renderHook(() => useEvalArgs());
-      expect(result.current.dynamicEvalArgs).toMatchObject({
-        action1: ACTION_RESULT_TEMPLATE,
-      });
-      expect(result.current.staticEvalArgs).toMatchObject({
-        action1: ACTION_RESULT_TEMPLATE,
-      });
     });
   });
 

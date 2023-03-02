@@ -22,6 +22,7 @@ const DEFAULT_STATE = {
   tool: {} as Tool,
   updateTool: async () => undefined,
   dataDepGraph: new DepGraph<string>(),
+  dataDepCycles: {},
   evalDataMap: {},
   evalDataValuesMap: {},
 };
@@ -32,6 +33,7 @@ export type ActiveToolState = {
     update: Partial<Pick<Tool, 'name' | 'components' | 'actions'>>
   ) => Promise<ApiResponse<Tool> | undefined>;
   dataDepGraph: DepGraph<string>;
+  dataDepCycles: Record<string, string[]>;
   evalDataMap: ToolEvalDataMap;
   evalDataValuesMap: ToolEvalDataValuesMap;
 };
@@ -51,34 +53,22 @@ export const ActiveToolProvider = ({
   const [updateTool, { error: updateError, data: updatedTool }] =
     useUpdateToolMutation();
 
-  const { dataDepGraph, cyclePath } = useToolDataDepGraph(activeTool);
+  const { dataDepGraph, dataDepCycles } = useToolDataDepGraph(activeTool);
   const enqueueSnackbar = useEnqueueSnackbar();
 
   const { evalDataMap, evalDataValuesMap } = useToolEvalDataMaps({
     tool: activeTool,
     dataDepGraph,
+    dataDepCycles,
   });
-
-  const displayErrorSnackbar = useCallback(
-    (error: string) => {
-      enqueueSnackbar(error, {
-        variant: 'error',
-      });
-    },
-    [enqueueSnackbar]
-  );
 
   useEffect(() => {
     if (updateError) {
-      displayErrorSnackbar(parseApiError(updateError));
+      enqueueSnackbar(parseApiError(updateError), {
+        variant: 'error',
+      });
     }
-  }, [displayErrorSnackbar, updateError]);
-
-  useEffect(() => {
-    if (cyclePath) {
-      displayErrorSnackbar(`Dependency Cycle Found: ${cyclePath.join(' → ')}`);
-    }
-  }, [cyclePath, displayErrorSnackbar]);
+  }, [enqueueSnackbar, updateError]);
 
   useEffect(() => {
     if (updatedTool) {
@@ -101,6 +91,7 @@ export const ActiveToolProvider = ({
       tool: activeTool,
       updateTool: updateActiveTool,
       dataDepGraph,
+      dataDepCycles,
       evalDataMap,
       evalDataValuesMap,
     };
@@ -108,6 +99,7 @@ export const ActiveToolProvider = ({
     activeTool,
     updateActiveTool,
     dataDepGraph,
+    dataDepCycles,
     evalDataMap,
     evalDataValuesMap,
   ]);

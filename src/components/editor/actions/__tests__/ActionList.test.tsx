@@ -2,7 +2,7 @@ import { mockTool } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
 import { Action, ActionType } from '@app/types';
-import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants/actions';
+import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants';
 import { useActiveTool } from '../../hooks/useActiveTool';
 import { ActionList } from '../ActionList';
 

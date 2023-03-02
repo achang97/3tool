@@ -6,6 +6,7 @@ import {
 import { render } from '@tests/utils/renderWithContext';
 import { BaseInspector, BaseInspectorSectionProps } from '../BaseInspector';
 
+const mockName = 'name';
 const mockHandleUpdateData = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
@@ -19,6 +20,10 @@ jest.mock(
   })
 );
 
+jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
+
 describe('BaseInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -31,7 +36,11 @@ describe('BaseInspector', () => {
     ];
 
     const result = render(
-      <BaseInspector config={mockConfig} onUpdateData={mockHandleUpdateData} />
+      <BaseInspector
+        name={mockName}
+        config={mockConfig}
+        onUpdateData={mockHandleUpdateData}
+      />
     );
 
     expect(result.getByText('Section 1')).toBeTruthy();
@@ -53,7 +62,11 @@ describe('BaseInspector', () => {
       },
     ];
     const result = render(
-      <BaseInspector config={mockConfig} onUpdateData={mockHandleUpdateData} />
+      <BaseInspector
+        name={mockName}
+        config={mockConfig}
+        onUpdateData={mockHandleUpdateData}
+      />
     );
     expect(result.queryByText('Text')).toBeNull();
     expect(result.queryByText('hello')).toBeNull();
@@ -91,6 +104,7 @@ describe('BaseInspector', () => {
 
       const result = render(
         <BaseInspector
+          name={mockName}
           config={mockConfig}
           onUpdateData={mockHandleUpdateData}
         />
@@ -131,6 +145,7 @@ describe('BaseInspector', () => {
 
       const result = render(
         <BaseInspector
+          name={mockName}
           config={mockConfig}
           onUpdateData={mockHandleUpdateData}
         />

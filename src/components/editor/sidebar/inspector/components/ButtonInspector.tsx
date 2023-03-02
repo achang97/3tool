@@ -6,6 +6,7 @@ import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 const DATA_TYPES = COMPONENT_DATA_TYPES.button;
 
 export const ButtonInspector = ({
+  name,
   data,
   onUpdateData,
 }: BaseComponentInspectorProps<ComponentType.Button>) => {
@@ -56,6 +57,7 @@ export const ButtonInspector = ({
 
   return (
     <BaseInspector
+      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="button-inspector"

@@ -6,6 +6,7 @@ import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 const DATA_TYPES = COMPONENT_DATA_TYPES.numberInput;
 
 export const NumberInputInspector = ({
+  name,
   data,
   onUpdateData,
 }: BaseComponentInspectorProps<ComponentType.NumberInput>) => {
@@ -106,6 +107,7 @@ export const NumberInputInspector = ({
 
   return (
     <BaseInspector
+      name={name}
       config={config}
       onUpdateData={onUpdateData}
       testId="number-input-inspector"

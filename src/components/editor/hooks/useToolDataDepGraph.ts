@@ -8,7 +8,7 @@ import { useToolFlattenedElements } from './useToolFlattenedElements';
 
 type HookReturnType = {
   dataDepGraph: DepGraph<string>;
-  cyclePath?: string[];
+  dataDepCycles: Record<string, string[]>;
 };
 
 export const useToolDataDepGraph = (tool: Tool): HookReturnType => {
@@ -82,16 +82,25 @@ export const useToolDataDepGraph = (tool: Tool): HookReturnType => {
     return circularDepGraph.clone();
   }, [circularDepGraph]);
 
-  const cyclePath = useMemo(() => {
-    try {
-      acyclicDepGraph.overallOrder();
-    } catch (e) {
-      if (e instanceof DepGraphCycleError) {
-        return parseDepCycle(e.cyclePath);
-      }
-    }
-    return undefined;
-  }, [acyclicDepGraph]);
+  const dataDepCycles = useMemo(() => {
+    const paths: Record<string, string[]> = {};
 
-  return { dataDepGraph: circularDepGraph, cyclePath };
+    elements.forEach((element) => {
+      element.fields
+        .filter((field) => field.isLeaf)
+        .forEach((field) => {
+          try {
+            acyclicDepGraph.dependenciesOf(field.name);
+          } catch (e) {
+            if (e instanceof DepGraphCycleError) {
+              paths[field.name] = parseDepCycle(e.cyclePath);
+            }
+          }
+        });
+    });
+
+    return paths;
+  }, [acyclicDepGraph, elements]);
+
+  return { dataDepGraph: circularDepGraph, dataDepCycles };
 };

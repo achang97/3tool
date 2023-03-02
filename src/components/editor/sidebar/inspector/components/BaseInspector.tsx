@@ -1,9 +1,9 @@
-import { CodeMirror } from '@app/components/editor/common/CodeMirror';
 import { FieldType } from '@app/types';
 import { Box } from '@mui/material';
 import _ from 'lodash';
 import { useCallback } from 'react';
 import { InspectorEnumField } from '../fields/InspectorEnumField';
+import { InspectorTextField } from '../fields/InspectorTextField';
 import { InspectorSection } from '../InspectorSection';
 
 export type BaseInspectorSectionProps = {
@@ -29,12 +29,14 @@ export type BaseInspectorFieldProps = {
 };
 
 type BaseInspectorProps = {
+  name: string;
   config: BaseInspectorSectionProps[];
   onUpdateData: (update: Record<string, unknown>) => void;
   testId?: string;
 };
 
 export const BaseInspector = ({
+  name,
   config,
   onUpdateData,
   testId,
@@ -67,20 +69,19 @@ export const BaseInspector = ({
 
       if (field.data.text) {
         return (
-          <CodeMirror
+          <InspectorTextField
+            name={`${name}.${field.field}`}
             label={field.label}
             value={field.value}
             type={field.data.text.type}
-            language="text"
             onChange={handleUpdateField}
-            isAutosaved
           />
         );
       }
 
       return null;
     },
-    [handleUpdate]
+    [handleUpdate, name]
   );
 
   return (
