@@ -19,6 +19,7 @@ import { CanvasNumberInput } from './components/CanvasNumberInput';
 import { CanvasTable } from './components/CanvasTable';
 import { useComponentEvalErrors } from '../hooks/useComponentEvalErrors';
 import { CanvasComponentHandle } from './CanvasComponentHandle';
+import { useComponentEventHandlerCallbacks } from '../hooks/useComponentEventHandlerCallbacks';
 
 type CanvasComponentProps = {
   component: Component;
@@ -46,6 +47,9 @@ export const CanvasComponent = forwardRef(
     const { movingComponentName, focusedComponentName } = useAppSelector(
       (state) => state.editor
     );
+    const eventHandlerCallbacks = useComponentEventHandlerCallbacks(
+      component.eventHandlers
+    );
 
     const errors = useComponentEvalErrors(component);
     const { isHovered, onMouseEnter, onMouseLeave } = useIsHovered();
@@ -60,8 +64,13 @@ export const CanvasComponent = forwardRef(
 
     const typedComponent = useMemo(() => {
       const TypedComponent = CANVAS_COMPONENT_MAP[component.type];
-      return <TypedComponent name={component.name} />;
-    }, [component.name, component.type]);
+      return (
+        <TypedComponent
+          name={component.name}
+          eventHandlerCallbacks={eventHandlerCallbacks}
+        />
+      );
+    }, [component.name, component.type, eventHandlerCallbacks]);
 
     const handleClick = useCallback(
       (e: MouseEvent) => {

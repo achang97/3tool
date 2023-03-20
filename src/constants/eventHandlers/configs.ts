@@ -23,4 +23,7 @@ export const EVENT_HANDLER_COMPONENT_EVENT_CONFIGS: Record<
   [ComponentEvent.Click]: {
     label: 'Click',
   },
+  [ComponentEvent.Submit]: {
+    label: 'Submit',
+  },
 };

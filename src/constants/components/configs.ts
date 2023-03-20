@@ -1,4 +1,4 @@
-import { ComponentType } from '@app/types';
+import { ComponentEvent, ComponentType } from '@app/types';
 import buttonIcon from '@app/resources/icons/components/button.svg';
 import textInputIcon from '@app/resources/icons/components/text-input.svg';
 import numberInputIcon from '@app/resources/icons/components/number-input.svg';
@@ -12,6 +12,7 @@ type ComponentConfig = {
     w: number;
     h: number;
   };
+  events: ComponentEvent[];
 };
 
 export const COMPONENT_CONFIGS: Record<ComponentType, ComponentConfig> = {
@@ -22,6 +23,7 @@ export const COMPONENT_CONFIGS: Record<ComponentType, ComponentConfig> = {
       w: 8,
       h: 4,
     },
+    events: [ComponentEvent.Click],
   },
   [ComponentType.TextInput]: {
     label: 'Text Input',
@@ -30,6 +32,7 @@ export const COMPONENT_CONFIGS: Record<ComponentType, ComponentConfig> = {
       w: 8,
       h: 7,
     },
+    events: [ComponentEvent.Submit],
   },
   [ComponentType.NumberInput]: {
     label: 'Number Input',
@@ -38,14 +41,16 @@ export const COMPONENT_CONFIGS: Record<ComponentType, ComponentConfig> = {
       w: 8,
       h: 7,
     },
+    events: [ComponentEvent.Submit],
   },
   [ComponentType.Text]: {
     label: 'Text',
+    icon: textIcon,
     dimensions: {
       w: 4,
       h: 4,
     },
-    icon: textIcon,
+    events: [],
   },
   [ComponentType.Table]: {
     label: 'Table',
@@ -54,5 +59,6 @@ export const COMPONENT_CONFIGS: Record<ComponentType, ComponentConfig> = {
       w: 16,
       h: 28,
     },
+    events: [],
   },
 };

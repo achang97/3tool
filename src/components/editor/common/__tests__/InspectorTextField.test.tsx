@@ -26,7 +26,20 @@ describe('InspectorTextField', () => {
     jest.clearAllMocks();
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: mockTool,
+      dataDepCycles: {},
     }));
+  });
+
+  it('renders label', () => {
+    const mockLabel = 'label';
+    const result = render(
+      <InspectorTextField
+        label={mockLabel}
+        name={mockName}
+        onChange={mockHandleChange}
+      />
+    );
+    expect(result.getByText(mockLabel)).toBeTruthy();
   });
 
   it('does not enqueue error snackbar if there is no cycle path', () => {
@@ -38,7 +51,7 @@ describe('InspectorTextField', () => {
     expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
   });
 
-  it('enqueues error snackbar on value change when there is a cycle path', () => {
+  it('does not enqueue error snackbar if not autosaved', () => {
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: mockTool,
       dataDepCycles: {
@@ -55,6 +68,33 @@ describe('InspectorTextField', () => {
         name={mockName}
         onChange={mockHandleChange}
         value="1"
+      />
+    );
+    expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
+  });
+
+  it('enqueues error snackbar on value change if autosaved and there is a cycle path', () => {
+    (useActiveTool as jest.Mock).mockImplementation(() => ({
+      tool: mockTool,
+      dataDepCycles: {
+        [mockName]: ['1', '2'],
+      },
+    }));
+    const result = render(
+      <InspectorTextField
+        name={mockName}
+        onChange={mockHandleChange}
+        isAutosaved
+      />
+    );
+    expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
+
+    result.rerender(
+      <InspectorTextField
+        name={mockName}
+        onChange={mockHandleChange}
+        value="1"
+        isAutosaved
       />
     );
     expect(mockEnqueueSnackbar).toHaveBeenCalledWith(

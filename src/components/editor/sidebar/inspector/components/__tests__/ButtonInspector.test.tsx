@@ -1,8 +1,15 @@
-import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { Component } from '@app/types';
+import { COMPONENT_CONFIGS, COMPONENT_DATA_TYPES } from '@app/constants';
 import {
-  validateDynamicInputField,
+  ActionMethod,
+  Component,
+  ComponentEvent,
+  EventHandler,
+  EventHandlerType,
+} from '@app/types';
+import {
+  validateTextField,
   validateSection,
+  validateEventHandlers,
 } from '@tests/testers/inspector';
 import { render } from '@tests/utils/renderWithContext';
 import { ButtonInspector } from '../ButtonInspector';
@@ -13,8 +20,21 @@ const mockData: Component['data']['button'] = {
   disabled: 'disabled',
   loading: 'loading',
 };
+const mockEventHandlers: EventHandler<ComponentEvent>[] = [
+  {
+    event: ComponentEvent.Click,
+    type: EventHandlerType.Action,
+    data: {
+      action: {
+        actionName: '',
+        method: ActionMethod.Trigger,
+      },
+    },
+  },
+];
 
-const mockHandleUpdateData = jest.fn();
+const mockHandleChangeData = jest.fn();
+const mockHandleChangeEventHandlers = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
@@ -42,7 +62,9 @@ describe('ButtonInspector', () => {
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
       validateSection(result, 'Basic');
@@ -53,16 +75,18 @@ describe('ButtonInspector', () => {
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
 
-      await validateDynamicInputField(result, 'Basic', {
+      await validateTextField(result, 'Basic', {
         field: 'text',
         label: 'Text',
         value: mockData.text,
-        onChange: mockHandleUpdateData,
-        config: { type: COMPONENT_DATA_TYPES.button.text },
+        onChange: mockHandleChangeData,
+        data: { type: COMPONENT_DATA_TYPES.button.text },
       });
     });
   });
@@ -73,7 +97,9 @@ describe('ButtonInspector', () => {
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
       validateSection(result, 'Interaction');
@@ -84,16 +110,18 @@ describe('ButtonInspector', () => {
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
 
-      await validateDynamicInputField(result, 'Interaction', {
+      await validateTextField(result, 'Interaction', {
         field: 'disabled',
         label: 'Disabled',
         value: mockData.disabled,
-        onChange: mockHandleUpdateData,
-        config: { type: COMPONENT_DATA_TYPES.button.disabled },
+        onChange: mockHandleChangeData,
+        data: { type: COMPONENT_DATA_TYPES.button.disabled },
       });
     });
 
@@ -102,16 +130,37 @@ describe('ButtonInspector', () => {
         <ButtonInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
 
-      await validateDynamicInputField(result, 'Interaction', {
+      await validateTextField(result, 'Interaction', {
         field: 'loading',
         label: 'Loading',
         value: mockData.loading,
-        onChange: mockHandleUpdateData,
-        config: { type: COMPONENT_DATA_TYPES.button.loading },
+        onChange: mockHandleChangeData,
+        data: { type: COMPONENT_DATA_TYPES.button.loading },
+      });
+    });
+
+    it('eventHandlers: renders event handlers component', async () => {
+      const result = render(
+        <ButtonInspector
+          name={mockName}
+          data={mockData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
+        />
+      );
+
+      await validateEventHandlers(result, 'Interaction', {
+        label: 'Event handlers',
+        eventHandlers: mockEventHandlers,
+        eventOptions: COMPONENT_CONFIGS.button.events,
+        onChange: mockHandleChangeEventHandlers,
       });
     });
   });

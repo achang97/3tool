@@ -1,4 +1,4 @@
-import { EventHandler, EventHandlerType } from '@app/types';
+import { ActionMethod, EventHandler, EventHandlerType } from '@app/types';
 
 type EventHandlerDataTemplates = {
   [KeyType in EventHandlerType]: NonNullable<EventHandler['data'][KeyType]>;
@@ -6,9 +6,11 @@ type EventHandlerDataTemplates = {
 
 export const EVENT_HANDLER_DATA_TEMPLATES: EventHandlerDataTemplates = {
   [EventHandlerType.Action]: {
-    actionId: '',
+    actionName: '',
+    method: ActionMethod.Trigger,
   },
   [EventHandlerType.Url]: {
     url: '',
+    newTab: true,
   },
 };

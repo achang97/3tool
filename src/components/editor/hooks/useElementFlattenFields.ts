@@ -72,7 +72,7 @@ export const useElementFlattenFields = ({
       const eventsObject = {
         eventHandlers: element.eventHandlers.map((eventHandler) => ({
           ..._.omit(eventHandler, 'data'),
-          ...getElementData(eventHandler),
+          ...eventHandler.data[eventHandler.type],
         })),
       };
       const fields = flattenObjectFields(

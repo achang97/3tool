@@ -1,8 +1,8 @@
 import { ActionResult } from '@app/constants';
 import { resetActionResult } from '@app/redux/features/activeToolSlice';
-import { Action } from '@app/types';
+import { Action, ActionMethod } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import { useActionFunctions } from '../useActionFunctions';
+import { useActionMethods } from '../useActionMethods';
 
 const mockActions = [{ name: 'action1' }, { name: 'action2' }] as Action[];
 const mockDispatch = jest.fn();
@@ -26,9 +26,9 @@ jest.mock('../useActiveTool', () => ({
   })),
 }));
 
-describe('useActionFunctions', () => {
+describe('useActionMethods', () => {
   it('returns function object map with action names as keys', () => {
-    const { result } = renderHook(() => useActionFunctions());
+    const { result } = renderHook(() => useActionMethods());
     expect(result.current).toEqual({
       action1: {
         reset: expect.any(Function),
@@ -42,8 +42,8 @@ describe('useActionFunctions', () => {
   });
 
   it('reset: dispatches action to reset action result', () => {
-    const { result } = renderHook(() => useActionFunctions());
-    result.current.action1.reset();
+    const { result } = renderHook(() => useActionMethods());
+    result.current.action1[ActionMethod.Reset]();
     expect(mockDispatch).toHaveBeenCalledWith(resetActionResult('action1'));
   });
 
@@ -55,8 +55,8 @@ describe('useActionFunctions', () => {
       onExecute(mockActionResult)
     );
 
-    const { result } = renderHook(() => useActionFunctions());
-    const triggerResult = await result.current.action1.trigger();
+    const { result } = renderHook(() => useActionMethods());
+    const triggerResult = await result.current.action1[ActionMethod.Trigger]();
 
     expect(mockEnqueueAction).toHaveBeenCalledWith(
       mockActions[0],

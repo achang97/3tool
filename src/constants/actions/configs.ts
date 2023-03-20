@@ -1,4 +1,4 @@
-import { ActionType } from '@app/types';
+import { ActionMethod, ActionType } from '@app/types';
 import javascriptIcon from '@app/resources/icons/actions/javascript.svg';
 import smartContractIcon from '@app/resources/icons/actions/smart-contract.svg';
 
@@ -23,5 +23,18 @@ export const ACTION_CONFIGS: Record<ActionType, ActionConfig> = {
     label: 'Smart contract',
     icon: smartContractIcon,
     mode: 'write',
+  },
+};
+
+type ActionMethodConfig = {
+  label: string;
+};
+
+export const ACTION_METHOD_CONFIGS: Record<ActionMethod, ActionMethodConfig> = {
+  [ActionMethod.Reset]: {
+    label: 'Reset',
+  },
+  [ActionMethod.Trigger]: {
+    label: 'Trigger',
   },
 };

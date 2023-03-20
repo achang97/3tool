@@ -18,6 +18,7 @@ export type CodeMirrorProps = {
   language: 'text' | 'javascript' | 'sql';
   isAutosaved?: boolean;
   showLineNumbers?: boolean;
+  testId?: string;
 };
 
 export const CodeMirror = ({
@@ -29,6 +30,7 @@ export const CodeMirror = ({
   language,
   isAutosaved,
   showLineNumbers = false,
+  testId,
 }: CodeMirrorProps) => {
   const [localValue, setLocalValue] = useState(value);
   const { isFocused, onFocus, onBlur } = useIsFocused();
@@ -59,7 +61,10 @@ export const CodeMirror = ({
   );
 
   return (
-    <Box sx={{ position: 'relative' }} data-testid={`code-mirror-${label}`}>
+    <Box
+      sx={{ position: 'relative' }}
+      data-testid={testId ?? `code-mirror-${label}`}
+    >
       {label && <FormFieldLabel label={label} />}
       <BaseCodeMirror
         basicSetup={basicSetup}

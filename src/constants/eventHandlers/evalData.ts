@@ -8,11 +8,13 @@ type EventHandlerDataTypes = {
 };
 
 const ACTION_DATA_TYPES: EventHandlerDataType<EventHandlerType.Action> = {
-  actionId: 'string',
+  actionName: 'string',
+  method: 'string',
 };
 
 const URL_DATA_TYPES: EventHandlerDataType<EventHandlerType.Url> = {
   url: 'string',
+  newTab: 'boolean',
 };
 
 export const EVENT_HANDLER_DATA_TYPES: EventHandlerDataTypes = {

@@ -7,29 +7,30 @@ import { gridClasses } from '@mui/x-data-grid';
 
 import type {} from '@mui/x-data-grid/themeAugmentation';
 import type {} from '@mui/lab/themeAugmentation';
+import { CSSProperties } from 'react';
 
 declare module '@mui/material/styles' {
   interface TypographyVariants {
-    code1: React.CSSProperties;
-    code2: React.CSSProperties;
+    code1: CSSProperties;
+    code2: CSSProperties;
 
-    customBody1: React.CSSProperties;
-    customBody2: React.CSSProperties;
+    customBody1: CSSProperties;
+    customBody2: CSSProperties;
 
-    customSubtitle1: React.CSSProperties;
-    customSubtitle2: React.CSSProperties;
+    customSubtitle1: CSSProperties;
+    customSubtitle2: CSSProperties;
   }
 
   // allow configuration using `createTheme`
   interface TypographyVariantsOptions {
-    code1?: React.CSSProperties;
-    code2?: React.CSSProperties;
+    code1?: CSSProperties;
+    code2?: CSSProperties;
 
-    customBody1?: React.CSSProperties;
-    customBody2?: React.CSSProperties;
+    customBody1?: CSSProperties;
+    customBody2?: CSSProperties;
 
-    customSubtitle1?: React.CSSProperties;
-    customSubtitle2?: React.CSSProperties;
+    customSubtitle1?: CSSProperties;
+    customSubtitle2?: CSSProperties;
   }
 
   interface GreyscalePalette {

@@ -8,7 +8,7 @@ export const useActionQueueExecutor = () => {
 
   useEffect(() => {
     const dequeueAndExecute = async () => {
-      const actionQueueElement = dequeueAction();
+      const actionQueueElement = await dequeueAction();
       if (actionQueueElement) {
         const { action, onExecute } = actionQueueElement;
         const result = await executeAction(action);

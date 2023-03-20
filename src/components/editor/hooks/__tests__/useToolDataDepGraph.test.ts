@@ -132,7 +132,7 @@ describe('useToolDataDepGraph', () => {
                   type: EventHandlerType.Action,
                   data: {
                     action: {
-                      actionId: '{{ button1.text }}',
+                      actionName: '{{ button1.text }}',
                     },
                   },
                 },
@@ -154,7 +154,7 @@ describe('useToolDataDepGraph', () => {
                   type: EventHandlerType.Action,
                   data: {
                     action: {
-                      actionId: '{{ button1.eventHandlers[0].actionId }}',
+                      actionName: '{{ button1.eventHandlers[0].actionName }}',
                     },
                   },
                 },
@@ -169,7 +169,7 @@ describe('useToolDataDepGraph', () => {
       ).toEqual(['action1.code']);
       expect(
         result.current.dataDepGraph.directDependenciesOf(
-          'button1.eventHandlers[0].actionId'
+          'button1.eventHandlers[0].actionName'
         )
       ).toEqual(['button1.text']);
       expect(
@@ -177,7 +177,7 @@ describe('useToolDataDepGraph', () => {
       ).toEqual([]);
       expect(
         result.current.dataDepGraph.directDependenciesOf(
-          'action1.eventHandlers[0].actionId'
+          'action1.eventHandlers[0].actionName'
         )
       ).toEqual(['button1.eventHandlers']);
     });

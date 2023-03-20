@@ -1,7 +1,11 @@
 import { Action, ActionType } from '@app/types';
 import { act, renderHook } from '@testing-library/react';
 import { ReactElement, useContext } from 'react';
-import { ActionQueueContext, ActionQueueProvider } from '../ActionQueueContext';
+import {
+  ActionQueueContext,
+  ActionQueueElement,
+  ActionQueueProvider,
+} from '../ActionQueueContext';
 
 describe('ActionQueueContext', () => {
   it('returns default state', () => {
@@ -57,12 +61,14 @@ describe('ActionQueueContext', () => {
       { action: mockAction, onExecute: mockHandleExecute },
     ]);
 
+    let actionElement: Promise<ActionQueueElement | undefined>;
     await act(() => {
-      const actionElement = result.current.dequeueAction();
-      expect(actionElement).toEqual({
-        action: mockAction,
-        onExecute: mockHandleExecute,
-      });
+      actionElement = result.current.dequeueAction();
+    });
+    // @ts-ignore actionElement is assigned
+    expect(await actionElement).toEqual({
+      action: mockAction,
+      onExecute: mockHandleExecute,
     });
     expect(result.current.actionQueue).toEqual([]);
   });
@@ -75,10 +81,13 @@ describe('ActionQueueContext', () => {
     });
 
     expect(result.current.actionQueue).toEqual([]);
+
+    let actionElement: Promise<ActionQueueElement | undefined>;
     await act(() => {
-      const actionElement = result.current.dequeueAction();
-      expect(actionElement).toBeUndefined();
+      actionElement = result.current.dequeueAction();
     });
+    // @ts-ignore actionElement is assigned
+    expect(await actionElement).toBeUndefined();
     expect(result.current.actionQueue).toEqual([]);
   });
 });

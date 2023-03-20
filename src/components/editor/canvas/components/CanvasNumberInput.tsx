@@ -6,7 +6,10 @@ import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { useComponentEvalData } from '../../hooks/useComponentEvalData';
 import { useComponentInputs } from '../../hooks/useComponentInputs';
 
-export const CanvasNumberInput = ({ name }: BaseCanvasComponentProps) => {
+export const CanvasNumberInput = ({
+  name,
+  eventHandlerCallbacks,
+}: BaseCanvasComponentProps) => {
   const dispatch = useAppDispatch();
   const input = useComponentInputs<ComponentType.NumberInput>(name);
   const { evalDataValues } =
@@ -83,6 +86,7 @@ export const CanvasNumberInput = ({ name }: BaseCanvasComponentProps) => {
       onChange={handleChange}
       error={!!errorText}
       helperText={errorText}
+      {...eventHandlerCallbacks}
     />
   );
 };

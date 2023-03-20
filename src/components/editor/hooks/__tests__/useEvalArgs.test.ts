@@ -1,14 +1,14 @@
 import { renderHook } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { utils } from '../../utils/public';
-import { useActionFunctions } from '../useActionFunctions';
+import { useActionMethods } from '../useActionMethods';
 import { useActiveTool } from '../useActiveTool';
 import { useBaseEvalArgs } from '../useBaseEvalArgs';
 import { useEvalArgs } from '../useEvalArgs';
 
 jest.mock('../useActiveTool');
 jest.mock('../useBaseEvalArgs');
-jest.mock('../useActionFunctions');
+jest.mock('../useActionMethods');
 
 describe('useEvalArgs', () => {
   beforeEach(() => {
@@ -57,17 +57,17 @@ describe('useEvalArgs', () => {
 
   describe('static', () => {
     it('includes entries from action functions', () => {
-      const mockActionFunctions = {
+      const mockActionMethods = {
         action1: {
           trigger: () => {},
         },
       };
-      (useActionFunctions as jest.Mock).mockImplementation(
-        () => mockActionFunctions
+      (useActionMethods as jest.Mock).mockImplementation(
+        () => mockActionMethods
       );
 
       const { result } = renderHook(() => useEvalArgs());
-      expect(result.current.staticEvalArgs).toMatchObject(mockActionFunctions);
+      expect(result.current.staticEvalArgs).toMatchObject(mockActionMethods);
     });
 
     it('includes entries from utils', () => {
@@ -78,18 +78,18 @@ describe('useEvalArgs', () => {
 
   describe('dynamic', () => {
     it('does not include entries from action functions', () => {
-      const mockActionFunctions = {
+      const mockActionMethods = {
         action1: {
           trigger: () => {},
         },
       };
-      (useActionFunctions as jest.Mock).mockImplementation(
-        () => mockActionFunctions
+      (useActionMethods as jest.Mock).mockImplementation(
+        () => mockActionMethods
       );
 
       const { result } = renderHook(() => useEvalArgs());
       expect(result.current.dynamicEvalArgs).not.toMatchObject(
-        mockActionFunctions
+        mockActionMethods
       );
     });
 

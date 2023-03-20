@@ -5,10 +5,12 @@ import { Box } from '@mui/material';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createRef } from 'react';
+import { useComponentEvalData } from '../../hooks/useComponentEvalData';
 import {
   ComponentEvalError,
   useComponentEvalErrors,
 } from '../../hooks/useComponentEvalErrors';
+import { useComponentEventHandlerCallbacks } from '../../hooks/useComponentEventHandlerCallbacks';
 import { CanvasComponent } from '../CanvasComponent';
 
 const mockComponent = {
@@ -30,12 +32,8 @@ jest.mock('@app/redux/hooks', () => ({
   useAppSelector: jest.fn(),
 }));
 
-jest.mock('../../hooks/useComponentEvalData', () => ({
-  useComponentEvalData: jest.fn(() => ({
-    evalDataValues: {},
-  })),
-}));
-
+jest.mock('../../hooks/useComponentEvalData');
+jest.mock('../../hooks/useComponentEventHandlerCallbacks');
 jest.mock('../../hooks/useComponentEvalErrors');
 
 describe('CanvasComponent', () => {
@@ -49,6 +47,9 @@ describe('CanvasComponent', () => {
       componentInputs: {},
     }));
     (useComponentEvalErrors as jest.Mock).mockImplementation(() => []);
+    (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+      evalDataValues: {},
+    }));
   });
 
   it('renders children', () => {
@@ -258,5 +259,37 @@ describe('CanvasComponent', () => {
         expect(result.getByTestId(componentId)).toBeTruthy();
       }
     );
+
+    it('passes event handlers to component', async () => {
+      const mockEventHandlerCallbacks = {
+        onClick: jest.fn(),
+      };
+      const mockEvalDataValues = {
+        text: 'text',
+      };
+      (useComponentEventHandlerCallbacks as jest.Mock).mockImplementation(
+        () => mockEventHandlerCallbacks
+      );
+      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+        evalDataValues: mockEvalDataValues,
+      }));
+
+      const result = render(
+        <CanvasComponent
+          component={
+            {
+              name: 'button1',
+              type: ComponentType.Button,
+              data: {},
+            } as Component
+          }
+        >
+          {mockChildren}
+        </CanvasComponent>
+      );
+
+      await userEvent.click(result.getByText(mockEvalDataValues.text));
+      expect(mockEventHandlerCallbacks.onClick).toHaveBeenCalled();
+    });
   });
 });

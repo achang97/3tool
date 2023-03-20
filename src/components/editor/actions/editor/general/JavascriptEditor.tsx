@@ -6,13 +6,13 @@ import { Transformer } from './Transformer';
 
 export const JavascriptEditor = ({
   data,
-  onUpdateData,
+  onChangeData,
 }: BaseActionEditorProps<ActionType.Javascript>) => {
   const handleCodeChange = useCallback(
     (code: string) => {
-      onUpdateData({ code });
+      onChangeData({ code });
     },
-    [onUpdateData]
+    [onChangeData]
   );
 
   return (
@@ -27,7 +27,7 @@ export const JavascriptEditor = ({
         language="javascript"
         showLineNumbers
       />
-      <Transformer value={data?.transformer} onUpdateData={onUpdateData} />
+      <Transformer value={data?.transformer} onChangeData={onChangeData} />
     </Box>
   );
 };

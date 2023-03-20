@@ -1,7 +1,7 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { Component } from '@app/types';
+import { Component, ComponentEvent, EventHandler } from '@app/types';
 import {
-  validateDynamicInputField,
+  validateTextField,
   validateEnumField,
   validateSection,
 } from '@tests/testers/inspector';
@@ -13,8 +13,10 @@ const mockData: Component['data']['text'] = {
   value: 'value',
   horizontalAlignment: 'left',
 };
+const mockEventHandlers: EventHandler<ComponentEvent>[] = [];
 
-const mockHandleUpdateData = jest.fn();
+const mockHandleChangeData = jest.fn();
+const mockHandleChangeEventHandlers = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
@@ -42,7 +44,9 @@ describe('TextInspector', () => {
         <TextInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
       validateSection(result, 'Basic');
@@ -53,16 +57,18 @@ describe('TextInspector', () => {
         <TextInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
 
-      await validateDynamicInputField(result, 'Basic', {
+      await validateTextField(result, 'Basic', {
         field: 'value',
         label: 'Value',
         value: mockData.value,
-        onChange: mockHandleUpdateData,
-        config: { type: COMPONENT_DATA_TYPES.text.value },
+        onChange: mockHandleChangeData,
+        data: { type: COMPONENT_DATA_TYPES.text.value },
       });
     });
   });
@@ -73,7 +79,9 @@ describe('TextInspector', () => {
         <TextInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
       validateSection(result, 'Layout');
@@ -84,7 +92,9 @@ describe('TextInspector', () => {
         <TextInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
 
@@ -92,8 +102,8 @@ describe('TextInspector', () => {
         field: 'horizontalAlignment',
         label: 'Horizontal Alignment',
         value: mockData.horizontalAlignment,
-        onChange: mockHandleUpdateData,
-        config: {
+        onChange: mockHandleChangeData,
+        data: {
           options: [
             {
               label: 'Left',

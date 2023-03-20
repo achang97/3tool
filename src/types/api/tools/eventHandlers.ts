@@ -3,12 +3,19 @@ export enum EventHandlerType {
   Url = 'url',
 }
 
+export enum ActionMethod {
+  Trigger = 'trigger',
+  Reset = 'reset',
+}
+
 export type ActionData = {
-  actionId: string;
+  actionName: string;
+  method: ActionMethod;
 };
 
 export type UrlData = {
   url: string;
+  newTab: boolean;
 };
 
 export type EventHandler<T = unknown> = {

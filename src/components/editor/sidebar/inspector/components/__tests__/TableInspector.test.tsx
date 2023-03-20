@@ -1,9 +1,6 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { Component } from '@app/types';
-import {
-  validateDynamicInputField,
-  validateSection,
-} from '@tests/testers/inspector';
+import { Component, ComponentEvent, EventHandler } from '@app/types';
+import { validateTextField, validateSection } from '@tests/testers/inspector';
 import { render } from '@tests/utils/renderWithContext';
 import { TableInspector } from '../TableInspector';
 
@@ -15,8 +12,10 @@ const mockData: Component['data']['table'] = {
   columnHeaderNames: {},
   columnHeadersByIndex: [],
 };
+const mockEventHandlers: EventHandler<ComponentEvent>[] = [];
 
-const mockHandleUpdateData = jest.fn();
+const mockHandleChangeData = jest.fn();
+const mockHandleChangeEventHandlers = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
@@ -44,7 +43,9 @@ describe('TableInspector', () => {
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
       validateSection(result, 'Data');
@@ -55,16 +56,18 @@ describe('TableInspector', () => {
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
 
-      await validateDynamicInputField(result, 'Data', {
+      await validateTextField(result, 'Data', {
         field: 'data',
         label: 'Data',
         value: mockData.data,
-        onChange: mockHandleUpdateData,
-        config: { type: COMPONENT_DATA_TYPES.table.data },
+        onChange: mockHandleChangeData,
+        data: { type: COMPONENT_DATA_TYPES.table.data },
       });
     });
 
@@ -73,16 +76,18 @@ describe('TableInspector', () => {
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
 
-      await validateDynamicInputField(result, 'Data', {
+      await validateTextField(result, 'Data', {
         field: 'emptyMessage',
         label: 'Empty message',
         value: mockData.emptyMessage,
-        onChange: mockHandleUpdateData,
-        config: { type: COMPONENT_DATA_TYPES.table.emptyMessage },
+        onChange: mockHandleChangeData,
+        data: { type: COMPONENT_DATA_TYPES.table.emptyMessage },
       });
     });
   });
@@ -93,7 +98,9 @@ describe('TableInspector', () => {
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
       validateSection(result, 'Row selection');
@@ -104,16 +111,18 @@ describe('TableInspector', () => {
         <TableInspector
           name={mockName}
           data={mockData}
-          onUpdateData={mockHandleUpdateData}
+          eventHandlers={mockEventHandlers}
+          onChangeData={mockHandleChangeData}
+          onChangeEventHandlers={mockHandleChangeEventHandlers}
         />
       );
 
-      await validateDynamicInputField(result, 'Row selection', {
+      await validateTextField(result, 'Row selection', {
         field: 'multiselect',
         label: 'Enable multi-row selection',
         value: mockData.multiselect,
-        onChange: mockHandleUpdateData,
-        config: { type: COMPONENT_DATA_TYPES.table.multiselect },
+        onChange: mockHandleChangeData,
+        data: { type: COMPONENT_DATA_TYPES.table.multiselect },
       });
     });
   });

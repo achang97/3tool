@@ -1,115 +1,136 @@
-import { COMPONENT_DATA_TYPES } from '@app/constants';
-import { BaseComponentInspectorProps, ComponentType } from '@app/types';
+import { InspectorEventHandlers } from '@app/components/editor/common/InspectorEventHandlers';
+import { COMPONENT_CONFIGS, COMPONENT_DATA_TYPES } from '@app/constants';
+import {
+  BaseComponentInspectorProps,
+  Component,
+  ComponentType,
+} from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 
 const DATA_TYPES = COMPONENT_DATA_TYPES.numberInput;
+const NUMBER_INPUT_CONFIG = COMPONENT_CONFIGS.numberInput;
 
 export const NumberInputInspector = ({
   name,
   data,
-  onUpdateData,
+  eventHandlers,
+  onChangeData,
+  onChangeEventHandlers,
 }: BaseComponentInspectorProps<ComponentType.NumberInput>) => {
-  const config: BaseInspectorSectionProps[] = useMemo(() => {
-    return [
-      {
-        title: 'Basic',
-        fields: [
-          {
-            field: 'defaultValue',
-            label: 'Default Value',
-            value: data?.defaultValue,
-            data: {
-              text: {
-                type: DATA_TYPES.defaultValue,
+  const config: BaseInspectorSectionProps<Component['data']['numberInput']>[] =
+    useMemo(() => {
+      return [
+        {
+          title: 'Basic',
+          fields: [
+            {
+              field: 'defaultValue',
+              label: 'Default Value',
+              value: data?.defaultValue,
+              data: {
+                text: {
+                  type: DATA_TYPES.defaultValue,
+                },
               },
             },
-          },
-          {
-            field: 'placeholder',
-            label: 'Placeholder',
-            value: data?.placeholder,
-            data: {
-              text: {
-                type: DATA_TYPES.placeholder,
+            {
+              field: 'placeholder',
+              label: 'Placeholder',
+              value: data?.placeholder,
+              data: {
+                text: {
+                  type: DATA_TYPES.placeholder,
+                },
               },
             },
-          },
-        ],
-      },
-      {
-        title: 'Label',
-        fields: [
-          {
-            field: 'label',
-            label: 'Label',
-            value: data?.label,
-            data: {
-              text: {
-                type: DATA_TYPES.label,
+          ],
+        },
+        {
+          title: 'Label',
+          fields: [
+            {
+              field: 'label',
+              label: 'Label',
+              value: data?.label,
+              data: {
+                text: {
+                  type: DATA_TYPES.label,
+                },
               },
             },
-          },
-        ],
-      },
-      {
-        title: 'Interaction',
-        fields: [
-          {
-            field: 'disabled',
-            label: 'Disabled',
-            value: data?.disabled,
-            data: {
-              text: {
-                type: DATA_TYPES.disabled,
+          ],
+        },
+        {
+          title: 'Interaction',
+          fields: [
+            {
+              field: 'disabled',
+              label: 'Disabled',
+              value: data?.disabled,
+              data: {
+                text: {
+                  type: DATA_TYPES.disabled,
+                },
               },
             },
-          },
-        ],
-      },
-      {
-        title: 'Validation',
-        fields: [
-          {
-            field: 'required',
-            label: 'Required',
-            value: data?.required,
-            data: {
-              text: {
-                type: DATA_TYPES.required,
+            {
+              field: 'eventHandlers',
+              component: (
+                <InspectorEventHandlers
+                  name={name}
+                  label="Event handlers"
+                  eventHandlers={eventHandlers}
+                  eventOptions={NUMBER_INPUT_CONFIG.events}
+                  onChange={onChangeEventHandlers}
+                />
+              ),
+            },
+          ],
+        },
+        {
+          title: 'Validation',
+          fields: [
+            {
+              field: 'required',
+              label: 'Required',
+              value: data?.required,
+              data: {
+                text: {
+                  type: DATA_TYPES.required,
+                },
               },
             },
-          },
-          {
-            field: 'minimum',
-            label: 'Minimum',
-            value: data?.minimum,
-            data: {
-              text: {
-                type: DATA_TYPES.minimum,
+            {
+              field: 'minimum',
+              label: 'Minimum',
+              value: data?.minimum,
+              data: {
+                text: {
+                  type: DATA_TYPES.minimum,
+                },
               },
             },
-          },
-          {
-            field: 'maximum',
-            label: 'Maximum',
-            value: data?.maximum,
-            data: {
-              text: {
-                type: DATA_TYPES.maximum,
+            {
+              field: 'maximum',
+              label: 'Maximum',
+              value: data?.maximum,
+              data: {
+                text: {
+                  type: DATA_TYPES.maximum,
+                },
               },
             },
-          },
-        ],
-      },
-    ];
-  }, [data]);
+          ],
+        },
+      ];
+    }, [data, eventHandlers, name, onChangeEventHandlers]);
 
   return (
     <BaseInspector
       name={name}
       config={config}
-      onUpdateData={onUpdateData}
+      onChange={onChangeData}
       testId="number-input-inspector"
     />
   );

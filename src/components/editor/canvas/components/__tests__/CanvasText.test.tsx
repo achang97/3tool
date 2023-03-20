@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import { CanvasText } from '../CanvasText';
 
 const mockName = 'name';
+const mockEventHandlerCallbacks = {};
 
 jest.mock('../../../hooks/useComponentEvalData');
 
@@ -16,7 +17,12 @@ describe('CanvasText', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(<CanvasText name={mockName} />);
+      const result = render(
+        <CanvasText
+          name={mockName}
+          eventHandlerCallbacks={mockEventHandlerCallbacks}
+        />
+      );
       expect(result.getByText(mockEvalDataValues.value)).toBeTruthy();
     });
 
@@ -26,7 +32,12 @@ describe('CanvasText', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(<CanvasText name={mockName} />);
+      const result = render(
+        <CanvasText
+          name={mockName}
+          eventHandlerCallbacks={mockEventHandlerCallbacks}
+        />
+      );
       expect(result.getByTestId(textId)).toHaveStyle({
         textAlign: mockEvalDataValues.horizontalAlignment,
       });

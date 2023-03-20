@@ -11,6 +11,7 @@ import { mainnet } from 'wagmi';
 import { Resource } from '@app/types';
 import { useAppSelector } from '@app/redux/hooks';
 import { isJSON } from '@app/utils/string';
+import { Select } from '@app/components/common/Select';
 import { FormContainer } from './FormContainer';
 import { AddressAbiFieldGroup } from './AddressAbiFieldGroup';
 import { useSubmitSmartContract } from '../hooks/useSubmitSmartContract';
@@ -89,12 +90,11 @@ export const ConfigureContractForm = ({
           onChange={handleNameChange}
           required
         />
-        <TextField
+        <Select
           value={chainId}
           placeholder="Select contract network"
           label="Network"
           onChange={handleNetworkChange}
-          select
           required
           inputProps={{
             'data-testid': 'configure-contract-form-network-select',
@@ -105,7 +105,7 @@ export const ConfigureContractForm = ({
               {chain.name}
             </MenuItem>
           ))}
-        </TextField>
+        </Select>
         <AddressAbiFieldGroup
           address={address}
           abi={abi}

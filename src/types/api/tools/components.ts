@@ -29,6 +29,7 @@ export type Component = {
 
 export enum ComponentEvent {
   Click = 'click',
+  Submit = 'submit',
 }
 
 type ButtonData = {

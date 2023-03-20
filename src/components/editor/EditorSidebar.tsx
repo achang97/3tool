@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { SyntheticEvent, useCallback } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
@@ -27,7 +27,7 @@ export const EditorSidebar = () => {
   const dispatch = useAppDispatch();
 
   const handleTabChange = useCallback(
-    (e: React.SyntheticEvent, newSidebarView: SidebarViewType) => {
+    (e: SyntheticEvent, newSidebarView: SidebarViewType) => {
       dispatch(setSidebarView(newSidebarView));
     },
     [dispatch]

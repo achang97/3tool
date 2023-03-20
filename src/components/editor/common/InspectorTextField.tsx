@@ -9,11 +9,13 @@ import { useEffect, useMemo } from 'react';
 
 type InspectorTextFieldProps = {
   name: string;
-} & Omit<CodeMirrorProps, 'language' | 'isAutosaved'>;
+} & Omit<CodeMirrorProps, 'language'>;
 
 export const InspectorTextField = ({
   name,
-  value,
+  value = '',
+  isAutosaved,
+  label,
   ...rest
 }: InspectorTextFieldProps) => {
   const enqueueSnackbar = useEnqueueSnackbar();
@@ -23,14 +25,27 @@ export const InspectorTextField = ({
   const prevValue = usePrevious(value);
 
   useEffect(() => {
-    if (!cyclePath || prevValue === value) {
+    if (!isAutosaved || !cyclePath) {
+      return;
+    }
+
+    if (prevValue === undefined || prevValue === value) {
       return;
     }
 
     enqueueSnackbar(`Dependency Cycle Found: ${cyclePath.join(' → ')}`, {
       variant: 'error',
     });
-  }, [value, prevValue, cyclePath, enqueueSnackbar]);
+  }, [value, prevValue, cyclePath, enqueueSnackbar, isAutosaved]);
 
-  return <CodeMirror value={value} language="text" isAutosaved {...rest} />;
+  return (
+    <CodeMirror
+      {...rest}
+      label={label}
+      value={value}
+      language="text"
+      isAutosaved={isAutosaved}
+      testId={`inspector-text-${label}`}
+    />
+  );
 };

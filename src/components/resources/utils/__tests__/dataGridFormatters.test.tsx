@@ -1,3 +1,4 @@
+import { RESOURCE_CONFIGS } from '@app/constants';
 import { ResourceType } from '@app/types';
 import {
   GridRenderCellParams,
@@ -12,25 +13,12 @@ import {
 
 describe('dataGridFormatters', () => {
   describe('formatResourceType', () => {
-    it('returns "Smart Contract" for smart_contract type', () => {
+    it('returns label for type', () => {
+      const mockType = ResourceType.SmartContract;
       const result = formatResourceType({
-        value: ResourceType.SmartContract,
+        value: mockType,
       } as GridValueFormatterParams);
-      expect(result).toEqual('Smart contract');
-    });
-
-    it('returns "Dune" for dune type', () => {
-      const result = formatResourceType({
-        value: ResourceType.Dune,
-      } as GridValueFormatterParams);
-      expect(result).toEqual('Dune');
-    });
-
-    it('returns "" for invalid type', () => {
-      const result = formatResourceType({
-        value: '',
-      } as GridValueFormatterParams);
-      expect(result).toEqual('');
+      expect(result).toEqual(RESOURCE_CONFIGS[mockType].label);
     });
   });
 

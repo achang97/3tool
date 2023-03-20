@@ -1,9 +1,19 @@
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
-import { COMPONENT_CONFIGS, COMPONENT_DATA_TEMPLATES } from '@app/constants';
-import { Component, ComponentType } from '@app/types';
+import {
+  COMPONENT_CONFIGS,
+  COMPONENT_DATA_TEMPLATES,
+  EVENT_HANDLER_COMPONENT_EVENT_CONFIGS,
+} from '@app/constants';
+import {
+  Component,
+  ComponentEvent,
+  ComponentType,
+  EventHandlerType,
+} from '@app/types';
 import { render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DepGraph } from 'dependency-graph';
+import _ from 'lodash';
 import { ComponentInspector } from '../ComponentInspector';
 
 const mockComponents = [
@@ -169,57 +179,124 @@ describe('ComponentInspector', () => {
     });
   });
 
-  it('calls API to update components with debounce of 300 ms', async () => {
-    const mockActiveComponent = {
-      name: 'Name',
-      type: ComponentType.Button,
-      data: {
-        button: COMPONENT_DATA_TEMPLATES.button,
-      },
-      eventHandlers: [],
-    } as unknown as Component;
+  describe('updates', () => {
+    it('calls API to update components with debounce of 300 ms', async () => {
+      const mockActiveComponent = {
+        name: 'Name',
+        type: ComponentType.Button,
+        data: {
+          button: COMPONENT_DATA_TEMPLATES.button,
+        },
+        eventHandlers: [],
+      } as unknown as Component;
 
-    (useActiveTool as jest.Mock).mockImplementation(() => ({
-      tool: {
-        components: [mockActiveComponent],
-        actions: [],
-      },
-      updateTool: mockUpdateTool,
-      evalDataMap: {},
-      evalDataValuesMap: {},
-      dataDepGraph: new DepGraph<string>(),
-      dataDepCycles: {},
-    }));
+      (useActiveTool as jest.Mock).mockImplementation(() => ({
+        tool: {
+          components: [mockActiveComponent],
+          actions: [],
+        },
+        updateTool: mockUpdateTool,
+        evalDataMap: {},
+        evalDataValuesMap: {},
+        dataDepGraph: new DepGraph<string>(),
+        dataDepCycles: {},
+      }));
 
-    const result = render(
-      <ComponentInspector component={mockActiveComponent} />
-    );
+      const result = render(
+        <ComponentInspector component={mockActiveComponent} />
+      );
 
-    const textInput = within(result.getByTestId('code-mirror-Text')).getByRole(
-      'textbox'
-    );
-    const newInputValue = 'h';
-    await userEvent.type(textInput, newInputValue);
+      const textInput = within(
+        result.getByTestId('inspector-text-Text')
+      ).getByRole('textbox');
+      const newInputValue = 'h';
+      await userEvent.type(textInput, newInputValue);
 
-    // NOTE: It would be ideal to use fake timers to actually test the debounce time here,
-    // but this test stubbornly refuses to work (it seems like runAllTimers and advanceTimersByTime
-    // don't work properly here for some reason).
-    expect(mockUpdateTool).not.toHaveBeenCalled();
-    await waitFor(() => {
-      const newExpectedText = `${newInputValue}${COMPONENT_DATA_TEMPLATES.button.text}`;
+      // NOTE: It would be ideal to use fake timers to actually test the debounce time here,
+      // but this test stubbornly refuses to work (it seems like runAllTimers and advanceTimersByTime
+      // don't work properly here for some reason).
+      expect(mockUpdateTool).not.toHaveBeenCalled();
+      await waitFor(() => {
+        const newExpectedText = `${newInputValue}${COMPONENT_DATA_TEMPLATES.button.text}`;
 
-      expect(mockUpdateTool).toHaveBeenCalledWith({
-        components: [
-          {
-            ...mockActiveComponent,
-            data: {
-              button: {
-                ...mockActiveComponent.data.button,
-                text: newExpectedText,
+        expect(mockUpdateTool).toHaveBeenCalledWith({
+          components: [
+            {
+              ...mockActiveComponent,
+              data: {
+                button: {
+                  ...mockActiveComponent.data.button,
+                  text: newExpectedText,
+                },
               },
             },
+          ],
+        });
+      });
+    });
+
+    it('calls API to update event handlers with debounce of 300 ms', async () => {
+      const mockActiveComponent = {
+        name: 'Name',
+        type: ComponentType.Button,
+        data: {
+          button: COMPONENT_DATA_TEMPLATES.button,
+        },
+        eventHandlers: [
+          {
+            event: ComponentEvent.Click,
+            type: EventHandlerType.Url,
+            data: {},
           },
         ],
+      } as unknown as Component;
+
+      (useActiveTool as jest.Mock).mockImplementation(() => ({
+        tool: {
+          components: [mockActiveComponent],
+          actions: [],
+        },
+        updateTool: mockUpdateTool,
+        evalDataMap: {},
+        evalDataValuesMap: {},
+        dataDepGraph: new DepGraph<string>(),
+        dataDepCycles: {},
+      }));
+
+      const result = render(
+        <ComponentInspector component={mockActiveComponent} />
+      );
+
+      await userEvent.click(
+        result.getByText(
+          EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[
+            mockActiveComponent.eventHandlers[0].event
+          ].label
+        )
+      );
+      expect(result.getByTestId('event-handler-editor')).toBeTruthy();
+      await userEvent.click(result.getByLabelText('New Tab'));
+
+      // NOTE: It would be ideal to use fake timers to actually test the debounce time here,
+      // but this test stubbornly refuses to work (it seems like runAllTimers and advanceTimersByTime
+      // don't work properly here for some reason).
+      expect(mockUpdateTool).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockUpdateTool).toHaveBeenCalledWith({
+          components: [
+            _.merge(mockActiveComponent, {
+              eventHandlers: [
+                _.merge(mockActiveComponent.eventHandlers[0], {
+                  data: {
+                    url: {
+                      newTab: true,
+                    },
+                  },
+                }),
+              ],
+            }),
+          ],
+        });
       });
     });
   });

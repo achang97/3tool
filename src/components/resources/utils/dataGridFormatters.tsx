@@ -1,3 +1,4 @@
+import { RESOURCE_CONFIGS } from '@app/constants';
 import { Resource, ResourceType } from '@app/types';
 import { Box, Typography } from '@mui/material';
 import {
@@ -9,14 +10,7 @@ import moment from 'moment';
 export const formatResourceType = ({
   value,
 }: GridValueFormatterParams<ResourceType>) => {
-  switch (value) {
-    case ResourceType.SmartContract:
-      return 'Smart contract';
-    case ResourceType.Dune:
-      return 'Dune';
-    default:
-      return '';
-  }
+  return RESOURCE_CONFIGS[value].label;
 };
 
 export const formatCreatedAt = ({ value }: GridValueFormatterParams<Date>) => {

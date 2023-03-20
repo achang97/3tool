@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, MouseEvent } from 'react';
 
 type HookReturnType = {
   isMenuOpen: boolean;
   menuAnchor: HTMLElement | null;
-  onMenuOpen: (event: React.MouseEvent<HTMLElement>) => void;
+  onMenuOpen: (event: MouseEvent<HTMLElement>) => void;
   onMenuClose: () => void;
 };
 
@@ -14,7 +14,7 @@ export const useMenuState = (): HookReturnType => {
     return Boolean(menuAnchor);
   }, [menuAnchor]);
 
-  const onMenuOpen = useCallback((event: React.MouseEvent<HTMLElement>) => {
+  const onMenuOpen = useCallback((event: MouseEvent<HTMLElement>) => {
     setMenuAnchor(event.currentTarget);
   }, []);
 

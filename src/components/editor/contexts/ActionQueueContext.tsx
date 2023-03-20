@@ -11,10 +11,10 @@ import React, {
 const DEFAULT_STATE = {
   actionQueue: [],
   enqueueAction: () => '',
-  dequeueAction: () => undefined,
+  dequeueAction: async () => undefined,
 };
 
-type ActionQueueElement = {
+export type ActionQueueElement = {
   action: Action;
   onExecute: (result: ActionResult) => void;
 };
@@ -25,7 +25,7 @@ export type ActionQueueState = {
     action: Action,
     onExecute: ActionQueueElement['onExecute']
   ) => void;
-  dequeueAction: () => ActionQueueElement | undefined;
+  dequeueAction: () => Promise<ActionQueueElement | undefined>;
 };
 
 export const ActionQueueContext =
@@ -46,15 +46,22 @@ export const ActionQueueProvider = ({ children }: ActionQueueProviderProps) => {
     []
   );
 
-  const dequeueAction = useCallback(() => {
-    if (actionQueue.length === 0) {
-      return undefined;
-    }
+  const dequeueAction = useCallback((): Promise<
+    ActionQueueElement | undefined
+  > => {
+    return new Promise((resolve) => {
+      setActionQueue((prevActionQueue) => {
+        if (prevActionQueue.length === 0) {
+          resolve(undefined);
+          return prevActionQueue;
+        }
 
-    const action = actionQueue[0];
-    setActionQueue(actionQueue.slice(1));
-    return action;
-  }, [actionQueue]);
+        const [action, ...newActionQueue] = prevActionQueue;
+        resolve(action);
+        return newActionQueue;
+      });
+    });
+  }, []);
 
   const contextValue = useMemo(() => {
     return {

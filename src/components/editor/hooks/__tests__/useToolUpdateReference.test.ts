@@ -34,7 +34,7 @@ describe('useToolUpdateReference', () => {
             type: EventHandlerType.Action,
             data: {
               action: {
-                actionId: '{{ button1.text }}',
+                actionName: '{{ button1.text }}',
               },
             },
           },
@@ -60,7 +60,7 @@ describe('useToolUpdateReference', () => {
           {
             data: {
               action: {
-                actionId: '{{ newButton.text }}',
+                actionName: '{{ newButton.text }}',
               },
             },
           },
@@ -85,7 +85,7 @@ describe('useToolUpdateReference', () => {
             type: EventHandlerType.Action,
             data: {
               action: {
-                actionId: '{{ action1.text }}',
+                actionName: '{{ action1.text }}',
               },
             },
           },
@@ -111,7 +111,7 @@ describe('useToolUpdateReference', () => {
           {
             data: {
               action: {
-                actionId: '{{ newAction.text }}',
+                actionName: '{{ newAction.text }}',
               },
             },
           },

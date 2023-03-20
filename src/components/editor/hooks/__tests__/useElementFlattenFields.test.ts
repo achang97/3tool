@@ -235,7 +235,7 @@ describe('useElementFlattenFields', () => {
             type: EventHandlerType.Action,
             data: {
               action: {
-                actionId: 'id',
+                actionName: 'id',
               },
             },
           },
@@ -268,7 +268,7 @@ describe('useElementFlattenFields', () => {
             isJavascript: false,
           },
           {
-            name: 'eventHandlers[0].actionId',
+            name: 'eventHandlers[0].actionName',
             value: 'id',
             parent: 'eventHandlers[0]',
             isLeaf: true,
@@ -325,7 +325,7 @@ describe('useElementFlattenFields', () => {
             type: EventHandlerType.Action,
             data: {
               action: {
-                actionId: 'id',
+                actionName: 'id',
               },
             },
           },
@@ -358,7 +358,7 @@ describe('useElementFlattenFields', () => {
             isJavascript: false,
           },
           {
-            name: 'eventHandlers[0].actionId',
+            name: 'eventHandlers[0].actionName',
             value: 'id',
             parent: 'eventHandlers[0]',
             isLeaf: true,

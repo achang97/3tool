@@ -196,7 +196,7 @@ describe('useReactGridLayoutProps', () => {
       expect(mockDispatch).toHaveBeenCalledWith(endCreateComponentDrag());
     });
 
-    it('calls onUpdateComponents with new component and focuses component on success', async () => {
+    it('calls updateTool with new component and focuses component on success', async () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         newComponent: mockNewComponent,
       }));
@@ -224,7 +224,7 @@ describe('useReactGridLayoutProps', () => {
       );
     });
 
-    it('calls onUpdateComponents with new component and does not focus component on failure', async () => {
+    it('calls updateTool with new component and does not focus component on failure', async () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         newComponent: mockNewComponent,
       }));
@@ -281,7 +281,7 @@ describe('useReactGridLayoutProps', () => {
       expect(mockUpdateTool).not.toHaveBeenCalled();
     });
 
-    it('calls onUpdateComponents with new layout', () => {
+    it('calls updateTool with new layout', () => {
       const { result } = renderHook(() => useReactGridLayoutProps());
 
       const mockNewLayout = getLayoutFromComponents(mockComponents);

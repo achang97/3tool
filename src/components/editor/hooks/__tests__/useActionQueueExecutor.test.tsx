@@ -41,8 +41,8 @@ describe('useActionQueueExecutor', () => {
       }
     );
 
-    expect(mockExecuteAction).toHaveBeenCalledWith(mockAction);
     await waitFor(() => {
+      expect(mockExecuteAction).toHaveBeenCalledWith(mockAction);
       expect(mockHandleExecute).toHaveBeenCalledWith(mockResult);
     });
   });

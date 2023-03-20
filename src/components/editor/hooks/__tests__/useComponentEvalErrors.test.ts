@@ -26,7 +26,7 @@ const mockComponent = {
       type: EventHandlerType.Action,
       data: {
         action: {
-          actionId: 'actionId',
+          actionName: 'actionName',
         },
       },
     },
@@ -102,7 +102,7 @@ describe('useComponentEvalErrors', () => {
     it('returns array with event handler error', () => {
       (useComponentEvalData as jest.Mock).mockImplementation(() => ({
         evalData: {
-          'eventHandlers[0].actionId': { error: mockError },
+          'eventHandlers[0].actionName': { error: mockError },
         },
       }));
 
@@ -110,7 +110,7 @@ describe('useComponentEvalErrors', () => {
         useComponentEvalErrors(mockComponent)
       );
       expect(result.current).toEqual([
-        { name: 'eventHandlers[0].actionId', error: mockError },
+        { name: 'eventHandlers[0].actionName', error: mockError },
       ]);
     });
   });

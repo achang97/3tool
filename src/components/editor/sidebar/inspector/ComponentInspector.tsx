@@ -5,7 +5,9 @@ import Image from 'next/image';
 import {
   BaseComponentInspectorProps,
   Component,
+  ComponentEvent,
   ComponentType,
+  EventHandler,
 } from '@app/types';
 import _ from 'lodash';
 import { InspectorHeader } from './InspectorHeader';
@@ -40,27 +42,33 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
 
   const handleUpdateName = useComponentUpdateName(component.name);
 
-  const handleUpdateComponent = useCallback(
-    async (update: RecursivePartial<Component>) => {
-      await updateTool({
+  const debouncedHandleUpdateComponent = useMemo(() => {
+    return _.debounce((updatedComponent: Component) => {
+      return updateTool({
         components: tool.components.map((currComponent) => {
           return currComponent.name === component.name
-            ? _.merge({}, currComponent, update)
+            ? updatedComponent
             : currComponent;
         }),
       });
+    }, DEBOUNCE_TIME_MS);
+  }, [component.name, tool.components, updateTool]);
+
+  const debouncedHandleUpdateData = useCallback(
+    (update: RecursivePartial<ValueOf<Component['data']>>) => {
+      return debouncedHandleUpdateComponent(
+        _.merge({}, component, { data: { [component.type]: update } })
+      );
     },
-    [component.name, tool.components, updateTool]
+    [component, debouncedHandleUpdateComponent]
   );
 
-  const debouncedHandleUpdateData = useMemo(() => {
-    return _.debounce(
-      (update: RecursivePartial<ValueOf<Component['data']>>) => {
-        handleUpdateComponent({ data: { [component.type]: update } });
-      },
-      DEBOUNCE_TIME_MS
-    );
-  }, [component.type, handleUpdateComponent]);
+  const debouncedHandleUpdateEventHandlers = useCallback(
+    (eventHandlers: EventHandler<ComponentEvent>[]) => {
+      return debouncedHandleUpdateComponent({ ...component, eventHandlers });
+    },
+    [component, debouncedHandleUpdateComponent]
+  );
 
   const dataInspector = useMemo(() => {
     const TypedInspector = COMPONENT_INSPECTOR_MAP[component.type];
@@ -68,12 +76,18 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
       <TypedInspector
         key={component.name}
         name={component.name}
+        eventHandlers={component.eventHandlers}
         // @ts-ignore We know that this accesses the correct data key
         data={component.data[component.type]}
-        onUpdateData={debouncedHandleUpdateData}
+        onChangeData={debouncedHandleUpdateData}
+        onChangeEventHandlers={debouncedHandleUpdateEventHandlers}
       />
     );
-  }, [component, debouncedHandleUpdateData]);
+  }, [
+    component,
+    debouncedHandleUpdateData,
+    debouncedHandleUpdateEventHandlers,
+  ]);
 
   return (
     <Box

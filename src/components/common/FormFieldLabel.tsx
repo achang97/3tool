@@ -1,12 +1,13 @@
 import { Help } from '@mui/icons-material';
-import { Box, InputLabel, Tooltip } from '@mui/material';
+import { Box, BoxProps, InputLabel, Tooltip } from '@mui/material';
 
 export type FormFieldLabelProps = {
   label: string;
   tooltip?: string;
+  sx?: BoxProps['sx'];
 };
 
-export const FormFieldLabel = ({ label, tooltip }: FormFieldLabelProps) => {
+export const FormFieldLabel = ({ label, tooltip, sx }: FormFieldLabelProps) => {
   return (
     <Box
       sx={{
@@ -14,6 +15,7 @@ export const FormFieldLabel = ({ label, tooltip }: FormFieldLabelProps) => {
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%',
+        ...sx,
       }}
     >
       <InputLabel shrink>{label}</InputLabel>

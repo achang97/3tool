@@ -6,9 +6,10 @@ import {
   GridRowsProp,
   GridSelectionModel,
 } from '@mui/x-data-grid';
-import { Box, Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import _ from 'lodash';
 import { useAppDispatch } from '@app/redux/hooks';
+import { DataGridPlaceholder } from '@app/components/common/DataGridPlaceholder';
 import { setComponentInput } from '@app/redux/features/activeToolSlice';
 import { useComponentEvalData } from '../../hooks/useComponentEvalData';
 
@@ -72,11 +73,7 @@ export const CanvasTable = ({
 
   const NoRowsOverlay = useCallback(() => {
     return (
-      <Stack
-        sx={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}
-      >
-        {evalDataValues.emptyMessage}
-      </Stack>
+      <DataGridPlaceholder>{evalDataValues.emptyMessage}</DataGridPlaceholder>
     );
   }, [evalDataValues.emptyMessage]);
 

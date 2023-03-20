@@ -2,14 +2,14 @@ import { FormFieldLabel } from '@app/components/common/FormFieldLabel';
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useCallback, MouseEvent } from 'react';
 
-export type InspectorEnumFieldProps = {
+type InspectorEnumFieldProps = {
   label: string;
   value?: any;
   options: {
     label: string;
     value: any;
   }[];
-  onChange: (newValue: string) => void;
+  onChange: (newValue: any) => void;
 };
 
 export const InspectorEnumField = ({
@@ -19,18 +19,17 @@ export const InspectorEnumField = ({
   onChange,
 }: InspectorEnumFieldProps) => {
   const handleChange = useCallback(
-    (e: MouseEvent<HTMLElement>, newValue: string | null) => {
-      if (!newValue) {
+    (e: MouseEvent<HTMLElement>, newValue: any) => {
+      if (newValue === null) {
         return;
       }
-
       onChange(newValue);
     },
     [onChange]
   );
 
   return (
-    <Box data-testid={`inspector-enum-field-${label}`}>
+    <Box data-testid={`inspector-enum-${label}`}>
       <FormFieldLabel label={label} />
       <ToggleButtonGroup
         exclusive

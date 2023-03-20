@@ -66,7 +66,7 @@ describe('useElementUpdateReference', () => {
             type: EventHandlerType.Action,
             data: {
               action: {
-                actionId: '{{ button1.text }}',
+                actionName: '{{ button1.text }}',
               },
             },
           },
@@ -80,7 +80,7 @@ describe('useElementUpdateReference', () => {
             {
               data: {
                 action: {
-                  actionId: '{{ newButton.text }}',
+                  actionName: '{{ newButton.text }}',
                 },
               },
             },
@@ -150,7 +150,7 @@ describe('useElementUpdateReference', () => {
             type: EventHandlerType.Action,
             data: {
               action: {
-                actionId: '{{ action1.text }}',
+                actionName: '{{ action1.text }}',
               },
             },
           },
@@ -164,7 +164,7 @@ describe('useElementUpdateReference', () => {
             {
               data: {
                 action: {
-                  actionId: '{{ newAction.text }}',
+                  actionName: '{{ newAction.text }}',
                 },
               },
             },

@@ -3,7 +3,7 @@ import { useAppDispatch } from '@app/redux/hooks';
 import { Action, ActionType } from '@app/types';
 import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Tab, Tabs } from '@mui/material';
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, SyntheticEvent } from 'react';
 import { SaveRunButton } from './editor/common/SaveRunButton';
 import { JavascriptEditor } from './editor/general/JavascriptEditor';
 import { SmartContractEditor } from './editor/general/SmartContractEditor';
@@ -25,7 +25,7 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
   );
 
   const handleTabChange = useCallback(
-    (e: React.SyntheticEvent, newTab: ActionTabType) => {
+    (e: SyntheticEvent, newTab: ActionTabType) => {
       setActiveTab(newTab);
     },
     []
@@ -44,7 +44,7 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
         return (
           <JavascriptEditor
             data={action.data.javascript}
-            onUpdateData={handleUpdateData}
+            onChangeData={handleUpdateData}
           />
         );
       }
