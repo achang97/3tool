@@ -163,6 +163,29 @@ describe('ResponseHandlerEditor', () => {
         })
       );
     });
+
+    it('shows Success as the only event option', async () => {
+      const result = render(
+        <ResponseHandlerEditor
+          name={mockName}
+          eventHandlers={[
+            {
+              event: ActionEvent.Success,
+              type: EventHandlerType.Url,
+              data: {},
+            },
+          ]}
+        />
+      );
+      const container = getSuccessContainer(result);
+
+      await userEvent.click(container.getByText('utils.openUrl()'));
+      await userEvent.click(result.getByLabelText('Event'));
+      const options = result.getAllByRole('option');
+      expect(
+        options.map((option) => option.getAttribute('data-value'))
+      ).toEqual([ActionEvent.Success]);
+    });
   });
 
   describe('error handlers', () => {
@@ -226,6 +249,29 @@ describe('ResponseHandlerEditor', () => {
           ],
         })
       );
+    });
+
+    it('shows Error as the only event option', async () => {
+      const result = render(
+        <ResponseHandlerEditor
+          name={mockName}
+          eventHandlers={[
+            {
+              event: ActionEvent.Error,
+              type: EventHandlerType.Url,
+              data: {},
+            },
+          ]}
+        />
+      );
+      const container = getErrorContainer(result);
+
+      await userEvent.click(container.getByText('utils.openUrl()'));
+      await userEvent.click(result.getByLabelText('Event'));
+      const options = result.getAllByRole('option');
+      expect(
+        options.map((option) => option.getAttribute('data-value'))
+      ).toEqual([ActionEvent.Error]);
     });
   });
 });
