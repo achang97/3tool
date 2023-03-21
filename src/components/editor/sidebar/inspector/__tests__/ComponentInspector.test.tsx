@@ -2,7 +2,7 @@ import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import {
   COMPONENT_CONFIGS,
   COMPONENT_DATA_TEMPLATES,
-  EVENT_HANDLER_COMPONENT_EVENT_CONFIGS,
+  EVENT_HANDLER_EVENT_CONFIGS,
 } from '@app/constants';
 import {
   Component,
@@ -269,7 +269,7 @@ describe('ComponentInspector', () => {
 
       await userEvent.click(
         result.getByText(
-          EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[
+          EVENT_HANDLER_EVENT_CONFIGS[
             mockActiveComponent.eventHandlers[0].event
           ].label
         )

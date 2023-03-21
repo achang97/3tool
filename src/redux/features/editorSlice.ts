@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Action, ComponentType, SidebarViewType } from '@app/types';
+import {
+  Action,
+  ActionViewType,
+  ComponentType,
+  SidebarViewType,
+} from '@app/types';
 import _ from 'lodash';
 
 type NewComponent = {
@@ -21,10 +26,12 @@ type EditorState = {
 
   // Actions
   focusedAction?: Action;
+  actionView: ActionViewType;
 };
 
 const initialState: EditorState = {
   sidebarView: SidebarViewType.Components,
+  actionView: ActionViewType.General,
 };
 
 export const editorSlice = createSlice({
@@ -67,6 +74,7 @@ export const editorSlice = createSlice({
     // Actions
     focusAction: (state, action: PayloadAction<Action>) => {
       state.focusedAction = action.payload;
+      state.actionView = ActionViewType.General;
     },
     blurAction: (state) => {
       state.focusedAction = undefined;
@@ -76,6 +84,9 @@ export const editorSlice = createSlice({
       action: PayloadAction<RecursivePartial<Action>>
     ) => {
       _.merge(state.focusedAction, action.payload);
+    },
+    setActionView: (state, action: PayloadAction<ActionViewType>) => {
+      state.actionView = action.payload;
     },
   },
 });
@@ -92,6 +103,7 @@ export const {
   focusAction,
   blurAction,
   updateFocusedAction,
+  setActionView,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

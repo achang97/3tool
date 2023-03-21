@@ -18,7 +18,7 @@ export type UrlData = {
   newTab: boolean;
 };
 
-export type EventHandler<T = unknown> = {
+export type EventHandler<T = any> = {
   event: T;
   type: EventHandlerType;
   data: {

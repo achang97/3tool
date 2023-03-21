@@ -1,18 +1,23 @@
-import { EVENT_HANDLER_COMPONENT_EVENT_CONFIGS } from '@app/constants';
-import { ComponentEvent, EventHandler, EventHandlerType } from '@app/types';
+import { EVENT_HANDLER_EVENT_CONFIGS } from '@app/constants';
+import {
+  ActionEvent,
+  ComponentEvent,
+  EventHandler,
+  EventHandlerType,
+} from '@app/types';
 import {
   GridRenderCellParams,
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 
-export type EventHandlerData = EventHandler<ComponentEvent> & {
+export type EventHandlerData = EventHandler & {
   id: number;
 };
 
 export const formatEventHandlerEvent = ({
   value,
-}: GridValueFormatterParams<ComponentEvent>) => {
-  return EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[value].label;
+}: GridValueFormatterParams<ActionEvent | ComponentEvent>) => {
+  return EVENT_HANDLER_EVENT_CONFIGS[value].label;
 };
 
 export const renderEventHandlerType = ({

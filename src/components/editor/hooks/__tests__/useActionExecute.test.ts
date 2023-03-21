@@ -1,20 +1,14 @@
-import { setActionResult } from '@app/redux/features/activeToolSlice';
+import { ActionResult } from '@app/constants';
 import { Action, ActionType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import { useActionExecute } from '../useActionExecute';
 import { useEvalArgs } from '../useEvalArgs';
 
-const mockEnqueueSnackbar = jest.fn();
-const mockDispatch = jest.fn();
+const mockHandleActionResult = jest.fn();
 
 jest.mock('../useEvalArgs');
-
-jest.mock('@app/redux/hooks', () => ({
-  useAppDispatch: jest.fn(() => mockDispatch),
-}));
-
-jest.mock('../useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
+jest.mock('../useActionHandleResult', () => ({
+  useActionHandleResult: jest.fn(() => mockHandleActionResult),
 }));
 
 describe('useActionExecute', () => {
@@ -88,53 +82,23 @@ describe('useActionExecute', () => {
     });
 
     describe('response handling', () => {
-      it('dispatches action to set the action result', async () => {
+      it('calls action handler function on execution', async () => {
         const { result } = renderHook(() => useActionExecute());
 
-        const actionResult = await result.current({
-          name: 'action1',
+        const mockAction = {
           type: ActionType.Javascript,
-          data: {
-            javascript: { code: 'return 1', transformer: '' },
-          },
-        } as Action);
+          data: { javascript: { code: 'asdf', transformer: '' } },
+        } as Action;
+        await result.current(mockAction);
 
-        expect(mockDispatch).toHaveBeenCalledWith(
-          setActionResult({ name: 'action1', result: actionResult })
+        const mockResult: ActionResult = {
+          data: undefined,
+          error: 'asdf is not defined',
+        };
+        expect(mockHandleActionResult).toHaveBeenCalledWith(
+          mockAction,
+          mockResult
         );
-      });
-
-      it('enqueues error snackbar on error', async () => {
-        const { result } = renderHook(() => useActionExecute());
-
-        await result.current({
-          name: 'action1',
-          type: ActionType.Javascript,
-          data: {
-            javascript: { code: 'asdf', transformer: '' },
-          },
-        } as Action);
-
-        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-          'Failed to execute action1',
-          { variant: 'error' }
-        );
-      });
-
-      it('enqueues success snackbar on success', async () => {
-        const { result } = renderHook(() => useActionExecute());
-
-        await result.current({
-          name: 'action1',
-          type: ActionType.Javascript,
-          data: {
-            javascript: { code: 'return 1', transformer: '' },
-          },
-        } as Action);
-
-        expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Executed action1', {
-          variant: 'success',
-        });
       });
     });
   });

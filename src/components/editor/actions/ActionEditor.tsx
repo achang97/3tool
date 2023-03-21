@@ -1,9 +1,12 @@
-import { updateFocusedAction } from '@app/redux/features/editorSlice';
-import { useAppDispatch } from '@app/redux/hooks';
-import { Action, ActionType } from '@app/types';
+import {
+  setActionView,
+  updateFocusedAction,
+} from '@app/redux/features/editorSlice';
+import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
+import { Action, ActionType, ActionViewType } from '@app/types';
 import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Tab, Tabs } from '@mui/material';
-import { useMemo, useCallback, useState, SyntheticEvent } from 'react';
+import { useMemo, useCallback, SyntheticEvent } from 'react';
 import { SaveRunButton } from './editor/common/SaveRunButton';
 import { JavascriptEditor } from './editor/general/JavascriptEditor';
 import { SmartContractEditor } from './editor/general/SmartContractEditor';
@@ -13,22 +16,15 @@ type ActionEditorProps = {
   action: Action;
 };
 
-enum ActionTabType {
-  General = 'general',
-  ResponseHandler = 'responseHandler',
-}
-
 export const ActionEditor = ({ action }: ActionEditorProps) => {
   const dispatch = useAppDispatch();
-  const [activeTab, setActiveTab] = useState<ActionTabType>(
-    ActionTabType.General
-  );
+  const { actionView } = useAppSelector((state) => state.editor);
 
   const handleTabChange = useCallback(
-    (e: SyntheticEvent, newTab: ActionTabType) => {
-      setActiveTab(newTab);
+    (e: SyntheticEvent, newTab: ActionViewType) => {
+      dispatch(setActionView(newTab));
     },
-    []
+    [dispatch]
   );
 
   const handleUpdateData = useCallback(
@@ -63,15 +59,20 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
       {
         label: 'General',
         panel: typedEditor,
-        value: ActionTabType.General,
+        value: ActionViewType.General,
       },
       {
         label: 'Response Handler',
-        panel: <ResponseHandlerEditor />,
-        value: ActionTabType.ResponseHandler,
+        panel: (
+          <ResponseHandlerEditor
+            name={action.name}
+            eventHandlers={action.eventHandlers}
+          />
+        ),
+        value: ActionViewType.ResponseHandler,
       },
     ],
-    [typedEditor]
+    [action.eventHandlers, action.name, typedEditor]
   );
 
   return (
@@ -95,7 +96,7 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
         }}
       >
         <Tabs
-          value={activeTab}
+          value={actionView}
           onChange={handleTabChange}
           sx={{ minHeight: 0 }}
         >
@@ -110,7 +111,7 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
         </Tabs>
         <SaveRunButton type={action.type} />
       </Box>
-      <TabContext value={activeTab}>
+      <TabContext value={actionView}>
         {tabs.map((tab) => (
           <TabPanel
             key={tab.label}

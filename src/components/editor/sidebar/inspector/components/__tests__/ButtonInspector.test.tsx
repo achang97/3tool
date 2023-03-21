@@ -9,7 +9,7 @@ import {
 import {
   validateTextField,
   validateSection,
-  validateEventHandlers,
+  validateComponentEventHandlers,
 } from '@tests/testers/inspector';
 import { render } from '@tests/utils/renderWithContext';
 import { ButtonInspector } from '../ButtonInspector';
@@ -156,8 +156,7 @@ describe('ButtonInspector', () => {
         />
       );
 
-      await validateEventHandlers(result, 'Interaction', {
-        label: 'Event handlers',
+      await validateComponentEventHandlers(result, 'Interaction', {
         eventHandlers: mockEventHandlers,
         eventOptions: COMPONENT_CONFIGS.button.events,
         onChange: mockHandleChangeEventHandlers,

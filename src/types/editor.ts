@@ -13,6 +13,11 @@ export enum SidebarViewType {
   Components = 'components',
 }
 
+export enum ActionViewType {
+  General = 'general',
+  ResponseHandler = 'responseHandler',
+}
+
 export type FieldType =
   | 'string'
   | 'boolean'

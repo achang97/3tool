@@ -1,5 +1,11 @@
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { Action, ActionType, ComponentType, SidebarViewType } from '@app/types';
+import {
+  Action,
+  ActionType,
+  ActionViewType,
+  ComponentType,
+  SidebarViewType,
+} from '@app/types';
 import { waitFor, act } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
 import {
@@ -14,6 +20,7 @@ import {
   focusAction,
   blurAction,
   updateFocusedAction,
+  setActionView,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -32,6 +39,11 @@ describe('editorSlice', () => {
     it('initially sets sidebar view to components', () => {
       const { result } = renderHooks();
       expect(result.current.sidebarView).toEqual(SidebarViewType.Components);
+    });
+
+    it('initially sets action view to general', () => {
+      const { result } = renderHooks();
+      expect(result.current.actionView).toEqual(ActionViewType.General);
     });
   });
 
@@ -163,18 +175,44 @@ describe('editorSlice', () => {
     });
 
     describe('actions', () => {
-      it('focusAction: sets focused action', async () => {
-        const mockAction = {
-          name: 'action1',
-          type: ActionType.Javascript,
-        } as Action;
-        const { result, dispatch } = renderHooks();
+      describe('focusAction', () => {
+        it('sets focused action', async () => {
+          const mockAction = {
+            name: 'action1',
+            type: ActionType.Javascript,
+          } as Action;
+          const { result, dispatch } = renderHooks();
 
-        act(() => {
-          dispatch(focusAction(mockAction));
+          act(() => {
+            dispatch(focusAction(mockAction));
+          });
+          await waitFor(() => {
+            expect(result.current.focusedAction).toEqual(mockAction);
+          });
         });
-        await waitFor(() => {
-          expect(result.current.focusedAction).toEqual(mockAction);
+
+        it('sets action view to general', async () => {
+          const mockAction = {
+            name: 'action1',
+            type: ActionType.Javascript,
+          } as Action;
+          const { result, dispatch } = renderHooks();
+
+          act(() => {
+            dispatch(setActionView(ActionViewType.ResponseHandler));
+          });
+          await waitFor(() => {
+            expect(result.current.actionView).not.toEqual(
+              ActionViewType.General
+            );
+          });
+
+          act(() => {
+            dispatch(focusAction(mockAction));
+          });
+          await waitFor(() => {
+            expect(result.current.actionView).toEqual(ActionViewType.General);
+          });
         });
       });
 
@@ -226,6 +264,18 @@ describe('editorSlice', () => {
               javascript: { code: 'code' },
             },
           });
+        });
+      });
+
+      it('setActionView: sets action view to payload type', async () => {
+        const mockActionViewType = ActionViewType.ResponseHandler;
+        const { result, dispatch } = renderHooks();
+
+        act(() => {
+          dispatch(setActionView(ActionViewType.ResponseHandler));
+        });
+        await waitFor(() => {
+          expect(result.current.actionView).toEqual(mockActionViewType);
         });
       });
     });

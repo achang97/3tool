@@ -1,8 +1,8 @@
-import { InspectorEventHandlersProps } from '@app/components/editor/common/InspectorEventHandlers';
 import { useCodeMirrorPreview } from '@app/components/editor/hooks/useCodeMirrorPreview';
+import { ComponentEventHandlersProps } from '@app/components/editor/sidebar/inspector/ComponentEventHandlers';
 import { BaseInspectorFieldProps } from '@app/components/editor/sidebar/inspector/components/BaseInspector';
 import {
-  EVENT_HANDLER_COMPONENT_EVENT_CONFIGS,
+  EVENT_HANDLER_EVENT_CONFIGS,
   EVENT_HANDLER_CONFIGS,
 } from '@app/constants';
 import { RenderResult, within } from '@testing-library/react';
@@ -174,17 +174,17 @@ export const validateSwitchField = async (
   onChange.mockClear();
 };
 
-type ValidateEventHandlersProps = Omit<
-  InspectorEventHandlersProps,
+type ValidateComponentEventHandlersProps = Omit<
+  ComponentEventHandlersProps,
   'onChange' | 'name'
 > & {
   onChange: jest.Mock;
 };
 
-export const validateEventHandlers = async (
+export const validateComponentEventHandlers = async (
   result: RenderResult,
   sectionTitle: string | undefined,
-  { label, eventHandlers, eventOptions, onChange }: ValidateEventHandlersProps
+  { eventHandlers, eventOptions, onChange }: ValidateComponentEventHandlersProps
 ) => {
   const container = getFieldContainer(
     result,
@@ -192,11 +192,15 @@ export const validateEventHandlers = async (
     'inspector-event-handlers'
   );
 
-  expect(container.getByText(label, { selector: 'label' })).toBeTruthy();
+  expect(
+    container.getByText('Event handlers', { selector: 'label' })
+  ).toBeTruthy();
 
   await userEvent.click(
     container.getByText(
-      EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[eventHandlers[0].event].label
+      // @ts-ignore Typing is a little dirty here due to the definition of both ActionEvent
+      // and ComponentEvent, but the test should fail if the label is undefined anyway.
+      EVENT_HANDLER_EVENT_CONFIGS[eventHandlers[0].event].label
     )
   );
   const editor = within(result.getByTestId('event-handler-editor'));

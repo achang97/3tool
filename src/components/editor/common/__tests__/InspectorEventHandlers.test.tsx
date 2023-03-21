@@ -1,5 +1,5 @@
 import {
-  EVENT_HANDLER_COMPONENT_EVENT_CONFIGS,
+  EVENT_HANDLER_EVENT_CONFIGS,
   EVENT_HANDLER_DATA_TEMPLATES,
 } from '@app/constants';
 import { ComponentEvent, EventHandler, EventHandlerType } from '@app/types';
@@ -18,6 +18,7 @@ const mockEventHandlers: EventHandler<ComponentEvent>[] = [
     data: {},
   },
 ];
+const mockPlaceholder = 'placeholder';
 const mockEventOptions: ComponentEvent[] = [
   ComponentEvent.Click,
   ComponentEvent.Submit,
@@ -41,6 +42,8 @@ describe('InspectorEventHandlers', () => {
         eventHandlers={mockEventHandlers}
         eventOptions={mockEventOptions}
         onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
       />
     );
     expect(result.getByText(mockLabel)).toBeTruthy();
@@ -54,14 +57,12 @@ describe('InspectorEventHandlers', () => {
         eventHandlers={[]}
         eventOptions={mockEventOptions}
         onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
       />
     );
 
-    expect(
-      result.getByText(
-        'Trigger actions, control components, or call other APIs in response to component events.'
-      )
-    );
+    expect(result.getByText(mockPlaceholder));
   });
 
   it('renders table of current event handlers', () => {
@@ -72,12 +73,14 @@ describe('InspectorEventHandlers', () => {
         eventHandlers={mockEventHandlers}
         eventOptions={mockEventOptions}
         onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
       />
     );
 
     expect(
       result.getByText(
-        EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[mockEventHandlers[0].event].label
+        EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label
       )
     );
     expect(result.getByText('utils.openUrl()'));
@@ -91,6 +94,8 @@ describe('InspectorEventHandlers', () => {
         eventHandlers={mockEventHandlers}
         eventOptions={mockEventOptions}
         onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
       />
     );
 
@@ -108,6 +113,8 @@ describe('InspectorEventHandlers', () => {
         eventHandlers={[]}
         eventOptions={mockEventOptions}
         onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
       />
     );
 
@@ -130,6 +137,8 @@ describe('InspectorEventHandlers', () => {
         eventHandlers={[newEventHandler]}
         eventOptions={mockEventOptions}
         onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
       />
     );
     expect(result.getByTestId('event-handler-editor')).toBeTruthy();
@@ -143,12 +152,14 @@ describe('InspectorEventHandlers', () => {
         eventHandlers={mockEventHandlers}
         eventOptions={mockEventOptions}
         onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
       />
     );
 
     await userEvent.click(
       result.getByText(
-        EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[mockEventHandlers[0].event].label
+        EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label
       )
     );
     expect(result.getByTestId('event-handler-editor')).toBeTruthy();
@@ -173,12 +184,14 @@ describe('InspectorEventHandlers', () => {
         eventHandlers={mockEventHandlers}
         eventOptions={mockEventOptions}
         onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
       />
     );
 
     await userEvent.click(
       result.getByText(
-        EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[mockEventHandlers[0].event].label
+        EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label
       )
     );
     expect(result.getByTestId('event-handler-editor')).toBeTruthy();
@@ -187,5 +200,45 @@ describe('InspectorEventHandlers', () => {
     await waitFor(() => {
       expect(result.queryByTestId('event-handler-editor')).toBeNull();
     });
+  });
+
+  it('hides event column if hideEventColumn is true', () => {
+    const result = render(
+      <InspectorEventHandlers
+        label={mockLabel}
+        name={mockName}
+        eventHandlers={mockEventHandlers}
+        eventOptions={mockEventOptions}
+        onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
+        hideEventColumn
+      />
+    );
+
+    expect(result.queryByText('Event')).toBeNull();
+    expect(
+      result.queryByText(
+        EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label
+      )
+    ).toBeNull();
+  });
+
+  it('hides column headers if hideColumnHeaders is true', () => {
+    const result = render(
+      <InspectorEventHandlers
+        label={mockLabel}
+        name={mockName}
+        eventHandlers={mockEventHandlers}
+        eventOptions={mockEventOptions}
+        onChange={mockHandleChange}
+        placeholder={mockPlaceholder}
+        menuPosition="left"
+        hideColumnHeaders
+      />
+    );
+
+    expect(result.getByText('Event')).not.toBeVisible();
+    expect(result.getByText('Effect')).not.toBeVisible();
   });
 });

@@ -133,21 +133,4 @@ describe('useEventHandlerGridProps', () => {
       });
     });
   });
-
-  describe('components', () => {
-    it('returns placeholder for no rows overlay', () => {
-      const { result } = renderHook(() =>
-        useEventHandlerGridProps({
-          eventHandlers: mockEventHandlers,
-          onChange: mockHandleChange,
-        })
-      );
-
-      const { NoRowsOverlay } = result.current.components;
-      const renderResult = render(<NoRowsOverlay />);
-      expect(renderResult.container.firstChild).toHaveTextContent(
-        'Trigger actions, control components, or call other APIs in response to component events.'
-      );
-    });
-  });
 });

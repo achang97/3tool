@@ -1,4 +1,4 @@
-import { ComponentEvent, EventHandlerType } from '@app/types';
+import { ActionEvent, ComponentEvent, EventHandlerType } from '@app/types';
 
 type EventHandlerConfig = {
   label: string;
@@ -16,10 +16,16 @@ export const EVENT_HANDLER_CONFIGS: Record<
   },
 };
 
-export const EVENT_HANDLER_COMPONENT_EVENT_CONFIGS: Record<
-  ComponentEvent,
+export const EVENT_HANDLER_EVENT_CONFIGS: Record<
+  ActionEvent | ComponentEvent,
   EventHandlerConfig
 > = {
+  [ActionEvent.Success]: {
+    label: 'Success',
+  },
+  [ActionEvent.Error]: {
+    label: 'Error',
+  },
   [ComponentEvent.Click]: {
     label: 'Click',
   },

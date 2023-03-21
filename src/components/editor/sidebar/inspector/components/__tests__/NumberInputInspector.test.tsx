@@ -9,7 +9,7 @@ import {
 import {
   validateTextField,
   validateSection,
-  validateEventHandlers,
+  validateComponentEventHandlers,
 } from '@tests/testers/inspector';
 import { render } from '@tests/utils/renderWithContext';
 import { NumberInputInspector } from '../NumberInputInspector';
@@ -195,8 +195,7 @@ describe('NumberInputInspector', () => {
         />
       );
 
-      await validateEventHandlers(result, 'Interaction', {
-        label: 'Event handlers',
+      await validateComponentEventHandlers(result, 'Interaction', {
         eventHandlers: mockEventHandlers,
         eventOptions: COMPONENT_CONFIGS.numberInput.events,
         onChange: mockHandleChangeEventHandlers,

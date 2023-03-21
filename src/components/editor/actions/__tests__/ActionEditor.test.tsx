@@ -1,5 +1,9 @@
-import { updateFocusedAction } from '@app/redux/features/editorSlice';
-import { Action, ActionType } from '@app/types';
+import {
+  setActionView,
+  updateFocusedAction,
+} from '@app/redux/features/editorSlice';
+import { useAppSelector } from '@app/redux/hooks';
+import { Action, ActionType, ActionViewType } from '@app/types';
 import { within } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -34,11 +38,18 @@ jest.mock('@app/components/editor/hooks/useActiveTool', () => ({
 }));
 
 jest.mock('@app/redux/hooks', () => ({
-  useAppDispatch: jest.fn(() => mockDispatch),
   useAppSelector: jest.fn(() => ({})),
+  useAppDispatch: jest.fn(() => mockDispatch),
 }));
 
 describe('ActionEditor', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useAppSelector as jest.Mock).mockImplementation(() => ({
+      actionView: ActionViewType.General,
+    }));
+  });
+
   it('renders tabs', () => {
     const result = render(<ActionEditor action={mockAction} />);
     expect(result.getByText('General')).toBeTruthy();
@@ -52,15 +63,27 @@ describe('ActionEditor', () => {
 
   describe('tab navigation', () => {
     it('navigates to General tab', async () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        actionView: ActionViewType.ResponseHandler,
+      }));
+
       const result = render(<ActionEditor action={mockAction} />);
       await userEvent.click(result.getByText('General'));
-      expect(result.getByTestId('javascript-editor')).toBeTruthy();
+      expect(mockDispatch).toHaveBeenCalledWith(
+        setActionView(ActionViewType.General)
+      );
     });
 
     it('navigates to Response Handler tab', async () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        actionView: ActionViewType.General,
+      }));
+
       const result = render(<ActionEditor action={mockAction} />);
       await userEvent.click(result.getByText('Response Handler'));
-      expect(result.getByTestId('response-handler-editor')).toBeTruthy();
+      expect(mockDispatch).toHaveBeenCalledWith(
+        setActionView(ActionViewType.ResponseHandler)
+      );
     });
   });
 
@@ -72,15 +95,36 @@ describe('ActionEditor', () => {
       ${ActionType.SmartContractWrite} | ${'smart-contract-editor'}
     `(
       'displays editor for $type type',
-      ({ type, testId }: { type: ActionType; testId: string }) => {
+      async ({ type, testId }: { type: ActionType; testId: string }) => {
+        (useAppSelector as jest.Mock).mockImplementation(() => ({
+          actionView: ActionViewType.General,
+        }));
+
         const result = render(
           <ActionEditor action={{ ...mockAction, type }} />
         );
         expect(result.getByTestId(testId)).toBeTruthy();
       }
     );
+  });
 
+  describe('response handler', () => {
+    it('renders response handler editor', () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        actionView: ActionViewType.ResponseHandler,
+      }));
+
+      const result = render(<ActionEditor action={mockAction} />);
+      expect(result.getByTestId('response-handler-editor')).toBeTruthy();
+    });
+  });
+
+  describe('updates', () => {
     it('dispatches action to update focused action', async () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        actionView: ActionViewType.General,
+      }));
+
       const result = render(
         <ActionEditor action={{ ...mockAction, type: ActionType.Javascript }} />
       );

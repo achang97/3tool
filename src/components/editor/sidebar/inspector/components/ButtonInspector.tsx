@@ -1,4 +1,3 @@
-import { InspectorEventHandlers } from '@app/components/editor/common/InspectorEventHandlers';
 import { COMPONENT_CONFIGS, COMPONENT_DATA_TYPES } from '@app/constants';
 import {
   BaseComponentInspectorProps,
@@ -6,6 +5,7 @@ import {
   ComponentType,
 } from '@app/types';
 import { useMemo } from 'react';
+import { ComponentEventHandlers } from '../ComponentEventHandlers';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 
 const DATA_TYPES = COMPONENT_DATA_TYPES.button;
@@ -62,9 +62,8 @@ export const ButtonInspector = ({
             {
               field: 'eventHandlers',
               component: (
-                <InspectorEventHandlers
+                <ComponentEventHandlers
                   name={name}
-                  label="Event handlers"
                   eventHandlers={eventHandlers}
                   eventOptions={BUTTON_CONFIG.events}
                   onChange={onChangeEventHandlers}

@@ -1,42 +1,76 @@
+import { DataGridPlaceholder } from '@app/components/common/DataGridPlaceholder';
 import { FormFieldLabel } from '@app/components/common/FormFieldLabel';
 import { EventHandlerEditor } from '@app/components/editor/common/EventHandlerEditor';
 import { useEventHandlerGridProps } from '@app/components/editor/hooks/useEventHandlerGridProps';
 import { EventHandlerData } from '@app/components/editor/utils/eventHandlers';
 import { EVENT_HANDLER_DATA_TEMPLATES } from '@app/constants';
 import {
-  BaseComponentInspectorProps,
+  ActionEvent,
   ComponentEvent,
   EventHandler,
   EventHandlerType,
 } from '@app/types';
 import { Add } from '@mui/icons-material';
-import { Box, Button, Menu } from '@mui/material';
+import { Box, Button, Menu, MenuProps } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import _ from 'lodash';
 import { useCallback, useState, useRef, useMemo } from 'react';
 
+type Event = ActionEvent | ComponentEvent;
+
 export type InspectorEventHandlersProps = {
   label: string;
+  placeholder: string;
   name: string;
-  eventHandlers: EventHandler<ComponentEvent>[];
-  eventOptions: ComponentEvent[];
-  onChange: BaseComponentInspectorProps['onChangeEventHandlers'];
+  eventHandlers: EventHandler[];
+  eventOptions: Event[];
+  onChange: (eventHandlers: EventHandler[]) => void;
+  menuPosition: 'left' | 'top';
+  hideEventColumn?: boolean;
+  hideColumnHeaders?: boolean;
+  testId?: string;
 };
+
+const DATA_GRID_HEADER_HEIGHT = 35;
 
 export const InspectorEventHandlers = ({
   label,
+  placeholder,
   name,
   eventHandlers,
   eventOptions,
   onChange,
+  menuPosition,
+  hideEventColumn,
+  hideColumnHeaders,
+  testId = 'inspector-event-handlers',
 }: InspectorEventHandlersProps) => {
   const [activeIndex, setActiveIndex] = useState<number>();
   const dataGridRef = useRef<HTMLDivElement>(null);
 
-  const { rows, columns, components } = useEventHandlerGridProps({
+  const { rows, columns } = useEventHandlerGridProps({
     eventHandlers,
     onChange,
   });
+
+  const NoRowsOverlay = useCallback(() => {
+    return <DataGridPlaceholder>{placeholder}</DataGridPlaceholder>;
+  }, [placeholder]);
+
+  const menuPositionProps: Pick<MenuProps, 'anchorOrigin' | 'transformOrigin'> =
+    useMemo(() => {
+      if (menuPosition === 'left') {
+        return {
+          anchorOrigin: { vertical: 'top', horizontal: 'left' },
+          transformOrigin: { vertical: 'top', horizontal: 'right' },
+        };
+      }
+
+      return {
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        transformOrigin: { vertical: 'bottom', horizontal: 'center' },
+      };
+    }, [menuPosition]);
 
   const activeEventHandler = useMemo(() => {
     return typeof activeIndex === 'number'
@@ -51,8 +85,12 @@ export const InspectorEventHandlers = ({
     []
   );
 
+  const handleMenuClose = useCallback(() => {
+    setActiveIndex(undefined);
+  }, []);
+
   const handleCreateEventHandler = useCallback(async () => {
-    const newEventHandler: EventHandler<ComponentEvent> = {
+    const newEventHandler: EventHandler = {
       type: EventHandlerType.Action,
       event: eventOptions[0],
       data: {
@@ -67,12 +105,8 @@ export const InspectorEventHandlers = ({
     setActiveIndex(newEventHandlers.length - 1);
   }, [eventOptions, onChange, eventHandlers]);
 
-  const handleMenuClose = useCallback(() => {
-    setActiveIndex(undefined);
-  }, []);
-
   const handleUpdateEventHandler = useCallback(
-    (update: RecursivePartial<EventHandler<ComponentEvent>>) => {
+    (update: RecursivePartial<EventHandler>) => {
       const newEventHandlers = eventHandlers.map((eventHandler) =>
         eventHandler === activeEventHandler
           ? _.merge({}, activeEventHandler, update)
@@ -84,17 +118,21 @@ export const InspectorEventHandlers = ({
   );
 
   return (
-    <Box
-      sx={{ display: 'flex', flexDirection: 'column' }}
-      data-testid="inspector-event-handlers"
-    >
+    <Box sx={{ display: 'flex', flexDirection: 'column' }} data-testid={testId}>
       <FormFieldLabel label={label} sx={{ marginBottom: 0.5 }} />
       <DataGrid
         rows={rows}
         columns={columns}
-        components={components}
+        components={{ NoRowsOverlay }}
+        columnVisibilityModel={{ event: !hideEventColumn }}
         onRowClick={handleRowClick}
-        sx={{ gridRow: { cursor: 'pointer' } }}
+        headerHeight={hideColumnHeaders ? 0 : DATA_GRID_HEADER_HEIGHT}
+        sx={{
+          gridRow: { cursor: 'pointer' },
+          '.MuiDataGrid-columnHeaders': hideColumnHeaders
+            ? { visibility: 'hidden' }
+            : undefined,
+        }}
         autoHeight
         disableColumnMenu
         disableSelectionOnClick
@@ -114,8 +152,7 @@ export const InspectorEventHandlers = ({
         open={!!activeEventHandler}
         anchorEl={dataGridRef.current}
         onClose={handleMenuClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        {...menuPositionProps}
       >
         {activeEventHandler && (
           <EventHandlerEditor

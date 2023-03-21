@@ -1,10 +1,9 @@
-import { DataGridPlaceholder } from '@app/components/common/DataGridPlaceholder';
 import {
   EventHandlerData,
   formatEventHandlerEvent,
   renderEventHandlerType,
 } from '@app/components/editor/utils/eventHandlers';
-import { ComponentEvent, EventHandler } from '@app/types';
+import { EventHandler } from '@app/types';
 import { Delete } from '@mui/icons-material';
 import {
   GridActionsCellItem,
@@ -12,19 +11,16 @@ import {
   GridRowParams,
   GridRowsProp,
 } from '@mui/x-data-grid';
-import { ReactElement, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 type HookArgs = {
-  eventHandlers: EventHandler<ComponentEvent>[];
-  onChange: (newEventHandlers: EventHandler<ComponentEvent>[]) => void;
+  eventHandlers: EventHandler[];
+  onChange: (newEventHandlers: EventHandler[]) => void;
 };
 
 type HookReturnType = {
   rows: GridRowsProp<EventHandlerData>;
   columns: GridColDef<EventHandlerData>[];
-  components: {
-    NoRowsOverlay: () => ReactElement;
-  };
 };
 
 export const useEventHandlerGridProps = ({
@@ -89,14 +85,5 @@ export const useEventHandlerGridProps = ({
     ];
   }, [getRowActions]);
 
-  const NoRowsOverlay = useCallback(() => {
-    return (
-      <DataGridPlaceholder>
-        Trigger actions, control components, or call other APIs in response to
-        component events.
-      </DataGridPlaceholder>
-    );
-  }, []);
-
-  return { rows, columns, components: { NoRowsOverlay } };
+  return { rows, columns };
 };

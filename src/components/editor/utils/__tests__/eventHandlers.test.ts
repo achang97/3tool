@@ -1,4 +1,4 @@
-import { EVENT_HANDLER_COMPONENT_EVENT_CONFIGS } from '@app/constants';
+import { EVENT_HANDLER_EVENT_CONFIGS } from '@app/constants';
 import { ComponentEvent, EventHandlerType } from '@app/types';
 import {
   GridRenderCellParams,
@@ -17,9 +17,7 @@ describe('eventHandlers', () => {
       const result = formatEventHandlerEvent({
         value: mockEvent,
       } as GridValueFormatterParams<ComponentEvent>);
-      expect(result).toEqual(
-        EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[mockEvent].label
-      );
+      expect(result).toEqual(EVENT_HANDLER_EVENT_CONFIGS[mockEvent].label);
     });
   });
 

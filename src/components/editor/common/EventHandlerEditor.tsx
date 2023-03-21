@@ -1,9 +1,10 @@
 import {
-  EVENT_HANDLER_COMPONENT_EVENT_CONFIGS,
+  EVENT_HANDLER_EVENT_CONFIGS,
   EVENT_HANDLER_CONFIGS,
   EVENT_HANDLER_DATA_TEMPLATES,
 } from '@app/constants';
 import {
+  ActionEvent,
   BaseEventHandlerEditorProps,
   ComponentEvent,
   EventHandler,
@@ -20,9 +21,9 @@ import { EventHandlerUrlEditor } from './EventHandlerUrlEditor';
 
 type EventHandlerEditorProps = {
   name: string;
-  eventOptions: ComponentEvent[];
-  eventHandler: EventHandler<ComponentEvent>;
-  onChange: (update: RecursivePartial<EventHandler<ComponentEvent>>) => void;
+  eventOptions: (ActionEvent | ComponentEvent)[];
+  eventHandler: EventHandler;
+  onChange: (update: RecursivePartial<EventHandler>) => void;
 };
 
 export const EVENT_HANDLER_EDITOR_WIDTH = 265;
@@ -91,8 +92,7 @@ export const EventHandlerEditor = ({
             data: {
               select: {
                 options: eventOptions.map((eventOption) => ({
-                  label:
-                    EVENT_HANDLER_COMPONENT_EVENT_CONFIGS[eventOption].label,
+                  label: EVENT_HANDLER_EVENT_CONFIGS[eventOption].label,
                   value: eventOption,
                 })),
                 placeholder: 'Select event',
