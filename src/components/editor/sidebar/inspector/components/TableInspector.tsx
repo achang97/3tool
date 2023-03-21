@@ -65,6 +65,7 @@ export const TableInspector = ({
       name={name}
       config={config}
       onChange={onChangeData}
+      isAutosaved
       testId="table-inspector"
     />
   );

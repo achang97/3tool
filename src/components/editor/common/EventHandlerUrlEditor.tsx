@@ -16,6 +16,7 @@ export const EventHandlerUrlEditor = ({
   name,
   data,
   onChangeData,
+  isAutosaved,
 }: BaseEventHandlerEditorProps<EventHandlerType.Url>) => {
   const config: BaseInspectorSectionProps<EventHandler['data']['url']>[] =
     useMemo(() => {
@@ -51,6 +52,7 @@ export const EventHandlerUrlEditor = ({
       name={name}
       config={config}
       onChange={onChangeData}
+      isAutosaved={isAutosaved}
       testId="event-handler-url-editor"
     />
   );

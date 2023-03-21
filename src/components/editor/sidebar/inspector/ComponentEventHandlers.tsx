@@ -10,6 +10,7 @@ export type ComponentEventHandlersProps = Omit<
   | 'label'
   | 'hideEventColumn'
   | 'hideColumnHeaders'
+  | 'isAutosaved'
 >;
 
 export const ComponentEventHandlers = (props: ComponentEventHandlersProps) => {
@@ -20,6 +21,7 @@ export const ComponentEventHandlers = (props: ComponentEventHandlersProps) => {
       menuPosition="left"
       hideColumnHeaders={false}
       hideEventColumn={false}
+      isAutosaved
       {...props}
     />
   );

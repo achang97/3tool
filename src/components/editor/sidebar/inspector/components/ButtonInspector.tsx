@@ -80,6 +80,7 @@ export const ButtonInspector = ({
       name={name}
       config={config}
       onChange={onChangeData}
+      isAutosaved
       testId="button-inspector"
     />
   );

@@ -20,6 +20,7 @@ import { TextInspector } from './components/TextInspector';
 import { NumberInputInspector } from './components/NumberInputInspector';
 import { useComponentUpdateName } from '../../hooks/useComponentUpdateName';
 import { TableInspector } from './components/TableInspector';
+import { overwriteArrayMergeCustomizer } from '../../utils/javascript';
 
 type ComponentInspectorProps = {
   component: Component;
@@ -43,31 +44,31 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
   const handleUpdateName = useComponentUpdateName(component.name);
 
   const debouncedHandleUpdateComponent = useMemo(() => {
-    return _.debounce((updatedComponent: Component) => {
+    return _.debounce((update: RecursivePartial<Component>) => {
       return updateTool({
         components: tool.components.map((currComponent) => {
           return currComponent.name === component.name
-            ? updatedComponent
+            ? _.mergeWith({}, component, update, overwriteArrayMergeCustomizer)
             : currComponent;
         }),
       });
     }, DEBOUNCE_TIME_MS);
-  }, [component.name, tool.components, updateTool]);
+  }, [component, tool.components, updateTool]);
 
   const debouncedHandleUpdateData = useCallback(
     (update: RecursivePartial<ValueOf<Component['data']>>) => {
-      return debouncedHandleUpdateComponent(
-        _.merge({}, component, { data: { [component.type]: update } })
-      );
+      return debouncedHandleUpdateComponent({
+        data: { [component.type]: update },
+      });
     },
     [component, debouncedHandleUpdateComponent]
   );
 
   const debouncedHandleUpdateEventHandlers = useCallback(
     (eventHandlers: EventHandler<ComponentEvent>[]) => {
-      return debouncedHandleUpdateComponent({ ...component, eventHandlers });
+      return debouncedHandleUpdateComponent({ eventHandlers });
     },
-    [component, debouncedHandleUpdateComponent]
+    [debouncedHandleUpdateComponent]
   );
 
   const dataInspector = useMemo(() => {

@@ -28,10 +28,12 @@ export type InspectorEventHandlersProps = {
   menuPosition: 'left' | 'top';
   hideEventColumn?: boolean;
   hideColumnHeaders?: boolean;
+  isAutosaved?: boolean;
   testId?: string;
 };
 
 const DATA_GRID_HEADER_HEIGHT = 35;
+const DATA_GRID_ROW_HEIGHT = 35;
 
 export const InspectorEventHandlers = ({
   label,
@@ -43,6 +45,7 @@ export const InspectorEventHandlers = ({
   menuPosition,
   hideEventColumn,
   hideColumnHeaders,
+  isAutosaved,
   testId = 'inspector-event-handlers',
 }: InspectorEventHandlersProps) => {
   const [activeIndex, setActiveIndex] = useState<number>();
@@ -126,6 +129,7 @@ export const InspectorEventHandlers = ({
         components={{ NoRowsOverlay }}
         columnVisibilityModel={{ event: !hideEventColumn }}
         onRowClick={handleRowClick}
+        rowHeight={DATA_GRID_ROW_HEIGHT}
         headerHeight={hideColumnHeaders ? 0 : DATA_GRID_HEADER_HEIGHT}
         sx={{
           gridRow: { cursor: 'pointer' },
@@ -160,6 +164,7 @@ export const InspectorEventHandlers = ({
             eventOptions={eventOptions}
             onChange={handleUpdateEventHandler}
             eventHandler={activeEventHandler}
+            isAutosaved={isAutosaved}
           />
         )}
       </Menu>

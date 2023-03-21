@@ -57,7 +57,7 @@ export const useElementFlattenFields = ({
 
         return {
           ...field,
-          // NOTE: We can probably improve this by converting FieldType into a boolean.
+          // NOTE: We can probably improve this by converting FieldType into a enum.
           evalType:
             typeof evalType === 'string' ? (evalType as FieldType) : 'any',
           isJavascript,

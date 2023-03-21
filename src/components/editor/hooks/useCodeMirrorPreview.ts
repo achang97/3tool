@@ -20,8 +20,6 @@ export const useCodeMirrorPreview = ({
   isDynamic,
   expression = '',
 }: HookArgs): Preview | null => {
-  // NOTE: We pass isDynamic as true instead of the given variable value, as we never
-  // want to include static eval args (like action functions and utils).
   const { dynamicEvalArgs } = useEvalArgs();
 
   const previewData: Preview | null = useMemo(() => {

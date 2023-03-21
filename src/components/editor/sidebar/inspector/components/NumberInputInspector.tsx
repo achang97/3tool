@@ -130,6 +130,7 @@ export const NumberInputInspector = ({
       name={name}
       config={config}
       onChange={onChangeData}
+      isAutosaved
       testId="number-input-inspector"
     />
   );

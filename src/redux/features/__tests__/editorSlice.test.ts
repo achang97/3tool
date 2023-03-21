@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import {
   Action,
+  ActionEvent,
   ActionType,
   ActionViewType,
   ComponentType,
@@ -239,30 +240,58 @@ describe('editorSlice', () => {
         });
       });
 
-      it('updateFocusedAction: updates focused action by merging payload', async () => {
-        const { result, dispatch } = renderHooks();
+      describe('updateFocusedAction', () => {
+        it('updates focused action by merging payload', async () => {
+          const { result, dispatch } = renderHooks();
 
-        const mockAction = {
-          name: 'action1',
-          type: ActionType.Javascript,
-          data: {},
-        } as Action;
-
-        act(() => {
-          dispatch(focusAction(mockAction));
-        });
-        act(() => {
-          dispatch(
-            updateFocusedAction({ data: { javascript: { code: 'code' } } })
-          );
-        });
-        await waitFor(() => {
-          expect(result.current.focusedAction).toEqual({
+          const mockAction = {
             name: 'action1',
             type: ActionType.Javascript,
-            data: {
-              javascript: { code: 'code' },
-            },
+            data: {},
+          } as Action;
+
+          act(() => {
+            dispatch(focusAction(mockAction));
+          });
+          act(() => {
+            dispatch(
+              updateFocusedAction({ data: { javascript: { code: 'code' } } })
+            );
+          });
+          await waitFor(() => {
+            expect(result.current.focusedAction).toEqual({
+              name: 'action1',
+              type: ActionType.Javascript,
+              data: {
+                javascript: { code: 'code' },
+              },
+            });
+          });
+        });
+
+        it('overwrites arrays with payload', async () => {
+          const { result, dispatch } = renderHooks();
+
+          const mockAction = {
+            name: 'action1',
+            type: ActionType.Javascript,
+            data: {},
+            eventHandlers: [{ event: ActionEvent.Success }],
+          } as Action;
+
+          act(() => {
+            dispatch(focusAction(mockAction));
+          });
+          act(() => {
+            dispatch(updateFocusedAction({ eventHandlers: [] }));
+          });
+          await waitFor(() => {
+            expect(result.current.focusedAction).toEqual({
+              name: 'action1',
+              type: ActionType.Javascript,
+              data: {},
+              eventHandlers: [],
+            });
           });
         });
       });

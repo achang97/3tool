@@ -68,6 +68,7 @@ export const TextInspector = ({
       name={name}
       config={config}
       onChange={onChangeData}
+      isAutosaved
       testId="text-inspector"
     />
   );

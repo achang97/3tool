@@ -321,3 +321,13 @@ export const getPrototypeFunctions = (value: unknown): Function[] => {
     .map((name) => _.get(prototype, name))
     .value();
 };
+
+export const overwriteArrayMergeCustomizer = (
+  _src: unknown,
+  update: unknown
+) => {
+  if (Array.isArray(update)) {
+    return update;
+  }
+  return undefined;
+};

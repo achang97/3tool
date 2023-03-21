@@ -9,6 +9,7 @@ import {
   parseDynamicTermVariables,
   getPrototypeFunctions,
   parseDeclaredVariables,
+  overwriteArrayMergeCustomizer,
 } from '../javascript';
 
 const acorn = require('acorn');
@@ -419,6 +420,19 @@ describe('javascript', () => {
       // @ts-ignore
       expect(result).not.toContain(Object.prototype.__lookupSetter__);
       /* eslint-enable no-underscore-dangle, no-restricted-properties */
+    });
+  });
+
+  describe('overwriteArrayMergeCustomizer', () => {
+    it('returns undefined if update is not an array', () => {
+      const result = overwriteArrayMergeCustomizer(undefined, {});
+      expect(result).toBeUndefined();
+    });
+
+    it('returns update object if update is not an array', () => {
+      const mockUpdate = [1];
+      const result = overwriteArrayMergeCustomizer(undefined, mockUpdate);
+      expect(result).toEqual(mockUpdate);
     });
   });
 });

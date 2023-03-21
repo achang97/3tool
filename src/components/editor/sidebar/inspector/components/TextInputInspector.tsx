@@ -130,6 +130,7 @@ export const TextInputInspector = ({
       name={name}
       config={config}
       onChange={onChangeData}
+      isAutosaved
       testId="text-input-inspector"
     />
   );

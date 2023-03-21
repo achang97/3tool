@@ -8,6 +8,7 @@ import { within } from '@testing-library/dom';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockTool } from '@tests/constants/data';
+import { useActionCycleListener } from '../../hooks/useActionCycleListener';
 import { ActionEditor } from '../ActionEditor';
 
 const mockAction = {
@@ -37,6 +38,8 @@ jest.mock('@app/components/editor/hooks/useActiveTool', () => ({
   })),
 }));
 
+jest.mock('@app/components/editor/hooks/useActionCycleListener');
+
 jest.mock('@app/redux/hooks', () => ({
   useAppSelector: jest.fn(() => ({})),
   useAppDispatch: jest.fn(() => mockDispatch),
@@ -59,6 +62,11 @@ describe('ActionEditor', () => {
   it('renders button to run and save', () => {
     const result = render(<ActionEditor action={mockAction} />);
     expect(result.getByTestId('save-run-button')).toBeTruthy();
+  });
+
+  it('calls useActionCycleListener to start listening for cycle changes', () => {
+    render(<ActionEditor action={mockAction} />);
+    expect(useActionCycleListener).toHaveBeenCalledWith(mockAction.name);
   });
 
   describe('tab navigation', () => {

@@ -16,6 +16,7 @@ export const EventHandlerActionEditor = ({
   name,
   data,
   onChangeData,
+  isAutosaved,
 }: BaseEventHandlerEditorProps<EventHandlerType.Action>) => {
   const { actionNames } = useToolElementNames();
 
@@ -66,6 +67,7 @@ export const EventHandlerActionEditor = ({
       name={name}
       config={config}
       onChange={onChangeData}
+      isAutosaved={isAutosaved}
       testId="event-handler-action-editor"
     />
   );

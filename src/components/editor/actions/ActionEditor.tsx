@@ -7,6 +7,7 @@ import { Action, ActionType, ActionViewType } from '@app/types';
 import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Tab, Tabs } from '@mui/material';
 import { useMemo, useCallback, SyntheticEvent } from 'react';
+import { useActionCycleListener } from '../hooks/useActionCycleListener';
 import { SaveRunButton } from './editor/common/SaveRunButton';
 import { JavascriptEditor } from './editor/general/JavascriptEditor';
 import { SmartContractEditor } from './editor/general/SmartContractEditor';
@@ -19,6 +20,8 @@ type ActionEditorProps = {
 export const ActionEditor = ({ action }: ActionEditorProps) => {
   const dispatch = useAppDispatch();
   const { actionView } = useAppSelector((state) => state.editor);
+
+  useActionCycleListener(action.name);
 
   const handleTabChange = useCallback(
     (e: SyntheticEvent, newTab: ActionViewType) => {

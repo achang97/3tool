@@ -46,6 +46,7 @@ export type BaseEventHandlerEditorProps<T extends EventHandlerType> = {
   name: string;
   data: EventHandler['data'][T];
   onChangeData: (update: RecursivePartial<EventHandler['data'][T]>) => void;
+  isAutosaved?: boolean;
 };
 
 export type BaseActionEditorProps<T extends ActionType> = {

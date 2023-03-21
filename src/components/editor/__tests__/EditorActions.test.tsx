@@ -11,6 +11,7 @@ jest.mock('../hooks/useActiveTool', () => ({
     evalDataMap: {},
     evalDataValuesMap: {},
     dataDepGraph: new DepGraph<string>(),
+    dataDepCycles: {},
   })),
 }));
 

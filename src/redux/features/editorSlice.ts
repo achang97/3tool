@@ -7,6 +7,7 @@ import {
   SidebarViewType,
 } from '@app/types';
 import _ from 'lodash';
+import { overwriteArrayMergeCustomizer } from '@app/components/editor/utils/javascript';
 
 type NewComponent = {
   name: string;
@@ -83,7 +84,11 @@ export const editorSlice = createSlice({
       state,
       action: PayloadAction<RecursivePartial<Action>>
     ) => {
-      _.merge(state.focusedAction, action.payload);
+      _.mergeWith(
+        state.focusedAction,
+        action.payload,
+        overwriteArrayMergeCustomizer
+      );
     },
     setActionView: (state, action: PayloadAction<ActionViewType>) => {
       state.actionView = action.payload;

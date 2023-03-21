@@ -24,6 +24,7 @@ type EventHandlerEditorProps = {
   eventOptions: (ActionEvent | ComponentEvent)[];
   eventHandler: EventHandler;
   onChange: (update: RecursivePartial<EventHandler>) => void;
+  isAutosaved?: boolean;
 };
 
 export const EVENT_HANDLER_EDITOR_WIDTH = 265;
@@ -40,6 +41,7 @@ export const EventHandlerEditor = ({
   eventOptions,
   eventHandler,
   onChange,
+  isAutosaved,
 }: EventHandlerEditorProps) => {
   const handleChange = useCallback(
     (update: RecursivePartial<EventHandler<ComponentEvent>>) => {
@@ -77,9 +79,10 @@ export const EventHandlerEditor = ({
         // @ts-ignore We know that this accesses the correct data key
         data={eventHandler.data[eventHandler.type]}
         onChangeData={handleDataChange}
+        isAutosaved={isAutosaved}
       />
     );
-  }, [eventHandler, handleDataChange, name]);
+  }, [eventHandler, handleDataChange, name, isAutosaved]);
 
   const config: BaseInspectorSectionProps[] = useMemo(() => {
     return [
@@ -135,7 +138,12 @@ export const EventHandlerEditor = ({
       }}
       data-testid="event-handler-editor"
     >
-      <BaseInspector name={name} config={config} onChange={handleChange} />
+      <BaseInspector
+        name={name}
+        config={config}
+        onChange={handleChange}
+        isAutosaved={isAutosaved}
+      />
     </Box>
   );
 };

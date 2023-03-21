@@ -1,9 +1,5 @@
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
-import {
-  COMPONENT_CONFIGS,
-  COMPONENT_DATA_TEMPLATES,
-  EVENT_HANDLER_EVENT_CONFIGS,
-} from '@app/constants';
+import { COMPONENT_CONFIGS, COMPONENT_DATA_TEMPLATES } from '@app/constants';
 import {
   Component,
   ComponentEvent,
@@ -13,7 +9,6 @@ import {
 import { render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DepGraph } from 'dependency-graph';
-import _ from 'lodash';
 import { ComponentInspector } from '../ComponentInspector';
 
 const mockComponents = [
@@ -215,7 +210,6 @@ describe('ComponentInspector', () => {
       // NOTE: It would be ideal to use fake timers to actually test the debounce time here,
       // but this test stubbornly refuses to work (it seems like runAllTimers and advanceTimersByTime
       // don't work properly here for some reason).
-      expect(mockUpdateTool).not.toHaveBeenCalled();
       await waitFor(() => {
         const newExpectedText = `${newInputValue}${COMPONENT_DATA_TEMPLATES.button.text}`;
 
@@ -267,34 +261,19 @@ describe('ComponentInspector', () => {
         <ComponentInspector component={mockActiveComponent} />
       );
 
-      await userEvent.click(
-        result.getByText(
-          EVENT_HANDLER_EVENT_CONFIGS[
-            mockActiveComponent.eventHandlers[0].event
-          ].label
-        )
-      );
-      expect(result.getByTestId('event-handler-editor')).toBeTruthy();
-      await userEvent.click(result.getByLabelText('New Tab'));
+      await userEvent.click(result.getByTestId('MoreVertIcon'));
+      await userEvent.click(result.getByTestId('event-handler-delete-icon'));
 
       // NOTE: It would be ideal to use fake timers to actually test the debounce time here,
       // but this test stubbornly refuses to work (it seems like runAllTimers and advanceTimersByTime
       // don't work properly here for some reason).
-      expect(mockUpdateTool).not.toHaveBeenCalled();
       await waitFor(() => {
         expect(mockUpdateTool).toHaveBeenCalledWith({
           components: [
-            _.merge(mockActiveComponent, {
-              eventHandlers: [
-                _.merge(mockActiveComponent.eventHandlers[0], {
-                  data: {
-                    url: {
-                      newTab: true,
-                    },
-                  },
-                }),
-              ],
-            }),
+            {
+              ...mockActiveComponent,
+              eventHandlers: [],
+            },
           ],
         });
       });

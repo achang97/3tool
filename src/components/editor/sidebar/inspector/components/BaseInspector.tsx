@@ -52,6 +52,7 @@ type BaseInspectorProps<T = any> = {
   name: string;
   config: BaseInspectorSectionProps<T>[];
   onChange: (update: Record<string, unknown>) => void;
+  isAutosaved?: boolean;
   testId?: string;
 };
 
@@ -59,6 +60,7 @@ export const BaseInspector = ({
   name,
   config,
   onChange,
+  isAutosaved,
   testId,
 }: BaseInspectorProps) => {
   const handleUpdate = useCallback(
@@ -98,7 +100,7 @@ export const BaseInspector = ({
             type={field.data.text.type}
             placeholder={field.data.text.placeholder}
             onChange={handleUpdateField}
-            isAutosaved
+            isAutosaved={isAutosaved}
           />
         );
       }
@@ -128,7 +130,7 @@ export const BaseInspector = ({
 
       return null;
     },
-    [handleUpdate, name]
+    [handleUpdate, name, isAutosaved]
   );
 
   const renderSection = useCallback(
