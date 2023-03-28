@@ -9,7 +9,6 @@ const RESOURCES: Resource[] = [
     name: 'SpaceCoin ICO',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    numLinkedQueries: 5,
     data: {
       smartContract: {
         chainId: 5,
@@ -25,7 +24,6 @@ const RESOURCES: Resource[] = [
     name: 'Staking Pool Contract',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    numLinkedQueries: 3,
     data: {
       smartContract: {
         chainId: 5,
@@ -44,7 +42,6 @@ const RESOURCES: Resource[] = [
     name: 'Dune API',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    numLinkedQueries: 4,
     data: {
       dune: {
         apiKey: 'api-key',
@@ -95,7 +92,6 @@ export const resourceHandlers = [
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       data: body.data,
-      numLinkedQueries: 0,
     };
     RESOURCES.push(newResource);
 

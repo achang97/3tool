@@ -9,7 +9,6 @@ export type Resource = {
   type: ResourceType;
   createdAt: string;
   updatedAt: string;
-  numLinkedQueries: number;
   data: {
     [ResourceType.SmartContract]?: SmartContractData;
     [ResourceType.Dune]?: DuneData;

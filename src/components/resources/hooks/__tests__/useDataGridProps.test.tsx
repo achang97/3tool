@@ -87,7 +87,7 @@ describe('useDataGridProps', () => {
       });
     });
 
-    it('returns number of linked queries as 4th column', () => {
+    it('returns actions as 4th column', () => {
       const { result } = renderHook(() =>
         useDataGridProps({
           resources: mockResources,
@@ -95,21 +95,6 @@ describe('useDataGridProps', () => {
         })
       );
       expect(result.current.columns[3]).toEqual({
-        field: 'numLinkedQueries',
-        headerName: 'Linked Queries',
-        type: 'number',
-        flex: 1,
-      });
-    });
-
-    it('returns actions as 5th column', () => {
-      const { result } = renderHook(() =>
-        useDataGridProps({
-          resources: mockResources,
-          onEditClick: mockHandleEditClick,
-        })
-      );
-      expect(result.current.columns[4]).toEqual({
         field: 'actions',
         type: 'actions',
         getActions: expect.any(Function),
@@ -133,7 +118,7 @@ describe('useDataGridProps', () => {
           },
         };
         // @ts-ignore getActions should be defined
-        const actions = result.current.columns[4].getActions(mockGridRowParams);
+        const actions = result.current.columns[3].getActions(mockGridRowParams);
         expect(actions).toHaveLength(1);
 
         const renderResult = render(
@@ -165,7 +150,7 @@ describe('useDataGridProps', () => {
           },
         };
         // @ts-ignore getActions should be defined
-        const actions = result.current.columns[4].getActions(mockGridRowParams);
+        const actions = result.current.columns[3].getActions(mockGridRowParams);
         expect(actions).toHaveLength(0);
       });
     });

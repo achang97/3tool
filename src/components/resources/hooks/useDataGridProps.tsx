@@ -72,12 +72,6 @@ export const useDataGridProps = ({
         valueFormatter: formatCreatedAt,
       },
       {
-        field: 'numLinkedQueries',
-        headerName: 'Linked Queries',
-        type: 'number',
-        flex: 1,
-      },
-      {
         field: 'actions',
         type: 'actions',
         getActions: getRowActions,

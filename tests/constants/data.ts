@@ -19,7 +19,6 @@ export const mockSmartContractResource: Resource = {
   name: 'Staking Pool Contract',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  numLinkedQueries: 3,
   data: {
     smartContract: {
       chainId: 5,
@@ -36,7 +35,6 @@ export const mockProxySmartContractResource: Resource = {
   id: '2',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  numLinkedQueries: 0,
   data: {
     smartContract: {
       chainId: 5,
@@ -56,7 +54,6 @@ export const mockDuneResource: Resource = {
   name: 'Dune API',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  numLinkedQueries: 4,
   data: {},
 };
 

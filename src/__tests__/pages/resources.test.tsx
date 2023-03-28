@@ -64,7 +64,6 @@ describe('Resources', () => {
       result.getByText(`(${mockResources[0].data.smartContract?.address})`)
     ).toBeTruthy();
     expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
-    expect(result.getByText(mockResources[0].numLinkedQueries)).toBeTruthy();
   });
 
   it('opens edit dialog and updates smart contract resource', async () => {

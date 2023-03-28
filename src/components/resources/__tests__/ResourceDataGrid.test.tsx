@@ -50,7 +50,6 @@ describe('ResourceDataGrid', () => {
     expect(result.getByText('Type')).toBeTruthy();
     expect(result.getByText('Resource')).toBeTruthy();
     expect(result.getByText('Created At')).toBeTruthy();
-    expect(result.getByText('Linked Queries')).toBeTruthy();
   });
 
   it('renders resources as rows in data grid', () => {
@@ -63,13 +62,11 @@ describe('ResourceDataGrid', () => {
       result.getByText(`(${mockResources[0].data.smartContract?.address})`)
     ).toBeTruthy();
     expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
-    expect(result.getByText(mockResources[0].numLinkedQueries)).toBeTruthy();
 
     // Check second row
     expect(result.getByText('Dune')).toBeTruthy();
     expect(result.getByText(mockResources[1].name)).toBeTruthy();
     expect(result.getByText('Jan 5, 2023 2:33 AM')).toBeTruthy();
-    expect(result.getByText(mockResources[1].numLinkedQueries)).toBeTruthy();
   });
 
   it('opens and closes edit dialog', async () => {
