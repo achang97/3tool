@@ -44,7 +44,7 @@ describe('useBaseElementUpdateName', () => {
   });
 
   describe('validation', () => {
-    it('displays error snackbar if new name does not match regex', async () => {
+    it('displays error snackbar if new name contains invalid characters', async () => {
       const { result } = renderHook(() =>
         useBaseElementUpdateName({
           prevName: mockPrevName,
@@ -56,6 +56,22 @@ describe('useBaseElementUpdateName', () => {
 
       expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
         'Name can only contain letters, numbers, _, or $',
+        { variant: 'error' }
+      );
+    });
+
+    it('displays error snackbar if new name does not starts with letter or _', async () => {
+      const { result } = renderHook(() =>
+        useBaseElementUpdateName({
+          prevName: mockPrevName,
+          extendUpdate: mockExtendUpdate,
+          onSuccess: mockHandleSuccess,
+        })
+      );
+      await result.current('123');
+
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+        'Name must start with a letter or "_"',
         { variant: 'error' }
       );
     });

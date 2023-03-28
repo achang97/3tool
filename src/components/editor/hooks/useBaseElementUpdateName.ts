@@ -32,6 +32,10 @@ export const useBaseElementUpdateName = ({
         return 'Name can only contain letters, numbers, _, or $';
       }
 
+      if (!newName.match(/^[a-zA-Z_]/)) {
+        return 'Name must start with a letter or "_"';
+      }
+
       if (elementNames.includes(newName)) {
         return `A component or action with the name "${newName}" already exists`;
       }
