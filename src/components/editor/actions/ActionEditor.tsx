@@ -8,7 +8,9 @@ import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Tab, Tabs } from '@mui/material';
 import { useMemo, useCallback, SyntheticEvent } from 'react';
 import { useActionCycleListener } from '../hooks/useActionCycleListener';
+import { EditorToolbar } from './editor/common/EditorToolbar';
 import { SaveRunButton } from './editor/common/SaveRunButton';
+import { SizeControlButton } from './editor/common/SizeControlButton';
 import { JavascriptEditor } from './editor/general/JavascriptEditor';
 import { SmartContractEditor } from './editor/general/SmartContractEditor';
 import { ResponseHandlerEditor } from './editor/responseHandler/ResponseHandlerEditor';
@@ -88,16 +90,7 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
       }}
       data-testid="action-editor"
     >
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: 1,
-          borderColor: 'divider',
-          paddingX: 1,
-        }}
-      >
+      <EditorToolbar>
         <Tabs
           value={actionView}
           onChange={handleTabChange}
@@ -112,8 +105,11 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
             />
           ))}
         </Tabs>
-        <SaveRunButton type={action.type} />
-      </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+          <SaveRunButton type={action.type} />
+          <SizeControlButton />
+        </Box>
+      </EditorToolbar>
       <TabContext value={actionView}>
         {tabs.map((tab) => (
           <TabPanel

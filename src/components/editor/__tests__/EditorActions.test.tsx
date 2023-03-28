@@ -2,7 +2,11 @@ import { useAppSelector } from '@app/redux/hooks';
 import { render } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
-import { EditorActions } from '../EditorActions';
+import {
+  EditorActions,
+  MAXIMIZED_HEIGHT,
+  MINIMIZED_HEIGHT,
+} from '../EditorActions';
 
 jest.mock('../hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
@@ -37,7 +41,7 @@ describe('EditorActions', () => {
 
   it('renders placeholder if no action is focused', () => {
     const result = render(<EditorActions />);
-    expect(result.getByText('Select an action to edit')).toBeTruthy();
+    expect(result.getByTestId('action-editor-placeholder')).toBeTruthy();
   });
 
   it('renders action editor if action is focused', () => {
@@ -46,5 +50,27 @@ describe('EditorActions', () => {
     }));
     const result = render(<EditorActions />);
     expect(result.getByTestId('action-editor')).toBeTruthy();
+  });
+
+  describe('height', () => {
+    it('renders with minimized height', () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        isActionViewMaximized: false,
+      }));
+      const result = render(<EditorActions />);
+      expect(
+        getComputedStyle(result.container.firstChild as Element).height
+      ).toEqual(MINIMIZED_HEIGHT);
+    });
+
+    it('renders with maximized height', () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        isActionViewMaximized: true,
+      }));
+      const result = render(<EditorActions />);
+      expect(
+        getComputedStyle(result.container.firstChild as Element).height
+      ).toEqual(MAXIMIZED_HEIGHT);
+    });
   });
 });

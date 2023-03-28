@@ -1,19 +1,22 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { Box, Divider } from '@mui/material';
 import { ActionEditor } from './actions/ActionEditor';
+import { ActionEditorPlaceholder } from './actions/ActionEditorPlaceholder';
 import { ActionList } from './actions/ActionList';
-import { EmptyPlaceholder } from './actions/common/EmptyPlaceholder';
 
-const HEIGHT = '250px';
+export const MINIMIZED_HEIGHT = '250px';
+export const MAXIMIZED_HEIGHT = '80vh';
 const LIST_WIDTH = '260px';
 
 export const EditorActions = () => {
-  const { focusedAction } = useAppSelector((state) => state.editor);
+  const { focusedAction, isActionViewMaximized } = useAppSelector(
+    (state) => state.editor
+  );
 
   return (
     <Box
       sx={{
-        height: HEIGHT,
+        height: isActionViewMaximized ? MAXIMIZED_HEIGHT : MINIMIZED_HEIGHT,
         display: 'flex',
         boxShadow: 3,
         flexShrink: 0,
@@ -29,9 +32,7 @@ export const EditorActions = () => {
         {focusedAction ? (
           <ActionEditor action={focusedAction} />
         ) : (
-          <Box sx={{ padding: 2, height: '100%' }}>
-            <EmptyPlaceholder>Select an action to edit</EmptyPlaceholder>
-          </Box>
+          <ActionEditorPlaceholder />
         )}
       </Box>
     </Box>

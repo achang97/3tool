@@ -22,6 +22,7 @@ import {
   blurAction,
   updateFocusedAction,
   setActionView,
+  setIsActionViewMaximized,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -45,6 +46,11 @@ describe('editorSlice', () => {
     it('initially sets action view to general', () => {
       const { result } = renderHooks();
       expect(result.current.actionView).toEqual(ActionViewType.General);
+    });
+
+    it('initially sets action view to be minimized', () => {
+      const { result } = renderHooks();
+      expect(result.current.isActionViewMaximized).toEqual(false);
     });
   });
 
@@ -305,6 +311,24 @@ describe('editorSlice', () => {
         });
         await waitFor(() => {
           expect(result.current.actionView).toEqual(mockActionViewType);
+        });
+      });
+
+      it('setIsActionViewMaximized: sets action view maximized boolean to payload', async () => {
+        const { result, dispatch } = renderHooks();
+
+        act(() => {
+          dispatch(setIsActionViewMaximized(true));
+        });
+        await waitFor(() => {
+          expect(result.current.isActionViewMaximized).toEqual(true);
+        });
+
+        act(() => {
+          dispatch(setIsActionViewMaximized(false));
+        });
+        await waitFor(() => {
+          expect(result.current.isActionViewMaximized).toEqual(false);
         });
       });
     });

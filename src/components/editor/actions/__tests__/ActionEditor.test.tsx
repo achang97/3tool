@@ -64,6 +64,11 @@ describe('ActionEditor', () => {
     expect(result.getByTestId('save-run-button')).toBeTruthy();
   });
 
+  it('renders button to maximize / minimize editor', () => {
+    const result = render(<ActionEditor action={mockAction} />);
+    expect(result.getByTestId('size-control-button')).toBeTruthy();
+  });
+
   it('calls useActionCycleListener to start listening for cycle changes', () => {
     render(<ActionEditor action={mockAction} />);
     expect(useActionCycleListener).toHaveBeenCalledWith(mockAction.name);
