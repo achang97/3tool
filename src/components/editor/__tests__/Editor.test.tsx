@@ -1,9 +1,8 @@
-import userEvent from '@testing-library/user-event';
+import { useAppSelector } from '@app/redux/hooks';
+import { render } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
-import { render } from '@tests/utils/renderWithContext';
 import { DepGraph } from 'dependency-graph';
 import { Editor } from '../Editor';
-import { useActionQueueExecutor } from '../hooks/useActionQueueExecutor';
 
 jest.mock('../hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
@@ -20,61 +19,70 @@ jest.mock('../hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => jest.fn()),
 }));
 
-jest.mock('../hooks/useActionQueueExecutor');
+jest.mock('@app/redux/hooks', () => ({
+  useAppSelector: jest.fn(),
+  useAppDispatch: jest.fn(() => jest.fn()),
+}));
 
 describe('Editor', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (useAppSelector as jest.Mock).mockImplementation(() => ({}));
   });
 
-  it('renders editor toolbar', () => {
-    const result = render(<Editor />);
-    expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
-  });
+  describe('edit mode', () => {
+    beforeEach(() => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        isPreview: false,
+      }));
+    });
 
-  it('renders editor sidebar', async () => {
-    const result = render(<Editor />);
+    it('renders editor toolbar', () => {
+      const result = render(<Editor />);
+      expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
+    });
 
-    // Default view should be the component picker
-    expect(result.getByTestId('component-picker')).toBeTruthy();
+    it('renders editor sidebar', async () => {
+      const result = render(<Editor />);
+      expect(result.getByTestId('editor-sidebar')).toBeTruthy();
+    });
 
-    await userEvent.click(result.getByText('Inspector'));
-    expect(result.getByTestId('inspector')).toBeTruthy();
+    it('renders editor canvas', async () => {
+      const result = render(<Editor />);
+      expect(result.getByTestId('editor-canvas')).toBeTruthy();
+    });
 
-    await userEvent.click(result.getByText('Components'));
-    expect(result.getByTestId('component-picker')).toBeTruthy();
-  });
-
-  it('renders editor canvas and components', async () => {
-    const result = render(<Editor />);
-
-    expect(result.getByTestId('editor-canvas')).toBeTruthy();
-    mockTool.components.forEach((component) => {
-      expect(
-        result.getByTestId(`canvas-component-${component.name}`)
-      ).toBeTruthy();
+    it('renders editor actions', async () => {
+      const result = render(<Editor />);
+      expect(result.getByTestId('editor-actions')).toBeTruthy();
     });
   });
 
-  it('renders editor action list and editor', async () => {
-    const result = render(<Editor />);
-
-    expect(result.getByTestId('action-list')).toBeTruthy();
-    mockTool.actions.forEach((action) => {
-      expect(
-        result.getByTestId(`action-list-item-${action.name}`)
-      ).toBeTruthy();
+  describe('preview mode', () => {
+    beforeEach(() => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        isPreview: true,
+      }));
     });
 
-    await userEvent.click(
-      result.getByTestId(`action-list-item-${mockTool.actions[0].name}`)
-    );
-    expect(result.getByTestId('action-editor')).toBeTruthy();
-  });
+    it('renders editor toolbar', () => {
+      const result = render(<Editor />);
+      expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
+    });
 
-  it('starts action queue executor', () => {
-    render(<Editor />);
+    it('renders editor canvas', async () => {
+      const result = render(<Editor />);
+      expect(result.getByTestId('editor-canvas')).toBeTruthy();
+    });
 
-    expect(useActionQueueExecutor as jest.Mock).toHaveBeenCalled();
+    it('does not render editor sidebar', () => {
+      const result = render(<Editor />);
+      expect(result.queryByTestId('editor-sidebar')).toBeNull();
+    });
+
+    it('does not render editor actions', () => {
+      const result = render(<Editor />);
+      expect(result.queryByTestId('editor-actions')).toBeNull();
+    });
   });
 });

@@ -15,11 +15,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 5px;
   border-radius: 4px;
 }
 
-.react-grid-item:not(.react-grid-placeholder):hover {
+.react-grid-item-hovered:hover {
   outline: var(--outline-hover);
   cursor: pointer;
 }

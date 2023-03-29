@@ -1,12 +1,15 @@
 import userEvent from '@testing-library/user-event';
 import { render } from '@testing-library/react';
-import { focusToolSettings } from '@app/redux/features/editorSlice';
+import {
+  focusToolSettings,
+  setIsPreview,
+} from '@app/redux/features/editorSlice';
 import {
   mockApiErrorResponse,
   mockApiSuccessResponse,
 } from '@tests/constants/api';
 import { mockTool } from '@tests/constants/data';
-import { BASE_WINDOW_URL } from '@tests/constants/window';
+import { useAppSelector } from '@app/redux/hooks';
 import { ToolEditorToolbar } from '../ToolEditorToolbar';
 
 const mockDispatch = jest.fn();
@@ -14,6 +17,7 @@ const mockUpdateTool = jest.fn();
 const mockReload = jest.fn();
 
 jest.mock('@app/redux/hooks', () => ({
+  useAppSelector: jest.fn(),
   useAppDispatch: jest.fn(() => mockDispatch),
 }));
 
@@ -35,6 +39,7 @@ describe('ToolEditorToolbar', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (useAppSelector as jest.Mock).mockImplementation(() => ({}));
   });
 
   describe('edit name', () => {
@@ -93,13 +98,23 @@ describe('ToolEditorToolbar', () => {
     expect(mockDispatch).toHaveBeenCalledWith(focusToolSettings());
   });
 
-  it('renders Preview button that links to tool page', () => {
+  it('renders Preview button that toggles preview', async () => {
+    (useAppSelector as jest.Mock).mockImplementation(() => ({
+      isPreview: false,
+    }));
     const result = render(<ToolEditorToolbar />);
 
-    const previewButton = result.getByText('Preview');
-    expect(previewButton).toHaveProperty(
-      'href',
-      `${BASE_WINDOW_URL}/tools/${mockTool.id}`
-    );
+    await userEvent.click(result.getByText('Preview'));
+    expect(mockDispatch).toHaveBeenCalledWith(setIsPreview(true));
+  });
+
+  it('renders Editor button that toggles editor', async () => {
+    (useAppSelector as jest.Mock).mockImplementation(() => ({
+      isPreview: true,
+    }));
+    const result = render(<ToolEditorToolbar />);
+
+    await userEvent.click(result.getByText('Editor'));
+    expect(mockDispatch).toHaveBeenCalledWith(setIsPreview(false));
   });
 });

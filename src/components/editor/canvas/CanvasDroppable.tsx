@@ -10,7 +10,11 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const NUM_COLS = 48;
 
-export const CanvasDroppable = () => {
+type CanvasDroppableProps = {
+  isEditable: boolean;
+};
+
+export const CanvasDroppable = ({ isEditable }: CanvasDroppableProps) => {
   const { tool } = useActiveTool();
 
   const { onLayoutChange, onDrag, onDragStop, onDrop, layout, droppingItem } =
@@ -18,9 +22,13 @@ export const CanvasDroppable = () => {
 
   const gridChildren = useMemo(() => {
     return tool.components.map((component) => (
-      <CanvasComponent key={component.name} component={component} />
+      <CanvasComponent
+        key={component.name}
+        component={component}
+        isEditable={isEditable}
+      />
     ));
-  }, [tool.components]);
+  }, [isEditable, tool.components]);
 
   return (
     <Box data-testid="canvas-droppable">
@@ -43,7 +51,8 @@ export const CanvasDroppable = () => {
         compactType={null}
         preventCollision={false}
         droppingItem={droppingItem}
-        isDroppable
+        isDroppable={isEditable}
+        isDraggable={isEditable}
         draggableCancel={`.${CANVAS_COMPONENT_HANDLE_CLASSNAME}`}
       >
         {gridChildren}

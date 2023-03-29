@@ -23,6 +23,7 @@ export const EditorActions = () => {
         // NOTE: Removes the overlapping shadow on the right side of the container.
         clipPath: 'inset(-5px 0px -5px -5px)',
       }}
+      data-testid="editor-actions"
     >
       <Box sx={{ width: LIST_WIDTH }}>
         <ActionList />

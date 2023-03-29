@@ -1,8 +1,5 @@
 import Head from 'next/head';
 import { createTitle } from '@app/utils/window';
-import { GetServerSideProps } from 'next';
-import { wrapper } from '@app/redux/store';
-import { getRunningQueriesThunk, getToolById } from '@app/redux/services/tools';
 import { Tool } from '@app/types';
 import { ActiveToolProvider } from '@app/components/editor/contexts/ActiveToolContext';
 import { PageContainer } from '@app/components/common/PageContainer';
@@ -10,6 +7,7 @@ import { ToolEditorToolbar } from '@app/components/toolbar/editor/ToolEditorTool
 import { ToolSnackbarProvider } from '@app/components/editor/contexts/ToolSnackbarProvider';
 import { Editor } from '@app/components/editor/Editor';
 import { ActionQueueProvider } from '@app/components/editor/contexts/ActionQueueContext';
+import { getServerSideProps } from '@app/pageGetters/tools';
 
 type EditorPageProps = {
   tool: Tool;
@@ -37,24 +35,6 @@ const EditorPage = ({ tool }: EditorPageProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps =
-  wrapper.getServerSideProps((store) => async (context) => {
-    const id = context.params?.id;
-    if (typeof id === 'string') {
-      store.dispatch(getToolById.initiate(id));
-    }
-
-    const [result] = await Promise.all(
-      store.dispatch(getRunningQueriesThunk())
-    );
-
-    if (!result || result.isError) {
-      return { notFound: true };
-    }
-
-    return {
-      props: { tool: result.data },
-    };
-  });
+export { getServerSideProps };
 
 export default EditorPage;

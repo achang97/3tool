@@ -59,6 +59,6 @@ export const {
   useGetToolsQuery,
   useCreateToolMutation,
   useUpdateToolMutation,
-  endpoints: { getToolById },
-  util: { getRunningQueriesThunk },
+  endpoints,
+  util,
 } = toolsApi;

@@ -42,6 +42,7 @@ export const EditorSidebar = () => {
         flex: 1,
         minHeight: 0,
       }}
+      data-testid="editor-sidebar"
     >
       <Box
         sx={{

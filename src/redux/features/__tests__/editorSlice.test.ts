@@ -23,6 +23,7 @@ import {
   updateFocusedAction,
   setActionView,
   setIsActionViewMaximized,
+  setIsPreview,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -51,6 +52,11 @@ describe('editorSlice', () => {
     it('initially sets action view to be minimized', () => {
       const { result } = renderHooks();
       expect(result.current.isActionViewMaximized).toEqual(false);
+    });
+
+    it('initially sets preview mode to be false', () => {
+      const { result } = renderHooks();
+      expect(result.current.isPreview).toEqual(false);
     });
   });
 
@@ -329,6 +335,26 @@ describe('editorSlice', () => {
         });
         await waitFor(() => {
           expect(result.current.isActionViewMaximized).toEqual(false);
+        });
+      });
+    });
+
+    describe('general', () => {
+      it('setIsPreview: sets preview boolean to payload', async () => {
+        const { result, dispatch } = renderHooks();
+
+        act(() => {
+          dispatch(setIsPreview(true));
+        });
+        await waitFor(() => {
+          expect(result.current.isPreview).toEqual(true);
+        });
+
+        act(() => {
+          dispatch(setIsPreview(false));
+        });
+        await waitFor(() => {
+          expect(result.current.isPreview).toEqual(false);
         });
       });
     });

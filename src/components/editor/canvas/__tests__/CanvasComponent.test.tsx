@@ -52,30 +52,39 @@ describe('CanvasComponent', () => {
     }));
   });
 
-  it('renders children', () => {
-    const result = render(
-      <CanvasComponent component={mockComponent}>
-        {mockChildren}
-      </CanvasComponent>
-    );
-    expect(result.getByText(mockChildren)).toBeTruthy();
-  });
-
   it('forwards ref onto component', () => {
     const ref = createRef<HTMLDivElement>();
     const result = render(
-      <CanvasComponent component={mockComponent} ref={ref}>
+      <CanvasComponent component={mockComponent} ref={ref} isEditable>
         {mockChildren}
       </CanvasComponent>
     );
     expect(result.container.firstChild).toEqual(ref.current);
   });
 
+  it('renders children if editable', () => {
+    const result = render(
+      <CanvasComponent component={mockComponent} isEditable>
+        {mockChildren}
+      </CanvasComponent>
+    );
+    expect(result.getByText(mockChildren)).toBeTruthy();
+  });
+
+  it('does not render children if not editable', () => {
+    const result = render(
+      <CanvasComponent component={mockComponent} isEditable={false}>
+        {mockChildren}
+      </CanvasComponent>
+    );
+    expect(result.queryByText(mockChildren)).toBeNull();
+  });
+
   it('focuses component on click and stops propagation of click event', async () => {
     const mockContainerHandleClick = jest.fn();
     const result = render(
       <Box onClick={mockContainerHandleClick}>
-        <CanvasComponent component={mockComponent}>
+        <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       </Box>
@@ -88,10 +97,34 @@ describe('CanvasComponent', () => {
   });
 
   describe('classNames', () => {
-    it('passes className to component', () => {
+    it('assigns className to component', () => {
       const mockClassName = 'some-class';
       const result = render(
-        <CanvasComponent component={mockComponent} className={mockClassName}>
+        <CanvasComponent
+          component={mockComponent}
+          className={mockClassName}
+          isEditable
+        >
+          {mockChildren}
+        </CanvasComponent>
+      );
+      const component = result.getByText(mockChildren);
+      expect(component).toHaveClass(mockClassName);
+    });
+
+    it('only assigns className to component if not editable', () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        componentInputs: {},
+        focusedComponentName: mockComponent.name,
+      }));
+      const mockClassName = 'some-class';
+
+      const result = render(
+        <CanvasComponent
+          component={mockComponent}
+          className={mockClassName}
+          isEditable
+        >
           {mockChildren}
         </CanvasComponent>
       );
@@ -106,7 +139,7 @@ describe('CanvasComponent', () => {
           focusedComponentName: mockComponent.name,
         }));
         const result = render(
-          <CanvasComponent component={mockComponent}>
+          <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
@@ -116,7 +149,7 @@ describe('CanvasComponent', () => {
 
       it('does not assign "react-grid-item-focused" class if name is not equal to focused component name', () => {
         const result = render(
-          <CanvasComponent component={mockComponent}>
+          <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
@@ -132,7 +165,7 @@ describe('CanvasComponent', () => {
           movingComponentName: mockComponent.name,
         }));
         const result = render(
-          <CanvasComponent component={mockComponent}>
+          <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
@@ -142,12 +175,35 @@ describe('CanvasComponent', () => {
 
       it('does not assign "react-grid-item-dragging" class if name is not equal to moving component name', () => {
         const result = render(
-          <CanvasComponent component={mockComponent}>
+          <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
         const component = result.getByText(mockChildren);
         expect(component).not.toHaveClass('react-grid-item-dragging');
+      });
+    });
+
+    describe('hovered', () => {
+      it('assigns "react-grid-item-hovered" class if hovered over component', async () => {
+        const result = render(
+          <CanvasComponent component={mockComponent} isEditable>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = result.getByText(mockChildren);
+        await userEvent.hover(component);
+        expect(component).toHaveClass('react-grid-item-hovered');
+      });
+
+      it('does not assign "react-grid-item-dragging" class if not hovered over component', () => {
+        const result = render(
+          <CanvasComponent component={mockComponent} isEditable>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = result.getByText(mockChildren);
+        expect(component).not.toHaveClass('react-grid-item-hovered');
       });
     });
 
@@ -157,7 +213,7 @@ describe('CanvasComponent', () => {
           mockComponentEvalError,
         ]);
         const result = render(
-          <CanvasComponent component={mockComponent}>
+          <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
@@ -168,7 +224,7 @@ describe('CanvasComponent', () => {
       it('does not assign "react-grid-item-error" class if there are no eval errors', () => {
         (useComponentEvalErrors as jest.Mock).mockImplementation(() => []);
         const result = render(
-          <CanvasComponent component={mockComponent}>
+          <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
@@ -187,7 +243,20 @@ describe('CanvasComponent', () => {
       }));
       (useComponentEvalErrors as jest.Mock).mockImplementation(() => []);
       const result = render(
-        <CanvasComponent component={mockComponent}>
+        <CanvasComponent component={mockComponent} isEditable>
+          {mockChildren}
+        </CanvasComponent>
+      );
+      expect(result.queryByTestId(handleId)).toBeNull();
+    });
+
+    it('does not render handle if not editable', () => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        componentInputs: {},
+        focusedComponentName: mockComponent.name,
+      }));
+      const result = render(
+        <CanvasComponent component={mockComponent} isEditable={false}>
           {mockChildren}
         </CanvasComponent>
       );
@@ -200,7 +269,7 @@ describe('CanvasComponent', () => {
         focusedComponentName: mockComponent.name,
       }));
       const result = render(
-        <CanvasComponent component={mockComponent}>
+        <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
@@ -209,7 +278,7 @@ describe('CanvasComponent', () => {
 
     it('renders handle on hover', async () => {
       const result = render(
-        <CanvasComponent component={mockComponent}>
+        <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
@@ -223,7 +292,7 @@ describe('CanvasComponent', () => {
       ]);
 
       const result = render(
-        <CanvasComponent component={mockComponent}>
+        <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
@@ -251,7 +320,7 @@ describe('CanvasComponent', () => {
       'renders $type canvas component',
       ({ type, componentId }: { type: ComponentType; componentId: string }) => {
         const result = render(
-          <CanvasComponent component={{ ...mockComponent, type }}>
+          <CanvasComponent component={{ ...mockComponent, type }} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
@@ -283,6 +352,7 @@ describe('CanvasComponent', () => {
               data: {},
             } as Component
           }
+          isEditable
         >
           {mockChildren}
         </CanvasComponent>

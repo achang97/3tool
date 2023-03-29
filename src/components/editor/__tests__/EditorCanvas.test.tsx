@@ -26,20 +26,29 @@ jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => mockDispatch),
 }));
 
+jest.mock('../hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => jest.fn()),
+}));
+
 describe('EditorCanvas', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('blurs component focus on canvas click', async () => {
-    const result = render(<EditorCanvas />);
+    const result = render(<EditorCanvas isEditable />);
 
     await userEvent.click(result.getByTestId('editor-canvas'));
     expect(mockDispatch).toHaveBeenCalledWith(blurComponent());
   });
 
+  it('does not render tool text if not editable', () => {
+    const result = render(<EditorCanvas isEditable={false} />);
+    expect(result.queryByText('tool')).toBeNull();
+  });
+
   it('focuses tool settings on tool text click', async () => {
-    const result = render(<EditorCanvas />);
+    const result = render(<EditorCanvas isEditable />);
 
     await userEvent.click(result.getByText('tool'));
     expect(mockDispatch).toHaveBeenCalledWith(focusToolSettings());
@@ -47,12 +56,12 @@ describe('EditorCanvas', () => {
   });
 
   it('renders canvas toolbar', () => {
-    const result = render(<EditorCanvas />);
+    const result = render(<EditorCanvas isEditable />);
     expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
   });
 
   it('renders droppable canvas', () => {
-    const result = render(<EditorCanvas />);
+    const result = render(<EditorCanvas isEditable />);
     expect(result.getByTestId('canvas-droppable')).toBeTruthy();
   });
 });

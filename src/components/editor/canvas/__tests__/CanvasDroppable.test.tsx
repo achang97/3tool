@@ -41,7 +41,7 @@ describe('CanvasDroppable', () => {
   });
 
   it('renders tool components', () => {
-    const result = render(<CanvasDroppable />);
+    const result = render(<CanvasDroppable isEditable />);
     expect(result.getByTestId('canvas-component-button1')).toBeTruthy();
   });
 });

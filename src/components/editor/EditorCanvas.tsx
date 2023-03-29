@@ -5,10 +5,13 @@ import {
 import { useAppDispatch } from '@app/redux/hooks';
 import { Box, Button } from '@mui/material';
 import { useCallback, MouseEvent } from 'react';
-import { CanvasDroppable } from './canvas/CanvasDroppable';
-import { CanvasToolbar } from './canvas/CanvasToolbar';
+import { EditorApp } from './EditorApp';
 
-export const EditorCanvas = () => {
+type EditorCanvasProps = {
+  isEditable: boolean;
+};
+
+export const EditorCanvas = ({ isEditable }: EditorCanvasProps) => {
   const dispatch = useAppDispatch();
 
   const handleCanvasClick = useCallback(() => {
@@ -38,14 +41,16 @@ export const EditorCanvas = () => {
       onClick={handleCanvasClick}
       data-testid="editor-canvas"
     >
-      <Button
-        size="small"
-        color="secondary"
-        sx={{ marginBottom: 0.5, alignSelf: 'flex-start' }}
-        onClick={handleToolClick}
-      >
-        tool
-      </Button>
+      {isEditable && (
+        <Button
+          size="small"
+          color="secondary"
+          sx={{ marginBottom: 0.5, alignSelf: 'flex-start' }}
+          onClick={handleToolClick}
+        >
+          tool
+        </Button>
+      )}
       <Box
         sx={{
           borderRadius: 1,
@@ -54,8 +59,7 @@ export const EditorCanvas = () => {
           flex: 1,
         }}
       >
-        <CanvasToolbar />
-        <CanvasDroppable />
+        <EditorApp isEditable={isEditable} />
       </Box>
     </Box>
   );

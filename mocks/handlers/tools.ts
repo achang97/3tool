@@ -1,18 +1,67 @@
 import { rest } from 'msw';
-import { Tool } from '@app/types';
+import {
+  ActionMethod,
+  ActionType,
+  ComponentEvent,
+  ComponentType,
+  EventHandlerType,
+  Tool,
+} from '@app/types';
 import { generateRandomDate } from '../utils';
 
 const TOOLS: Tool[] = [
   {
     id: '1',
     name: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
-    createdAt: generateRandomDate(),
-    updatedAt: generateRandomDate(),
+    createdAt: '2023-03-28T22:46:19.997Z',
+    updatedAt: '2023-03-28T23:04:55.359Z',
     creatorUser: {
       name: 'Andrew Chang',
     },
-    components: [],
-    actions: [],
+    components: [
+      {
+        type: ComponentType.Button,
+        name: 'button1',
+        layout: {
+          w: 8,
+          h: 4,
+          x: 5,
+          y: 5,
+        },
+        data: {
+          button: {
+            text: 'Button',
+            disabled: '',
+            loading: '',
+          },
+        },
+        eventHandlers: [
+          {
+            type: EventHandlerType.Action,
+            event: ComponentEvent.Click,
+            data: {
+              action: {
+                actionName: 'action1',
+                method: ActionMethod.Trigger,
+              },
+            },
+          },
+        ],
+      },
+    ],
+    actions: [
+      {
+        type: ActionType.Javascript,
+        name: 'action1',
+        data: {
+          javascript: {
+            transformer: 'return data',
+            code: "alert('hello');",
+          },
+        },
+        eventHandlers: [],
+      },
+    ],
   },
   {
     id: '2',

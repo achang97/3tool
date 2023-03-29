@@ -1,18 +1,22 @@
+import { useAppSelector } from '@app/redux/hooks';
 import { Box } from '@mui/material';
 import { useMemo } from 'react';
 import { EditorActions } from './EditorActions';
 import { EditorCanvas } from './EditorCanvas';
 import { EditorSidebar } from './EditorSidebar';
-import { useActionQueueExecutor } from './hooks/useActionQueueExecutor';
 import { useToolElementNames } from './hooks/useToolElementNames';
 
 export const Editor = () => {
   const { elementNames } = useToolElementNames();
-  useActionQueueExecutor();
+  const { isPreview } = useAppSelector((state) => state.editor);
 
   const rerenderKey = useMemo(() => {
     return elementNames.join('|');
   }, [elementNames]);
+
+  if (isPreview) {
+    return <EditorCanvas isEditable={false} />;
+  }
 
   return (
     <Box sx={{ flex: 1, minHeight: 0, display: 'flex' }} data-testid="editor">
@@ -24,7 +28,7 @@ export const Editor = () => {
           position: 'relative',
         }}
       >
-        <EditorCanvas />
+        <EditorCanvas isEditable />
         <EditorActions />
       </Box>
       <Box

@@ -29,12 +29,16 @@ type EditorState = {
   focusedAction?: Action;
   actionView: ActionViewType;
   isActionViewMaximized: boolean;
+
+  // General
+  isPreview: boolean;
 };
 
 const initialState: EditorState = {
   sidebarView: SidebarViewType.Components,
   actionView: ActionViewType.General,
   isActionViewMaximized: false,
+  isPreview: false,
 };
 
 export const editorSlice = createSlice({
@@ -98,6 +102,11 @@ export const editorSlice = createSlice({
     setIsActionViewMaximized: (state, action: PayloadAction<boolean>) => {
       state.isActionViewMaximized = action.payload;
     },
+
+    // General
+    setIsPreview: (state, action: PayloadAction<boolean>) => {
+      state.isPreview = action.payload;
+    },
   },
 });
 
@@ -115,6 +124,7 @@ export const {
   updateFocusedAction,
   setActionView,
   setIsActionViewMaximized,
+  setIsPreview,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

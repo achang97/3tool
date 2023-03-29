@@ -1,17 +1,21 @@
 import { useCallback, useMemo } from 'react';
 import { Box, Button, IconButton } from '@mui/material';
 import { Tune } from '@mui/icons-material';
-import { useAppDispatch } from '@app/redux/hooks';
-import { focusToolSettings } from '@app/redux/features/editorSlice';
+import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
+import {
+  focusToolSettings,
+  setIsPreview,
+} from '@app/redux/features/editorSlice';
 import { isSuccessfulApiResponse } from '@app/utils/api';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import { EditableTextField } from '@app/components/common/EditableTextField';
 import { ToolbarTemplate } from '../common/ToolbarTemplate';
 
 export const ToolEditorToolbar = () => {
   const dispatch = useAppDispatch();
+  const { isPreview } = useAppSelector((state) => state.editor);
+
   const { tool, updateTool } = useActiveTool();
   const { reload } = useRouter();
 
@@ -34,6 +38,10 @@ export const ToolEditorToolbar = () => {
   const handleSettingsClick = useCallback(() => {
     dispatch(focusToolSettings());
   }, [dispatch]);
+
+  const handlePreviewClick = useCallback(() => {
+    dispatch(setIsPreview(!isPreview));
+  }, [dispatch, isPreview]);
 
   const middle = useMemo(() => {
     return (
@@ -62,17 +70,12 @@ export const ToolEditorToolbar = () => {
         >
           <Tune />
         </IconButton>
-        <Button
-          color="secondary"
-          size="small"
-          LinkComponent={Link}
-          href={`/tools/${tool.id}`}
-        >
-          Preview
+        <Button color="secondary" size="small" onClick={handlePreviewClick}>
+          {isPreview ? 'Editor' : 'Preview'}
         </Button>
       </Box>
     );
-  }, [handleSettingsClick, tool.id]);
+  }, [handlePreviewClick, handleSettingsClick, isPreview]);
 
   return (
     <ToolbarTemplate

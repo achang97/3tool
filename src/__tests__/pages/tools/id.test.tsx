@@ -1,4 +1,4 @@
-import Editor from '@app/pages/editor/[id]';
+import Tool from '@app/pages/tools/[id]';
 import { mockTool } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
 
@@ -16,20 +16,20 @@ jest.mock('next/router', () => ({
   })),
 }));
 
-describe('Editor/Id', () => {
+describe('Tools/Id', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe('page', () => {
-    it('renders tool editor toolbar', () => {
-      const result = render(<Editor tool={mockTool} />);
-      expect(result.getByTestId('tool-editor-toolbar')).toBeTruthy();
+    it('renders tool viewer toolbar', () => {
+      const result = render(<Tool tool={mockTool} />);
+      expect(result.getByTestId('tool-viewer-toolbar')).toBeTruthy();
     });
 
-    it('renders editor', () => {
-      const result = render(<Editor tool={mockTool} />);
-      expect(result.getByTestId('editor')).toBeTruthy();
+    it('renders editor app', () => {
+      const result = render(<Tool tool={mockTool} />);
+      expect(result.getByTestId('editor-app')).toBeTruthy();
     });
   });
 });
