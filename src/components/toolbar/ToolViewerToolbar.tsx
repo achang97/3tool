@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Button, Typography } from '@mui/material';
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import Link from 'next/link';
-import { ToolbarTemplate } from '../common/ToolbarTemplate';
+import { ToolbarTemplate } from './common/ToolbarTemplate';
 
 export const ToolViewerToolbar = () => {
   const { tool } = useActiveTool();

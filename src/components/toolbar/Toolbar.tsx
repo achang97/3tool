@@ -1,18 +1,19 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { useRouter } from 'next/router';
-import { DefaultToolbar } from './default/DefaultToolbar';
+import { useUser } from '@app/hooks/useUser';
+import { AuthenticatedToolbar } from './AuthenticatedToolbar';
+import { UnauthenticatedToolbar } from './UnauthenticatedToolbar';
 
 export const Toolbar = () => {
-  const { isAuthenticated } = useAuth0();
+  const user = useUser();
   const { pathname } = useRouter();
 
-  if (!isAuthenticated) {
-    return null;
+  if (!user) {
+    return <UnauthenticatedToolbar />;
   }
 
   if (pathname === '/tools/[id]' || pathname === '/editor/[id]') {
     return null;
   }
 
-  return <DefaultToolbar />;
+  return <AuthenticatedToolbar />;
 };

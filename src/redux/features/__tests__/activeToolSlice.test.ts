@@ -1,7 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { waitFor, act } from '@testing-library/react';
-import { renderHook } from '@tests/utils/renderWithContext';
-import {
+import activeToolReducer, {
   renameActionResult,
   renameComponentInput,
   resetActionResult,
@@ -11,163 +8,99 @@ import {
 } from '../activeToolSlice';
 
 describe('activeToolSlice', () => {
-  const renderHooks = () => {
-    const { result } = renderHook(() =>
-      useAppSelector((state) => state.activeTool)
-    );
-    const {
-      result: { current: dispatch },
-    } = renderHook(() => useAppDispatch());
+  describe('component inputs', () => {
+    it('setComponentInput: sets input value for given component name', () => {
+      const mockName = 'name';
+      const mockInput = { value: '1' };
 
-    return { result, dispatch };
-  };
+      const initialState = { actionResults: {}, componentInputs: {} };
+      const state = activeToolReducer(
+        initialState,
+        setComponentInput({ name: mockName, input: mockInput })
+      );
+      expect(state.componentInputs[mockName]).toEqual(mockInput);
+    });
 
-  describe('initialState', () => {
-    it('initially sets componentInputs to empty object', () => {
-      const { result } = renderHooks();
-      expect(result.current.componentInputs).toEqual({});
+    it('resetComponentInput: sets input value for given component name back to undefined', () => {
+      const mockName = 'name';
+
+      const initialState = {
+        actionResults: {},
+        componentInputs: { [mockName]: { value: '1' } },
+      };
+      const state = activeToolReducer(
+        initialState,
+        resetComponentInput(mockName)
+      );
+      expect(state.componentInputs[mockName]).toBeUndefined();
+    });
+
+    it('renameComponentInput: moves input value from previous name to new name', () => {
+      const mockPrevName = 'name';
+      const mockNewName = 'new-name';
+      const mockInput = { value: '1' };
+
+      const initialState = {
+        actionResults: {},
+        componentInputs: { [mockPrevName]: { value: '1' } },
+      };
+      const state = activeToolReducer(
+        initialState,
+        renameComponentInput({
+          prevName: mockPrevName,
+          newName: mockNewName,
+        })
+      );
+      expect(state.componentInputs[mockPrevName]).toBeUndefined();
+      expect(state.componentInputs[mockNewName]).toEqual(mockInput);
     });
   });
 
-  describe('actions', () => {
-    describe('component inputs', () => {
-      it('setComponentInput: sets input value for given component name', async () => {
-        const { result, dispatch } = renderHooks();
+  describe('action results', () => {
+    it('setActionResult: sets result value for given action name', () => {
+      const mockName = 'name';
+      const mockResult = { data: 'data' };
 
-        const mockName = 'name';
-        const mockInput = { value: '1' };
-
-        act(() => {
-          dispatch(setComponentInput({ name: mockName, input: mockInput }));
-        });
-        await waitFor(() => {
-          expect(result.current.componentInputs[mockName]).toEqual(mockInput);
-        });
-      });
-
-      it('resetComponentInput: sets input value for given component name back to undefined', async () => {
-        const { result, dispatch } = renderHooks();
-
-        const mockName = 'name';
-
-        act(() => {
-          dispatch(
-            setComponentInput({ name: mockName, input: { value: '1' } })
-          );
-        });
-        await waitFor(() => {
-          expect(result.current.componentInputs).not.toBeUndefined();
-        });
-
-        act(() => {
-          dispatch(resetComponentInput(mockName));
-        });
-        await waitFor(() => {
-          expect(result.current.componentInputs[mockName]).toBeUndefined();
-        });
-      });
-
-      it('renameComponentInput: moves input value from previous name to new name', async () => {
-        const { result, dispatch } = renderHooks();
-
-        const mockPrevName = 'name';
-        const mockNewName = 'new-name';
-        const mockInput = { value: '1' };
-
-        act(() => {
-          dispatch(setComponentInput({ name: mockPrevName, input: mockInput }));
-        });
-        await waitFor(() => {
-          expect(result.current.componentInputs[mockPrevName]).toEqual(
-            mockInput
-          );
-          expect(result.current.componentInputs[mockNewName]).toBeUndefined();
-        });
-
-        act(() => {
-          dispatch(
-            renameComponentInput({
-              prevName: mockPrevName,
-              newName: mockNewName,
-            })
-          );
-        });
-        await waitFor(() => {
-          expect(result.current.componentInputs[mockPrevName]).toBeUndefined();
-          expect(result.current.componentInputs[mockNewName]).toEqual(
-            mockInput
-          );
-        });
-      });
+      const initialState = { actionResults: {}, componentInputs: {} };
+      const state = activeToolReducer(
+        initialState,
+        setActionResult({ name: mockName, result: mockResult })
+      );
+      expect(state.actionResults[mockName]).toEqual(mockResult);
     });
 
-    describe('action results', () => {
-      it('setActionResult: sets result value for given action name', async () => {
-        const { result, dispatch } = renderHooks();
+    it('resetActionResult: sets result value for given action name back to undefined', () => {
+      const mockName = 'name';
 
-        const mockName = 'name';
-        const mockResult = { data: 'data' };
+      const initialState = {
+        actionResults: { [mockName]: { data: 'data' } },
+        componentInputs: {},
+      };
+      const state = activeToolReducer(
+        initialState,
+        resetActionResult(mockName)
+      );
+      expect(state.actionResults[mockName]).toBeUndefined();
+    });
 
-        act(() => {
-          dispatch(setActionResult({ name: mockName, result: mockResult }));
-        });
-        await waitFor(() => {
-          expect(result.current.actionResults[mockName]).toEqual(mockResult);
-        });
-      });
+    it('renameActionResult: moves result value from previous name to new name', () => {
+      const mockPrevName = 'name';
+      const mockNewName = 'new-name';
+      const mockResult = { data: 'data' };
 
-      it('resetActionResult: sets result value for given action name back to undefined', async () => {
-        const { result, dispatch } = renderHooks();
-
-        const mockName = 'name';
-
-        act(() => {
-          dispatch(
-            setActionResult({ name: mockName, result: { data: 'data' } })
-          );
-        });
-        await waitFor(() => {
-          expect(result.current.actionResults).not.toBeUndefined();
-        });
-
-        act(() => {
-          dispatch(resetActionResult(mockName));
-        });
-        await waitFor(() => {
-          expect(result.current.actionResults[mockName]).toBeUndefined();
-        });
-      });
-
-      it('renameActionResult: moves result value from previous name to new name', async () => {
-        const { result, dispatch } = renderHooks();
-
-        const mockPrevName = 'name';
-        const mockNewName = 'new-name';
-        const mockResult = { data: 'data' };
-
-        act(() => {
-          dispatch(setActionResult({ name: mockPrevName, result: mockResult }));
-        });
-        await waitFor(() => {
-          expect(result.current.actionResults[mockPrevName]).toEqual(
-            mockResult
-          );
-          expect(result.current.actionResults[mockNewName]).toBeUndefined();
-        });
-
-        act(() => {
-          dispatch(
-            renameActionResult({
-              prevName: mockPrevName,
-              newName: mockNewName,
-            })
-          );
-        });
-        await waitFor(() => {
-          expect(result.current.actionResults[mockPrevName]).toBeUndefined();
-          expect(result.current.actionResults[mockNewName]).toEqual(mockResult);
-        });
-      });
+      const initialState = {
+        actionResults: { [mockPrevName]: mockResult },
+        componentInputs: {},
+      };
+      const state = activeToolReducer(
+        initialState,
+        renameActionResult({
+          prevName: mockPrevName,
+          newName: mockNewName,
+        })
+      );
+      expect(state.actionResults[mockPrevName]).toBeUndefined();
+      expect(state.actionResults[mockNewName]).toEqual(mockResult);
     });
   });
 });

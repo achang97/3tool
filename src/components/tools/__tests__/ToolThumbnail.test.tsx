@@ -1,12 +1,13 @@
-import { User } from '@auth0/auth0-react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { User } from '@app/types';
+import { mockUser } from '@tests/constants/data';
 import { ToolThumbnail } from '../ToolThumbnail';
 
 const mockId = 'mock-id';
 const mockName = 'Mock Thumbnail Name';
 const mockUpdatedAt = new Date().toISOString();
-const mockCreator: User = { name: 'Andrew Chang' };
+const mockCreator: User = mockUser;
 
 const mockPush = jest.fn();
 
@@ -44,7 +45,7 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    expect(result.getByText(mockCreator.name![0])).toBeTruthy();
+    expect(result.getByText(mockCreator.firstName[0])).toBeTruthy();
   });
 
   it('renders date when tool was last updated', () => {

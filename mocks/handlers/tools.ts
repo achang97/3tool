@@ -8,6 +8,7 @@ import {
   Tool,
 } from '@app/types';
 import { generateRandomDate } from '../utils';
+import { mockUser } from './auth';
 
 const TOOLS: Tool[] = [
   {
@@ -15,9 +16,7 @@ const TOOLS: Tool[] = [
     name: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
     createdAt: '2023-03-28T22:46:19.997Z',
     updatedAt: '2023-03-28T23:04:55.359Z',
-    creatorUser: {
-      name: 'Andrew Chang',
-    },
+    creatorUser: mockUser,
     components: [
       {
         type: ComponentType.Button,
@@ -68,9 +67,7 @@ const TOOLS: Tool[] = [
     name: 'Script Dashboard',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    creatorUser: {
-      name: 'Akshay Ramaswamy',
-    },
+    creatorUser: mockUser,
     components: [],
     actions: [],
   },
@@ -79,9 +76,7 @@ const TOOLS: Tool[] = [
     name: 'Topping Up Nodes',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    creatorUser: {
-      name: 'Chetan Rane',
-    },
+    creatorUser: mockUser,
     components: [],
     actions: [],
   },
@@ -101,7 +96,7 @@ export const toolHandlers = [
     return res(ctx.status(200), ctx.json<Tool[]>(TOOLS));
   }),
   rest.post('*/api/tools', async (req, res, ctx) => {
-    const body = await req.json();
+    const body = await req.json<{ name: string }>();
 
     if (TOOLS.some((tool) => tool.name === body.name)) {
       return res(
@@ -115,7 +110,7 @@ export const toolHandlers = [
       name: body.name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      creatorUser: { name: 'Andrew Chang' },
+      creatorUser: mockUser,
       components: [],
       actions: [],
     };
@@ -124,7 +119,9 @@ export const toolHandlers = [
     return res(ctx.status(201), ctx.json<Tool>(newTool));
   }),
   rest.put('*/api/tools/:id', async (req, res, ctx) => {
-    const body = await req.json();
+    const body = await req.json<
+      Pick<Tool, 'name' | 'components' | 'actions'>
+    >();
 
     const tool = TOOLS.find((currTool) => currTool.id === req.params.id);
 

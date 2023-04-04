@@ -1,4 +1,4 @@
-import { User } from '@auth0/auth0-react';
+import { User } from '../users';
 import { Action } from './actions';
 import { Component } from './components';
 

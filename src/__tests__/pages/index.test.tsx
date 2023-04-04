@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Tool } from '@app/types';
 import ToolsPage from '@app/pages';
+import { mockUser } from '@tests/constants/data';
 
 const mockTools: Tool[] = [
   {
@@ -9,7 +10,7 @@ const mockTools: Tool[] = [
     name: 'Tool 1',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    creatorUser: { name: 'Andrew Chang' },
+    creatorUser: mockUser,
     components: [],
     actions: [],
   },
@@ -18,7 +19,7 @@ const mockTools: Tool[] = [
     name: 'Tool 2',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    creatorUser: { name: 'Andrew Chang' },
+    creatorUser: mockUser,
     components: [],
     actions: [],
   },
@@ -29,7 +30,7 @@ const mockNewTool: Tool = {
   name: 'Tool 3',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  creatorUser: { name: 'Andrew Chang' },
+  creatorUser: mockUser,
   components: [],
   actions: [],
 };

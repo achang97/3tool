@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { mockUser } from '@tests/constants/data';
 import { UserAvatar } from '../UserAvatar';
 
-const mockName = 'Andrew Chang';
 const MockAvatar = jest.fn();
 
 jest.mock('@mui/material', () => {
@@ -25,20 +25,22 @@ describe('UserAvatar', () => {
   });
 
   it('renders first letter of name', () => {
-    const result = render(<UserAvatar name={mockName} />);
+    const result = render(<UserAvatar user={mockUser} />);
 
-    expect(result.getByText(mockName[0])).toBeTruthy();
+    expect(result.getByText(mockUser.firstName[0])).toBeTruthy();
   });
 
   it('shows tooltip of full name on hover', async () => {
-    const result = render(<UserAvatar name={mockName} />);
+    const result = render(<UserAvatar user={mockUser} />);
 
-    await userEvent.hover(result.getByText(mockName[0]));
-    expect(await result.findByText(mockName)).toBeTruthy();
+    await userEvent.hover(result.getByText(mockUser.firstName[0]));
+    expect(
+      await result.findByText(`${mockUser.firstName} ${mockUser.lastName}`)
+    ).toBeTruthy();
   });
 
   it('uses default size of 30', () => {
-    render(<UserAvatar name={mockName} />);
+    render(<UserAvatar user={mockUser} />);
     expect(MockAvatar).toHaveBeenCalledWith(
       expect.objectContaining({
         sx: expect.objectContaining({ width: 30, height: 30 }),
@@ -48,7 +50,7 @@ describe('UserAvatar', () => {
 
   it('passes custom size to Avatar', () => {
     const mockSize = 200;
-    render(<UserAvatar name={mockName} size={mockSize} />);
+    render(<UserAvatar user={mockUser} size={mockSize} />);
     expect(MockAvatar).toHaveBeenCalledWith(
       expect.objectContaining({
         sx: expect.objectContaining({ width: mockSize, height: mockSize }),
@@ -58,7 +60,7 @@ describe('UserAvatar', () => {
 
   it('passes sx prop to Avatar', () => {
     const mockSx = { width: '1000px' };
-    render(<UserAvatar name={mockName} sx={mockSx} />);
+    render(<UserAvatar user={mockUser} sx={mockSx} />);
     expect(MockAvatar).toHaveBeenCalledWith(
       expect.objectContaining({ sx: expect.objectContaining(mockSx) })
     );

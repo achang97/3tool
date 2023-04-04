@@ -7,20 +7,34 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
+  persistReducer,
 } from 'redux-persist';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { createWrapper } from 'next-redux-wrapper';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import authReducer from './features/authSlice';
 import editorReducer from './features/editorSlice';
 import resourcesReducer from './features/resourcesSlice';
 import activeToolReducer from './features/activeToolSlice';
+import { authApi } from './services/auth';
 import { toolsApi } from './services/tools';
 import { resourcesApi } from './services/resources';
 
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+};
+
 export const store = configureStore({
   reducer: {
+    auth: persistReducer<ReturnType<typeof authReducer>>(
+      authPersistConfig,
+      authReducer
+    ),
     editor: editorReducer,
     resources: resourcesReducer,
     activeTool: activeToolReducer,
+    [authApi.reducerPath]: authApi.reducer,
     [toolsApi.reducerPath]: toolsApi.reducer,
     [resourcesApi.reducerPath]: resourcesApi.reducer,
   },
@@ -30,7 +44,11 @@ export const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     };
-    const apiMiddlewares = [toolsApi.middleware, resourcesApi.middleware];
+    const apiMiddlewares = [
+      authApi.middleware,
+      toolsApi.middleware,
+      resourcesApi.middleware,
+    ];
 
     const middleware = getDefaultMiddleware(middlewareConfig).concat(
       ...apiMiddlewares

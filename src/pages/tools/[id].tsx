@@ -6,7 +6,7 @@ import { ActionQueueProvider } from '@app/components/editor/contexts/ActionQueue
 import { PageContainer } from '@app/components/common/PageContainer';
 import { Tool } from '@app/types';
 import { getServerSideProps } from '@app/pageGetters/tools';
-import { ToolViewerToolbar } from '@app/components/toolbar/viewer/ToolViewerToolbar';
+import { ToolViewerToolbar } from '@app/components/toolbar/ToolViewerToolbar';
 import { EditorApp } from '@app/components/editor/EditorApp';
 
 type ToolPageProps = {

@@ -1,4 +1,4 @@
-import { endpoints, util } from '@app/redux/services/tools';
+import { toolsApi } from '@app/redux/services/tools';
 import { store } from '@app/redux/store';
 import { mockTool } from '@tests/constants/data';
 import { GetServerSidePropsContext } from 'next';
@@ -17,14 +17,17 @@ jest.mock('@app/redux/services/tools', () => {
     useGetToolByIdQuery: jest.fn(() => ({
       data: mockTool,
     })),
-    endpoints: {
-      getToolById: {
-        initiate: jest.fn(() => mockGetToolByIdInitiateResult),
+    toolsApi: {
+      ...actualToolsServices.toolsApi,
+      endpoints: {
+        getToolById: {
+          initiate: jest.fn(() => mockGetToolByIdInitiateResult),
+        },
       },
-    },
-    util: {
-      ...actualToolsServices.util,
-      resetApiState: jest.fn(() => mockResetApiStateResult),
+      util: {
+        ...actualToolsServices.toolsApi.util,
+        resetApiState: jest.fn(() => mockResetApiStateResult),
+      },
     },
   };
 });
@@ -43,7 +46,7 @@ describe('tools', () => {
       } as unknown as GetServerSidePropsContext);
 
       expect(dispatchSpy).not.toHaveBeenCalledWith(
-        endpoints.getToolById.initiate(mockId as unknown as string)
+        toolsApi.endpoints.getToolById.initiate(mockId as unknown as string)
       );
     });
 
@@ -54,13 +57,15 @@ describe('tools', () => {
         params: { id: mockId },
       } as unknown as GetServerSidePropsContext);
 
-      expect(endpoints.getToolById.initiate).toHaveBeenCalledWith(mockId);
+      expect(toolsApi.endpoints.getToolById.initiate).toHaveBeenCalledWith(
+        mockId
+      );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        endpoints.getToolById.initiate(mockId)
+        toolsApi.endpoints.getToolById.initiate(mockId)
       );
 
-      expect(util.resetApiState).toHaveBeenCalled();
-      expect(dispatchSpy).toHaveBeenCalledWith(util.resetApiState());
+      expect(toolsApi.util.resetApiState).toHaveBeenCalled();
+      expect(dispatchSpy).toHaveBeenCalledWith(toolsApi.util.resetApiState());
     });
 
     it('returns notFound as true if there are no queries', async () => {

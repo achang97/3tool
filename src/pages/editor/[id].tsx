@@ -3,7 +3,7 @@ import { createTitle } from '@app/utils/window';
 import { Tool } from '@app/types';
 import { ActiveToolProvider } from '@app/components/editor/contexts/ActiveToolContext';
 import { PageContainer } from '@app/components/common/PageContainer';
-import { ToolEditorToolbar } from '@app/components/toolbar/editor/ToolEditorToolbar';
+import { ToolEditorToolbar } from '@app/components/toolbar/ToolEditorToolbar';
 import { ToolSnackbarProvider } from '@app/components/editor/contexts/ToolSnackbarProvider';
 import { Editor } from '@app/components/editor/Editor';
 import { ActionQueueProvider } from '@app/components/editor/contexts/ActionQueueContext';

@@ -16,7 +16,6 @@
     "lezer-generate": "lezer-generator src/codemirror/dynamicLanguage/grammar.txt > src/codemirror/dynamicLanguage/parser.ts"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^1.12.0",
     "@babel/types": "^7.20.7",
     "@codemirror/autocomplete": "^6.4.0",
     "@codemirror/lang-javascript": "^6.1.2",
@@ -48,6 +47,7 @@
     "abort-controller": "^3.0.0",
     "acorn": "^8.8.2",
     "acorn-walk": "^8.2.0",
+    "async-mutex": "^0.4.0",
     "axios": "^1.2.1",
     "dependency-graph": "^0.11.0",
     "ethers": "^5.7.2",

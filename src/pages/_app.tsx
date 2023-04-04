@@ -5,24 +5,19 @@ import { Box } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { Toolbar } from '@app/components/toolbar/Toolbar';
 import { theme } from '@app/utils/mui';
-import { wrapper } from '@app/redux/store';
+import { persistor, wrapper } from '@app/redux/store';
 import { wagmiClient, ethereumClient } from '@app/utils/wallet';
-import {
-  AUTH0_CLIENT_ID,
-  AUTH0_DOMAIN,
-  MSW_API,
-  WALLETCONNECT_PROJECT_ID,
-} from '@app/constants';
+import { MSW_API, WALLETCONNECT_PROJECT_ID } from '@app/constants';
 import { Provider } from 'react-redux';
 import { WagmiConfig } from 'wagmi';
 import { Web3Modal } from '@web3modal/react';
-import { Auth0Provider } from '@auth0/auth0-react';
-import { Auth0RedirectWrapper } from '@app/components/auth0/Auth0RedirectWrapper';
 import { initFetch } from '@app/utils/global';
+import { AuthRedirectProvider } from '@app/components/auth/contexts/AuthRedirectProvider';
 
 import '@app/styles/globals.css';
 import '@app/styles/react-grid-layout.css';
 import '@app/styles/codemirror.css';
+import { PersistGate } from 'redux-persist/integration/react';
 
 // Start MSW on the server
 if (MSW_API) {
@@ -49,11 +44,10 @@ const App = ({ Component, ...rest }: AppProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Provider store={store}>
-        {/* <PersistGate loading={null} persistor={persistor}> */}
-        <Auth0Provider domain={AUTH0_DOMAIN} clientId={AUTH0_CLIENT_ID}>
+        <PersistGate loading={null} persistor={persistor}>
           <CssVarsProvider theme={theme}>
             <WagmiConfig client={wagmiClient}>
-              <Auth0RedirectWrapper>
+              <AuthRedirectProvider>
                 <Box
                   sx={{
                     backgroundColor: 'background.paper',
@@ -71,11 +65,10 @@ const App = ({ Component, ...rest }: AppProps) => {
                   projectId={WALLETCONNECT_PROJECT_ID}
                   ethereumClient={ethereumClient}
                 />
-              </Auth0RedirectWrapper>
+              </AuthRedirectProvider>
             </WagmiConfig>
           </CssVarsProvider>
-        </Auth0Provider>
-        {/* </PersistGate> */}
+        </PersistGate>
       </Provider>
     </>
   );

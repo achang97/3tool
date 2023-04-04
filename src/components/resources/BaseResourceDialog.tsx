@@ -1,16 +1,15 @@
 import { ApiError, Resource } from '@app/types';
-import { parseApiError } from '@app/utils/api';
 import { LoadingButton } from '@mui/lab';
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Typography,
 } from '@mui/material';
 import { SerializedError } from '@reduxjs/toolkit';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { ConfigureResourceForm } from './ConfigureResourceForm';
+import { ApiErrorMessage } from '../common/ApiErrorMessage';
 
 type BaseResourceDialogProps = {
   title: string;
@@ -42,31 +41,18 @@ export const BaseResourceDialog = ({
     [onSubmit]
   );
 
-  const errorMessage = useMemo(() => {
-    return error && parseApiError(error);
-  }, [error]);
-
   useEffect(() => {
-    if (errorMessage) {
+    if (error) {
       errorRef.current?.scrollIntoView();
     }
-  }, [errorMessage]);
+  }, [error]);
 
   return (
     <Dialog onClose={onClose} open={isOpen} fullWidth data-testid={testId}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <ConfigureResourceForm formId={FORM_ID} onSubmit={handleSubmit} />
-        {errorMessage && (
-          <Typography
-            ref={errorRef}
-            color="error"
-            variant="body2"
-            sx={{ marginTop: 1, textAlign: 'center' }}
-          >
-            {errorMessage}
-          </Typography>
-        )}
+        {error && <ApiErrorMessage error={error} ref={errorRef} />}
       </DialogContent>
       <DialogActions>
         <LoadingButton form={FORM_ID} type="submit" loading={isLoading}>

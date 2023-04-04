@@ -5,8 +5,8 @@ import { Box, Typography } from '@mui/material';
 import { GridViewRounded } from '@mui/icons-material';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { User } from '@auth0/auth0-react';
 import { stringToColor } from '@app/utils/styles';
+import { User } from '@app/types';
 import { ThumbnailContainer } from './ThumbnailContainer';
 
 type ToolThumbnailProps = {
@@ -57,7 +57,7 @@ export const ToolThumbnail = ({
             Updated {moment(updatedAt).fromNow()}
           </Typography>
         </Box>
-        <UserAvatar name={creatorUser.name} sx={{ marginLeft: 1 }} />
+        <UserAvatar user={creatorUser} sx={{ marginLeft: 1 }} />
       </Box>
     </ThumbnailContainer>
   );

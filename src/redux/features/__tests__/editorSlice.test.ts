@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import {
   Action,
   ActionEvent,
@@ -7,9 +6,7 @@ import {
   ComponentType,
   SidebarViewType,
 } from '@app/types';
-import { waitFor, act } from '@testing-library/react';
-import { renderHook } from '@tests/utils/renderWithContext';
-import {
+import editorReducer, {
   startCreateComponentDrag,
   endCreateComponentDrag,
   startMoveComponentDrag,
@@ -27,336 +24,252 @@ import {
 } from '../editorSlice';
 
 describe('editorSlice', () => {
-  const renderHooks = () => {
-    const { result } = renderHook(() =>
-      useAppSelector((state) => state.editor)
-    );
-    const {
-      result: { current: dispatch },
-    } = renderHook(() => useAppDispatch());
+  describe('create component', () => {
+    it('startCreateComponentDrag: sets new component object', () => {
+      const mockComponent = { name: 'name', type: ComponentType.Button };
 
-    return { result, dispatch };
-  };
-
-  describe('initialState', () => {
-    it('initially sets sidebar view to components', () => {
-      const { result } = renderHooks();
-      expect(result.current.sidebarView).toEqual(SidebarViewType.Components);
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+      };
+      const state = editorReducer(
+        initialState,
+        startCreateComponentDrag(mockComponent)
+      );
+      expect(state.newComponent).toEqual(mockComponent);
     });
 
-    it('initially sets action view to general', () => {
-      const { result } = renderHooks();
-      expect(result.current.actionView).toEqual(ActionViewType.General);
-    });
-
-    it('initially sets action view to be minimized', () => {
-      const { result } = renderHooks();
-      expect(result.current.isActionViewMaximized).toEqual(false);
-    });
-
-    it('initially sets preview mode to be false', () => {
-      const { result } = renderHooks();
-      expect(result.current.isPreview).toEqual(false);
+    it('endCreateComponentDrag: unsets new component', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+        newComponent: {
+          name: 'name',
+          type: ComponentType.Button,
+        },
+      };
+      const state = editorReducer(initialState, endCreateComponentDrag());
+      expect(state.newComponent).toBeUndefined();
     });
   });
 
-  describe('actions', () => {
-    describe('create component', () => {
-      it('startCreateComponentDrag: sets new component object', async () => {
-        const { result, dispatch } = renderHooks();
+  describe('move', () => {
+    it('startMoveComponentDrag: sets moving component name', () => {
+      const mockComponentName = 'name';
 
-        const mockComponent = { name: 'name', type: ComponentType.Button };
-        act(() => {
-          dispatch(startCreateComponentDrag(mockComponent));
-        });
-        await waitFor(() => {
-          expect(result.current.newComponent).toEqual(mockComponent);
-        });
-      });
-
-      it('endCreateComponentDrag: unsets new component', async () => {
-        const { result, dispatch } = renderHooks();
-
-        act(() => {
-          dispatch(
-            startCreateComponentDrag({
-              name: 'name',
-              type: ComponentType.Button,
-            })
-          );
-        });
-        await waitFor(() => {
-          expect(result.current.newComponent).toBeTruthy();
-        });
-
-        act(() => {
-          dispatch(endCreateComponentDrag());
-        });
-        await waitFor(() => {
-          expect(result.current.newComponent).toBeUndefined();
-        });
-      });
-    });
-
-    describe('move', () => {
-      it('startMoveComponentDrag: sets moving component name', async () => {
-        const { result, dispatch } = renderHooks();
-
-        const mockComponentName = 'name';
-        act(() => {
-          dispatch(startMoveComponentDrag(mockComponentName));
-        });
-        await waitFor(() => {
-          expect(result.current.movingComponentName).toEqual(mockComponentName);
-        });
-      });
-
-      it('endMoveComponentDrag: unsets moving component name', async () => {
-        const { result, dispatch } = renderHooks();
-
-        act(() => {
-          dispatch(startMoveComponentDrag('name'));
-        });
-        await waitFor(() => {
-          expect(result.current.movingComponentName).toBeTruthy();
-        });
-
-        act(() => {
-          dispatch(endMoveComponentDrag());
-        });
-        await waitFor(() => {
-          expect(result.current.movingComponentName).toBeUndefined();
-        });
-      });
-    });
-
-    describe('sidebar focus', () => {
-      it('focusComponent: sets focused component name and changes sidebar view to Inspector', async () => {
-        const { result, dispatch } = renderHooks();
-
-        const mockComponentName = 'name';
-        act(() => {
-          dispatch(focusComponent(mockComponentName));
-        });
-        await waitFor(() => {
-          expect(result.current.focusedComponentName).toEqual(
-            mockComponentName
-          );
-          expect(result.current.sidebarView).toEqual(SidebarViewType.Inspector);
-        });
-      });
-
-      it('blurComponent: unsets focused component name and changes sidebar view to Components', async () => {
-        const { result, dispatch } = renderHooks();
-
-        act(() => {
-          dispatch(blurComponent());
-        });
-        await waitFor(() => {
-          expect(result.current.focusedComponentName).toBeUndefined();
-          expect(result.current.sidebarView).toEqual(
-            SidebarViewType.Components
-          );
-        });
-      });
-
-      it('focusToolSettings: unsets focused component name and changes sidebar view to Inspector', async () => {
-        const { result, dispatch } = renderHooks();
-
-        act(() => {
-          dispatch(focusToolSettings());
-        });
-        await waitFor(() => {
-          expect(result.current.focusedComponentName).toBeUndefined();
-          expect(result.current.sidebarView).toEqual(SidebarViewType.Inspector);
-        });
-      });
-
-      it.each([SidebarViewType.Components, SidebarViewType.Inspector])(
-        'setSidebarView: sets sidebar view to %s',
-        async (sidebarView: SidebarViewType) => {
-          const { result, dispatch } = renderHooks();
-
-          act(() => {
-            dispatch(setSidebarView(sidebarView));
-          });
-          await waitFor(() => {
-            expect(result.current.sidebarView).toEqual(sidebarView);
-          });
-        }
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+      };
+      const state = editorReducer(
+        initialState,
+        startMoveComponentDrag(mockComponentName)
       );
+      expect(state.movingComponentName).toEqual(mockComponentName);
     });
 
-    describe('actions', () => {
-      describe('focusAction', () => {
-        it('sets focused action', async () => {
-          const mockAction = {
-            name: 'action1',
-            type: ActionType.Javascript,
-          } as Action;
-          const { result, dispatch } = renderHooks();
+    it('endMoveComponentDrag: unsets moving component name', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+        movingComponentName: 'name',
+      };
+      const state = editorReducer(initialState, endMoveComponentDrag());
+      expect(state.movingComponentName).toBeUndefined();
+    });
+  });
 
-          act(() => {
-            dispatch(focusAction(mockAction));
-          });
-          await waitFor(() => {
-            expect(result.current.focusedAction).toEqual(mockAction);
-          });
-        });
+  describe('sidebar focus', () => {
+    it('focusComponent: sets focused component name and changes sidebar view to Inspector', () => {
+      const mockComponentName = 'name';
 
-        it('sets action view to general', async () => {
-          const mockAction = {
-            name: 'action1',
-            type: ActionType.Javascript,
-          } as Action;
-          const { result, dispatch } = renderHooks();
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+      };
+      const state = editorReducer(
+        initialState,
+        focusComponent(mockComponentName)
+      );
+      expect(state.focusedComponentName).toEqual(mockComponentName);
+      expect(state.sidebarView).toEqual(SidebarViewType.Inspector);
+    });
 
-          act(() => {
-            dispatch(setActionView(ActionViewType.ResponseHandler));
-          });
-          await waitFor(() => {
-            expect(result.current.actionView).not.toEqual(
-              ActionViewType.General
-            );
-          });
+    it('blurComponent: unsets focused component name and changes sidebar view to Components', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Inspector,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+        focusedComponentName: 'name',
+      };
+      const state = editorReducer(initialState, blurComponent());
+      expect(state.focusedComponentName).toBeUndefined();
+      expect(state.sidebarView).toEqual(SidebarViewType.Components);
+    });
 
-          act(() => {
-            dispatch(focusAction(mockAction));
-          });
-          await waitFor(() => {
-            expect(result.current.actionView).toEqual(ActionViewType.General);
-          });
-        });
-      });
+    it('focusToolSettings: unsets focused component name and changes sidebar view to Inspector', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+        focusedComponentName: 'name',
+      };
+      const state = editorReducer(initialState, focusToolSettings());
+      expect(state.focusedComponentName).toBeUndefined();
+      expect(state.sidebarView).toEqual(SidebarViewType.Inspector);
+    });
 
-      it('blurAction: sets focused action to undefined', async () => {
-        const { result, dispatch } = renderHooks();
+    it.each([SidebarViewType.Components, SidebarViewType.Inspector])(
+      'setSidebarView: sets sidebar view to %s',
+      (sidebarView: SidebarViewType) => {
+        const initialState = {
+          sidebarView: SidebarViewType.Components,
+          actionView: ActionViewType.General,
+          isActionViewMaximized: false,
+          isPreview: false,
+          focusedComponentName: 'name',
+        };
+        const state = editorReducer(initialState, setSidebarView(sidebarView));
+        expect(state.sidebarView).toEqual(sidebarView);
+      }
+    );
+  });
 
-        act(() => {
-          dispatch(
-            focusAction({
-              name: 'action1',
-              type: ActionType.Javascript,
-            } as Action)
-          );
-        });
-        await waitFor(() => {
-          expect(result.current.focusedAction).not.toBeUndefined();
-        });
+  describe('actions', () => {
+    it('focusAction: sets action view to general and focused action', () => {
+      const mockAction = {
+        name: 'action1',
+        type: ActionType.Javascript,
+      } as Action;
 
-        act(() => {
-          dispatch(blurAction());
-        });
-        await waitFor(() => {
-          expect(result.current.focusedAction).toBeUndefined();
-        });
-      });
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.ResponseHandler,
+        isActionViewMaximized: false,
+        isPreview: false,
+      };
+      const state = editorReducer(initialState, focusAction(mockAction));
+      expect(state.focusedAction).toEqual(mockAction);
+      expect(state.actionView).toEqual(ActionViewType.General);
+    });
 
-      describe('updateFocusedAction', () => {
-        it('updates focused action by merging payload', async () => {
-          const { result, dispatch } = renderHooks();
+    it('blurAction: sets focused action to undefined', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.ResponseHandler,
+        isActionViewMaximized: false,
+        isPreview: false,
+        focusedAction: {
+          name: 'action1',
+          type: ActionType.Javascript,
+        } as Action,
+      };
+      const state = editorReducer(initialState, blurAction());
+      expect(state.focusedAction).toBeUndefined();
+    });
 
-          const mockAction = {
+    describe('updateFocusedAction', () => {
+      it('updates focused action by merging payload', () => {
+        const initialState = {
+          sidebarView: SidebarViewType.Components,
+          actionView: ActionViewType.General,
+          isActionViewMaximized: false,
+          isPreview: false,
+          focusedAction: {
             name: 'action1',
             type: ActionType.Javascript,
             data: {},
-          } as Action;
-
-          act(() => {
-            dispatch(focusAction(mockAction));
-          });
-          act(() => {
-            dispatch(
-              updateFocusedAction({ data: { javascript: { code: 'code' } } })
-            );
-          });
-          await waitFor(() => {
-            expect(result.current.focusedAction).toEqual({
-              name: 'action1',
-              type: ActionType.Javascript,
-              data: {
-                javascript: { code: 'code' },
-              },
-            });
-          });
+          } as Action,
+        };
+        const state = editorReducer(
+          initialState,
+          updateFocusedAction({ data: { javascript: { code: 'code' } } })
+        );
+        expect(state.focusedAction).toEqual({
+          name: 'action1',
+          type: ActionType.Javascript,
+          data: {
+            javascript: { code: 'code' },
+          },
         });
+      });
 
-        it('overwrites arrays with payload', async () => {
-          const { result, dispatch } = renderHooks();
-
-          const mockAction = {
+      it('overwrites arrays with payload', () => {
+        const initialState = {
+          sidebarView: SidebarViewType.Components,
+          actionView: ActionViewType.General,
+          isActionViewMaximized: false,
+          isPreview: false,
+          focusedAction: {
             name: 'action1',
             type: ActionType.Javascript,
             data: {},
             eventHandlers: [{ event: ActionEvent.Success }],
-          } as Action;
-
-          act(() => {
-            dispatch(focusAction(mockAction));
-          });
-          act(() => {
-            dispatch(updateFocusedAction({ eventHandlers: [] }));
-          });
-          await waitFor(() => {
-            expect(result.current.focusedAction).toEqual({
-              name: 'action1',
-              type: ActionType.Javascript,
-              data: {},
-              eventHandlers: [],
-            });
-          });
-        });
-      });
-
-      it('setActionView: sets action view to payload type', async () => {
-        const mockActionViewType = ActionViewType.ResponseHandler;
-        const { result, dispatch } = renderHooks();
-
-        act(() => {
-          dispatch(setActionView(ActionViewType.ResponseHandler));
-        });
-        await waitFor(() => {
-          expect(result.current.actionView).toEqual(mockActionViewType);
-        });
-      });
-
-      it('setIsActionViewMaximized: sets action view maximized boolean to payload', async () => {
-        const { result, dispatch } = renderHooks();
-
-        act(() => {
-          dispatch(setIsActionViewMaximized(true));
-        });
-        await waitFor(() => {
-          expect(result.current.isActionViewMaximized).toEqual(true);
-        });
-
-        act(() => {
-          dispatch(setIsActionViewMaximized(false));
-        });
-        await waitFor(() => {
-          expect(result.current.isActionViewMaximized).toEqual(false);
+          } as Action,
+        };
+        const state = editorReducer(
+          initialState,
+          updateFocusedAction({ eventHandlers: [] })
+        );
+        expect(state.focusedAction).toEqual({
+          name: 'action1',
+          type: ActionType.Javascript,
+          data: {},
+          eventHandlers: [],
         });
       });
     });
 
-    describe('general', () => {
-      it('setIsPreview: sets preview boolean to payload', async () => {
-        const { result, dispatch } = renderHooks();
+    it('setActionView: sets action view to payload type', () => {
+      const mockActionViewType = ActionViewType.ResponseHandler;
 
-        act(() => {
-          dispatch(setIsPreview(true));
-        });
-        await waitFor(() => {
-          expect(result.current.isPreview).toEqual(true);
-        });
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+      };
+      const state = editorReducer(
+        initialState,
+        setActionView(ActionViewType.ResponseHandler)
+      );
+      expect(state.actionView).toEqual(mockActionViewType);
+    });
 
-        act(() => {
-          dispatch(setIsPreview(false));
-        });
-        await waitFor(() => {
-          expect(result.current.isPreview).toEqual(false);
-        });
-      });
+    it('setIsActionViewMaximized: sets action view maximized boolean to payload', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+      };
+      const state = editorReducer(initialState, setIsActionViewMaximized(true));
+      expect(state.isActionViewMaximized).toEqual(true);
+    });
+  });
+
+  describe('general', () => {
+    it('setIsPreview: sets preview boolean to payload', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+      };
+      const state = editorReducer(initialState, setIsPreview(true));
+      expect(state.isPreview).toEqual(true);
     });
   });
 });

@@ -74,7 +74,7 @@ export const resourceHandlers = [
     );
   }),
   rest.post('*/api/resources', async (req, res, ctx) => {
-    const body = await req.json();
+    const body = await req.json<Pick<Resource, 'name' | 'type' | 'data'>>();
 
     if (RESOURCES.some((resource) => resource.name === body.name)) {
       return res(
@@ -98,7 +98,9 @@ export const resourceHandlers = [
     return res(ctx.status(201), ctx.json<Resource>(newResource));
   }),
   rest.put('*/api/resources/:id', async (req, res, ctx) => {
-    const body = await req.json();
+    const body = await req.json<
+      Pick<Resource, 'id'> & Partial<Pick<Resource, 'name' | 'data'>>
+    >();
 
     const resource = RESOURCES.find(
       (currResource) => currResource.id === req.params.id
@@ -123,7 +125,7 @@ export const resourceHandlers = [
     }
 
     if (body.name) resource.name = body.name;
-    if (resource.data) resource.data = body.data;
+    if (body.data) resource.data = body.data;
     resource.updatedAt = new Date().toISOString();
 
     return res(ctx.status(200), ctx.json<Resource>(resource));
