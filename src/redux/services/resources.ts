@@ -17,7 +17,7 @@ export const resourcesApi = createApi({
     }),
     createResource: builder.mutation<
       Resource,
-      Pick<Resource, 'name' | 'type' | 'data'>
+      Pick<Resource, 'type' | 'name' | 'data'>
     >({
       query: (body) => ({
         url: '/resources',

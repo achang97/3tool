@@ -8,7 +8,7 @@ export const RESOURCE_CONFIGS: Record<ResourceType, ResourceConfig> = {
   [ResourceType.SmartContract]: {
     label: 'Smart contract',
   },
-  [ResourceType.Dune]: {
-    label: 'Dune',
+  [ResourceType.Abi]: {
+    label: 'ABI',
   },
 };

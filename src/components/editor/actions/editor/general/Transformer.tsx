@@ -4,15 +4,15 @@ import { useCallback } from 'react';
 
 type TransformerProps = {
   value?: string;
-  onChangeData: (update: RecursivePartial<TransformableData>) => void;
+  onDataChange: (update: RecursivePartial<TransformableData>) => void;
 };
 
-export const Transformer = ({ value, onChangeData }: TransformerProps) => {
+export const Transformer = ({ value, onDataChange }: TransformerProps) => {
   const handleTransformerChange = useCallback(
     (transformer: string) => {
-      onChangeData({ transformer });
+      onDataChange({ transformer });
     },
-    [onChangeData]
+    [onDataChange]
   );
 
   return (

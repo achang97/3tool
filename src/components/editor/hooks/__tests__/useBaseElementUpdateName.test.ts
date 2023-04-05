@@ -3,6 +3,7 @@ import {
   mockApiErrorResponse,
   mockApiSuccessResponse,
 } from '@tests/constants/api';
+import { validateVariableName } from '@app/utils/namespace';
 import { ReferenceUpdate } from '../useToolUpdateReference';
 import { useBaseElementUpdateName } from '../useBaseElementUpdateName';
 
@@ -38,13 +39,19 @@ jest.mock('../useActiveTool', () => ({
   })),
 }));
 
+jest.mock('@app/utils/namespace');
+
 describe('useBaseElementUpdateName', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (validateVariableName as jest.Mock).mockImplementation(() => undefined);
   });
 
   describe('validation', () => {
-    it('displays error snackbar if new name contains invalid characters', async () => {
+    it('displays error snackbar if new name is invalid variable name', async () => {
+      const mockError = 'error';
+      (validateVariableName as jest.Mock).mockImplementation(() => mockError);
+
       const { result } = renderHook(() =>
         useBaseElementUpdateName({
           prevName: mockPrevName,
@@ -54,26 +61,9 @@ describe('useBaseElementUpdateName', () => {
       );
       await result.current('new-name!');
 
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-        'Name can only contain letters, numbers, _, or $',
-        { variant: 'error' }
-      );
-    });
-
-    it('displays error snackbar if new name does not starts with letter or _', async () => {
-      const { result } = renderHook(() =>
-        useBaseElementUpdateName({
-          prevName: mockPrevName,
-          extendUpdate: mockExtendUpdate,
-          onSuccess: mockHandleSuccess,
-        })
-      );
-      await result.current('123');
-
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-        'Name must start with a letter or "_"',
-        { variant: 'error' }
-      );
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(mockError, {
+        variant: 'error',
+      });
     });
 
     it('displays error snackbar if new name matches name of another element', async () => {

@@ -1,32 +1,62 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { Add } from '@mui/icons-material';
-import { Button } from '@mui/material';
-import { CreateResourceDialog } from './CreateResourceDialog';
+import { Button, Menu } from '@mui/material';
+import { useMenuState } from '@app/hooks/useMenuState';
+import { Resource, ResourceType } from '@app/types';
+import { RESOURCE_CONFIGS, RESOURCE_DATA_TEMPLATES } from '@app/constants';
+import { useAppDispatch } from '@app/redux/hooks';
+import { pushResource } from '@app/redux/features/resourcesSlice';
+import { MenuItem } from '../common/MenuItem';
+
+const RESOURCES = [ResourceType.SmartContract, ResourceType.Abi];
 
 export const CreateResourceButton = () => {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const { isMenuOpen, menuAnchor, onMenuOpen, onMenuClose } = useMenuState();
 
-  const handleCreateDialogOpen = useCallback(() => {
-    setIsCreateDialogOpen(true);
-  }, []);
-
-  const handleCreateDialogClose = useCallback(() => {
-    setIsCreateDialogOpen(false);
-  }, []);
+  const handleCreateResource = useCallback(
+    (resourceType: ResourceType) => {
+      const newResource: Resource = {
+        name: '',
+        type: resourceType,
+        data: {
+          [resourceType]: RESOURCE_DATA_TEMPLATES[resourceType],
+        },
+        // These values are all generated on the BE, but we provide placeholder values until the
+        // object is created.
+        id: '',
+        createdAt: '',
+        updatedAt: '',
+      };
+      dispatch(pushResource({ type: 'create', resource: newResource }));
+    },
+    [dispatch]
+  );
 
   return (
     <>
       <Button
         variant="text"
         startIcon={<Add color="primary" />}
-        onClick={handleCreateDialogOpen}
+        onClick={onMenuOpen}
+        data-testid="create-resource-button"
       >
         Add new resource
       </Button>
-      <CreateResourceDialog
-        isOpen={isCreateDialogOpen}
-        onClose={handleCreateDialogClose}
-      />
+      <Menu
+        anchorEl={menuAnchor}
+        open={isMenuOpen}
+        onClose={onMenuClose}
+        onClick={onMenuClose}
+      >
+        {RESOURCES.map((resourceType) => (
+          <MenuItem
+            key={resourceType}
+            onClick={() => handleCreateResource(resourceType)}
+            label={RESOURCE_CONFIGS[resourceType].label}
+          />
+        ))}
+      </Menu>
     </>
   );
 };

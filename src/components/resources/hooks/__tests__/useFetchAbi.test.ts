@@ -6,9 +6,6 @@ import { useFetchAbi } from '../useFetchAbi';
 
 jest.mock('@app/utils/contracts');
 
-const mockHandleAbiChange = jest.fn();
-const mockChainId = mainnet.id;
-
 describe('useFetchAbi', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -18,46 +15,30 @@ describe('useFetchAbi', () => {
     it('does nothing if address is invalid', () => {
       renderHook(() =>
         useFetchAbi({
-          abi: '',
-          chainId: mockChainId,
+          chainId: mainnet.id,
           address: '0x',
-          onAbiChange: mockHandleAbiChange,
         })
       );
-
       expect(getContractAbi).not.toHaveBeenCalled();
     });
 
-    it('does nothing if abi changes to the empty string', () => {
-      const { rerender } = renderHook(() =>
-        useFetchAbi({
-          abi: '[]',
-          chainId: mockChainId,
-          address: mockValidAddress,
-          onAbiChange: mockHandleAbiChange,
-        })
-      );
-
-      rerender({
-        abi: '',
-        chainId: mockChainId,
-        address: mockValidAddress,
-        onAbiChange: mockHandleAbiChange,
-      });
-
-      expect(getContractAbi).not.toHaveBeenCalled();
-    });
-
-    it('does nothing if abi is defined', () => {
+    it('does nothing if address is undefined', () => {
       renderHook(() =>
         useFetchAbi({
-          abi: '[]',
-          chainId: mockChainId,
-          address: mockValidAddress,
-          onAbiChange: mockHandleAbiChange,
+          chainId: mainnet.id,
+          address: undefined,
         })
       );
+      expect(getContractAbi).not.toHaveBeenCalled();
+    });
 
+    it('does nothing if chain id is undefined', () => {
+      renderHook(() =>
+        useFetchAbi({
+          chainId: undefined,
+          address: mockValidAddress,
+        })
+      );
       expect(getContractAbi).not.toHaveBeenCalled();
     });
   });
@@ -69,35 +50,26 @@ describe('useFetchAbi', () => {
       (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
     });
 
-    it('calls onAbiChange with fetched abi', async () => {
-      renderHook(() =>
+    it('sets abi to fetched value', async () => {
+      const { result } = renderHook(() =>
         useFetchAbi({
-          abi: '',
           chainId: mainnet.id,
           address: mockValidAddress,
-          onAbiChange: mockHandleAbiChange,
         })
       );
-
-      await waitFor(() => {
-        expect(mockHandleAbiChange).toHaveBeenCalledWith(
-          JSON.stringify(mockAbi)
-        );
+      await waitFor(async () => {
+        expect(result.current.abi).toEqual(JSON.stringify(mockAbi));
       });
     });
 
     it('sets error to undefined', async () => {
       const { result } = renderHook(() =>
         useFetchAbi({
-          abi: '',
           chainId: mainnet.id,
           address: mockValidAddress,
-          onAbiChange: mockHandleAbiChange,
         })
       );
-
-      await waitFor(() => {
-        expect(mockHandleAbiChange).toHaveBeenCalled();
+      await waitFor(async () => {
         expect(result.current.error).toBeUndefined();
       });
     });
@@ -112,32 +84,26 @@ describe('useFetchAbi', () => {
       });
     });
 
-    it('calls onAbiChange with empty string', async () => {
-      renderHook(() =>
+    it('sets abi to empty string', async () => {
+      const { result } = renderHook(() =>
         useFetchAbi({
-          abi: '',
           chainId: mainnet.id,
           address: mockValidAddress,
-          onAbiChange: mockHandleAbiChange,
         })
       );
-
-      await waitFor(() => {
-        expect(mockHandleAbiChange).toHaveBeenCalledWith('');
+      await waitFor(async () => {
+        expect(result.current.abi).toEqual('');
       });
     });
 
-    it('sets error to fetch abi error message', async () => {
+    it('sets error to fetch abi error', async () => {
       const { result } = renderHook(() =>
         useFetchAbi({
-          abi: '',
           chainId: mainnet.id,
           address: mockValidAddress,
-          onAbiChange: mockHandleAbiChange,
         })
       );
-
-      await waitFor(() => {
+      await waitFor(async () => {
         expect(result.current.error).toEqual(mockError);
       });
     });
@@ -151,10 +117,8 @@ describe('useFetchAbi', () => {
     it('sets isLoading to true and back to false', async () => {
       const { result } = renderHook(() =>
         useFetchAbi({
-          abi: '',
           chainId: mainnet.id,
           address: mockValidAddress,
-          onAbiChange: mockHandleAbiChange,
         })
       );
 

@@ -1,7 +1,8 @@
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useCreateToolMutation } from '@app/redux/services/tools';
 import { ApiError } from '@app/types';
+import { mockApiErrorResponse } from '@tests/constants/api';
 import { CreateToolDialog } from '../CreateToolDialog';
 
 const mockHandleClose = jest.fn();
@@ -70,36 +71,42 @@ describe('CreateToolDialog', () => {
     const submitButton = result.getByText('Create tool');
     await userEvent.click(submitButton);
 
-    expect(mockCreateTool).toHaveBeenCalledTimes(1);
     expect(mockCreateTool).toHaveBeenCalledWith({ name: mockName });
   });
 
-  it('does not navigate to new page', () => {
-    (useCreateToolMutation as jest.Mock).mockImplementation(() => [
-      mockCreateTool,
-      {},
-    ]);
+  it('does not navigate to new page after failed creation of tool', async () => {
+    mockCreateTool.mockImplementation(() => mockApiErrorResponse);
 
-    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
+    const result = render(
+      <CreateToolDialog onClose={mockHandleClose} isOpen />
+    );
+
+    const input = result.getByTestId('create-tool-dialog-input');
+    await userEvent.type(input, 'New Tool Name');
+
+    const submitButton = result.getByText('Create tool');
+    await userEvent.click(submitButton);
 
     expect(mockPush).not.toHaveBeenCalled();
+    expect(mockHandleClose).not.toHaveBeenCalled();
   });
 
   it('navigates to /editor/:id and resets state after successful creation of tool', async () => {
     const mockNewTool = { id: 'new-tool-id' };
-    (useCreateToolMutation as jest.Mock).mockImplementation(() => [
-      mockCreateTool,
-      { data: mockNewTool },
-    ]);
+    mockCreateTool.mockImplementation(() => ({ data: mockNewTool }));
 
-    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
+    const result = render(
+      <CreateToolDialog onClose={mockHandleClose} isOpen />
+    );
 
-    await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledTimes(1);
-      expect(mockPush).toHaveBeenCalledWith(`/editor/${mockNewTool.id}`);
+    const input = result.getByTestId('create-tool-dialog-input');
+    await userEvent.type(input, 'New Tool Name');
 
-      expect(mockHandleClose).toHaveBeenCalledTimes(1);
-    });
+    const submitButton = result.getByText('Create tool');
+    await userEvent.click(submitButton);
+
+    expect(mockPush).toHaveBeenCalledWith(`/editor/${mockNewTool.id}`);
+    expect(mockHandleClose).toHaveBeenCalled();
   });
 
   it('renders error message after failed creation', () => {

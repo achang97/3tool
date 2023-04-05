@@ -15,8 +15,8 @@ export const TextInputInspector = ({
   name,
   data,
   eventHandlers,
-  onChangeData,
-  onChangeEventHandlers,
+  onDataChange,
+  onEventHandlersChange,
 }: BaseComponentInspectorProps<ComponentType.TextInput>) => {
   const config: BaseInspectorSectionProps<Component['data']['textInput']>[] =
     useMemo(() => {
@@ -81,7 +81,7 @@ export const TextInputInspector = ({
                   name={name}
                   eventHandlers={eventHandlers}
                   eventOptions={TEXT_INPUT_CONFIG.events}
-                  onChange={onChangeEventHandlers}
+                  onChange={onEventHandlersChange}
                 />
               ),
             },
@@ -123,13 +123,13 @@ export const TextInputInspector = ({
           ],
         },
       ];
-    }, [data, eventHandlers, name, onChangeEventHandlers]);
+    }, [data, eventHandlers, name, onEventHandlersChange]);
 
   return (
     <BaseInspector
       name={name}
       config={config}
-      onChange={onChangeData}
+      onChange={onDataChange}
       isAutosaved
       testId="text-input-inspector"
     />

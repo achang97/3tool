@@ -5,6 +5,7 @@ import { PageTitle } from '@app/components/common/PageTitle';
 import { PageContainer } from '@app/components/common/PageContainer';
 import { ResourceDataGrid } from '@app/components/resources/ResourceDataGrid';
 import { CreateResourceButton } from '@app/components/resources/CreateResourceButton';
+import { ResourceModals } from '@app/components/resources/ResourceModals';
 
 const Resources = () => {
   return (
@@ -26,6 +27,7 @@ const Resources = () => {
             <CreateResourceButton />
           </Box>
           <ResourceDataGrid />
+          <ResourceModals />
         </PageContainer>
       </main>
     </>

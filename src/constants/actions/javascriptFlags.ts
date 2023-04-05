@@ -22,13 +22,13 @@ const JAVASCRIPT_DATA_JAVASCRIPT_FLAGS: ActionDataJavascriptFlags<ActionType.Jav
 const SMART_CONTRACT_READ_DATA_JAVASCRIPT_FLAGS: ActionDataJavascriptFlags<ActionType.SmartContractRead> =
   {
     ...TRANSFORMER_DATA_JAVASCRIPT_FLAGS,
-    resourceId: false,
+    smartContractId: false,
   };
 
 const SMART_CONTRACT_WRITE_DATA_JAVASCRIPT_FLAGS: ActionDataJavascriptFlags<ActionType.SmartContractWrite> =
   {
     ...TRANSFORMER_DATA_JAVASCRIPT_FLAGS,
-    resourceId: false,
+    smartContractId: false,
   };
 
 export const ACTION_DATA_JAVASCRIPT_FLAGS: ActionDataJavascriptFlagsMap = {

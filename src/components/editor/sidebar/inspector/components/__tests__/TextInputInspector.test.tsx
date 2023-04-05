@@ -37,8 +37,8 @@ const mockEventHandlers: EventHandler<ComponentEvent>[] = [
   },
 ];
 
-const mockHandleChangeData = jest.fn();
-const mockHandleChangeEventHandlers = jest.fn();
+const mockHandleDataChange = jest.fn();
+const mockHandleEventHandlersChange = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
@@ -67,8 +67,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Basic');
@@ -80,8 +80,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -89,7 +89,7 @@ describe('TextInputInspector', () => {
         field: 'defaultValue',
         label: 'Default Value',
         value: mockData.defaultValue,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.textInput.defaultValue },
       });
     });
@@ -100,8 +100,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -109,7 +109,7 @@ describe('TextInputInspector', () => {
         field: 'placeholder',
         label: 'Placeholder',
         value: mockData.placeholder,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.textInput.placeholder },
       });
     });
@@ -122,8 +122,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Label');
@@ -135,8 +135,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -144,7 +144,7 @@ describe('TextInputInspector', () => {
         field: 'label',
         label: 'Label',
         value: mockData.label,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.textInput.label },
       });
     });
@@ -157,8 +157,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Interaction');
@@ -170,8 +170,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -179,7 +179,7 @@ describe('TextInputInspector', () => {
         field: 'disabled',
         label: 'Disabled',
         value: mockData.disabled,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.textInput.disabled },
       });
     });
@@ -190,15 +190,15 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
       await validateComponentEventHandlers(result, 'Interaction', {
         eventHandlers: mockEventHandlers,
         eventOptions: COMPONENT_CONFIGS.textInput.events,
-        onChange: mockHandleChangeEventHandlers,
+        onChange: mockHandleEventHandlersChange,
       });
     });
   });
@@ -210,8 +210,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Validation');
@@ -223,8 +223,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -232,7 +232,7 @@ describe('TextInputInspector', () => {
         field: 'required',
         label: 'Required',
         value: mockData.required,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.textInput.required },
       });
     });
@@ -243,8 +243,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -252,7 +252,7 @@ describe('TextInputInspector', () => {
         field: 'minLength',
         label: 'Min Length',
         value: mockData.minLength,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.textInput.minLength },
       });
     });
@@ -263,8 +263,8 @@ describe('TextInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -272,7 +272,7 @@ describe('TextInputInspector', () => {
         field: 'maxLength',
         label: 'Max Length',
         value: mockData.maxLength,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.textInput.maxLength },
       });
     });

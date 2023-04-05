@@ -1,5 +1,5 @@
 import { useCreateToolMutation } from '@app/redux/services/tools';
-import { parseApiError } from '@app/utils/api';
+import { isSuccessfulApiResponse, parseApiError } from '@app/utils/api';
 import { LoadingButton } from '@mui/lab';
 import {
   Dialog,
@@ -9,14 +9,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from 'react';
 
 type CreateToolDialogProps = {
   onClose: () => void;
@@ -31,28 +24,27 @@ export const CreateToolDialog = ({
 }: CreateToolDialogProps) => {
   const [name, setName] = useState('');
 
-  const [createTool, { data: newTool, isLoading, error }] =
-    useCreateToolMutation();
+  const [createTool, { isLoading, error }] = useCreateToolMutation();
   const { push } = useRouter();
-
-  useEffect(() => {
-    if (newTool) {
-      onClose();
-      setName('');
-      push(`/editor/${newTool.id}`);
-    }
-  }, [newTool, onClose, push]);
 
   const handleNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   }, []);
 
   const handleCreateTool = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      createTool({ name });
+      const response = await createTool({ name });
+
+      if (!isSuccessfulApiResponse(response)) {
+        return;
+      }
+
+      onClose();
+      setName('');
+      push(`/editor/${response.data.id}`);
     },
-    [createTool, name]
+    [createTool, name, onClose, push]
   );
 
   const errorMessage = useMemo(() => {

@@ -37,8 +37,8 @@ const mockEventHandlers: EventHandler<ComponentEvent>[] = [
   },
 ];
 
-const mockHandleChangeData = jest.fn();
-const mockHandleChangeEventHandlers = jest.fn();
+const mockHandleDataChange = jest.fn();
+const mockHandleEventHandlersChange = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
@@ -67,8 +67,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Basic');
@@ -80,8 +80,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -89,7 +89,7 @@ describe('NumberInputInspector', () => {
         field: 'defaultValue',
         label: 'Default Value',
         value: mockData.defaultValue,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.numberInput.defaultValue },
       });
     });
@@ -100,8 +100,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -109,7 +109,7 @@ describe('NumberInputInspector', () => {
         field: 'placeholder',
         label: 'Placeholder',
         value: mockData.placeholder,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.numberInput.placeholder },
       });
     });
@@ -122,8 +122,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Label');
@@ -135,8 +135,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -144,7 +144,7 @@ describe('NumberInputInspector', () => {
         field: 'label',
         label: 'Label',
         value: mockData.label,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.numberInput.label },
       });
     });
@@ -157,8 +157,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Interaction');
@@ -170,8 +170,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -179,7 +179,7 @@ describe('NumberInputInspector', () => {
         field: 'disabled',
         label: 'Disabled',
         value: mockData.disabled,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.numberInput.disabled },
       });
     });
@@ -190,15 +190,15 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
       await validateComponentEventHandlers(result, 'Interaction', {
         eventHandlers: mockEventHandlers,
         eventOptions: COMPONENT_CONFIGS.numberInput.events,
-        onChange: mockHandleChangeEventHandlers,
+        onChange: mockHandleEventHandlersChange,
       });
     });
   });
@@ -210,8 +210,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Validation');
@@ -223,8 +223,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -232,7 +232,7 @@ describe('NumberInputInspector', () => {
         field: 'required',
         label: 'Required',
         value: mockData.required,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.numberInput.required },
       });
     });
@@ -243,8 +243,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -252,7 +252,7 @@ describe('NumberInputInspector', () => {
         field: 'minimum',
         label: 'Minimum',
         value: mockData.minimum,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.numberInput.minimum },
       });
     });
@@ -263,8 +263,8 @@ describe('NumberInputInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -272,7 +272,7 @@ describe('NumberInputInspector', () => {
         field: 'maximum',
         label: 'Maximum',
         value: mockData.maximum,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.numberInput.maximum },
       });
     });

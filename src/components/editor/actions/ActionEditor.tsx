@@ -45,7 +45,7 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
         return (
           <JavascriptEditor
             data={action.data.javascript}
-            onChangeData={handleUpdateData}
+            onDataChange={handleUpdateData}
           />
         );
       }

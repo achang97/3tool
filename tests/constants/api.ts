@@ -1,10 +1,10 @@
-import { ApiResponse } from '@app/types';
+import { ApiErrorResponse, ApiSuccessResponse } from '@app/types';
 
-export const mockApiSuccessResponse: ApiResponse = {
+export const mockApiSuccessResponse: ApiSuccessResponse = {
   data: {},
 };
 
-export const mockApiErrorResponse: ApiResponse = {
+export const mockApiErrorResponse: ApiErrorResponse = {
   error: {
     status: 400,
     data: {

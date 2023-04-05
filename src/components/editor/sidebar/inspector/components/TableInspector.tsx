@@ -12,7 +12,7 @@ const DATA_TYPES = COMPONENT_DATA_TYPES.table;
 export const TableInspector = ({
   name,
   data,
-  onChangeData,
+  onDataChange,
 }: BaseComponentInspectorProps<ComponentType.Table>) => {
   const config: BaseInspectorSectionProps<Component['data']['table']>[] =
     useMemo(() => {
@@ -64,7 +64,7 @@ export const TableInspector = ({
     <BaseInspector
       name={name}
       config={config}
-      onChange={onChangeData}
+      onChange={onDataChange}
       isAutosaved
       testId="table-inspector"
     />

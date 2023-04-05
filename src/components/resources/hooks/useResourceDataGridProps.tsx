@@ -1,4 +1,4 @@
-import { Resource, ResourceType } from '@app/types';
+import { Resource } from '@app/types';
 import { Edit } from '@mui/icons-material';
 import {
   GridActionsCellItem,
@@ -7,47 +7,48 @@ import {
   GridRowsProp,
 } from '@mui/x-data-grid';
 import { useCallback, useMemo } from 'react';
+import { pushResource } from '@app/redux/features/resourcesSlice';
+import { useAppDispatch } from '@app/redux/hooks';
 import {
   formatResourceType,
   formatCreatedAt,
   renderNameCell,
 } from '../utils/dataGridFormatters';
 
-type HookArgs = {
-  resources?: Resource[];
-  onEditClick: (resource: Resource) => void;
-};
-
 type DataGridProps = {
   rows: GridRowsProp<Resource>;
   columns: GridColDef<Resource>[];
 };
 
-export const useDataGridProps = ({
-  resources,
-  onEditClick,
-}: HookArgs): DataGridProps => {
+export const useResourceDataGridProps = (
+  resources?: Resource[]
+): DataGridProps => {
+  const dispatch = useAppDispatch();
+
   const rows: GridRowsProp<Resource> = useMemo(() => {
     return resources ?? [];
   }, [resources]);
 
+  const handleEditDialogOpen = useCallback(
+    (resource: Resource) => {
+      dispatch(pushResource({ type: 'edit', resource }));
+    },
+    [dispatch]
+  );
+
   const getRowActions = useCallback(
     (params: GridRowParams<Resource>) => {
-      if (params.row.type !== ResourceType.SmartContract) {
-        return [];
-      }
-
       // TODO: Add delete action
       return [
         <GridActionsCellItem
           icon={<Edit />}
           label="Edit"
-          onClick={() => onEditClick(params.row)}
+          onClick={() => handleEditDialogOpen(params.row)}
           showInMenu
         />,
       ];
     },
-    [onEditClick]
+    [handleEditDialogOpen]
   );
 
   const columns: GridColDef<Resource>[] = useMemo(() => {

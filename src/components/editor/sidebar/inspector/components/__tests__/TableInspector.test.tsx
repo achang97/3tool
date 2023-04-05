@@ -14,8 +14,8 @@ const mockData: Component['data']['table'] = {
 };
 const mockEventHandlers: EventHandler<ComponentEvent>[] = [];
 
-const mockHandleChangeData = jest.fn();
-const mockHandleChangeEventHandlers = jest.fn();
+const mockHandleDataChange = jest.fn();
+const mockHandleEventHandlersChange = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
@@ -44,8 +44,8 @@ describe('TableInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Data');
@@ -57,8 +57,8 @@ describe('TableInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -66,7 +66,7 @@ describe('TableInspector', () => {
         field: 'data',
         label: 'Data',
         value: mockData.data,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.table.data },
       });
     });
@@ -77,8 +77,8 @@ describe('TableInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -86,7 +86,7 @@ describe('TableInspector', () => {
         field: 'emptyMessage',
         label: 'Empty message',
         value: mockData.emptyMessage,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.table.emptyMessage },
       });
     });
@@ -99,8 +99,8 @@ describe('TableInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Row selection');
@@ -112,8 +112,8 @@ describe('TableInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -121,7 +121,7 @@ describe('TableInspector', () => {
         field: 'multiselect',
         label: 'Enable multi-row selection',
         value: mockData.multiselect,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.table.multiselect },
       });
     });

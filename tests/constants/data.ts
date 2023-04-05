@@ -40,8 +40,7 @@ export const mockSmartContractResource: Resource = {
     smartContract: {
       chainId: 5,
       address: '0x5059475daFA6Fa3d23AAAc23A5809615FE35a1d3',
-      abi: '[{"inputs":[{"internalType":"address","name":"contractLogic","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"stateMutability":"payable","type":"fallback"}]',
-      isProxy: false,
+      abiId: '1',
     },
   },
 };
@@ -56,22 +55,9 @@ export const mockProxySmartContractResource: Resource = {
     smartContract: {
       chainId: 5,
       address: '0xf33Cb58287017175CADf990c9e4733823704aA86',
-      abi: '[{ stateMutability: "payable", type: "fallback" }]',
-      isProxy: true,
-      logicAddress: '0x73F165E0013a1BfA645f7d867E9cA87d03cDb598',
-      logicAbi:
-        '[{ stateMutability: "payable", inputs: [], type: "function" }]',
+      abiId: '1',
     },
   },
-};
-
-export const mockDuneResource: Resource = {
-  id: '3',
-  type: ResourceType.Dune,
-  name: 'Dune API',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  data: {},
 };
 
 export const mockTool: Tool = {

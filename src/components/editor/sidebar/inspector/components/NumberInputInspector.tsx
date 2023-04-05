@@ -15,8 +15,8 @@ export const NumberInputInspector = ({
   name,
   data,
   eventHandlers,
-  onChangeData,
-  onChangeEventHandlers,
+  onDataChange,
+  onEventHandlersChange,
 }: BaseComponentInspectorProps<ComponentType.NumberInput>) => {
   const config: BaseInspectorSectionProps<Component['data']['numberInput']>[] =
     useMemo(() => {
@@ -81,7 +81,7 @@ export const NumberInputInspector = ({
                   name={name}
                   eventHandlers={eventHandlers}
                   eventOptions={NUMBER_INPUT_CONFIG.events}
-                  onChange={onChangeEventHandlers}
+                  onChange={onEventHandlersChange}
                 />
               ),
             },
@@ -123,13 +123,13 @@ export const NumberInputInspector = ({
           ],
         },
       ];
-    }, [data, eventHandlers, name, onChangeEventHandlers]);
+    }, [data, eventHandlers, name, onEventHandlersChange]);
 
   return (
     <BaseInspector
       name={name}
       config={config}
-      onChange={onChangeData}
+      onChange={onDataChange}
       isAutosaved
       testId="number-input-inspector"
     />

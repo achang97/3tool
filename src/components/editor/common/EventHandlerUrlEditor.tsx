@@ -15,7 +15,7 @@ const DATA_TYPES = EVENT_HANDLER_DATA_TYPES.url;
 export const EventHandlerUrlEditor = ({
   name,
   data,
-  onChangeData,
+  onDataChange,
   isAutosaved,
 }: BaseEventHandlerEditorProps<EventHandlerType.Url>) => {
   const config: BaseInspectorSectionProps<EventHandler['data']['url']>[] =
@@ -51,7 +51,7 @@ export const EventHandlerUrlEditor = ({
     <BaseInspector
       name={name}
       config={config}
-      onChange={onChangeData}
+      onChange={onDataChange}
       isAutosaved={isAutosaved}
       testId="event-handler-url-editor"
     />

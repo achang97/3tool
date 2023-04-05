@@ -1,41 +1,45 @@
 import { useUpdateResourceMutation } from '@app/redux/services/resources';
 import { Resource } from '@app/types';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
+import { isSuccessfulApiResponse } from '@app/utils/api';
 import { BaseResourceDialog } from './BaseResourceDialog';
 
 type EditResourceDialogProps = {
-  onClose: () => void;
+  resource: Resource;
   isOpen: boolean;
-  resourceId: string;
+  isBackButtonVisible: boolean;
+  onClose: () => void;
+  onChange: (update: RecursivePartial<Resource>) => void;
 };
 
 export const EditResourceDialog = ({
-  onClose,
+  resource,
   isOpen,
-  resourceId,
+  isBackButtonVisible,
+  onClose,
+  onChange,
 }: EditResourceDialogProps) => {
-  const [updateResource, { isLoading, error, data: updatedResource }] =
-    useUpdateResourceMutation();
+  const [updateResource, { isLoading, error }] = useUpdateResourceMutation();
 
-  useEffect(() => {
-    if (updatedResource) {
-      onClose();
+  const handleUpdateResource = useCallback(async () => {
+    const response = await updateResource(resource);
+
+    if (!isSuccessfulApiResponse(response)) {
+      return;
     }
-  }, [updatedResource, onClose]);
 
-  const handleUpdateResource = useCallback(
-    (resource: Pick<Resource, 'type' | 'name' | 'data'>) => {
-      updateResource({ id: resourceId, ...resource });
-    },
-    [updateResource, resourceId]
-  );
+    onClose();
+  }, [updateResource, resource, onClose]);
 
   return (
     <BaseResourceDialog
       title="Edit Resource"
       testId="edit-resource-dialog"
+      resource={resource}
+      onChange={onChange}
       onClose={onClose}
       isOpen={isOpen}
+      isBackButtonVisible={isBackButtonVisible}
       onSubmit={handleUpdateResource}
       error={error}
       isLoading={isLoading}

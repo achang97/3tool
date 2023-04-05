@@ -78,7 +78,7 @@ export const EventHandlerEditor = ({
         name={name}
         // @ts-ignore We know that this accesses the correct data key
         data={eventHandler.data[eventHandler.type]}
-        onChangeData={handleDataChange}
+        onDataChange={handleDataChange}
         isAutosaved={isAutosaved}
       />
     );

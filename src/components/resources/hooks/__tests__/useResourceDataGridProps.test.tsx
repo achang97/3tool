@@ -1,40 +1,37 @@
-import { Resource, ResourceType } from '@app/types';
+import { Resource } from '@app/types';
 import { render, renderHook } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockSmartContractResource } from '@tests/constants/data';
 import { ReactNode } from 'react';
+import { pushResource } from '@app/redux/features/resourcesSlice';
 import {
   formatCreatedAt,
   formatResourceType,
   renderNameCell,
 } from '../../utils/dataGridFormatters';
-import { useDataGridProps } from '../useDataGridProps';
+import { useResourceDataGridProps } from '../useResourceDataGridProps';
 
-const mockHandleEditClick = jest.fn();
+const mockDispatch = jest.fn();
 const mockResources: Resource[] = [mockSmartContractResource];
 
-describe('useDataGridProps', () => {
+jest.mock('@app/redux/hooks', () => ({
+  useAppDispatch: jest.fn(() => mockDispatch),
+}));
+
+describe('useResourceDataGridProps', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   describe('rows', () => {
     it('returns empty array if resources is undefined', () => {
-      const { result } = renderHook(() =>
-        useDataGridProps({
-          resources: undefined,
-          onEditClick: mockHandleEditClick,
-        })
-      );
+      const { result } = renderHook(() => useResourceDataGridProps(undefined));
       expect(result.current.rows).toEqual([]);
     });
 
     it('returns resources array', () => {
       const { result } = renderHook(() =>
-        useDataGridProps({
-          resources: mockResources,
-          onEditClick: mockHandleEditClick,
-        })
+        useResourceDataGridProps(mockResources)
       );
       expect(result.current.rows).toEqual(mockResources);
     });
@@ -43,10 +40,7 @@ describe('useDataGridProps', () => {
   describe('columns', () => {
     it('returns type as 1st column', () => {
       const { result } = renderHook(() =>
-        useDataGridProps({
-          resources: mockResources,
-          onEditClick: mockHandleEditClick,
-        })
+        useResourceDataGridProps(mockResources)
       );
       expect(result.current.columns[0]).toEqual({
         field: 'type',
@@ -58,10 +52,7 @@ describe('useDataGridProps', () => {
 
     it('returns name as 2nd column', () => {
       const { result } = renderHook(() =>
-        useDataGridProps({
-          resources: mockResources,
-          onEditClick: mockHandleEditClick,
-        })
+        useResourceDataGridProps(mockResources)
       );
       expect(result.current.columns[1]).toEqual({
         field: 'name',
@@ -73,10 +64,7 @@ describe('useDataGridProps', () => {
 
     it('returns created at date as 3rd column', () => {
       const { result } = renderHook(() =>
-        useDataGridProps({
-          resources: mockResources,
-          onEditClick: mockHandleEditClick,
-        })
+        useResourceDataGridProps(mockResources)
       );
       expect(result.current.columns[2]).toEqual({
         field: 'createdAt',
@@ -89,10 +77,7 @@ describe('useDataGridProps', () => {
 
     it('returns actions as 4th column', () => {
       const { result } = renderHook(() =>
-        useDataGridProps({
-          resources: mockResources,
-          onEditClick: mockHandleEditClick,
-        })
+        useResourceDataGridProps(mockResources)
       );
       expect(result.current.columns[3]).toEqual({
         field: 'actions',
@@ -103,19 +88,14 @@ describe('useDataGridProps', () => {
     });
 
     describe('getActions', () => {
-      it('returns array with edit action if type is smart_contract', async () => {
+      it('returns array with edit action', async () => {
         const { result } = renderHook(() =>
-          useDataGridProps({
-            resources: mockResources,
-            onEditClick: mockHandleEditClick,
-          })
+          useResourceDataGridProps(mockResources)
         );
 
         const mockGridRowParams = {
           id: 1,
-          row: {
-            type: ResourceType.SmartContract,
-          },
+          row: mockResources[0],
         };
         // @ts-ignore getActions should be defined
         const actions = result.current.columns[3].getActions(mockGridRowParams);
@@ -132,26 +112,9 @@ describe('useDataGridProps', () => {
 
         const editButton = renderResult.getByText('Edit');
         await userEvent.click(editButton);
-        expect(mockHandleEditClick).toHaveBeenCalledWith(mockGridRowParams.row);
-      });
-
-      it('returns empty array if type is not smart_contract', () => {
-        const { result } = renderHook(() =>
-          useDataGridProps({
-            resources: mockResources,
-            onEditClick: mockHandleEditClick,
-          })
+        expect(mockDispatch).toHaveBeenCalledWith(
+          pushResource({ type: 'edit', resource: mockGridRowParams.row })
         );
-
-        const mockGridRowParams = {
-          id: 1,
-          row: {
-            type: ResourceType.Dune,
-          },
-        };
-        // @ts-ignore getActions should be defined
-        const actions = result.current.columns[3].getActions(mockGridRowParams);
-        expect(actions).toHaveLength(0);
       });
     });
   });

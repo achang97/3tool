@@ -80,8 +80,8 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
         eventHandlers={component.eventHandlers}
         // @ts-ignore We know that this accesses the correct data key
         data={component.data[component.type]}
-        onChangeData={debouncedHandleUpdateData}
-        onChangeEventHandlers={debouncedHandleUpdateEventHandlers}
+        onDataChange={debouncedHandleUpdateData}
+        onEventHandlersChange={debouncedHandleUpdateEventHandlers}
       />
     );
   }, [

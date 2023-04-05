@@ -1,58 +1,46 @@
-import { usePrevious } from '@app/hooks/usePrevious';
 import { getContractAbi } from '@app/utils/contracts';
 import { prettifyJSON } from '@app/utils/string';
 import { isAddress } from 'ethers/lib/utils';
 import { useEffect, useState } from 'react';
 
 type HookArgs = {
-  abi: string;
-  address: string;
-  chainId: number;
-  onAbiChange: (newAbi: string) => void;
+  address?: string;
+  chainId?: number;
 };
 
 type HookReturnType = {
+  abi: string;
   error?: Error;
   isLoading: boolean;
 };
 
-export const useFetchAbi = ({
-  abi,
-  chainId,
-  address,
-  onAbiChange,
-}: HookArgs): HookReturnType => {
+export const useFetchAbi = ({ chainId, address }: HookArgs): HookReturnType => {
+  const [abi, setAbi] = useState('');
   const [error, setError] = useState<Error>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const prevArgs = usePrevious({ address, chainId });
-
   useEffect(() => {
     const fetchAbi = async () => {
+      if (!address || !chainId || !isAddress(address)) {
+        return;
+      }
+
       setIsLoading(true);
 
       try {
         const fetchedAbi = await getContractAbi(address, chainId);
-        onAbiChange(prettifyJSON(fetchedAbi));
+        setAbi(prettifyJSON(fetchedAbi));
         setError(undefined);
       } catch (e) {
-        onAbiChange('');
+        setAbi('');
         setError(e as Error);
       }
 
       setIsLoading(false);
     };
 
-    if (!isAddress(address) || abi) {
-      return;
-    }
-
-    if (prevArgs?.address === address && prevArgs?.chainId === chainId) {
-      return;
-    }
-
     fetchAbi();
-  }, [abi, address, chainId, onAbiChange, prevArgs]);
+  }, [address, chainId]);
 
-  return { error, isLoading };
+  return { abi, error, isLoading };
 };

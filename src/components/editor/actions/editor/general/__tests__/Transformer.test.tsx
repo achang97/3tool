@@ -2,7 +2,7 @@ import userEvent from '@testing-library/user-event';
 import { render } from '@tests/utils/renderWithContext';
 import { Transformer } from '../Transformer';
 
-const mockHandleChangeData = jest.fn();
+const mockHandleDataChange = jest.fn();
 
 jest.mock(
   '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
@@ -20,20 +20,20 @@ describe('Transformer', () => {
   });
 
   it('renders label', () => {
-    const result = render(<Transformer onChangeData={mockHandleChangeData} />);
+    const result = render(<Transformer onDataChange={mockHandleDataChange} />);
     expect(result.getByText('Transformer (JavaScript)')).toBeTruthy();
   });
 
   it('renders value', () => {
     const mockValue = 'value';
     const result = render(
-      <Transformer value={mockValue} onChangeData={mockHandleChangeData} />
+      <Transformer value={mockValue} onDataChange={mockHandleDataChange} />
     );
     expect(result.getByText(mockValue)).toBeTruthy();
   });
 
   it('renders placeholder', () => {
-    const result = render(<Transformer onChangeData={mockHandleChangeData} />);
+    const result = render(<Transformer onDataChange={mockHandleDataChange} />);
     expect(
       result.getByText(
         'return formatDataAsArray(data).filter(row => row.quantity > 20)'
@@ -41,12 +41,12 @@ describe('Transformer', () => {
     ).toBeTruthy();
   });
 
-  it('calls onChangeData on value change', async () => {
+  it('calls onDataChange on value change', async () => {
     const mockValue = 'value';
-    const result = render(<Transformer onChangeData={mockHandleChangeData} />);
+    const result = render(<Transformer onDataChange={mockHandleDataChange} />);
     const input = result.getByRole('textbox');
     await userEvent.type(input, mockValue);
-    expect(mockHandleChangeData).toHaveBeenCalledWith({
+    expect(mockHandleDataChange).toHaveBeenCalledWith({
       transformer: mockValue,
     });
   });

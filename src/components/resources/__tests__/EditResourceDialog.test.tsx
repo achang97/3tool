@@ -1,21 +1,38 @@
 import { useUpdateResourceMutation } from '@app/redux/services/resources';
-import { ApiError, ResourceType } from '@app/types';
-import { getContractAbi } from '@app/utils/contracts';
-import { waitFor } from '@testing-library/dom';
+import { ApiError, Resource, ResourceType } from '@app/types';
 import userEvent from '@testing-library/user-event';
 import { mockValidAddress } from '@tests/constants/data';
-import { completeContractForm } from '@tests/utils/form';
 import { render } from '@tests/utils/renderWithContext';
-import { Abi } from 'abitype';
+import {
+  mockApiErrorResponse,
+  mockApiSuccessResponse,
+} from '@tests/constants/api';
 import { mainnet } from 'wagmi';
 import { EditResourceDialog } from '../EditResourceDialog';
 
-const mockResourceId = 'resource-id';
-
 const mockHandleClose = jest.fn();
+const mockHandleChange = jest.fn();
 const mockUpdateResource = jest.fn();
 
-jest.mock('@app/utils/contracts');
+const mockResource = {
+  name: 'name',
+  type: ResourceType.SmartContract,
+  data: {
+    smartContract: {
+      address: mockValidAddress,
+      chainId: mainnet.id,
+      abiId: '1',
+    },
+  },
+} as Resource;
+
+jest.mock('../hooks/useFetchAbi', () => ({
+  useFetchAbi: jest.fn(() => ({})),
+}));
+
+jest.mock('../hooks/useAbiResources', () => ({
+  useAbiResources: jest.fn(() => []),
+}));
 
 jest.mock('@app/redux/services/resources', () => ({
   ...jest.requireActual('@app/redux/services/resources'),
@@ -31,39 +48,17 @@ describe('EditResourceDialog', () => {
     ]);
   });
 
-  it('does not render dialog', () => {
-    const result = render(
-      <EditResourceDialog
-        resourceId={mockResourceId}
-        onClose={mockHandleClose}
-        isOpen={false}
-      />
-    );
-    expect(result.queryByTestId('create-resource-dialog')).toBeNull();
-  });
-
-  it('calls onClose when dialog is closed', async () => {
-    render(
-      <EditResourceDialog
-        resourceId={mockResourceId}
-        onClose={mockHandleClose}
-        isOpen
-      />
-    );
-
-    await userEvent.keyboard('[Escape]');
-    expect(mockHandleClose).toHaveBeenCalled();
-  });
-
   it('renders title', () => {
     const result = render(
       <EditResourceDialog
-        resourceId={mockResourceId}
+        resource={mockResource}
         onClose={mockHandleClose}
+        onChange={mockHandleChange}
         isOpen
+        isBackButtonVisible
       />
     );
-    expect(result.getByText('Edit Resource')).toBeTruthy();
+    expect(result.getByText(/Edit Resource/)).toBeTruthy();
   });
 
   it('renders error message', () => {
@@ -81,67 +76,47 @@ describe('EditResourceDialog', () => {
 
     const result = render(
       <EditResourceDialog
-        resourceId={mockResourceId}
+        resource={mockResource}
         onClose={mockHandleClose}
+        onChange={mockHandleChange}
         isOpen
+        isBackButtonVisible
       />
     );
     expect(result.getByText('Mock Error')).toBeTruthy();
   });
 
-  it('calls onSubmit with smart contract resource on Save button click', async () => {
-    const mockAbi: Abi = [];
-    (getContractAbi as jest.Mock).mockImplementation(() => mockAbi);
+  it('calls onClose on successful update of resource', async () => {
+    mockUpdateResource.mockImplementation(() => mockApiSuccessResponse);
 
     const result = render(
       <EditResourceDialog
-        resourceId={mockResourceId}
+        resource={mockResource}
         onClose={mockHandleClose}
+        onChange={mockHandleChange}
         isOpen
+        isBackButtonVisible
       />
     );
-    const contractFields = {
-      name: 'Contract',
-      chainId: mainnet.id,
-      address: mockValidAddress,
-    };
-
-    await completeContractForm(result, contractFields);
     await userEvent.click(result.getByText('Save'));
-
-    expect(mockUpdateResource).toHaveBeenCalledWith({
-      id: mockResourceId,
-      type: ResourceType.SmartContract,
-      name: contractFields.name,
-      data: {
-        smartContract: {
-          chainId: contractFields.chainId,
-          address: contractFields.address,
-          abi: JSON.stringify(mockAbi),
-          isProxy: false,
-          logicAddress: undefined,
-          logicAbi: undefined,
-        },
-      },
-    });
+    expect(mockUpdateResource).toHaveBeenCalledWith(mockResource);
+    expect(mockHandleClose).toHaveBeenCalled();
   });
 
-  it('calls onClose on successful creation of resource', async () => {
-    (useUpdateResourceMutation as jest.Mock).mockImplementation(() => [
-      mockUpdateResource,
-      { data: {} },
-    ]);
+  it('does not call onClose on failed update of resource', async () => {
+    mockUpdateResource.mockImplementation(() => mockApiErrorResponse);
 
-    render(
+    const result = render(
       <EditResourceDialog
-        resourceId={mockResourceId}
+        resource={mockResource}
         onClose={mockHandleClose}
+        onChange={mockHandleChange}
         isOpen
+        isBackButtonVisible
       />
     );
-
-    await waitFor(() => {
-      expect(mockHandleClose).toHaveBeenCalled();
-    });
+    await userEvent.click(result.getByText('Save'));
+    expect(mockUpdateResource).toHaveBeenCalledWith(mockResource);
+    expect(mockHandleClose).not.toHaveBeenCalled();
   });
 });

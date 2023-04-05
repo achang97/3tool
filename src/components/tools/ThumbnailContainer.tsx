@@ -5,15 +5,17 @@ type ThumbnailContainerProps = {
   children: ReactNode;
   icon: ReactNode;
   onClick: () => void;
+  testId?: string;
 };
 
 export const ThumbnailContainer = ({
   children,
   icon,
   onClick,
+  testId,
 }: ThumbnailContainerProps) => {
   return (
-    <Grid item xs={3}>
+    <Grid item xs={3} data-testid={testId}>
       <Box
         sx={{
           display: 'flex',

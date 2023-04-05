@@ -1,6 +1,6 @@
 export enum ResourceType {
   SmartContract = 'smartContract',
-  Dune = 'dune',
+  Abi = 'abi',
 }
 
 export type Resource = {
@@ -11,19 +11,18 @@ export type Resource = {
   updatedAt: string;
   data: {
     [ResourceType.SmartContract]?: SmartContractData;
-    [ResourceType.Dune]?: DuneData;
+    [ResourceType.Abi]?: AbiData;
   };
 };
 
 export type SmartContractData = {
   chainId: number;
   address: string;
-  abi: string;
-  isProxy: boolean;
-  logicAddress?: string;
-  logicAbi?: string;
+  abiId: string;
 };
 
-export type DuneData = {
-  apiKey: string;
+export type AbiData = {
+  isProxy: boolean;
+  abi: string;
+  logicAbi?: string;
 };

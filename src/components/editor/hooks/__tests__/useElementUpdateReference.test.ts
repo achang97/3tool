@@ -97,7 +97,7 @@ describe('useElementUpdateReference', () => {
         name: 'action1',
         data: {
           smartContractRead: {
-            resourceId: '{{ action1.text }}',
+            smartContractId: '{{ action1.text }}',
           },
         },
         eventHandlers: [],
@@ -108,7 +108,7 @@ describe('useElementUpdateReference', () => {
         _.merge(mockElement, {
           data: {
             smartContractRead: {
-              resourceId: '{{ newAction.text }}',
+              smartContractId: '{{ newAction.text }}',
             },
           },
         })

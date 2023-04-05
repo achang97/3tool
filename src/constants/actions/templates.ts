@@ -19,10 +19,10 @@ export const ACTION_DATA_TEMPLATES: ActionDataTemplates = {
   },
   [ActionType.SmartContractRead]: {
     ...TRANSFORMABLE_DATA_TEMPLATE,
-    resourceId: '',
+    smartContractId: '',
   },
   [ActionType.SmartContractWrite]: {
     ...TRANSFORMABLE_DATA_TEMPLATE,
-    resourceId: '',
+    smartContractId: '',
   },
 };

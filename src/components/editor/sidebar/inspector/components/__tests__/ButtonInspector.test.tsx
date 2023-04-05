@@ -33,8 +33,8 @@ const mockEventHandlers: EventHandler<ComponentEvent>[] = [
   },
 ];
 
-const mockHandleChangeData = jest.fn();
-const mockHandleChangeEventHandlers = jest.fn();
+const mockHandleDataChange = jest.fn();
+const mockHandleEventHandlersChange = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
@@ -63,8 +63,8 @@ describe('ButtonInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Basic');
@@ -76,8 +76,8 @@ describe('ButtonInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -85,7 +85,7 @@ describe('ButtonInspector', () => {
         field: 'text',
         label: 'Text',
         value: mockData.text,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.button.text },
       });
     });
@@ -98,8 +98,8 @@ describe('ButtonInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
       validateSection(result, 'Interaction');
@@ -111,8 +111,8 @@ describe('ButtonInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -120,7 +120,7 @@ describe('ButtonInspector', () => {
         field: 'disabled',
         label: 'Disabled',
         value: mockData.disabled,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.button.disabled },
       });
     });
@@ -131,8 +131,8 @@ describe('ButtonInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
@@ -140,7 +140,7 @@ describe('ButtonInspector', () => {
         field: 'loading',
         label: 'Loading',
         value: mockData.loading,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.button.loading },
       });
     });
@@ -151,15 +151,15 @@ describe('ButtonInspector', () => {
           name={mockName}
           data={mockData}
           eventHandlers={mockEventHandlers}
-          onChangeData={mockHandleChangeData}
-          onChangeEventHandlers={mockHandleChangeEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
 
       await validateComponentEventHandlers(result, 'Interaction', {
         eventHandlers: mockEventHandlers,
         eventOptions: COMPONENT_CONFIGS.button.events,
-        onChange: mockHandleChangeEventHandlers,
+        onChange: mockHandleEventHandlersChange,
       });
     });
   });

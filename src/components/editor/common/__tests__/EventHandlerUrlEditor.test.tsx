@@ -7,7 +7,7 @@ import { render } from '@tests/utils/renderWithContext';
 import { EventHandlerUrlEditor } from '../EventHandlerUrlEditor';
 
 const mockName = 'name';
-const mockHandleChangeData = jest.fn();
+const mockHandleDataChange = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => jest.fn()),
@@ -22,7 +22,7 @@ describe('EventHandlerUrlEditor', () => {
         <EventHandlerUrlEditor
           name={mockName}
           data={{ url: 'url', newTab: false }}
-          onChangeData={mockHandleChangeData}
+          onDataChange={mockHandleDataChange}
         />
       );
 
@@ -30,7 +30,7 @@ describe('EventHandlerUrlEditor', () => {
         field: 'url',
         label: 'URL',
         value: 'url',
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: {
           type: EVENT_HANDLER_DATA_TYPES.url.url,
           placeholder: 'Add URL',
@@ -43,7 +43,7 @@ describe('EventHandlerUrlEditor', () => {
         <EventHandlerUrlEditor
           name={mockName}
           data={{ url: '', newTab: false }}
-          onChangeData={mockHandleChangeData}
+          onDataChange={mockHandleDataChange}
         />
       );
 
@@ -56,7 +56,7 @@ describe('EventHandlerUrlEditor', () => {
       <EventHandlerUrlEditor
         name={mockName}
         data={{ url: 'url', newTab: true }}
-        onChangeData={mockHandleChangeData}
+        onDataChange={mockHandleDataChange}
       />
     );
 
@@ -64,7 +64,7 @@ describe('EventHandlerUrlEditor', () => {
       field: 'newTab',
       label: 'New Tab',
       value: true,
-      onChange: mockHandleChangeData,
+      onChange: mockHandleDataChange,
       data: {},
     });
   });

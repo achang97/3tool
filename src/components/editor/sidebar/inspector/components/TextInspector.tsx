@@ -12,7 +12,7 @@ const DATA_TYPES = COMPONENT_DATA_TYPES.text;
 export const TextInspector = ({
   name,
   data,
-  onChangeData,
+  onDataChange,
 }: BaseComponentInspectorProps<ComponentType.Text>) => {
   const config: BaseInspectorSectionProps<Component['data']['text']>[] =
     useMemo(() => {
@@ -67,7 +67,7 @@ export const TextInspector = ({
     <BaseInspector
       name={name}
       config={config}
-      onChange={onChangeData}
+      onChange={onDataChange}
       isAutosaved
       testId="text-inspector"
     />

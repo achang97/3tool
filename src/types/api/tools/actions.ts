@@ -20,7 +20,7 @@ type JavascriptData = TransformableData<{
 }>;
 
 type SmartContractBaseData = TransformableData<{
-  resourceId: string;
+  smartContractId: string;
 }>;
 
 type SmartContractReadData = SmartContractBaseData;

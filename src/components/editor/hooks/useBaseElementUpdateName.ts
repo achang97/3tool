@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { ApiSuccessResponse, Tool } from '@app/types';
 import { isSuccessfulApiResponse } from '@app/utils/api';
+import { validateVariableName } from '@app/utils/namespace';
 import { useActiveTool } from './useActiveTool';
 import {
   ReferenceUpdate,
@@ -28,19 +29,16 @@ export const useBaseElementUpdateName = ({
 
   const validateName = useCallback(
     (newName: string) => {
-      if (!newName.match(/^[\w_$]+$/)) {
-        return 'Name can only contain letters, numbers, _, or $';
-      }
-
-      if (!newName.match(/^[a-zA-Z_]/)) {
-        return 'Name must start with a letter or "_"';
+      const validateVariableError = validateVariableName(newName);
+      if (validateVariableError) {
+        return validateVariableError;
       }
 
       if (elementNames.includes(newName)) {
         return `A component or action with the name "${newName}" already exists`;
       }
 
-      return '';
+      return undefined;
     },
     [elementNames]
   );

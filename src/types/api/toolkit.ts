@@ -2,7 +2,7 @@ import { SerializedError } from '@reduxjs/toolkit';
 
 export type ApiResponse<T = {}> = ApiSuccessResponse<T> | ApiErrorResponse;
 
-export type ApiSuccessResponse<T> = {
+export type ApiSuccessResponse<T = unknown> = {
   data: T;
 };
 

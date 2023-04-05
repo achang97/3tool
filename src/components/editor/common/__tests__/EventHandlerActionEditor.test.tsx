@@ -7,7 +7,7 @@ import { useToolElementNames } from '../../hooks/useToolElementNames';
 import { EventHandlerActionEditor } from '../EventHandlerActionEditor';
 
 const mockName = 'name';
-const mockHandleChangeData = jest.fn();
+const mockHandleDataChange = jest.fn();
 
 jest.mock('../../hooks/useToolElementNames');
 
@@ -33,14 +33,14 @@ describe('EventHandlerActionEditor', () => {
             actionName: 'action1',
             method: ActionMethod.Trigger,
           }}
-          onChangeData={mockHandleChangeData}
+          onDataChange={mockHandleDataChange}
         />
       );
       await validateSelectField(result, undefined, {
         field: 'actionName',
         label: 'Action',
         value: 'action1',
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: {
           options: mockActionNames.map((actionName) => ({
             label: actionName,
@@ -59,7 +59,7 @@ describe('EventHandlerActionEditor', () => {
         <EventHandlerActionEditor
           name={mockName}
           data={{ actionName: '', method: ActionMethod.Trigger }}
-          onChangeData={mockHandleChangeData}
+          onDataChange={mockHandleDataChange}
         />
       );
       expect(result.getByText('No created actions')).toBeTruthy();
@@ -75,7 +75,7 @@ describe('EventHandlerActionEditor', () => {
         <EventHandlerActionEditor
           name={mockName}
           data={{ actionName: '', method: ActionMethod.Trigger }}
-          onChangeData={mockHandleChangeData}
+          onDataChange={mockHandleDataChange}
         />
       );
       expect(result.getByText('Select action')).toBeTruthy();
@@ -90,7 +90,7 @@ describe('EventHandlerActionEditor', () => {
         <EventHandlerActionEditor
           name={mockName}
           data={{ actionName: '', method: ActionMethod.Trigger }}
-          onChangeData={mockHandleChangeData}
+          onDataChange={mockHandleDataChange}
         />
       );
       await userEvent.click(result.getByLabelText('Action'));
@@ -107,14 +107,14 @@ describe('EventHandlerActionEditor', () => {
             actionName: 'action1',
             method: ActionMethod.Trigger,
           }}
-          onChangeData={mockHandleChangeData}
+          onDataChange={mockHandleDataChange}
         />
       );
       await validateSelectField(result, undefined, {
         field: 'method',
         label: 'Method',
         value: ActionMethod.Trigger,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: {
           options: Object.values(ActionMethod).map((method) => ({
             label: ACTION_METHOD_CONFIGS[method].label,
@@ -132,7 +132,7 @@ describe('EventHandlerActionEditor', () => {
             actionName: '',
             method: '' as unknown as ActionMethod,
           }}
-          onChangeData={mockHandleChangeData}
+          onDataChange={mockHandleDataChange}
         />
       );
       expect(result.getByText('Select method')).toBeTruthy();

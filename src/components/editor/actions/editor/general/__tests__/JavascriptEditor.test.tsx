@@ -9,7 +9,7 @@ const mockData: Action['data']['javascript'] = {
   transformer: 'transformer',
 };
 
-const mockHandleChangeData = jest.fn();
+const mockHandleDataChange = jest.fn();
 
 jest.mock(
   '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
@@ -29,28 +29,28 @@ describe('JavascriptEditor', () => {
   describe('code', () => {
     it('renders label', () => {
       const result = render(
-        <JavascriptEditor data={mockData} onChangeData={mockHandleChangeData} />
+        <JavascriptEditor data={mockData} onDataChange={mockHandleDataChange} />
       );
       expect(result.getByText('JS Code (JavaScript)')).toBeTruthy();
     });
 
     it('displays value from code field', () => {
       const result = render(
-        <JavascriptEditor data={mockData} onChangeData={mockHandleChangeData} />
+        <JavascriptEditor data={mockData} onDataChange={mockHandleDataChange} />
       );
       expect(result.getByText(mockData?.code as string)).toBeTruthy();
     });
 
-    it('calls onChangeData with code field', async () => {
+    it('calls onDataChange with code field', async () => {
       const mockValue = '1';
       const result = render(
-        <JavascriptEditor data={mockData} onChangeData={mockHandleChangeData} />
+        <JavascriptEditor data={mockData} onDataChange={mockHandleDataChange} />
       );
       const input = within(
         result.getByTestId('code-mirror-JS Code (JavaScript)')
       ).getByRole('textbox');
       await userEvent.type(input, mockValue);
-      expect(mockHandleChangeData).toHaveBeenCalledWith({
+      expect(mockHandleDataChange).toHaveBeenCalledWith({
         code: `${mockValue}${mockData?.code}`,
       });
     });
@@ -59,21 +59,21 @@ describe('JavascriptEditor', () => {
   describe('transformer', () => {
     it('displays value from transformer field', () => {
       const result = render(
-        <JavascriptEditor data={mockData} onChangeData={mockHandleChangeData} />
+        <JavascriptEditor data={mockData} onDataChange={mockHandleDataChange} />
       );
       expect(result.getByText(mockData?.transformer as string)).toBeTruthy();
     });
 
-    it('calls onChangeData with transformer field', async () => {
+    it('calls onDataChange with transformer field', async () => {
       const mockValue = '1';
       const result = render(
-        <JavascriptEditor data={mockData} onChangeData={mockHandleChangeData} />
+        <JavascriptEditor data={mockData} onDataChange={mockHandleDataChange} />
       );
       const input = within(
         result.getByTestId('code-mirror-Transformer (JavaScript)')
       ).getByRole('textbox');
       await userEvent.type(input, mockValue);
-      expect(mockHandleChangeData).toHaveBeenCalledWith({
+      expect(mockHandleDataChange).toHaveBeenCalledWith({
         transformer: `${mockValue}${mockData?.transformer}`,
       });
     });

@@ -38,7 +38,7 @@ describe('dataGridFormatters', () => {
       const result = render(
         renderNameCell({
           value: mockName,
-          row: { type: ResourceType.Dune },
+          row: { type: ResourceType.Abi },
         } as GridRenderCellParams)
       );
 

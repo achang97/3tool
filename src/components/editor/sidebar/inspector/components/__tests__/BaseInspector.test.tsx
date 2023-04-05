@@ -10,7 +10,7 @@ import { render } from '@tests/utils/renderWithContext';
 import { BaseInspector, BaseInspectorSectionProps } from '../BaseInspector';
 
 const mockName = 'name';
-const mockHandleChangeData = jest.fn();
+const mockHandleDataChange = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
@@ -50,7 +50,7 @@ describe('BaseInspector', () => {
       <BaseInspector
         name={mockName}
         config={mockConfig}
-        onChange={mockHandleChangeData}
+        onChange={mockHandleDataChange}
       />
     );
     expect(result.queryByText('Text')).toBeNull();
@@ -68,7 +68,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -92,7 +92,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -118,7 +118,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -151,7 +151,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -159,7 +159,7 @@ describe('BaseInspector', () => {
         field: 'text',
         label: 'Text',
         value: '{{ something }}',
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: {
           type: mockInputType,
         },
@@ -191,7 +191,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -233,7 +233,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -241,7 +241,7 @@ describe('BaseInspector', () => {
         field: 'enum',
         label: 'Enum',
         value: 1,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: {
           options: mockOptions,
         },
@@ -283,7 +283,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -291,7 +291,7 @@ describe('BaseInspector', () => {
         field: 'select',
         label: 'Select',
         value: 1,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: {
           options: mockOptions,
         },
@@ -323,7 +323,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -354,7 +354,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -385,7 +385,7 @@ describe('BaseInspector', () => {
         <BaseInspector
           name={mockName}
           config={mockConfig}
-          onChange={mockHandleChangeData}
+          onChange={mockHandleDataChange}
         />
       );
 
@@ -393,7 +393,7 @@ describe('BaseInspector', () => {
         field: 'switch',
         label: 'Switch',
         value: false,
-        onChange: mockHandleChangeData,
+        onChange: mockHandleDataChange,
         data: {},
       });
     });

@@ -36,8 +36,8 @@ export type BaseComponentInspectorProps<T extends ComponentType = any> = {
   name: string;
   data: Component['data'][T];
   eventHandlers: EventHandler<ComponentEvent>[];
-  onChangeData: (update: RecursivePartial<Component['data'][T]>) => void;
-  onChangeEventHandlers: (
+  onDataChange: (update: RecursivePartial<Component['data'][T]>) => void;
+  onEventHandlersChange: (
     eventHandlers: EventHandler<ComponentEvent>[]
   ) => void;
 };
@@ -45,11 +45,11 @@ export type BaseComponentInspectorProps<T extends ComponentType = any> = {
 export type BaseEventHandlerEditorProps<T extends EventHandlerType> = {
   name: string;
   data: EventHandler['data'][T];
-  onChangeData: (update: RecursivePartial<EventHandler['data'][T]>) => void;
+  onDataChange: (update: RecursivePartial<EventHandler['data'][T]>) => void;
   isAutosaved?: boolean;
 };
 
 export type BaseActionEditorProps<T extends ActionType> = {
   data: Action['data'][T];
-  onChangeData: (update: RecursivePartial<Action['data'][T]>) => void;
+  onDataChange: (update: RecursivePartial<Action['data'][T]>) => void;
 };

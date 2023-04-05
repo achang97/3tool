@@ -15,8 +15,8 @@ export const ButtonInspector = ({
   name,
   data,
   eventHandlers,
-  onChangeData,
-  onChangeEventHandlers,
+  onDataChange,
+  onEventHandlersChange,
 }: BaseComponentInspectorProps<ComponentType.Button>) => {
   const config: BaseInspectorSectionProps<Component['data']['button']>[] =
     useMemo(() => {
@@ -66,20 +66,20 @@ export const ButtonInspector = ({
                   name={name}
                   eventHandlers={eventHandlers}
                   eventOptions={BUTTON_CONFIG.events}
-                  onChange={onChangeEventHandlers}
+                  onChange={onEventHandlersChange}
                 />
               ),
             },
           ],
         },
       ];
-    }, [data, eventHandlers, name, onChangeEventHandlers]);
+    }, [data, eventHandlers, name, onEventHandlersChange]);
 
   return (
     <BaseInspector
       name={name}
       config={config}
-      onChange={onChangeData}
+      onChange={onDataChange}
       isAutosaved
       testId="button-inspector"
     />
