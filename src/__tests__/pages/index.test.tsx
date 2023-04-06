@@ -6,7 +6,7 @@ import { render } from '@tests/utils/renderWithContext';
 
 const mockTools: Tool[] = [
   {
-    id: '1',
+    _id: '1',
     name: 'Tool 1',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

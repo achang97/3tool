@@ -135,7 +135,7 @@ describe('ResourceModals', () => {
 
   it('sets abi field on smart contract modal if abi was successfully created', async () => {
     mockCreateResource.mockImplementation(() => ({
-      data: { type: ResourceType.Abi, id: 'newId' },
+      data: { type: ResourceType.Abi, _id: 'newId' },
     }));
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       resourceStack: [

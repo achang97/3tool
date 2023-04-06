@@ -32,14 +32,16 @@ export const toolsApi = createApi({
     }),
     updateTool: builder.mutation<
       Tool,
-      Pick<Tool, 'id'> & Partial<Pick<Tool, 'name' | 'components' | 'actions'>>
+      Pick<Tool, '_id'> & Partial<Pick<Tool, 'name' | 'components' | 'actions'>>
     >({
-      query: ({ id, ...body }) => ({
-        url: `/tools/${id}`,
+      query: ({ _id, ...body }) => ({
+        url: `/tools/${_id}`,
         method: 'PUT',
         body,
       }),
-      invalidatesTags: ['Tool'],
+      // NOTE: Adding this field causes a GET to fire after every PUT in the editor, which is
+      // unnecessary (as the updated tool object is already returned from the PUT endpoint).
+      // invalidatesTags: ['Tool'],
     }),
   }),
 });

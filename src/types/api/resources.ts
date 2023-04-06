@@ -4,7 +4,7 @@ export enum ResourceType {
 }
 
 export type Resource = {
-  id: string;
+  _id: string;
   name: string;
   type: ResourceType;
   createdAt: string;

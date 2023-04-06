@@ -65,7 +65,7 @@ export const SmartContractForm = ({
       },
       // These values are all generated on the BE, but we provide placeholder values until the
       // object is created.
-      id: '',
+      _id: '',
       createdAt: '',
       updatedAt: '',
     };
@@ -111,7 +111,10 @@ export const SmartContractForm = ({
       />
       <Select
         value={data?.abiId}
-        placeholder="Select contract ABI"
+        placeholder={
+          abis.length === 0 ? 'No created ABIs' : 'Select contract ABI'
+        }
+        disabled={abis.length === 0}
         label="ABI"
         onChange={handleAbiChange}
         required
@@ -120,7 +123,7 @@ export const SmartContractForm = ({
         }}
       >
         {abis.map((abi) => (
-          <MenuItem key={abi.id} value={abi.id}>
+          <MenuItem key={abi._id} value={abi._id}>
             {abi.name}
           </MenuItem>
         ))}

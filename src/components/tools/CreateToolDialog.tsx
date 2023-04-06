@@ -42,7 +42,7 @@ export const CreateToolDialog = ({
 
       onClose();
       setName('');
-      push(`/editor/${response.data.id}`);
+      push(`/editor/${response.data._id}`);
     },
     [createTool, name, onClose, push]
   );

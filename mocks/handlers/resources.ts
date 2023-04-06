@@ -2,9 +2,9 @@ import { rest } from 'msw';
 import { Resource, ResourceType } from '@app/types';
 import { generateRandomDate } from '../utils';
 
-const RESOURCES: Resource[] = [
+const mockResources: Resource[] = [
   {
-    id: '1',
+    _id: '1',
     type: ResourceType.SmartContract,
     name: 'stakingPool',
     createdAt: generateRandomDate(),
@@ -18,7 +18,7 @@ const RESOURCES: Resource[] = [
     },
   },
   {
-    id: '2',
+    _id: '2',
     type: ResourceType.SmartContract,
     name: 'donations',
     createdAt: generateRandomDate(),
@@ -32,7 +32,7 @@ const RESOURCES: Resource[] = [
     },
   },
   {
-    id: '3',
+    _id: '3',
     type: ResourceType.Abi,
     name: 'stakingPool',
     createdAt: generateRandomDate(),
@@ -47,7 +47,7 @@ const RESOURCES: Resource[] = [
     },
   },
   {
-    id: '4',
+    _id: '4',
     type: ResourceType.Abi,
     name: 'donations',
     createdAt: generateRandomDate(),
@@ -61,10 +61,10 @@ const RESOURCES: Resource[] = [
   },
 ];
 
-export const resourceHandlers = [
+export const resourcesHandlers = [
   rest.get('*/api/resources/:id', (req, res, ctx) => {
-    const resource = RESOURCES.find(
-      (currResource) => currResource.id === req.params.id
+    const resource = mockResources.find(
+      (currResource) => currResource._id === req.params.id
     );
 
     if (!resource) {
@@ -78,7 +78,7 @@ export const resourceHandlers = [
     return res(
       ctx.status(200),
       ctx.json<Resource[]>(
-        RESOURCES.filter(
+        mockResources.filter(
           (resource) => !name || resource.name.toLowerCase().includes(name)
         )
       )
@@ -87,7 +87,7 @@ export const resourceHandlers = [
   rest.post('*/api/resources', async (req, res, ctx) => {
     const body = await req.json<Pick<Resource, 'name' | 'type' | 'data'>>();
 
-    if (RESOURCES.some((resource) => resource.name === body.name)) {
+    if (mockResources.some((resource) => resource.name === body.name)) {
       return res(
         ctx.status(400),
         ctx.json({
@@ -97,24 +97,24 @@ export const resourceHandlers = [
     }
 
     const newResource: Resource = {
-      id: crypto.randomUUID(),
+      _id: crypto.randomUUID(),
       type: body.type,
       name: body.name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       data: body.data,
     };
-    RESOURCES.push(newResource);
+    mockResources.push(newResource);
 
     return res(ctx.status(201), ctx.json<Resource>(newResource));
   }),
   rest.put('*/api/resources/:id', async (req, res, ctx) => {
     const body = await req.json<
-      Pick<Resource, 'id'> & Partial<Pick<Resource, 'name' | 'data'>>
+      Pick<Resource, '_id'> & Partial<Pick<Resource, 'name' | 'data'>>
     >();
 
-    const resource = RESOURCES.find(
-      (currResource) => currResource.id === req.params.id
+    const resource = mockResources.find(
+      (currResource) => currResource._id === req.params.id
     );
 
     if (!resource) {
@@ -122,9 +122,9 @@ export const resourceHandlers = [
     }
 
     if (
-      RESOURCES.some(
+      mockResources.some(
         (currResource) =>
-          currResource.id !== resource.id && currResource.name === body.name
+          currResource._id !== resource._id && currResource.name === body.name
       )
     ) {
       return res(

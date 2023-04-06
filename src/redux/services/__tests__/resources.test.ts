@@ -84,7 +84,7 @@ describe('resources', () => {
       const [updateResource] = result.current;
 
       await act(async () => {
-        await updateResource({ id: mockId, ...mockBody });
+        await updateResource({ _id: mockId, ...mockBody });
       });
 
       expect(fetch).toHaveBeenCalledWith(

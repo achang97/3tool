@@ -12,7 +12,10 @@ export const useActionIsEditing = () => {
   }, [focusedAction?.name, tool.actions]);
 
   const isEditing = useMemo(() => {
-    return !_.isEqual(savedAction, focusedAction);
+    return !_.isEqual(
+      _.pick(savedAction, ['type', 'data', 'eventHandlers']),
+      _.pick(focusedAction, ['type', 'data', 'eventHandlers'])
+    );
   }, [focusedAction, savedAction]);
 
   return isEditing;

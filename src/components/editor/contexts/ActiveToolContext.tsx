@@ -1,14 +1,14 @@
 import { useUpdateToolMutation } from '@app/redux/services/tools';
 import { ApiResponse, Tool } from '@app/types';
-import { parseApiError } from '@app/utils/api';
+import { isSuccessfulApiResponse, parseApiError } from '@app/utils/api';
 import { DepGraph } from 'dependency-graph';
 import React, {
   useCallback,
   createContext,
   ReactNode,
   useMemo,
-  useEffect,
   useState,
+  useEffect,
 } from 'react';
 import {
   useToolEvalDataMaps,
@@ -50,8 +50,7 @@ export const ActiveToolProvider = ({
   children,
 }: ActiveToolProviderProps) => {
   const [activeTool, setActiveTool] = useState<Tool>(tool);
-  const [updateTool, { error: updateError, data: updatedTool }] =
-    useUpdateToolMutation();
+  const [updateTool] = useUpdateToolMutation();
 
   const { dataDepGraph, dataDepCycles } = useToolDataDepGraph(activeTool);
   const enqueueSnackbar = useEnqueueSnackbar();
@@ -63,27 +62,29 @@ export const ActiveToolProvider = ({
   });
 
   useEffect(() => {
-    if (updateError) {
-      enqueueSnackbar(parseApiError(updateError), {
-        variant: 'error',
-      });
+    if (tool) {
+      setActiveTool(tool);
     }
-  }, [enqueueSnackbar, updateError]);
-
-  useEffect(() => {
-    if (updatedTool) {
-      setActiveTool(updatedTool);
-    }
-  }, [updatedTool]);
+  }, [tool]);
 
   const updateActiveTool = useCallback(
     async (update: Partial<Pick<Tool, 'name' | 'components' | 'actions'>>) => {
-      return updateTool({
-        id: activeTool.id,
+      const response = await updateTool({
+        _id: activeTool._id,
         ...update,
       });
+
+      if (isSuccessfulApiResponse(response)) {
+        setActiveTool(response.data);
+      } else {
+        enqueueSnackbar(parseApiError(response.error), {
+          variant: 'error',
+        });
+      }
+
+      return response;
     },
-    [activeTool.id, updateTool]
+    [activeTool._id, enqueueSnackbar, updateTool]
   );
 
   const contextValue = useMemo(() => {

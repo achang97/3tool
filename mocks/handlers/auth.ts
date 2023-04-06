@@ -1,26 +1,12 @@
 import { rest } from 'msw';
 import { User } from '@app/types';
+import { mockUser } from '@tests/constants/data';
 
 // Map of emails to passwords
-export const validUsers: Record<string, string> = {
+const validUsers: Record<string, string> = {
   'andrew@tryelixir.io': 'password',
 };
 
-export const mockUser: User = {
-  _id: '1',
-  email: 'andrew@tryelixir.io',
-  firstName: 'Andrew',
-  lastName: 'Chang',
-  companyId: '123',
-  state: {
-    isPasswordSet: true,
-  },
-  roles: {
-    isAdmin: true,
-    isEditor: true,
-    isViewer: true,
-  },
-};
 const mockAccessToken = 'accessToken';
 const mockRefreshToken = 'refreshToken';
 
@@ -34,8 +20,8 @@ export const authHandlers = [
 
     return res(
       ctx.status(200),
-      ctx.json<User & { accessToken: string; refreshToken: string }>({
-        ...mockUser,
+      ctx.json<{ user: User; accessToken: string; refreshToken: string }>({
+        user: mockUser,
         accessToken: mockAccessToken,
         refreshToken: mockRefreshToken,
       })

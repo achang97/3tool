@@ -86,7 +86,7 @@ describe('tools', () => {
       const [updateTool] = result.current;
 
       await act(async () => {
-        await updateTool({ id: mockId, ...mockBody });
+        await updateTool({ _id: mockId, ...mockBody });
       });
 
       expect(fetch).toHaveBeenCalledWith(

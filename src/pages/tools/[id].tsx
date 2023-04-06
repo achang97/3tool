@@ -4,37 +4,37 @@ import { ToolSnackbarProvider } from '@app/components/editor/contexts/ToolSnackb
 import { ActiveToolProvider } from '@app/components/editor/contexts/ActiveToolContext';
 import { ActionQueueProvider } from '@app/components/editor/contexts/ActionQueueContext';
 import { PageContainer } from '@app/components/common/PageContainer';
-import { Tool } from '@app/types';
-import { getServerSideProps } from '@app/pageGetters/tools';
 import { ToolViewerToolbar } from '@app/components/toolbar/ToolViewerToolbar';
 import { EditorApp } from '@app/components/editor/EditorApp';
+import { FullscreenLoader } from '@app/components/common/FullscreenLoader';
+import { useQueryTool } from '@app/components/editor/hooks/useQueryTool';
 
-type ToolPageProps = {
-  tool: Tool;
-};
+const ToolViewer = () => {
+  const tool = useQueryTool();
 
-const ToolViewer = ({ tool }: ToolPageProps) => {
   return (
     <>
       <Head>
-        <title>{createTitle(tool.name)}</title>
+        <title>{createTitle(tool?.name ?? 'Tool Viewer')}</title>
       </Head>
       <main>
-        <ToolSnackbarProvider>
-          <ActiveToolProvider tool={tool}>
-            <ActionQueueProvider>
-              <PageContainer sx={{ padding: 0 }}>
-                <ToolViewerToolbar />
-                <EditorApp isEditable={false} />
-              </PageContainer>
-            </ActionQueueProvider>
-          </ActiveToolProvider>
-        </ToolSnackbarProvider>
+        {tool ? (
+          <ToolSnackbarProvider>
+            <ActiveToolProvider tool={tool}>
+              <ActionQueueProvider>
+                <PageContainer sx={{ padding: 0 }}>
+                  <ToolViewerToolbar />
+                  <EditorApp isEditable={false} />
+                </PageContainer>
+              </ActionQueueProvider>
+            </ActiveToolProvider>
+          </ToolSnackbarProvider>
+        ) : (
+          <FullscreenLoader />
+        )}
       </main>
     </>
   );
 };
-
-export { getServerSideProps };
 
 export default ToolViewer;

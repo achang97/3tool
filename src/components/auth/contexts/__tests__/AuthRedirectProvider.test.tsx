@@ -2,12 +2,18 @@ import { render } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import { useUser } from '@app/hooks/useUser';
 import { mockUser } from '@tests/constants/data';
+import { useGetMyUserQuery } from '@app/redux/services/users';
 import { AuthRedirectProvider } from '../AuthRedirectProvider';
 
 const mockChildren = 'children';
 const mockPush = jest.fn();
 
 jest.mock('@app/hooks/useUser');
+
+jest.mock('@app/redux/services/users', () => ({
+  useGetMyUserQuery: jest.fn(),
+}));
+
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
 }));
@@ -19,6 +25,11 @@ describe('AuthRedirectProvider', () => {
       pathname: '',
       push: mockPush,
     }));
+  });
+
+  it('refreshes user', () => {
+    render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
+    expect(useGetMyUserQuery).toHaveBeenCalled();
   });
 
   describe('authenticated', () => {

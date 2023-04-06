@@ -49,9 +49,13 @@ describe('useActionIsEditing', () => {
     expect(result.current).toEqual(false);
   });
 
-  it('returns false if there are no changes', () => {
+  it('returns false if there are no changes to type, data, or event handlers', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
-      focusedAction: _.cloneDeep(mockAction),
+      focusedAction: {
+        ..._.cloneDeep(mockAction),
+        id: 'id',
+        _id: 'id',
+      },
     }));
     const { result } = renderHook(() => useActionIsEditing());
     expect(result.current).toEqual(false);

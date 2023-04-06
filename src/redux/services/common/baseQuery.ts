@@ -35,7 +35,11 @@ export const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   prepareHeaders: async (headers) => {
     const tokens = await getTokensFromStorage();
-    headers.set('authorization', `Bearer ${tokens.accessToken}`);
+
+    // Prevent overrides if the authorization header has been explicitly set
+    if (!headers.get('authorization')) {
+      headers.set('authorization', `Bearer ${tokens.accessToken}`);
+    }
   },
 }) as CustomBaseQueryFn;
 
@@ -52,7 +56,12 @@ export const baseQueryWithReauth: CustomBaseQueryFn = async (
 
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
+  if (
+    result.error &&
+    result.error.status === 401 &&
+    // @ts-ignore isTokenExpired is a custom field defined on this error
+    result.error.data?.isTokenExpired
+  ) {
     // Check whether the mutex is locked
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
@@ -69,16 +78,26 @@ export const baseQueryWithReauth: CustomBaseQueryFn = async (
         );
 
         if (refreshResult.data) {
-          api.dispatch(
-            setTokens(
-              refreshResult.data as {
-                accessToken: string;
-                refreshToken: string;
-              }
-            )
-          );
+          const newTokens = refreshResult.data as {
+            accessToken: string;
+            refreshToken: string;
+          };
+
+          api.dispatch(setTokens(newTokens));
+
           // Retry the initial query
-          result = await baseQuery(args, api, extraOptions);
+          const baseArgs: FetchArgs =
+            typeof args === 'string' ? { url: args } : args;
+          result = await baseQuery(
+            {
+              ...baseArgs,
+              headers: new Headers({
+                authorization: `Bearer ${newTokens.accessToken}`,
+              }),
+            },
+            api,
+            extraOptions
+          );
         } else {
           api.dispatch(logout());
         }

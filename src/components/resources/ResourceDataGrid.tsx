@@ -17,7 +17,7 @@ export const ResourceDataGrid = ({
     refetchOnMountOrArgChange: true,
   });
 
-  const { rows, columns } = useResourceDataGridProps(resources);
+  const { rows, columns, getRowId } = useResourceDataGridProps(resources);
 
   return (
     <Box
@@ -45,6 +45,7 @@ export const ResourceDataGrid = ({
       <DataGrid
         rows={rows}
         columns={columns}
+        getRowId={getRowId}
         disableColumnMenu
         disableSelectionOnClick
         disableVirtualization={__test__disableVirtualization}

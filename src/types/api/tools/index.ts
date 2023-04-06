@@ -3,7 +3,7 @@ import { Action } from './actions';
 import { Component } from './components';
 
 export type Tool = {
-  id: string;
+  _id: string;
   name: string;
   createdAt: string;
   updatedAt: string;

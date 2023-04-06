@@ -28,10 +28,10 @@ export const resourcesApi = createApi({
     }),
     updateResource: builder.mutation<
       Resource,
-      Pick<Resource, 'id'> & Partial<Pick<Resource, 'name' | 'data'>>
+      Pick<Resource, '_id'> & Partial<Pick<Resource, 'name' | 'data'>>
     >({
-      query: ({ id, ...body }) => ({
-        url: `/resources/${id}`,
+      query: ({ _id, ...body }) => ({
+        url: `/resources/${_id}`,
         method: 'PUT',
         body,
       }),

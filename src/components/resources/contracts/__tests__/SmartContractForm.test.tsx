@@ -192,7 +192,7 @@ describe('SmartContractForm', () => {
   describe('abi', () => {
     beforeEach(() => {
       (useAbiResources as jest.Mock).mockImplementation(() => [
-        { id: '1', name: 'abi1' },
+        { _id: '1', name: 'abi1' },
       ]);
     });
 
@@ -277,7 +277,7 @@ describe('SmartContractForm', () => {
                 abi: mockAbi,
               },
             },
-            id: '',
+            _id: '',
             createdAt: '',
             updatedAt: '',
           },

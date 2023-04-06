@@ -24,7 +24,7 @@ export const CreateResourceButton = () => {
         },
         // These values are all generated on the BE, but we provide placeholder values until the
         // object is created.
-        id: '',
+        _id: '',
         createdAt: '',
         updatedAt: '',
       };

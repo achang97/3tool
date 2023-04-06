@@ -3,6 +3,7 @@ import { Edit } from '@mui/icons-material';
 import {
   GridActionsCellItem,
   GridColDef,
+  GridRowIdGetter,
   GridRowParams,
   GridRowsProp,
 } from '@mui/x-data-grid';
@@ -18,6 +19,7 @@ import {
 type DataGridProps = {
   rows: GridRowsProp<Resource>;
   columns: GridColDef<Resource>[];
+  getRowId: GridRowIdGetter<Resource>;
 };
 
 export const useResourceDataGridProps = (
@@ -81,5 +83,12 @@ export const useResourceDataGridProps = (
     ];
   }, [getRowActions]);
 
-  return { rows, columns };
+  const getRowId: GridRowIdGetter<Resource> = useCallback(
+    (resource: Resource) => {
+      return resource._id;
+    },
+    []
+  );
+
+  return { rows, columns, getRowId };
 };

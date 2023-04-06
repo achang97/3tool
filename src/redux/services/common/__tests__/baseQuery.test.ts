@@ -61,12 +61,33 @@ describe('baseQuery', () => {
   });
 
   describe('baseQuery', () => {
-    it('adds authorization header', async () => {
+    it('adds authorization header if not set', async () => {
       await baseQuery('/test', {} as BaseQueryApi, {});
       expect(fetch).toHaveBeenCalledWith(
         expect.objectContaining({
           headers: new Headers({
             authorization: `Bearer ${mockAccessToken}`,
+          }),
+        })
+      );
+    });
+
+    it('does not override authorization header if already set', async () => {
+      const mockCustomAccessToken = 'customAccessToken';
+      await baseQuery(
+        {
+          url: '/test',
+          headers: new Headers({
+            authorization: `Bearer ${mockCustomAccessToken}`,
+          }),
+        },
+        {} as BaseQueryApi,
+        {}
+      );
+      expect(fetch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          headers: new Headers({
+            authorization: `Bearer ${mockCustomAccessToken}`,
           }),
         })
       );
@@ -90,9 +111,15 @@ describe('baseQuery', () => {
     });
 
     describe('refresh with mutex unlocked', () => {
+      const mockNewAccessToken = 'newAccessToken';
+      const mockNewRefreshToken = 'newRefreshToken';
+
       beforeEach(() => {
         (fetch as jest.Mock).mockImplementationOnce(
-          () => new Response(null, { status: 401 })
+          () =>
+            new Response(JSON.stringify({ isTokenExpired: true }), {
+              status: 401,
+            })
         );
       });
 
@@ -116,8 +143,8 @@ describe('baseQuery', () => {
           () =>
             new Response(
               JSON.stringify({
-                accessToken: mockAccessToken,
-                refreshToken: mockRefreshToken,
+                accessToken: mockNewAccessToken,
+                refreshToken: mockNewRefreshToken,
               })
             )
         );
@@ -128,8 +155,8 @@ describe('baseQuery', () => {
         );
         expect(mockDispatch).toHaveBeenCalledWith(
           setTokens({
-            accessToken: mockAccessToken,
-            refreshToken: mockRefreshToken,
+            accessToken: mockNewAccessToken,
+            refreshToken: mockNewRefreshToken,
           })
         );
       });
@@ -144,6 +171,61 @@ describe('baseQuery', () => {
           {}
         );
         expect(mockDispatch).toHaveBeenCalledWith(logout());
+      });
+
+      it('adds explicit access token header to re-attempted call with string as args', async () => {
+        (fetch as jest.Mock).mockImplementationOnce(
+          () =>
+            new Response(
+              JSON.stringify({
+                accessToken: mockNewAccessToken,
+                refreshToken: mockNewRefreshToken,
+              })
+            )
+        );
+        await baseQueryWithReauth(
+          '/test',
+          { dispatch: mockDispatch } as unknown as BaseQueryApi,
+          {}
+        );
+        await waitFor(() => {
+          expect(fetch).toHaveBeenCalledWith(
+            expect.objectContaining({
+              url: '/test',
+              headers: new Headers({
+                authorization: `Bearer ${mockNewAccessToken}`,
+              }),
+            })
+          );
+        });
+      });
+
+      it('adds explicit access token header to re-attempted call with object as args', async () => {
+        (fetch as jest.Mock).mockImplementationOnce(
+          () =>
+            new Response(
+              JSON.stringify({
+                accessToken: mockNewAccessToken,
+                refreshToken: mockNewRefreshToken,
+              })
+            )
+        );
+        await baseQueryWithReauth(
+          { url: '/test', method: 'POST' },
+          { dispatch: mockDispatch } as unknown as BaseQueryApi,
+          {}
+        );
+        await waitFor(() => {
+          expect(fetch).toHaveBeenCalledWith(
+            expect.objectContaining({
+              url: '/test',
+              method: 'POST',
+              headers: new Headers({
+                authorization: `Bearer ${mockNewAccessToken}`,
+              }),
+            })
+          );
+        });
       });
 
       it('releases mutex after completion', async () => {
@@ -161,7 +243,12 @@ describe('baseQuery', () => {
         (fetch as jest.Mock).mockImplementationOnce(() => {
           return new Promise((resolve) => {
             setTimeout(
-              () => resolve(new Response(null, { status: 401 })),
+              () =>
+                resolve(
+                  new Response(JSON.stringify({ isTokenExpired: true }), {
+                    status: 401,
+                  })
+                ),
               5000
             );
           });

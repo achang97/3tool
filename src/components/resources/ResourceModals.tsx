@@ -45,7 +45,7 @@ export const ResourceModals = () => {
             update: {
               data: {
                 smartContract: {
-                  abiId: newResource.id,
+                  abiId: newResource._id,
                 },
               },
             },

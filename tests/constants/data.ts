@@ -31,7 +31,7 @@ export const mockUser: User = {
 };
 
 export const mockSmartContractResource: Resource = {
-  id: '1',
+  _id: '1',
   type: ResourceType.SmartContract,
   name: 'Staking Pool Contract',
   createdAt: new Date().toISOString(),
@@ -48,7 +48,7 @@ export const mockSmartContractResource: Resource = {
 export const mockProxySmartContractResource: Resource = {
   type: ResourceType.SmartContract,
   name: 'Name',
-  id: '2',
+  _id: '2',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   data: {
@@ -61,7 +61,7 @@ export const mockProxySmartContractResource: Resource = {
 };
 
 export const mockTool: Tool = {
-  id: 'test',
+  _id: 'test',
   name: 'Tool',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),

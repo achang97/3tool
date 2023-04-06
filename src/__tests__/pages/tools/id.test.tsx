@@ -1,3 +1,4 @@
+import { useQueryTool } from '@app/components/editor/hooks/useQueryTool';
 import Tool from '@app/pages/tools/[id]';
 import { mockTool } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
@@ -12,9 +13,11 @@ jest.mock('@app/redux/services/tools', () => ({
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(() => ({
-    query: { id: mockTool.id },
+    query: { id: mockTool._id },
   })),
 }));
+
+jest.mock('@app/components/editor/hooks/useQueryTool');
 
 describe('Tools/Id', () => {
   beforeEach(() => {
@@ -22,14 +25,28 @@ describe('Tools/Id', () => {
   });
 
   describe('page', () => {
-    it('renders tool viewer toolbar', () => {
-      const result = render(<Tool tool={mockTool} />);
-      expect(result.getByTestId('tool-viewer-toolbar')).toBeTruthy();
+    describe('loading', () => {
+      it('renders fullscreen loader', () => {
+        (useQueryTool as jest.Mock).mockImplementation(() => undefined);
+        const result = render(<Tool />);
+        expect(result.getByTestId('fullscreen-loader')).toBeTruthy();
+      });
     });
 
-    it('renders editor app', () => {
-      const result = render(<Tool tool={mockTool} />);
-      expect(result.getByTestId('editor-app')).toBeTruthy();
+    describe('fulfilled', () => {
+      beforeEach(() => {
+        (useQueryTool as jest.Mock).mockImplementation(() => mockTool);
+      });
+
+      it('renders tool viewer toolbar', () => {
+        const result = render(<Tool />);
+        expect(result.getByTestId('tool-viewer-toolbar')).toBeTruthy();
+      });
+
+      it('renders editor app', () => {
+        const result = render(<Tool />);
+        expect(result.getByTestId('editor-app')).toBeTruthy();
+      });
     });
   });
 });

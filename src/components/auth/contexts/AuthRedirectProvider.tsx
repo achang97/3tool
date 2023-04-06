@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useMemo } from 'react';
 import { FullscreenLoader } from '@app/components/common/FullscreenLoader';
 import { useUser } from '@app/hooks/useUser';
 import { useRouter } from 'next/router';
+import { useGetMyUserQuery } from '@app/redux/services/users';
 
 type AuthRedirectProviderProps = {
   children: ReactNode;
@@ -13,6 +14,10 @@ export const AuthRedirectProvider = ({
   children,
 }: AuthRedirectProviderProps) => {
   const user = useUser();
+
+  // Refresh the current user if authed
+  useGetMyUserQuery(undefined, { skip: !user });
+
   const { pathname, push } = useRouter();
 
   const shouldRedirectToLogin = useMemo(() => {

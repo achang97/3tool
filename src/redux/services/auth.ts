@@ -8,7 +8,8 @@ export const authApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     login: builder.mutation<
-      User & {
+      {
+        user: User;
         accessToken: string;
         refreshToken: string;
       },

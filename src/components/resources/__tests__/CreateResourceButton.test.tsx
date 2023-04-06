@@ -36,7 +36,7 @@ describe('CreateResourceButton', () => {
             data: {
               [resourceType]: RESOURCE_DATA_TEMPLATES[resourceType],
             },
-            id: '',
+            _id: '',
             createdAt: '',
             updatedAt: '',
           },

@@ -4,10 +4,6 @@ import {
   focusToolSettings,
   setIsPreview,
 } from '@app/redux/features/editorSlice';
-import {
-  mockApiErrorResponse,
-  mockApiSuccessResponse,
-} from '@tests/constants/api';
 import { mockTool } from '@tests/constants/data';
 import { useAppSelector } from '@app/redux/hooks';
 import { ToolEditorToolbar } from '../ToolEditorToolbar';
@@ -48,9 +44,7 @@ describe('ToolEditorToolbar', () => {
       expect(result.getByText(mockTool.name)).toBeTruthy();
     });
 
-    it('toggles editable input and refreshes window if name update succeeds', async () => {
-      mockUpdateTool.mockImplementation(jest.fn(() => mockApiSuccessResponse));
-
+    it('toggles editable input and updates name', async () => {
       const result = render(<ToolEditorToolbar />);
 
       await userEvent.click(result.getByText(mockTool.name));
@@ -63,29 +57,6 @@ describe('ToolEditorToolbar', () => {
       expect(mockUpdateTool).toHaveBeenCalledWith({
         name: `${mockTool.name}${newNameText}`,
       });
-
-      await result.findByTestId('editable-text-field-view');
-      expect(mockReload).toHaveBeenCalled();
-    });
-
-    it('toggles editable input and does not refresh window if name update fails', async () => {
-      mockUpdateTool.mockImplementation(jest.fn(() => mockApiErrorResponse));
-
-      const result = render(<ToolEditorToolbar />);
-
-      await userEvent.click(result.getByText(mockTool.name));
-      await result.findByTestId('editable-text-field-edit');
-
-      const newNameText = '1234';
-      await userEvent.keyboard(newNameText);
-      await userEvent.keyboard('[Enter]');
-
-      expect(mockUpdateTool).toHaveBeenCalledWith({
-        name: `${mockTool.name}${newNameText}`,
-      });
-
-      await result.findByTestId('editable-text-field-view');
-      expect(mockReload).not.toHaveBeenCalled();
     });
   });
 

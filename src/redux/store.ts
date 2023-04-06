@@ -19,6 +19,7 @@ import activeToolReducer from './features/activeToolSlice';
 import { authApi } from './services/auth';
 import { toolsApi } from './services/tools';
 import { resourcesApi } from './services/resources';
+import { usersApi } from './services/users';
 
 const authPersistConfig = {
   key: 'auth',
@@ -37,6 +38,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [toolsApi.reducerPath]: toolsApi.reducer,
     [resourcesApi.reducerPath]: resourcesApi.reducer,
+    [usersApi.reducerPath]: usersApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     const middlewareConfig = {
@@ -48,6 +50,7 @@ export const store = configureStore({
       authApi.middleware,
       toolsApi.middleware,
       resourcesApi.middleware,
+      usersApi.middleware,
     ];
 
     const middleware = getDefaultMiddleware(middlewareConfig).concat(

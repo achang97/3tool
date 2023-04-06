@@ -266,7 +266,7 @@ describe('BaseResourceDialog', () => {
           title={mockTitle}
           resource={
             {
-              id: 'id',
+              _id: 'id',
               name: 'name',
               type: ResourceType.SmartContract,
               data: {

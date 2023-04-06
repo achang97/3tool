@@ -13,11 +13,11 @@ export const ToolViewerToolbar = () => {
 
   const right = useMemo(() => {
     return (
-      <Button size="small" LinkComponent={Link} href={`/editor/${tool.id}`}>
+      <Button size="small" LinkComponent={Link} href={`/editor/${tool._id}`}>
         Edit app
       </Button>
     );
-  }, [tool.id]);
+  }, [tool._id]);
 
   return (
     <ToolbarTemplate

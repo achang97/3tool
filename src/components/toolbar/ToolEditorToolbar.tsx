@@ -6,8 +6,6 @@ import {
   focusToolSettings,
   setIsPreview,
 } from '@app/redux/features/editorSlice';
-import { isSuccessfulApiResponse } from '@app/utils/api';
-import { useRouter } from 'next/router';
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import { EditableTextField } from '@app/components/common/EditableTextField';
 import { ToolbarTemplate } from './common/ToolbarTemplate';
@@ -17,22 +15,15 @@ export const ToolEditorToolbar = () => {
   const { isPreview } = useAppSelector((state) => state.editor);
 
   const { tool, updateTool } = useActiveTool();
-  const { reload } = useRouter();
 
   const handleUpdateToolName = useCallback(
     async (name: string) => {
       if (!name) {
         return;
       }
-
-      const response = await updateTool({ name });
-      if (!isSuccessfulApiResponse(response)) {
-        return;
-      }
-
-      reload();
+      updateTool({ name });
     },
-    [reload, updateTool]
+    [updateTool]
   );
 
   const handleSettingsClick = useCallback(() => {

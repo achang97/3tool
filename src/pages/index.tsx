@@ -24,8 +24,8 @@ const Tools = () => {
             <CreateToolThumbnail />
             {tools?.map((tool) => (
               <ToolThumbnail
-                key={tool.id}
-                id={tool.id}
+                key={tool._id}
+                id={tool._id}
                 name={tool.name}
                 updatedAt={tool.updatedAt}
                 creatorUser={tool.creatorUser}

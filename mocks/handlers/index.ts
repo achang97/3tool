@@ -1,6 +1,12 @@
 import _ from 'lodash';
-import { toolHandlers } from './tools';
-import { resourceHandlers } from './resources';
+import { toolsHandlers } from './tools';
+import { resourcesHandlers } from './resources';
 import { authHandlers } from './auth';
+import { usersHandlers } from './users';
 
-export const handlers = _.concat(authHandlers, toolHandlers, resourceHandlers);
+export const handlers = _.concat(
+  authHandlers,
+  toolsHandlers,
+  resourcesHandlers,
+  usersHandlers
+);

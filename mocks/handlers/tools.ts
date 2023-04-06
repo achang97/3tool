@@ -7,12 +7,12 @@ import {
   EventHandlerType,
   Tool,
 } from '@app/types';
+import { mockUser } from '@mocks/data/users';
 import { generateRandomDate } from '../utils';
-import { mockUser } from './auth';
 
-const TOOLS: Tool[] = [
+const mockTools: Tool[] = [
   {
-    id: '1',
+    _id: '1',
     name: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
     createdAt: '2023-03-28T22:46:19.997Z',
     updatedAt: '2023-03-28T23:04:55.359Z',
@@ -63,7 +63,7 @@ const TOOLS: Tool[] = [
     ],
   },
   {
-    id: '2',
+    _id: '2',
     name: 'Script Dashboard',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
@@ -72,7 +72,7 @@ const TOOLS: Tool[] = [
     actions: [],
   },
   {
-    id: '3',
+    _id: '3',
     name: 'Topping Up Nodes',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
@@ -82,9 +82,9 @@ const TOOLS: Tool[] = [
   },
 ];
 
-export const toolHandlers = [
+export const toolsHandlers = [
   rest.get('*/api/tools/:id', (req, res, ctx) => {
-    const tool = TOOLS.find((currTool) => currTool.id === req.params.id);
+    const tool = mockTools.find((currTool) => currTool._id === req.params.id);
 
     if (!tool) {
       return res(ctx.status(400));
@@ -93,12 +93,12 @@ export const toolHandlers = [
     return res(ctx.status(200), ctx.json<Tool>(tool));
   }),
   rest.get('*/api/tools', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json<Tool[]>(TOOLS));
+    return res(ctx.status(200), ctx.json<Tool[]>(mockTools));
   }),
   rest.post('*/api/tools', async (req, res, ctx) => {
     const body = await req.json<{ name: string }>();
 
-    if (TOOLS.some((tool) => tool.name === body.name)) {
+    if (mockTools.some((tool) => tool.name === body.name)) {
       return res(
         ctx.status(400),
         ctx.json({ message: `Tool with name "${body.name}" already exists.` })
@@ -106,7 +106,7 @@ export const toolHandlers = [
     }
 
     const newTool: Tool = {
-      id: crypto.randomUUID(),
+      _id: crypto.randomUUID(),
       name: body.name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -114,7 +114,7 @@ export const toolHandlers = [
       components: [],
       actions: [],
     };
-    TOOLS.push(newTool);
+    mockTools.push(newTool);
 
     return res(ctx.status(201), ctx.json<Tool>(newTool));
   }),
@@ -123,15 +123,15 @@ export const toolHandlers = [
       Pick<Tool, 'name' | 'components' | 'actions'>
     >();
 
-    const tool = TOOLS.find((currTool) => currTool.id === req.params.id);
+    const tool = mockTools.find((currTool) => currTool._id === req.params.id);
 
     if (!tool) {
       return res(ctx.status(400));
     }
 
     if (
-      TOOLS.some(
-        (currTool) => currTool.id !== tool.id && currTool.name === body.name
+      mockTools.some(
+        (currTool) => currTool._id !== tool._id && currTool.name === body.name
       )
     ) {
       return res(

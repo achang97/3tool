@@ -1,9 +1,8 @@
-import { useUpdateToolMutation } from '@app/redux/services/tools';
-import { ApiError } from '@app/types';
-import { renderHook } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { ReactElement, useContext } from 'react';
+import { Tool } from '@app/types';
 import { useToolDataDepGraph } from '../../hooks/useToolDataDepGraph';
 import {
   ToolEvalDataMap,
@@ -21,20 +20,17 @@ jest.mock('../../hooks/useEnqueueSnackbar', () => ({
 
 jest.mock('../../hooks/useToolDataDepGraph');
 jest.mock('../../hooks/useToolEvalDataMaps');
-jest.mock('@app/redux/services/tools');
+
+jest.mock('@app/redux/services/tools', () => ({
+  useUpdateToolMutation: jest.fn(() => [mockUpdateTool]),
+}));
 
 describe('ActiveToolContext', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    (useUpdateToolMutation as jest.Mock).mockImplementation(() => [
-      mockUpdateTool,
-      {},
-    ]);
-
     (useToolEvalDataMaps as jest.Mock).mockImplementation(() => ({}));
     (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({}));
-    mockUpdateTool.mockClear();
   });
 
   it('returns default state', () => {
@@ -56,6 +52,23 @@ describe('ActiveToolContext', () => {
       ),
     });
     expect(result.current.tool).toEqual(mockTool);
+  });
+
+  it('updates tool if tool prop changes', () => {
+    let tool: Tool = mockTool;
+    const { result, rerender } = renderHook(
+      () => useContext(ActiveToolContext),
+      {
+        wrapper: ({ children }: { children: ReactElement }) => (
+          <ActiveToolProvider tool={tool}>{children}</ActiveToolProvider>
+        ),
+      }
+    );
+    expect(result.current.tool).toEqual(tool);
+
+    tool = { ...mockTool, name: 'Updated Tool!' };
+    rerender();
+    expect(result.current.tool).toEqual(tool);
   });
 
   describe('dep graph', () => {
@@ -138,78 +151,71 @@ describe('ActiveToolContext', () => {
   });
 
   describe('update', () => {
-    it('returns updated tool as tool after successful update', () => {
-      const mockUpdatedTool = {
+    const mockToolUpdate = { name: 'Updated Tool Name' };
+    const mockSuccessResponse = {
+      data: {
         ...mockTool,
-        name: 'Updated Tool Name',
-      };
-      (useUpdateToolMutation as jest.Mock).mockImplementation(() => [
-        mockUpdateTool,
-        { data: mockUpdatedTool },
-      ]);
-
-      const { result } = renderHook(() => useContext(ActiveToolContext), {
-        wrapper: ({ children }: { children: ReactElement }) => (
-          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-        ),
-      });
-
-      expect(result.current.tool).toEqual(mockUpdatedTool);
-    });
-
-    it('updateTool calls API to update tool with original tool id', () => {
-      const { result } = renderHook(() => useContext(ActiveToolContext), {
-        wrapper: ({ children }: { children: ReactElement }) => (
-          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
-        ),
-      });
-
-      const mockToolUpdate = { name: 'Updated Tool Name' };
-      result.current.updateTool(mockToolUpdate);
-
-      expect(mockUpdateTool).toHaveBeenCalledWith({
-        id: mockTool.id,
         ...mockToolUpdate,
-      });
-    });
+      },
+    };
 
-    it('does not display error snackbar if update succeeds', () => {
-      (useUpdateToolMutation as jest.Mock).mockImplementation(() => [
-        mockUpdateTool,
-        { error: undefined },
-      ]);
+    it('returns result from update tool API', async () => {
+      mockUpdateTool.mockImplementation(() => mockSuccessResponse);
 
-      renderHook(() => useContext(ActiveToolContext), {
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
         wrapper: ({ children }: { children: ReactElement }) => (
           <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
         ),
       });
 
-      expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
+      await waitFor(async () => {
+        const response = await result.current.updateTool(mockToolUpdate);
+
+        expect(mockUpdateTool).toHaveBeenCalledWith({
+          _id: mockTool._id,
+          ...mockToolUpdate,
+        });
+        expect(response).toEqual(mockSuccessResponse);
+      });
     });
 
-    it('displays error snackbar if update fails', () => {
-      const mockApiError: ApiError = {
+    it('sets active tool as tool after successful update', async () => {
+      mockUpdateTool.mockImplementation(() => mockSuccessResponse);
+
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
+        wrapper: ({ children }: { children: ReactElement }) => (
+          <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
+        ),
+      });
+
+      await waitFor(async () => {
+        await result.current.updateTool(mockToolUpdate);
+        expect(result.current.tool).toEqual(mockSuccessResponse.data);
+      });
+    });
+
+    it('displays error snackbar if update fails', async () => {
+      const mockApiError = {
         status: 400,
         data: {
           message: 'Error Message',
         },
       };
-      (useUpdateToolMutation as jest.Mock).mockImplementation(() => [
-        mockUpdateTool,
-        { error: mockApiError },
-      ]);
+      mockUpdateTool.mockImplementation(() => ({ error: mockApiError }));
 
-      renderHook(() => useContext(ActiveToolContext), {
+      const { result } = renderHook(() => useContext(ActiveToolContext), {
         wrapper: ({ children }: { children: ReactElement }) => (
           <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
         ),
       });
 
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-        mockApiError.data!.message,
-        { variant: 'error' }
-      );
+      await waitFor(async () => {
+        await result.current.updateTool(mockToolUpdate);
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+          mockApiError.data.message,
+          { variant: 'error' }
+        );
+      });
     });
   });
 });
