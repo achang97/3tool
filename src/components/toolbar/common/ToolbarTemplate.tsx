@@ -35,7 +35,11 @@ export const ToolbarTemplate = ({
       <ToolbarSection sx={{ justifyContent: 'flex-start' }}>
         <Box sx={{ mr: 1 }}>
           <Link href="/" data-testid="toolbar-logo">
-            <Image src={logo} alt="ACA Labs logo" />
+            <Image
+              src={logo}
+              alt="Elixir logo"
+              style={{ height: '40px', width: 'auto' }}
+            />
           </Link>
         </Box>
         {left}

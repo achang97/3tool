@@ -1,3 +1,3 @@
 export const createTitle = (title: string): string => {
-  return `${title} | ACA Labs`;
+  return `${title} | Elixir`;
 };

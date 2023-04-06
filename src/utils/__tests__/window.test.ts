@@ -2,10 +2,10 @@ import { createTitle } from '../window';
 
 describe('window', () => {
   describe('createTitle', () => {
-    it('appends "| ACA Labs" suffix to given string', () => {
+    it('appends "| Elixir" suffix to given string', () => {
       const mockTitle = 'Title';
       const result = createTitle(mockTitle);
-      expect(result).toEqual(`${mockTitle} | ACA Labs`);
+      expect(result).toEqual(`${mockTitle} | Elixir`);
     });
   });
 });
