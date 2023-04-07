@@ -118,4 +118,13 @@ describe('useResourceDataGridProps', () => {
       });
     });
   });
+
+  describe('getRowId', () => {
+    it('returns _id field from resource', () => {
+      const { result } = renderHook(() =>
+        useResourceDataGridProps(mockResources)
+      );
+      expect(result.current.getRowId({ _id: 'id' } as Resource)).toEqual('id');
+    });
+  });
 });
