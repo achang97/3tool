@@ -1,10 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { lineClamp } from '@app/utils/mui';
 import { UserAvatar } from '@app/components/common/UserAvatar';
 import { Box, Typography } from '@mui/material';
 import { GridViewRounded } from '@mui/icons-material';
 import moment from 'moment';
-import { useRouter } from 'next/router';
 import { stringToColor } from '@app/utils/styles';
 import { User } from '@app/types';
 import { ThumbnailContainer } from './ThumbnailContainer';
@@ -22,15 +21,9 @@ export const ToolThumbnail = ({
   updatedAt,
   creatorUser,
 }: ToolThumbnailProps) => {
-  const { push } = useRouter();
-
   const iconColor = useMemo(() => {
     return stringToColor(name);
   }, [name]);
-
-  const handleNavigateToTool = useCallback(() => {
-    push(`/tools/${id}`);
-  }, [push, id]);
 
   return (
     <ThumbnailContainer
@@ -40,7 +33,7 @@ export const ToolThumbnail = ({
           sx={{ transform: 'rotate(45deg)', color: iconColor }}
         />
       }
-      onClick={handleNavigateToTool}
+      href={`/tools/${id}`}
     >
       <Box
         sx={{

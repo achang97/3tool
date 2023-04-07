@@ -8,6 +8,7 @@ import {
   mockApiSuccessResponse,
 } from '@tests/constants/api';
 import { mainnet } from 'wagmi';
+import _ from 'lodash';
 import { CreateResourceDialog } from '../CreateResourceDialog';
 
 const mockHandleClose = jest.fn();
@@ -15,7 +16,7 @@ const mockHandleChange = jest.fn();
 const mockHandleCreate = jest.fn();
 const mockCreateResource = jest.fn();
 
-const mockResource = {
+const mockResource: Resource = {
   name: 'name',
   type: ResourceType.SmartContract,
   data: {
@@ -25,7 +26,10 @@ const mockResource = {
       abiId: '1',
     },
   },
-} as Resource;
+  _id: '',
+  createdAt: '',
+  updatedAt: '',
+};
 
 jest.mock('../hooks/useFetchAbi', () => ({
   useFetchAbi: jest.fn(() => ({})),
@@ -89,6 +93,23 @@ describe('CreateResourceDialog', () => {
     expect(result.getByText('Mock Error')).toBeTruthy();
   });
 
+  it('calls create API without _id, updatedAt, and createdAt field', async () => {
+    const result = render(
+      <CreateResourceDialog
+        resource={mockResource}
+        onClose={mockHandleClose}
+        onChange={mockHandleChange}
+        onCreate={mockHandleCreate}
+        isOpen
+        isBackButtonVisible
+      />
+    );
+    await userEvent.click(result.getByText('Save'));
+    expect(mockCreateResource).toHaveBeenCalledWith(
+      _.omit(mockResource, ['_id', 'createdAt', 'updatedAt'])
+    );
+  });
+
   it('calls onCreate and onClose on successful creation of resource', async () => {
     mockCreateResource.mockImplementation(() => mockApiSuccessResponse);
 
@@ -103,7 +124,6 @@ describe('CreateResourceDialog', () => {
       />
     );
     await userEvent.click(result.getByText('Save'));
-    expect(mockCreateResource).toHaveBeenCalledWith(mockResource);
     expect(mockHandleCreate).toHaveBeenCalledWith(mockApiSuccessResponse.data);
     expect(mockHandleClose).toHaveBeenCalled();
   });
@@ -122,7 +142,6 @@ describe('CreateResourceDialog', () => {
       />
     );
     await userEvent.click(result.getByText('Save'));
-    expect(mockCreateResource).toHaveBeenCalledWith(mockResource);
     expect(mockHandleCreate).not.toHaveBeenCalled();
     expect(mockHandleClose).not.toHaveBeenCalled();
   });

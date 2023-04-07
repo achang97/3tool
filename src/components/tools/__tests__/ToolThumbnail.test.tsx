@@ -1,21 +1,13 @@
 import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { User } from '@app/types';
 import { mockUser } from '@tests/constants/data';
+import { BASE_WINDOW_URL } from '@tests/constants/window';
 import { ToolThumbnail } from '../ToolThumbnail';
 
 const mockId = 'mock-id';
 const mockName = 'Mock Thumbnail Name';
 const mockUpdatedAt = new Date().toISOString();
 const mockCreator: User = mockUser;
-
-const mockPush = jest.fn();
-
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({
-    push: mockPush,
-  })),
-}));
 
 describe('ToolThumbnail', () => {
   beforeEach(() => {
@@ -66,7 +58,7 @@ describe('ToolThumbnail', () => {
     expect(result.getByText('Updated a month ago')).toBeTruthy();
   });
 
-  it('navigates to /tools/:id route on click', async () => {
+  it('navigates to /tools/:id route on click', () => {
     const result = render(
       <ToolThumbnail
         id={mockId}
@@ -76,9 +68,9 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    await userEvent.click(result.getByText(mockName));
-
-    expect(mockPush).toHaveBeenCalledTimes(1);
-    expect(mockPush).toHaveBeenCalledWith(`/tools/${mockId}`);
+    expect(result.container.firstChild).toHaveProperty(
+      'href',
+      `${BASE_WINDOW_URL}/tools/${mockId}`
+    );
   });
 });

@@ -6,39 +6,19 @@ import {
   FetchArgs,
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import { logout, setTokens } from '@app/redux/actions/auth';
-
-export const getTokensFromStorage = async (): Promise<{
-  accessToken?: string;
-  refreshToken?: string;
-}> => {
-  const authData = await storage.getItem('persist:auth');
-  if (!authData) {
-    return {};
-  }
-
-  try {
-    const parsedAuthData = JSON.parse(authData);
-    return {
-      accessToken: JSON.parse(parsedAuthData.accessToken),
-      refreshToken: JSON.parse(parsedAuthData.refreshToken),
-    };
-  } catch {
-    return {};
-  }
-};
+import type { RootState } from '@app/redux/store';
 
 type CustomBaseQueryFn = BaseQueryFn<string | FetchArgs, unknown, ApiError, {}>;
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
-  prepareHeaders: async (headers) => {
-    const tokens = await getTokensFromStorage();
+  prepareHeaders: async (headers, { getState }) => {
+    const state = getState() as RootState;
 
     // Prevent overrides if the authorization header has been explicitly set
     if (!headers.get('authorization')) {
-      headers.set('authorization', `Bearer ${tokens.accessToken}`);
+      headers.set('authorization', `Bearer ${state.auth.accessToken}`);
     }
   },
 }) as CustomBaseQueryFn;
@@ -55,7 +35,6 @@ export const baseQueryWithReauth: CustomBaseQueryFn = async (
   await mutex.waitForUnlock();
 
   let result = await baseQuery(args, api, extraOptions);
-
   if (
     result.error &&
     result.error.status === 401 &&
@@ -66,12 +45,12 @@ export const baseQueryWithReauth: CustomBaseQueryFn = async (
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {
-        const tokens = await getTokensFromStorage();
+        const state = api.getState() as RootState;
         const refreshResult = await baseQuery(
           {
             url: '/auth/refreshToken',
             method: 'POST',
-            body: { refreshToken: tokens.refreshToken },
+            body: { refreshToken: state.auth.refreshToken },
           },
           api,
           extraOptions

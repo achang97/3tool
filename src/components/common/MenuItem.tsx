@@ -28,7 +28,6 @@ export const MenuItem = ({
     if (!href) {
       return {};
     }
-
     return {
       component: Link,
       href,

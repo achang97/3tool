@@ -1,21 +1,23 @@
-import storage from 'redux-persist/lib/storage';
 import { BaseQueryApi } from '@reduxjs/toolkit/dist/query';
 import { logout, setTokens } from '@app/redux/actions/auth';
 import { waitFor } from '@testing-library/dom';
-import {
-  baseQuery,
-  baseQueryWithReauth,
-  getTokensFromStorage,
-  mutex,
-} from '../baseQuery';
-
-jest.mock('redux-persist/lib/storage');
+import { baseQuery, baseQueryWithReauth, mutex } from '../baseQuery';
 
 const mockResponse = new Response('response');
 const mockDispatch = jest.fn();
 
 const mockAccessToken = 'accessToken';
 const mockRefreshToken = 'refreshToken';
+
+const mockBaseQueryApi = {
+  dispatch: mockDispatch,
+  getState: () => ({
+    auth: {
+      accessToken: mockAccessToken,
+      refreshToken: mockRefreshToken,
+    },
+  }),
+} as unknown as BaseQueryApi;
 
 describe('baseQuery', () => {
   beforeAll(() => {
@@ -29,40 +31,11 @@ describe('baseQuery', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (fetch as jest.Mock).mockImplementation(() => mockResponse);
-
-    (storage.getItem as jest.Mock).mockImplementation(() =>
-      JSON.stringify({
-        accessToken: JSON.stringify(mockAccessToken),
-        refreshToken: JSON.stringify(mockRefreshToken),
-      })
-    );
-  });
-
-  describe('getTokensFromStorage', () => {
-    it('returns empty object if storage does not contain auth data', async () => {
-      (storage.getItem as jest.Mock).mockImplementation(() => undefined);
-      const result = await getTokensFromStorage();
-      expect(result).toEqual({});
-    });
-
-    it('returns empty object if storage contains invalid auth data', async () => {
-      (storage.getItem as jest.Mock).mockImplementation(() => 'asdf');
-      const result = await getTokensFromStorage();
-      expect(result).toEqual({});
-    });
-
-    it('returns parsed access and refresh token', async () => {
-      const result = await getTokensFromStorage();
-      expect(result).toEqual({
-        accessToken: mockAccessToken,
-        refreshToken: mockRefreshToken,
-      });
-    });
   });
 
   describe('baseQuery', () => {
     it('adds authorization header if not set', async () => {
-      await baseQuery('/test', {} as BaseQueryApi, {});
+      await baseQuery('/test', mockBaseQueryApi, {});
       expect(fetch).toHaveBeenCalledWith(
         expect.objectContaining({
           headers: new Headers({
@@ -81,7 +54,7 @@ describe('baseQuery', () => {
             authorization: `Bearer ${mockCustomAccessToken}`,
           }),
         },
-        {} as BaseQueryApi,
+        mockBaseQueryApi,
         {}
       );
       expect(fetch).toHaveBeenCalledWith(
@@ -96,14 +69,14 @@ describe('baseQuery', () => {
 
   describe('baseQueryWithReauth', () => {
     it('issues call to original endpoint', async () => {
-      await baseQueryWithReauth('/test', {} as BaseQueryApi, {});
+      await baseQueryWithReauth('/test', mockBaseQueryApi, {});
       expect(fetch).toHaveBeenCalledWith(
         expect.objectContaining({ url: '/test' })
       );
     });
 
     it('does not refresh token if call does not return 401', async () => {
-      await baseQueryWithReauth('/test', {} as BaseQueryApi, {});
+      await baseQueryWithReauth('/test', mockBaseQueryApi, {});
       expect(fetch).toHaveBeenCalledTimes(1);
       expect(fetch).not.toHaveBeenCalledWith(
         expect.objectContaining({ url: '/auth/refreshToken' })
@@ -124,11 +97,7 @@ describe('baseQuery', () => {
       });
 
       it('refreshes token if first call returns 401', async () => {
-        await baseQueryWithReauth(
-          '/test',
-          { dispatch: mockDispatch } as unknown as BaseQueryApi,
-          {}
-        );
+        await baseQueryWithReauth('/test', mockBaseQueryApi, {});
         expect(fetch).toHaveBeenCalledWith(
           expect.objectContaining({
             method: 'POST',
@@ -148,11 +117,7 @@ describe('baseQuery', () => {
               })
             )
         );
-        await baseQueryWithReauth(
-          '/test',
-          { dispatch: mockDispatch } as unknown as BaseQueryApi,
-          {}
-        );
+        await baseQueryWithReauth('/test', mockBaseQueryApi, {});
         expect(mockDispatch).toHaveBeenCalledWith(
           setTokens({
             accessToken: mockNewAccessToken,
@@ -165,11 +130,7 @@ describe('baseQuery', () => {
         (fetch as jest.Mock).mockImplementationOnce(
           () => new Response(null, { status: 400 })
         );
-        await baseQueryWithReauth(
-          '/test',
-          { dispatch: mockDispatch } as unknown as BaseQueryApi,
-          {}
-        );
+        await baseQueryWithReauth('/test', mockBaseQueryApi, {});
         expect(mockDispatch).toHaveBeenCalledWith(logout());
       });
 
@@ -183,11 +144,7 @@ describe('baseQuery', () => {
               })
             )
         );
-        await baseQueryWithReauth(
-          '/test',
-          { dispatch: mockDispatch } as unknown as BaseQueryApi,
-          {}
-        );
+        await baseQueryWithReauth('/test', mockBaseQueryApi, {});
         await waitFor(() => {
           expect(fetch).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -212,7 +169,7 @@ describe('baseQuery', () => {
         );
         await baseQueryWithReauth(
           { url: '/test', method: 'POST' },
-          { dispatch: mockDispatch } as unknown as BaseQueryApi,
+          mockBaseQueryApi,
           {}
         );
         await waitFor(() => {
@@ -229,11 +186,7 @@ describe('baseQuery', () => {
       });
 
       it('releases mutex after completion', async () => {
-        await baseQueryWithReauth(
-          '/test',
-          { dispatch: mockDispatch } as unknown as BaseQueryApi,
-          {}
-        );
+        await baseQueryWithReauth('/test', mockBaseQueryApi, {});
         expect(mutex.isLocked()).toEqual(false);
       });
     });
@@ -258,11 +211,7 @@ describe('baseQuery', () => {
       it('waits for unlock and then calls original endpoint again', async () => {
         const mutexWaitSpy = jest.spyOn(mutex, 'waitForUnlock');
 
-        baseQueryWithReauth(
-          '/test',
-          { dispatch: mockDispatch } as unknown as BaseQueryApi,
-          {}
-        );
+        baseQueryWithReauth('/test', mockBaseQueryApi, {});
 
         const release = await mutex.acquire();
         await waitFor(() => {

@@ -1,4 +1,3 @@
-import userEvent from '@testing-library/user-event';
 import ToolsPage from '@app/pages';
 import { mockUser } from '@tests/constants/data';
 import { Tool } from '@app/types';
@@ -16,12 +15,8 @@ const mockTools: Tool[] = [
   },
 ];
 
-const mockPush = jest.fn();
-
 jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({
-    push: mockPush,
-  })),
+  useRouter: jest.fn(() => ({})),
 }));
 
 jest.mock('@app/redux/services/tools', () => ({
@@ -44,9 +39,8 @@ describe('Home', () => {
     expect(result.findByTestId('create-tool-thumbnail')).toBeDefined();
   });
 
-  it('renders tools and navigates to the /tools/:id page on click', async () => {
+  it('renders tools', () => {
     const result = render(<ToolsPage />);
-    await userEvent.click(result.getByText('Tool 1'));
-    expect(mockPush).toHaveBeenCalledWith('/tools/1');
+    expect(result.getByText('Tool 1')).toBeTruthy();
   });
 });

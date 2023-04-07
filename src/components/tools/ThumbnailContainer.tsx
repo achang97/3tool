@@ -1,10 +1,12 @@
 import { Box, Grid } from '@mui/material';
-import { ReactNode } from 'react';
+import Link from 'next/link';
+import { ReactNode, useMemo } from 'react';
 
 type ThumbnailContainerProps = {
   children: ReactNode;
   icon: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  href?: string;
   testId?: string;
 };
 
@@ -12,10 +14,21 @@ export const ThumbnailContainer = ({
   children,
   icon,
   onClick,
+  href,
   testId,
 }: ThumbnailContainerProps) => {
+  const linkProps = useMemo(() => {
+    if (!href) {
+      return {};
+    }
+    return {
+      component: Link,
+      href,
+    };
+  }, [href]);
+
   return (
-    <Grid item xs={3} data-testid={testId}>
+    <Grid item xs={3} data-testid={testId} onClick={onClick} {...linkProps}>
       <Box
         sx={{
           display: 'flex',
@@ -27,7 +40,6 @@ export const ThumbnailContainer = ({
           cursor: 'pointer',
           height: '200px',
         }}
-        onClick={onClick}
       >
         <Box
           sx={{

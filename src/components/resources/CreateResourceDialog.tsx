@@ -2,6 +2,7 @@ import { useCreateResourceMutation } from '@app/redux/services/resources';
 import { Resource } from '@app/types';
 import { useCallback } from 'react';
 import { isSuccessfulApiResponse } from '@app/utils/api';
+import _ from 'lodash';
 import { BaseResourceDialog } from './BaseResourceDialog';
 
 type CreateResourceDialogProps = {
@@ -24,7 +25,9 @@ export const CreateResourceDialog = ({
   const [createResource, { isLoading, error }] = useCreateResourceMutation();
 
   const handleCreateResource = useCallback(async () => {
-    const response = await createResource(resource);
+    const response = await createResource(
+      _.omit(resource, ['_id', 'createdAt', 'updatedAt'])
+    );
 
     if (!isSuccessfulApiResponse(response)) {
       return;
