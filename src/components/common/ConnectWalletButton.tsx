@@ -1,22 +1,10 @@
-import { Wallet } from '@mui/icons-material';
-import { Button } from '@mui/material';
-import { useWeb3Modal } from '@web3modal/react';
-import { useCallback } from 'react';
+import { Box } from '@mui/material';
+import { Web3Button } from '@web3modal/react';
 
 export const ConnectWalletButton = () => {
-  const { open } = useWeb3Modal();
-
-  const handleConnectWallet = useCallback(() => {
-    open();
-  }, [open]);
-
   return (
-    <Button
-      startIcon={<Wallet />}
-      onClick={handleConnectWallet}
-      data-testid="connect-wallet-button"
-    >
-      Connect Wallet
-    </Button>
+    <Box data-testid="connect-wallet-button">
+      <Web3Button />
+    </Box>
   );
 };

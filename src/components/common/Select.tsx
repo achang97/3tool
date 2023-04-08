@@ -1,5 +1,4 @@
-import { theme } from '@app/utils/mui';
-import { TextField, TextFieldProps } from '@mui/material';
+import { TextField, TextFieldProps, useTheme } from '@mui/material';
 import { useMemo } from 'react';
 
 export type SelectProps = TextFieldProps;
@@ -10,6 +9,8 @@ export const Select = ({
   SelectProps,
   ...rest
 }: SelectProps) => {
+  const theme = useTheme();
+
   const renderValue = useMemo(() => {
     if (value) {
       return undefined;
@@ -17,12 +18,14 @@ export const Select = ({
 
     return () => (
       <span
-        style={{ opacity: theme.colorSchemes.light.opacity.inputPlaceholder }}
+        style={{
+          opacity: theme.opacity.inputPlaceholder,
+        }}
       >
         {placeholder}
       </span>
     );
-  }, [placeholder, value]);
+  }, [placeholder, theme.opacity.inputPlaceholder, value]);
 
   return (
     <TextField

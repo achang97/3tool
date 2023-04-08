@@ -10,6 +10,15 @@ import type {} from '@mui/lab/themeAugmentation';
 import { CSSProperties } from 'react';
 
 declare module '@mui/material/styles' {
+  interface Theme {
+    opacity: {
+      inputPlaceholder: number;
+      inputUnderline: number;
+      switchTrack: number;
+      switchTrackDisabled: number;
+    };
+  }
+
   interface TypographyVariants {
     code1: CSSProperties;
     code2: CSSProperties;

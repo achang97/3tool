@@ -1,9 +1,9 @@
-import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { goerli, mainnet } from 'wagmi';
 import { ResourceType } from '@app/types';
 import { RESOURCE_DATA_TEMPLATES } from '@app/constants';
 import { pushResource } from '@app/redux/features/resourcesSlice';
+import { render } from '@tests/utils/renderWithContext';
 import { SmartContractForm } from '../SmartContractForm';
 import { useAbiResources } from '../../hooks/useAbiResources';
 import { useFetchAbi } from '../../hooks/useFetchAbi';

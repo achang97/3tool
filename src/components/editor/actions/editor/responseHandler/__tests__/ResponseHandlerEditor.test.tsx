@@ -6,8 +6,9 @@ import {
   EventHandler,
 } from '@app/types';
 import { within } from '@testing-library/dom';
-import { render, RenderResult } from '@testing-library/react';
+import { RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { render } from '@tests/utils/renderWithContext';
 import { ResponseHandlerEditor } from '../ResponseHandlerEditor';
 
 const mockName = 'name';

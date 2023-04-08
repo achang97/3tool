@@ -1,5 +1,5 @@
-import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { render } from '@tests/utils/renderWithContext';
 import { InspectorSelect } from '../InspectorSelect';
 
 const mockLabel = 'label';

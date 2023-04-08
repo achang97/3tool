@@ -1,8 +1,8 @@
 import { ACTION_METHOD_CONFIGS } from '@app/constants';
 import { ActionMethod } from '@app/types';
-import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { validateSelectField } from '@tests/testers/inspector';
+import { render } from '@tests/utils/renderWithContext';
 import { useToolElementNames } from '../../hooks/useToolElementNames';
 import { EventHandlerActionEditor } from '../EventHandlerActionEditor';
 

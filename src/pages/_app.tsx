@@ -6,13 +6,13 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import { Toolbar } from '@app/components/toolbar/Toolbar';
 import { theme } from '@app/utils/mui';
 import { persistor, wrapper } from '@app/redux/store';
-import { wagmiClient, ethereumClient } from '@app/utils/wallet';
-import { MSW_API, WALLETCONNECT_PROJECT_ID } from '@app/constants';
+import { wagmiClient } from '@app/utils/wallet';
+import { MSW_API } from '@app/constants';
 import { Provider } from 'react-redux';
 import { WagmiConfig } from 'wagmi';
-import { Web3Modal } from '@web3modal/react';
 import { initFetch } from '@app/utils/global';
 import { AuthRedirectProvider } from '@app/components/auth/contexts/AuthRedirectProvider';
+import { ConnectWalletModal } from '@app/components/common/ConnectWalletModal';
 
 import '@app/styles/globals.css';
 import '@app/styles/react-grid-layout.css';
@@ -61,10 +61,7 @@ const App = ({ Component, ...rest }: AppProps) => {
                     <Component {...props.pageProps} />
                   </Box>
                 </Box>
-                <Web3Modal
-                  projectId={WALLETCONNECT_PROJECT_ID}
-                  ethereumClient={ethereumClient}
-                />
+                <ConnectWalletModal />
               </AuthRedirectProvider>
             </WagmiConfig>
           </CssVarsProvider>

@@ -6,6 +6,11 @@ const mockValue = '1';
 const mockChildren = <MenuItem value={mockValue}>1</MenuItem>;
 const mockPlaceholder = 'placeholder';
 
+jest.mock('@mui/material', () => ({
+  ...jest.requireActual('@mui/material'),
+  useTheme: jest.fn(() => ({ opacity: { inputPlaceholder: '' } })),
+}));
+
 describe('Select', () => {
   it('renders placeholder', () => {
     const result = render(

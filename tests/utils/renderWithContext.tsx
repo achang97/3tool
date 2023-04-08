@@ -11,6 +11,9 @@ import {
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from '@app/redux/store';
+import { ThemeProvider } from '@mui/material';
+import { theme } from '@app/utils/mui';
+import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 
 export const render = (
   ui: ReactElement,
@@ -20,11 +23,13 @@ export const render = (
     ...options,
     wrapper: ({ children }: { children: ReactElement }) => (
       <Provider store={store}>
-        {options?.wrapper ? (
-          <options.wrapper>{children}</options.wrapper>
-        ) : (
-          children
-        )}
+        <CssVarsProvider theme={theme}>
+          {options?.wrapper ? (
+            <options.wrapper>{children}</options.wrapper>
+          ) : (
+            children
+          )}
+        </CssVarsProvider>
       </Provider>
     ),
   });
@@ -44,11 +49,13 @@ export const renderHook = <
     ...options,
     wrapper: ({ children }: { children: ReactElement }) => (
       <Provider store={store}>
-        {options?.wrapper ? (
-          <options.wrapper>{children}</options.wrapper>
-        ) : (
-          children
-        )}
+        <CssVarsProvider theme={theme}>
+          {options?.wrapper ? (
+            <options.wrapper>{children}</options.wrapper>
+          ) : (
+            children
+          )}
+        </CssVarsProvider>
       </Provider>
     ),
   });

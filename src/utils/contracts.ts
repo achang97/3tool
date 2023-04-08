@@ -6,7 +6,13 @@ import { CHAINS_BY_ID, ETHERSCAN_API_KEY } from '@app/constants';
 
 const TIMEOUT = 10_000;
 
-export const ETHERSCAN_CONFIGS = {
+export const ETHERSCAN_CONFIGS: Record<
+  number,
+  {
+    etherscanEndpoint: string;
+    apiKey: string;
+  }
+> = {
   [mainnet.id]: {
     etherscanEndpoint: 'https://api.etherscan.io',
     apiKey: ETHERSCAN_API_KEY,

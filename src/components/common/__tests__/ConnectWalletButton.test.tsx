@@ -1,13 +1,9 @@
 import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { Web3Button } from '@web3modal/react';
 import { ConnectWalletButton } from '../ConnectWalletButton';
 
-const mockOpen = jest.fn();
-
 jest.mock('@web3modal/react', () => ({
-  useWeb3Modal: jest.fn(() => ({
-    open: mockOpen,
-  })),
+  Web3Button: jest.fn(),
 }));
 
 describe('ConnectWalletButton', () => {
@@ -15,14 +11,12 @@ describe('ConnectWalletButton', () => {
     jest.clearAllMocks();
   });
 
-  it('renders Connect Wallet text', () => {
-    const result = render(<ConnectWalletButton />);
-    expect(result.getByText('Connect Wallet')).toBeTruthy();
-  });
+  it('renders Connect Wallet button', () => {
+    const mockWeb3Button = 'Web3 Button';
+    (Web3Button as jest.Mock).mockImplementation(() => mockWeb3Button);
 
-  it('opens WalletConnect modal on click', async () => {
     const result = render(<ConnectWalletButton />);
-    await userEvent.click(result.getByText('Connect Wallet'));
-    expect(mockOpen).toHaveBeenCalled();
+    expect(result.getByTestId('connect-wallet-button')).toBeTruthy();
+    expect(result.getByText(mockWeb3Button)).toBeTruthy();
   });
 });
