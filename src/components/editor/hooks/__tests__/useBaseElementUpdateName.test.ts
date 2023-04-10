@@ -1,8 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import {
-  mockApiErrorResponse,
-  mockApiSuccessResponse,
-} from '@tests/constants/api';
+import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { validateVariableName } from '@app/utils/namespace';
 import { ReferenceUpdate } from '../useToolUpdateReference';
 import { useBaseElementUpdateName } from '../useBaseElementUpdateName';
@@ -85,12 +82,10 @@ describe('useBaseElementUpdateName', () => {
 
   describe('API call', () => {
     it('calls API with extended update', async () => {
-      mockExtendUpdate.mockImplementation(
-        (newName: string, update: ReferenceUpdate) => {
-          // @ts-ignore We're purposefully using a bogus field here
-          update.randomField = newName;
-        }
-      );
+      mockExtendUpdate.mockImplementation((newName: string, update: ReferenceUpdate) => {
+        // @ts-ignore We're purposefully using a bogus field here
+        update.randomField = newName;
+      });
 
       const { result } = renderHook(() =>
         useBaseElementUpdateName({
@@ -101,10 +96,7 @@ describe('useBaseElementUpdateName', () => {
       );
       await result.current(mockNewName);
 
-      expect(mockExtendUpdate).toHaveBeenCalledWith(
-        mockNewName,
-        mockReferenceUpdate
-      );
+      expect(mockExtendUpdate).toHaveBeenCalledWith(mockNewName, mockReferenceUpdate);
       expect(mockUpdateTool).toHaveBeenCalledWith({
         ...mockReferenceUpdate,
         randomField: mockNewName,
@@ -145,10 +137,7 @@ describe('useBaseElementUpdateName', () => {
           })
         );
         await result.current(mockNewName);
-        expect(mockHandleSuccess).toHaveBeenCalledWith(
-          mockNewName,
-          mockApiSuccessResponse
-        );
+        expect(mockHandleSuccess).toHaveBeenCalledWith(mockNewName, mockApiSuccessResponse);
       });
     });
   });

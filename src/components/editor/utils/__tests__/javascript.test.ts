@@ -18,9 +18,7 @@ describe('javascript', () => {
   describe('acornParse', () => {
     it('returns result of acorn.parse with latest ecma version', () => {
       const result = acornParse('button1');
-      expect(result).toEqual(
-        acorn.parse('button1', { ecmaVersion: 'latest ' })
-      );
+      expect(result).toEqual(acorn.parse('button1', { ecmaVersion: 'latest ' }));
     });
   });
 
@@ -37,9 +35,7 @@ describe('javascript', () => {
     });
 
     it('parses multiple terms', () => {
-      const result = parseDynamicTerms(
-        '{{ button1.text }} {{textInput1.value}}'
-      );
+      const result = parseDynamicTerms('{{ button1.text }} {{textInput1.value}}');
       expect(result).toEqual([
         {
           group: '{{ button1.text }}',
@@ -55,9 +51,7 @@ describe('javascript', () => {
     });
 
     it('parses complex expression terms', () => {
-      const result = parseDynamicTerms(
-        '  {{ button1.text + 1 / 5 + textInput.value }}  '
-      );
+      const result = parseDynamicTerms('  {{ button1.text + 1 / 5 + textInput.value }}  ');
       expect(result).toEqual([
         {
           group: '{{ button1.text + 1 / 5 + textInput.value }}',
@@ -130,20 +124,12 @@ describe('javascript', () => {
 
   describe('replaceVariableName', () => {
     it('replaces all variable references in expression', () => {
-      const result = replaceVariableName(
-        'button1 + button1.text',
-        'button1',
-        'newButton'
-      );
+      const result = replaceVariableName('button1 + button1.text', 'button1', 'newButton');
       expect(result).toEqual('newButton + newButton.text');
     });
 
     it('replaces terms in expression with return statement', () => {
-      const result = replaceVariableName(
-        'return button1.text',
-        'button1',
-        'newButton'
-      );
+      const result = replaceVariableName('return button1.text', 'button1', 'newButton');
       expect(result).toEqual('return newButton.text');
     });
 
@@ -153,9 +139,7 @@ describe('javascript', () => {
         'button1',
         'newButton'
       );
-      expect(result).toEqual(
-        'const button1 = test; console.log(button1.text);'
-      );
+      expect(result).toEqual('const button1 = test; console.log(button1.text);');
     });
 
     it('does not replace variable references if a function of the same name has been declared', () => {
@@ -164,9 +148,7 @@ describe('javascript', () => {
         'button1',
         'newButton'
       );
-      expect(result).toEqual(
-        'function button1() {}; console.log(button1.text);'
-      );
+      expect(result).toEqual('function button1() {}; console.log(button1.text);');
     });
   });
 
@@ -206,10 +188,7 @@ describe('javascript', () => {
     });
 
     it('returns parsed MemberExpression nodes from expression', () => {
-      const result = parseVariables('button1.test + button2.test.nested', [
-        'button1',
-        'button2',
-      ]);
+      const result = parseVariables('button1.test + button2.test.nested', ['button1', 'button2']);
       expect(result).toEqual(['button1.test', 'button2.test.nested']);
     });
 
@@ -224,10 +203,7 @@ describe('javascript', () => {
     });
 
     it('returns parsed Identifier nodes from expression', () => {
-      const result = parseVariables('button1 + button2', [
-        'button1',
-        'button2',
-      ]);
+      const result = parseVariables('button1 + button2', ['button1', 'button2']);
       expect(result).toEqual(['button1', 'button2']);
     });
 
@@ -242,9 +218,7 @@ describe('javascript', () => {
     });
 
     it('removes multiple call expressions from the end of a variable', () => {
-      const result = parseVariables('button2.text.toString().toString()', [
-        'button2',
-      ]);
+      const result = parseVariables('button2.text.toString().toString()', ['button2']);
       expect(result).toEqual(['button2.text']);
     });
 
@@ -262,10 +236,10 @@ describe('javascript', () => {
   describe('parseDynamicTermVariables', () => {
     describe('parseVariables', () => {
       it('returns variables within dynamic terms', () => {
-        const result = parseDynamicTermVariables(
-          '{{ button1.test + button2.test.nested }}',
-          ['button1', 'button2']
-        );
+        const result = parseDynamicTermVariables('{{ button1.test + button2.test.nested }}', [
+          'button1',
+          'button2',
+        ]);
         expect(result).toEqual(['button1.test', 'button2.test.nested']);
       });
 
@@ -275,9 +249,7 @@ describe('javascript', () => {
       });
 
       it('excludes duplicates across different dynamic terms', () => {
-        const result = parseVariables('{{ button1 }} {{ button1 }}', [
-          'button1',
-        ]);
+        const result = parseVariables('{{ button1 }} {{ button1 }}', ['button1']);
         expect(result).toEqual(['button1']);
       });
     });

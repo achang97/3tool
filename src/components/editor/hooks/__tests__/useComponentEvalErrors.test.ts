@@ -1,9 +1,4 @@
-import {
-  Component,
-  ComponentEvent,
-  ComponentType,
-  EventHandlerType,
-} from '@app/types';
+import { Component, ComponentEvent, ComponentType, EventHandlerType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import { useComponentEvalData } from '../useComponentEvalData';
 import { useComponentEvalErrors } from '../useComponentEvalErrors';
@@ -59,9 +54,7 @@ describe('useComponentEvalErrors', () => {
         },
       }));
 
-      const { result } = renderHook(() =>
-        useComponentEvalErrors(mockComponent)
-      );
+      const { result } = renderHook(() => useComponentEvalErrors(mockComponent));
       expect(result.current).toEqual([{ name: 'data', error: mockError }]);
     });
 
@@ -74,12 +67,8 @@ describe('useComponentEvalErrors', () => {
         },
       }));
 
-      const { result } = renderHook(() =>
-        useComponentEvalErrors(mockComponent)
-      );
-      expect(result.current).toEqual([
-        { name: 'columnHeaderNames.id', error: mockError },
-      ]);
+      const { result } = renderHook(() => useComponentEvalErrors(mockComponent));
+      expect(result.current).toEqual([{ name: 'columnHeaderNames.id', error: mockError }]);
     });
 
     it('returns array with nested array data field error', () => {
@@ -89,12 +78,8 @@ describe('useComponentEvalErrors', () => {
         },
       }));
 
-      const { result } = renderHook(() =>
-        useComponentEvalErrors(mockComponent)
-      );
-      expect(result.current).toEqual([
-        { name: 'columnHeadersByIndex[0]', error: mockError },
-      ]);
+      const { result } = renderHook(() => useComponentEvalErrors(mockComponent));
+      expect(result.current).toEqual([{ name: 'columnHeadersByIndex[0]', error: mockError }]);
     });
   });
 
@@ -106,12 +91,8 @@ describe('useComponentEvalErrors', () => {
         },
       }));
 
-      const { result } = renderHook(() =>
-        useComponentEvalErrors(mockComponent)
-      );
-      expect(result.current).toEqual([
-        { name: 'eventHandlers[0].actionName', error: mockError },
-      ]);
+      const { result } = renderHook(() => useComponentEvalErrors(mockComponent));
+      expect(result.current).toEqual([{ name: 'eventHandlers[0].actionName', error: mockError }]);
     });
   });
 });

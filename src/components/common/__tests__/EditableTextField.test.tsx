@@ -1,9 +1,4 @@
-import {
-  TextField,
-  TextFieldProps,
-  Typography,
-  TypographyProps,
-} from '@mui/material';
+import { TextField, TextFieldProps, Typography, TypographyProps } from '@mui/material';
 import { render, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { EditableTextField } from '../EditableTextField';
@@ -40,15 +35,13 @@ describe('EditableTextField', () => {
       const result = render(<EditableTextField value={mockValue} />);
 
       await userEvent.click(result.getByTestId(textId));
-      expect(
-        within(await result.findByTestId(inputId)).getByRole('textbox')
-      ).toHaveValue(mockValue);
+      expect(within(await result.findByTestId(inputId)).getByRole('textbox')).toHaveValue(
+        mockValue
+      );
     });
 
     it('does not toggle to text field if not editable', async () => {
-      const result = render(
-        <EditableTextField value={mockValue} isEditable={false} />
-      );
+      const result = render(<EditableTextField value={mockValue} isEditable={false} />);
 
       await userEvent.click(result.getByTestId(textId));
       expect(result.queryByTestId(inputId)).toBeNull();
@@ -67,9 +60,7 @@ describe('EditableTextField', () => {
     });
 
     it('shows disabled icon if not editable and hovering', async () => {
-      const result = render(
-        <EditableTextField value={mockValue} isEditable={false} showIcon />
-      );
+      const result = render(<EditableTextField value={mockValue} isEditable={false} showIcon />);
       await userEvent.hover(result.getByTestId(textId));
       expect(result.getByTestId(disabledIconId)).toBeVisible();
     });
@@ -88,11 +79,7 @@ describe('EditableTextField', () => {
     it('shows tooltip if hovering over edit icon', async () => {
       const mockTooltip = 'This is a test tooltip';
       const result = render(
-        <EditableTextField
-          value={mockValue}
-          iconTooltip={mockTooltip}
-          showIcon
-        />
+        <EditableTextField value={mockValue} iconTooltip={mockTooltip} showIcon />
       );
       await userEvent.hover(result.getByTestId(editIconId));
       expect(await result.findByText(mockTooltip)).toBeVisible();
@@ -115,15 +102,11 @@ describe('EditableTextField', () => {
       await userEvent.keyboard(newValueText);
 
       await userEvent.click(result.getByText('Blur'));
-      expect(mockHandleSubmit).toHaveBeenCalledWith(
-        `${mockValue}${newValueText}`
-      );
+      expect(mockHandleSubmit).toHaveBeenCalledWith(`${mockValue}${newValueText}`);
     });
 
     it('calls onSubmit on enter keypress', async () => {
-      const result = render(
-        <EditableTextField value={mockValue} onSubmit={mockHandleSubmit} />
-      );
+      const result = render(<EditableTextField value={mockValue} onSubmit={mockHandleSubmit} />);
 
       await userEvent.click(result.getByTestId(textId));
       await result.findByTestId(inputId);
@@ -132,15 +115,11 @@ describe('EditableTextField', () => {
       await userEvent.keyboard(newValueText);
       await userEvent.keyboard('[Enter]');
 
-      expect(mockHandleSubmit).toHaveBeenCalledWith(
-        `${mockValue}${newValueText}`
-      );
+      expect(mockHandleSubmit).toHaveBeenCalledWith(`${mockValue}${newValueText}`);
     });
 
     it('does not call onSubmit if value has not changed', async () => {
-      const result = render(
-        <EditableTextField value={mockValue} onSubmit={mockHandleSubmit} />
-      );
+      const result = render(<EditableTextField value={mockValue} onSubmit={mockHandleSubmit} />);
 
       await userEvent.click(result.getByTestId(textId));
       await result.findByTestId(inputId);
@@ -150,9 +129,7 @@ describe('EditableTextField', () => {
     });
 
     it('resets local value to initial value on submit', async () => {
-      const result = render(
-        <EditableTextField value={mockValue} onSubmit={mockHandleSubmit} />
-      );
+      const result = render(<EditableTextField value={mockValue} onSubmit={mockHandleSubmit} />);
 
       await userEvent.click(result.getByTestId(textId));
       await result.findByTestId(inputId);
@@ -161,46 +138,34 @@ describe('EditableTextField', () => {
       await userEvent.keyboard(newValueText);
       await userEvent.keyboard('[Enter]');
 
-      expect(mockHandleSubmit).toHaveBeenCalledWith(
-        `${mockValue}${newValueText}`
-      );
+      expect(mockHandleSubmit).toHaveBeenCalledWith(`${mockValue}${newValueText}`);
 
       await userEvent.click(result.getByTestId(textId));
-      expect(
-        within(await result.findByTestId(inputId)).getByRole('textbox')
-      ).toHaveValue(mockValue);
+      expect(within(await result.findByTestId(inputId)).getByRole('textbox')).toHaveValue(
+        mockValue
+      );
     });
 
     it('resets local value to new value', async () => {
-      const result = render(
-        <EditableTextField value={mockValue} onSubmit={mockHandleSubmit} />
-      );
+      const result = render(<EditableTextField value={mockValue} onSubmit={mockHandleSubmit} />);
 
       await userEvent.click(result.getByTestId(textId));
-      expect(
-        within(await result.findByTestId(inputId)).getByRole('textbox')
-      ).toHaveValue(mockValue);
+      expect(within(await result.findByTestId(inputId)).getByRole('textbox')).toHaveValue(
+        mockValue
+      );
       await userEvent.keyboard('[Enter]');
 
       const newValue = 'New Value';
-      result.rerender(
-        <EditableTextField value={newValue} onSubmit={mockHandleSubmit} />
-      );
+      result.rerender(<EditableTextField value={newValue} onSubmit={mockHandleSubmit} />);
       await userEvent.click(result.getByTestId(textId));
-      expect(
-        within(await result.findByTestId(inputId)).getByRole('textbox')
-      ).toHaveValue(newValue);
+      expect(within(await result.findByTestId(inputId)).getByRole('textbox')).toHaveValue(newValue);
     });
   });
 
   describe('style', () => {
     it('passes height to Typography', () => {
       const result = render(
-        <EditableTextField
-          value={mockValue}
-          onSubmit={mockHandleSubmit}
-          height={10}
-        />
+        <EditableTextField value={mockValue} onSubmit={mockHandleSubmit} height={10} />
       );
 
       expect(result.getByTestId(textId)).toHaveStyle({ height: '10px' });
@@ -208,11 +173,7 @@ describe('EditableTextField', () => {
 
     it('passes height to TextField', async () => {
       const result = render(
-        <EditableTextField
-          value={mockValue}
-          onSubmit={mockHandleSubmit}
-          height={10}
-        />
+        <EditableTextField value={mockValue} onSubmit={mockHandleSubmit} height={10} />
       );
 
       await userEvent.click(result.getByTestId(textId));
@@ -235,9 +196,7 @@ describe('EditableTextField', () => {
         />
       );
 
-      expect((Typography as jest.Mock).mock.calls[0][0]).toMatchObject(
-        mockTypographyProps
-      );
+      expect((Typography as jest.Mock).mock.calls[0][0]).toMatchObject(mockTypographyProps);
     });
 
     it('passes TextFieldProps to TextField', async () => {
@@ -255,10 +214,7 @@ describe('EditableTextField', () => {
       );
 
       await userEvent.click(result.getByTestId(textId));
-      expect(TextField).toHaveBeenCalledWith(
-        expect.objectContaining(mockTextFieldProps),
-        {}
-      );
+      expect(TextField).toHaveBeenCalledWith(expect.objectContaining(mockTextFieldProps), {});
     });
   });
 });

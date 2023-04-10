@@ -1,7 +1,4 @@
-import {
-  COMPONENT_INPUT_TEMPLATES,
-  ACTION_RESULT_TEMPLATE,
-} from '@app/constants';
+import { COMPONENT_INPUT_TEMPLATES, ACTION_RESULT_TEMPLATE } from '@app/constants';
 import { Action, ActionType, Component, ComponentType, Tool } from '@app/types';
 import { useAppSelector } from '@app/redux/hooks';
 import { renderHook } from '@testing-library/react';
@@ -58,9 +55,7 @@ describe('useBaseEvalArgs', () => {
   });
 
   it('includes entries from default component inputs', () => {
-    const mockComponents = [
-      { name: 'textInput1', type: ComponentType.TextInput },
-    ] as Component[];
+    const mockComponents = [{ name: 'textInput1', type: ComponentType.TextInput }] as Component[];
 
     const { result } = renderHook(() =>
       useBaseEvalArgs({ components: mockComponents } as unknown as Tool)
@@ -71,9 +66,7 @@ describe('useBaseEvalArgs', () => {
   });
 
   it('includes entries from default action results', () => {
-    const mockActions = [
-      { name: 'action1', type: ActionType.Javascript },
-    ] as Action[];
+    const mockActions = [{ name: 'action1', type: ActionType.Javascript }] as Action[];
 
     const { result } = renderHook(() =>
       useBaseEvalArgs({

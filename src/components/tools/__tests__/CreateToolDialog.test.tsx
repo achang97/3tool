@@ -23,37 +23,26 @@ jest.mock('@app/redux/services/tools', () => ({
 describe('CreateToolDialog', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useCreateToolMutation as jest.Mock).mockImplementation(() => [
-      mockCreateTool,
-      {},
-    ]);
+    (useCreateToolMutation as jest.Mock).mockImplementation(() => [mockCreateTool, {}]);
   });
 
   it('does not render dialog if isOpen is false', () => {
-    const result = render(
-      <CreateToolDialog onClose={mockHandleClose} isOpen={false} />
-    );
+    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen={false} />);
 
     expect(result.queryByTestId('create-tool-dialog')).toBeNull();
   });
 
   it('renders dialog title', () => {
-    const result = render(
-      <CreateToolDialog onClose={mockHandleClose} isOpen />
-    );
+    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     expect(result.getByText('Create new tool')).toBeTruthy();
   });
 
   it('does not call API to create tool if no tool name is provided', async () => {
-    const result = render(
-      <CreateToolDialog onClose={mockHandleClose} isOpen />
-    );
+    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     const submitButton = result.getByText('Create tool');
-    expect(() => userEvent.click(submitButton)).rejects.toThrow(
-      /pointer-events: none/
-    );
+    expect(() => userEvent.click(submitButton)).rejects.toThrow(/pointer-events: none/);
 
     expect(mockCreateTool).not.toHaveBeenCalled();
   });
@@ -61,9 +50,7 @@ describe('CreateToolDialog', () => {
   it('calls API to create tool on submit click', async () => {
     const mockName = 'New Tool Name';
 
-    const result = render(
-      <CreateToolDialog onClose={mockHandleClose} isOpen />
-    );
+    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     const input = result.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, mockName);
@@ -77,9 +64,7 @@ describe('CreateToolDialog', () => {
   it('does not navigate to new page after failed creation of tool', async () => {
     mockCreateTool.mockImplementation(() => mockApiErrorResponse);
 
-    const result = render(
-      <CreateToolDialog onClose={mockHandleClose} isOpen />
-    );
+    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     const input = result.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, 'New Tool Name');
@@ -95,9 +80,7 @@ describe('CreateToolDialog', () => {
     const mockNewTool = { _id: 'new-tool-id' };
     mockCreateTool.mockImplementation(() => ({ data: mockNewTool }));
 
-    const result = render(
-      <CreateToolDialog onClose={mockHandleClose} isOpen />
-    );
+    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     const input = result.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, 'New Tool Name');
@@ -121,9 +104,7 @@ describe('CreateToolDialog', () => {
       { error: mockError },
     ]);
 
-    const result = render(
-      <CreateToolDialog onClose={mockHandleClose} isOpen />
-    );
+    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
     expect(result.getByText('Mock Error Message')).toBeTruthy();
   });
 });

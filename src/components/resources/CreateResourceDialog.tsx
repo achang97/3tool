@@ -25,9 +25,7 @@ export const CreateResourceDialog = ({
   const [createResource, { isLoading, error }] = useCreateResourceMutation();
 
   const handleCreateResource = useCallback(async () => {
-    const response = await createResource(
-      _.omit(resource, ['_id', 'createdAt', 'updatedAt'])
-    );
+    const response = await createResource(_.omit(resource, ['_id', 'createdAt', 'updatedAt']));
 
     if (!isSuccessfulApiResponse(response)) {
       return;

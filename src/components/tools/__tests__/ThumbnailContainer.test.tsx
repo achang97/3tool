@@ -12,17 +12,13 @@ describe('ThumbnailContainer', () => {
   });
 
   it('renders children', () => {
-    const result = render(
-      <ThumbnailContainer icon={mockIcon}>{mockChildren}</ThumbnailContainer>
-    );
+    const result = render(<ThumbnailContainer icon={mockIcon}>{mockChildren}</ThumbnailContainer>);
 
     expect(result.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders children', () => {
-    const result = render(
-      <ThumbnailContainer icon={mockIcon}>{mockChildren}</ThumbnailContainer>
-    );
+    const result = render(<ThumbnailContainer icon={mockIcon}>{mockChildren}</ThumbnailContainer>);
 
     expect(result.getByText(mockChildren)).toBeTruthy();
   });
@@ -46,9 +42,6 @@ describe('ThumbnailContainer', () => {
         {mockChildren}
       </ThumbnailContainer>
     );
-    expect(result.container.firstChild).toHaveProperty(
-      'href',
-      `${BASE_WINDOW_URL}${mockHref}`
-    );
+    expect(result.container.firstChild).toHaveProperty('href', `${BASE_WINDOW_URL}${mockHref}`);
   });
 });

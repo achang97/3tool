@@ -70,19 +70,13 @@ export const parseObjectVariable = (
   };
 };
 
-const parseMemberExpressionName = (
-  memberExpression: MemberExpression
-): string => {
-  const parseMemberExpressionNameHelper = (
-    node: MemberExpression
-  ): [string, boolean] => {
+const parseMemberExpressionName = (memberExpression: MemberExpression): string => {
+  const parseMemberExpressionNameHelper = (node: MemberExpression): [string, boolean] => {
     if ('name' in node) {
       return [node.name as string, false];
     }
 
-    const [fullName, isEnd] = parseMemberExpressionNameHelper(
-      node.object as MemberExpression
-    );
+    const [fullName, isEnd] = parseMemberExpressionNameHelper(node.object as MemberExpression);
 
     if (isEnd) {
       return [fullName, isEnd];
@@ -103,10 +97,7 @@ const parseMemberExpressionName = (
   return parseMemberExpressionNameHelper(memberExpression)[0];
 };
 
-export const parseVariables = (
-  expression: string,
-  includedVariableNames: string[]
-): string[] => {
+export const parseVariables = (expression: string, includedVariableNames: string[]): string[] => {
   const variables = new Set<string>();
 
   try {
@@ -155,10 +146,7 @@ export const parseDynamicTermVariables = (
 
   const dynamicTerms = parseDynamicTerms(expression);
   dynamicTerms.forEach((dynamicTerm) => {
-    const termVariables = parseVariables(
-      dynamicTerm.expression,
-      includedVariableNames
-    );
+    const termVariables = parseVariables(dynamicTerm.expression, includedVariableNames);
     termVariables.forEach((termVariable) => variables.add(termVariable));
   });
 
@@ -178,8 +166,7 @@ export const parseDeclaredVariables = (expression: string): string[] => {
         }
       },
       VariableDeclarator: (variableDeclarator: VariableDeclarator) => {
-        const name =
-          'name' in variableDeclarator.id ? variableDeclarator.id.name : '';
+        const name = 'name' in variableDeclarator.id ? variableDeclarator.id.name : '';
         if (name) {
           variables.add(name);
         }
@@ -293,12 +280,7 @@ export const flattenObjectFields = (
 
     if (typeof value === 'object') {
       Object.entries(value).forEach(([fieldKey, fieldVal]) => {
-        flattenObjectFieldsHelper(
-          name ? `${name}.${fieldKey}` : fieldKey,
-          name,
-          fieldVal,
-          fields
-        );
+        flattenObjectFieldsHelper(name ? `${name}.${fieldKey}` : fieldKey, name, fieldVal, fields);
       });
     }
   };
@@ -322,10 +304,7 @@ export const getPrototypeFunctions = (value: unknown): Function[] => {
     .value();
 };
 
-export const overwriteArrayMergeCustomizer = (
-  _src: unknown,
-  update: unknown
-) => {
+export const overwriteArrayMergeCustomizer = (_src: unknown, update: unknown) => {
   if (Array.isArray(update)) {
     return update;
   }

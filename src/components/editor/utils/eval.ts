@@ -22,9 +22,7 @@ const baseEvalWithArgs = (
   FunctionConstructor: FunctionConstructor
 ): unknown => {
   const redeclaredVariables = parseDeclaredVariables(expression);
-  const argNames = Object.keys(args).filter(
-    (arg) => !redeclaredVariables.includes(arg)
-  );
+  const argNames = Object.keys(args).filter((arg) => !redeclaredVariables.includes(arg));
 
   const trimmedExpression = expression.trim();
   if (!trimmedExpression) {
@@ -81,11 +79,7 @@ const evalDynamicTerms = (
 
   for (let i = 0; i < dynamicTerms.length; i++) {
     const dynamicTerm = dynamicTerms[i];
-    const groupResult = evalWithArgs(
-      dynamicTerm.expression,
-      dynamicArgs,
-      false
-    );
+    const groupResult = evalWithArgs(dynamicTerm.expression, dynamicArgs, false);
     const groupResultStr = stringifyByType(groupResult, type);
 
     result = result.replace(dynamicTerm.group, groupResultStr);
@@ -127,10 +121,7 @@ const evalAsType = (expression: string, type: FieldType): unknown => {
   }
 
   // Number
-  if (
-    type === 'number' &&
-    ['number', 'null', 'undefined'].includes(valueType)
-  ) {
+  if (type === 'number' && ['number', 'null', 'undefined'].includes(valueType)) {
     return value;
   }
 
@@ -158,9 +149,7 @@ const evalAsType = (expression: string, type: FieldType): unknown => {
     throw new Error('Unable to evaluate nested value');
   }
 
-  throw new Error(
-    `Expected value of type '${type}', received value of type '${valueType}'`
-  );
+  throw new Error(`Expected value of type '${type}', received value of type '${valueType}'`);
 };
 
 export type EvalResult<ValueType = unknown> = {

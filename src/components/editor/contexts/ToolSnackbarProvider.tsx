@@ -8,9 +8,7 @@ type ToolSnackbarProviderProps = {
   children: ReactNode;
 };
 
-export const ToolSnackbarProvider = ({
-  children,
-}: ToolSnackbarProviderProps) => {
+export const ToolSnackbarProvider = ({ children }: ToolSnackbarProviderProps) => {
   return (
     <SnackbarProvider
       autoHideDuration={DURATION_MS}

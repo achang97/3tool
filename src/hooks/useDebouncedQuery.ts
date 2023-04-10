@@ -9,17 +9,12 @@ type HookReturnType = {
   handleQueryChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const useDebouncedQuery = (
-  debounceTimeMs = DEFAULT_DEBOUNCE_TIME_MS
-): HookReturnType => {
+export const useDebouncedQuery = (debounceTimeMs = DEFAULT_DEBOUNCE_TIME_MS): HookReturnType => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
   const debouncedSetDebouncedQuery = useMemo(() => {
-    return debounce(
-      (newQuery: string) => setDebouncedQuery(newQuery),
-      debounceTimeMs
-    );
+    return debounce((newQuery: string) => setDebouncedQuery(newQuery), debounceTimeMs);
   }, [debounceTimeMs]);
 
   const handleQueryChange = useCallback(

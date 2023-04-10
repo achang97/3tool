@@ -3,10 +3,7 @@ import { BasicSetupOptions } from '@uiw/react-codemirror';
 import { useMemo } from 'react';
 import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
 import { dynamicTextLanguage } from '@app/codemirror/dynamicTextLanguage';
-import {
-  dynamicSqlLanguage,
-  sqlLanguage,
-} from '@app/codemirror/dynamicSqlLanguage';
+import { dynamicSqlLanguage, sqlLanguage } from '@app/codemirror/dynamicSqlLanguage';
 import { EditorView } from '@codemirror/view';
 import { useCodeMirrorJavascriptAutocomplete } from './useCodeMirrorJavascriptAutocomplete';
 

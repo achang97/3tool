@@ -52,10 +52,7 @@ export const InspectorHeader = ({
         />
       </Box>
       {subtitle && (
-        <Typography
-          variant="caption"
-          sx={{ whiteSpace: 'nowrap', marginLeft: 0.5 }}
-        >
+        <Typography variant="caption" sx={{ whiteSpace: 'nowrap', marginLeft: 0.5 }}>
           {subtitle}
         </Typography>
       )}

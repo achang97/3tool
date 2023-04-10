@@ -1,13 +1,6 @@
 import { Box, TextField, Tooltip, Typography } from '@mui/material';
 import type { TextFieldProps, TypographyProps } from '@mui/material';
-import {
-  ChangeEvent,
-  useCallback,
-  useState,
-  KeyboardEvent,
-  useEffect,
-  useMemo,
-} from 'react';
+import { ChangeEvent, useCallback, useState, KeyboardEvent, useEffect, useMemo } from 'react';
 import { useIsHovered } from '@app/hooks/useIsHovered';
 import { Edit, EditOff } from '@mui/icons-material';
 import _ from 'lodash';
@@ -106,11 +99,7 @@ export const EditableTextField = ({
   }, [iconTooltip, isEditable, isHovered, showIcon]);
 
   return (
-    <Box
-      sx={{ minWidth: 0, flex: 1 }}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
+    <Box sx={{ minWidth: 0, flex: 1 }} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {isTextField && (
         <TextField
           value={localValue}
@@ -141,10 +130,7 @@ export const EditableTextField = ({
               borderRadius: '4px',
               padding: 0.25,
               ':hover': {
-                backgroundColor:
-                  isHovered && isEditable
-                    ? 'greyscale.offwhite.main'
-                    : 'inherit',
+                backgroundColor: isHovered && isEditable ? 'greyscale.offwhite.main' : 'inherit',
               },
             },
             TypographyProps?.sx

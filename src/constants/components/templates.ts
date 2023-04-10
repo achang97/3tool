@@ -11,27 +11,25 @@ const BUTTON_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.Button> = {
   loading: '',
 };
 
-const TEXT_INPUT_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.TextInput> =
-  {
-    defaultValue: '',
-    placeholder: 'Enter value',
-    label: 'Label',
-    disabled: '',
-    required: '',
-    minLength: '',
-    maxLength: '',
-  };
+const TEXT_INPUT_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.TextInput> = {
+  defaultValue: '',
+  placeholder: 'Enter value',
+  label: 'Label',
+  disabled: '',
+  required: '',
+  minLength: '',
+  maxLength: '',
+};
 
-const NUMBER_INPUT_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.NumberInput> =
-  {
-    defaultValue: '0',
-    placeholder: 'Enter value',
-    label: 'Label',
-    disabled: '',
-    required: '',
-    minimum: '',
-    maximum: '',
-  };
+const NUMBER_INPUT_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.NumberInput> = {
+  defaultValue: '0',
+  placeholder: 'Enter value',
+  label: 'Label',
+  disabled: '',
+  required: '',
+  minimum: '',
+  maximum: '',
+};
 
 const TEXT_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.Text> = {
   value: 'Hello!',

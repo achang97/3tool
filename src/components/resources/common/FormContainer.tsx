@@ -9,10 +9,7 @@ type FormContainerProps = {
 
 export const FormContainer = ({ children, sx, testId }: FormContainerProps) => {
   return (
-    <Box
-      sx={{ display: 'flex', flexDirection: 'column', gap: 1, ...sx }}
-      data-testid={testId}
-    >
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, ...sx }} data-testid={testId}>
       {children}
     </Box>
   );

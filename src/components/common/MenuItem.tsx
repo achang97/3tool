@@ -1,9 +1,4 @@
-import {
-  Box,
-  Typography,
-  MenuItem as BaseMenuItem,
-  BoxProps,
-} from '@mui/material';
+import { Box, Typography, MenuItem as BaseMenuItem, BoxProps } from '@mui/material';
 import Link from 'next/link';
 import { ReactNode, useMemo } from 'react';
 
@@ -16,14 +11,7 @@ type MenuItemProps = {
   testId?: string;
 };
 
-export const MenuItem = ({
-  icon,
-  label,
-  color,
-  onClick,
-  href,
-  testId,
-}: MenuItemProps) => {
+export const MenuItem = ({ icon, label, color, onClick, href, testId }: MenuItemProps) => {
   const linkProps = useMemo(() => {
     if (!href) {
       return {};
@@ -35,12 +23,7 @@ export const MenuItem = ({
   }, [href]);
 
   return (
-    <BaseMenuItem
-      {...linkProps}
-      onClick={onClick}
-      sx={{ color }}
-      data-testid={testId}
-    >
+    <BaseMenuItem {...linkProps} onClick={onClick} sx={{ color }} data-testid={testId}>
       <Box
         sx={{
           display: 'flex',

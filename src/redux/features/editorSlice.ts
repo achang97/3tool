@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import {
-  Action,
-  ActionViewType,
-  ComponentType,
-  SidebarViewType,
-} from '@app/types';
+import { Action, ActionViewType, ComponentType, SidebarViewType } from '@app/types';
 import _ from 'lodash';
 import { overwriteArrayMergeCustomizer } from '@app/components/editor/utils/javascript';
 
@@ -86,15 +81,8 @@ export const editorSlice = createSlice({
     blurAction: (state) => {
       state.focusedAction = undefined;
     },
-    updateFocusedAction: (
-      state,
-      action: PayloadAction<RecursivePartial<Action>>
-    ) => {
-      _.mergeWith(
-        state.focusedAction,
-        action.payload,
-        overwriteArrayMergeCustomizer
-      );
+    updateFocusedAction: (state, action: PayloadAction<RecursivePartial<Action>>) => {
+      _.mergeWith(state.focusedAction, action.payload, overwriteArrayMergeCustomizer);
     },
     setActionView: (state, action: PayloadAction<ActionViewType>) => {
       state.actionView = action.payload;

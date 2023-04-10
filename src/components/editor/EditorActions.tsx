@@ -9,9 +9,7 @@ export const MAXIMIZED_HEIGHT = '80vh';
 const LIST_WIDTH = '260px';
 
 export const EditorActions = () => {
-  const { focusedAction, isActionViewMaximized } = useAppSelector(
-    (state) => state.editor
-  );
+  const { focusedAction, isActionViewMaximized } = useAppSelector((state) => state.editor);
 
   return (
     <Box
@@ -30,11 +28,7 @@ export const EditorActions = () => {
       </Box>
       <Divider orientation="vertical" />
       <Box sx={{ flex: 1 }}>
-        {focusedAction ? (
-          <ActionEditor action={focusedAction} />
-        ) : (
-          <ActionEditorPlaceholder />
-        )}
+        {focusedAction ? <ActionEditor action={focusedAction} /> : <ActionEditorPlaceholder />}
       </Box>
     </Box>
   );

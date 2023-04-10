@@ -18,10 +18,7 @@ describe('useEnqueueSnackbar', () => {
   it('enqueues snackbar with message', () => {
     const { result } = renderHook(() => useEnqueueSnackbar());
     result.current(mockMessage, { variant: 'success' });
-    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-      mockMessage,
-      expect.any(Object)
-    );
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(mockMessage, expect.any(Object));
   });
 
   it('enqueues snackbar content with correct options', () => {

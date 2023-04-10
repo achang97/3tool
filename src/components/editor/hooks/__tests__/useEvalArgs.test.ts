@@ -46,12 +46,8 @@ describe('useEvalArgs', () => {
       }));
 
       const { result } = renderHook(() => useEvalArgs());
-      expect(result.current.dynamicEvalArgs).toMatchObject(
-        mockElementEvalDataValuesMap
-      );
-      expect(result.current.staticEvalArgs).toMatchObject(
-        mockElementEvalDataValuesMap
-      );
+      expect(result.current.dynamicEvalArgs).toMatchObject(mockElementEvalDataValuesMap);
+      expect(result.current.staticEvalArgs).toMatchObject(mockElementEvalDataValuesMap);
     });
   });
 
@@ -62,9 +58,7 @@ describe('useEvalArgs', () => {
           trigger: () => {},
         },
       };
-      (useActionMethods as jest.Mock).mockImplementation(
-        () => mockActionMethods
-      );
+      (useActionMethods as jest.Mock).mockImplementation(() => mockActionMethods);
 
       const { result } = renderHook(() => useEvalArgs());
       expect(result.current.staticEvalArgs).toMatchObject(mockActionMethods);
@@ -83,14 +77,10 @@ describe('useEvalArgs', () => {
           trigger: () => {},
         },
       };
-      (useActionMethods as jest.Mock).mockImplementation(
-        () => mockActionMethods
-      );
+      (useActionMethods as jest.Mock).mockImplementation(() => mockActionMethods);
 
       const { result } = renderHook(() => useEvalArgs());
-      expect(result.current.dynamicEvalArgs).not.toMatchObject(
-        mockActionMethods
-      );
+      expect(result.current.dynamicEvalArgs).not.toMatchObject(mockActionMethods);
     });
 
     it('does not include entries from utils', () => {

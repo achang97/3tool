@@ -15,12 +15,7 @@ type ToolThumbnailProps = {
   creatorUser: User;
 };
 
-export const ToolThumbnail = ({
-  id,
-  name,
-  updatedAt,
-  creatorUser,
-}: ToolThumbnailProps) => {
+export const ToolThumbnail = ({ id, name, updatedAt, creatorUser }: ToolThumbnailProps) => {
   const iconColor = useMemo(() => {
     return stringToColor(name);
   }, [name]);
@@ -28,10 +23,7 @@ export const ToolThumbnail = ({
   return (
     <ThumbnailContainer
       icon={
-        <GridViewRounded
-          fontSize="inherit"
-          sx={{ transform: 'rotate(45deg)', color: iconColor }}
-        />
+        <GridViewRounded fontSize="inherit" sx={{ transform: 'rotate(45deg)', color: iconColor }} />
       }
       href={`/tools/${id}`}
     >

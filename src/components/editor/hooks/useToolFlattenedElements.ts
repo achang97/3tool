@@ -9,21 +9,14 @@ type HookArgs = {
   onlyLeaves: boolean;
 };
 
-export const useToolFlattenedElements = ({
-  tool,
-  includePrefix,
-  onlyLeaves,
-}: HookArgs) => {
+export const useToolFlattenedElements = ({ tool, includePrefix, onlyLeaves }: HookArgs) => {
   const flattenElement = useElementFlattenFields({
     includePrefix,
     onlyLeaves,
   });
 
   const elements = useMemo(() => {
-    return _.concat(
-      tool.components.map(flattenElement),
-      tool.actions.map(flattenElement)
-    );
+    return _.concat(tool.components.map(flattenElement), tool.actions.map(flattenElement));
   }, [flattenElement, tool.actions, tool.components]);
 
   return elements;

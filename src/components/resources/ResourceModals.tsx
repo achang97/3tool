@@ -14,9 +14,7 @@ export const ResourceModals = () => {
   const dispatch = useAppDispatch();
   const { resourceStack } = useAppSelector((state) => state.resources);
 
-  const activeResourceElement = useMemo(():
-    | ResourceStackElement
-    | undefined => {
+  const activeResourceElement = useMemo((): ResourceStackElement | undefined => {
     return resourceStack[0];
   }, [resourceStack]);
 
@@ -86,13 +84,7 @@ export const ResourceModals = () => {
       default:
         return null;
     }
-  }, [
-    activeResourceElement,
-    handleChange,
-    handleCreate,
-    handleDialogClose,
-    isBackButtonVisible,
-  ]);
+  }, [activeResourceElement, handleChange, handleCreate, handleDialogClose, isBackButtonVisible]);
 
   return <Box data-testid="resource-modals">{modal}</Box>;
 };

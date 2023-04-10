@@ -18,14 +18,7 @@ export enum ActionViewType {
   ResponseHandler = 'responseHandler',
 }
 
-export type FieldType =
-  | 'string'
-  | 'boolean'
-  | 'number'
-  | 'array'
-  | 'object'
-  | 'any'
-  | 'nested';
+export type FieldType = 'string' | 'boolean' | 'number' | 'array' | 'object' | 'any' | 'nested';
 
 export type BaseCanvasComponentProps = {
   name: string;
@@ -37,9 +30,7 @@ export type BaseComponentInspectorProps<T extends ComponentType = any> = {
   data: Component['data'][T];
   eventHandlers: EventHandler<ComponentEvent>[];
   onDataChange: (update: RecursivePartial<Component['data'][T]>) => void;
-  onEventHandlersChange: (
-    eventHandlers: EventHandler<ComponentEvent>[]
-  ) => void;
+  onEventHandlersChange: (eventHandlers: EventHandler<ComponentEvent>[]) => void;
 };
 
 export type BaseEventHandlerEditorProps<T extends EventHandlerType> = {

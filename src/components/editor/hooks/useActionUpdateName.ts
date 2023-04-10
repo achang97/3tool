@@ -21,9 +21,7 @@ export const useActionUpdateName = (prevName: string) => {
 
   const handleSuccess = useCallback(
     (newName: string, response: ApiSuccessResponse<Tool>) => {
-      const updatedAction = response.data.actions.find(
-        (action) => action.name === newName
-      );
+      const updatedAction = response.data.actions.find((action) => action.name === newName);
 
       if (!updatedAction) {
         return;

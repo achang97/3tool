@@ -136,24 +136,14 @@ export const BaseInspector = ({
   const renderSection = useCallback(
     (section: BaseInspectorSectionProps) => {
       const sectionFields = section.fields.map((field) => (
-        <Fragment key={field.field.toString()}>
-          {renderSectionField(field)}
-        </Fragment>
+        <Fragment key={field.field.toString()}>{renderSectionField(field)}</Fragment>
       ));
 
       if (section.title) {
-        return (
-          <InspectorSection title={section.title}>
-            {sectionFields}
-          </InspectorSection>
-        );
+        return <InspectorSection title={section.title}>{sectionFields}</InspectorSection>;
       }
 
-      return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {sectionFields}
-        </Box>
-      );
+      return <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{sectionFields}</Box>;
     },
     [renderSectionField]
   );

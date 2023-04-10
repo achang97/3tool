@@ -1,8 +1,4 @@
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider,
-} from '@web3modal/ethereum';
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
 import { configureChains, createClient } from 'wagmi';
 import { CHAINS, WALLETCONNECT_PROJECT_ID } from '@app/constants';
 

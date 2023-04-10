@@ -30,11 +30,7 @@ export const useActionExecute = () => {
 
         const transformer = action.data[action.type]?.transformer;
         if (transformer) {
-          data = await asyncEvalWithArgs(
-            transformer,
-            { ...staticEvalArgs, data },
-            true
-          );
+          data = await asyncEvalWithArgs(transformer, { ...staticEvalArgs, data }, true);
         }
       } catch (e) {
         return {

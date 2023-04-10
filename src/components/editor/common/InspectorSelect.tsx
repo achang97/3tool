@@ -10,12 +10,7 @@ type InspectorSelectProps = Omit<SelectProps, 'onChange'> & {
   }[];
 };
 
-export const InspectorSelect = ({
-  options,
-  onChange,
-  label,
-  ...rest
-}: InspectorSelectProps) => {
+export const InspectorSelect = ({ options, onChange, label, ...rest }: InspectorSelectProps) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value);

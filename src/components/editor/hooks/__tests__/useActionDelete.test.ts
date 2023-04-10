@@ -2,10 +2,7 @@ import { resetActionResult } from '@app/redux/features/activeToolSlice';
 import { blurAction } from '@app/redux/features/editorSlice';
 import { Action } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import {
-  mockApiErrorResponse,
-  mockApiSuccessResponse,
-} from '@tests/constants/api';
+import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { useActionDelete } from '../useActionDelete';
 
 const mockName = 'name';

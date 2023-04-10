@@ -58,38 +58,19 @@ describe('elements', () => {
 
   describe('parseDepCycle', () => {
     it('returns cycle with the same first and last element', () => {
-      const result = parseDepCycle([
-        'button1',
-        'button1.text',
-        'button1.disabled',
-        'button1.text',
-      ]);
-      expect(result).toEqual([
-        'button1.text',
-        'button1.disabled',
-        'button1.text',
-      ]);
+      const result = parseDepCycle(['button1', 'button1.text', 'button1.disabled', 'button1.text']);
+      expect(result).toEqual(['button1.text', 'button1.disabled', 'button1.text']);
     });
   });
 
   describe('createNameWithPrefix', () => {
     it('returns id with suffix of 1 if there are no ids with the same component type', () => {
-      const result = createNameWithPrefix('button', [
-        'text1',
-        'text2',
-        'textInput2',
-        'button',
-      ]);
+      const result = createNameWithPrefix('button', ['text1', 'text2', 'textInput2', 'button']);
       expect(result).toEqual('button1');
     });
 
     it('returns id with suffix of the max id with the same component type + 1', () => {
-      const result = createNameWithPrefix('button', [
-        'text1',
-        'text2',
-        'button2',
-        'button3',
-      ]);
+      const result = createNameWithPrefix('button', ['text1', 'text2', 'button2', 'button3']);
       expect(result).toEqual('button4');
     });
   });

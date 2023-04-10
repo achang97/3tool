@@ -6,16 +6,11 @@ export const useEnqueueSnackbar = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const pushSnackbar = useCallback(
-    (
-      message: string,
-      options: OptionsObject & { variant: SnackbarProps['variant'] }
-    ) => {
+    (message: string, options: OptionsObject & { variant: SnackbarProps['variant'] }) => {
       enqueueSnackbar(message, {
         ...options,
         content: (key) => {
-          return (
-            <Snackbar key={key} message={message} variant={options.variant} />
-          );
+          return <Snackbar key={key} message={message} variant={options.variant} />;
         },
       });
     },

@@ -16,12 +16,7 @@ type DeleteDialogProps = {
   onDelete: () => Promise<boolean>;
 };
 
-export const DeleteDialog = ({
-  name,
-  isOpen,
-  onClose,
-  onDelete,
-}: DeleteDialogProps) => {
+export const DeleteDialog = ({ name, isOpen, onClose, onDelete }: DeleteDialogProps) => {
   const dependents = useElementDependentFields(name);
 
   const handleConfirmDelete = useCallback(async () => {
@@ -33,18 +28,12 @@ export const DeleteDialog = ({
   }, [onClose, onDelete]);
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={onClose}
-      fullWidth
-      data-testid="delete-dialog"
-    >
+    <Dialog open={isOpen} onClose={onClose} fullWidth data-testid="delete-dialog">
       <DialogTitle>Are you sure you want to delete {name}?</DialogTitle>
       {dependents.length !== 0 && (
         <DialogContent data-testid="delete-dialog-content">
           <Typography sx={{ display: 'inline' }}>
-            You will need to manually delete the following JavaScript expression
-            references:{' '}
+            You will need to manually delete the following JavaScript expression references:{' '}
           </Typography>
           <Typography sx={{ display: 'inline', marginLeft: 0.5 }}>
             {dependents.map((dependent, i) => (

@@ -15,9 +15,7 @@ export const useComponentUpdateName = (prevName: string) => {
     (newName: string, update: ReferenceUpdate) => {
       // Update the name of the actual component
       update.components = update.components.map((component) => {
-        return component.name === prevName
-          ? { ...component, name: newName }
-          : component;
+        return component.name === prevName ? { ...component, name: newName } : component;
       });
     },
     [prevName]
@@ -30,11 +28,7 @@ export const useComponentUpdateName = (prevName: string) => {
       dispatch(renameComponentInput({ prevName, newName }));
 
       if (focusedAction) {
-        const updatedAction = updateElementReference(
-          focusedAction,
-          prevName,
-          newName
-        );
+        const updatedAction = updateElementReference(focusedAction, prevName, newName);
         dispatch(focusAction(updatedAction));
       }
     },

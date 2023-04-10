@@ -3,10 +3,7 @@ import { ApiError, Resource, ResourceType } from '@app/types';
 import userEvent from '@testing-library/user-event';
 import { mockValidAddress } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
-import {
-  mockApiErrorResponse,
-  mockApiSuccessResponse,
-} from '@tests/constants/api';
+import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { mainnet } from 'wagmi';
 import { EditResourceDialog } from '../EditResourceDialog';
 
@@ -42,10 +39,7 @@ jest.mock('@app/redux/services/resources', () => ({
 describe('EditResourceDialog', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useUpdateResourceMutation as jest.Mock).mockImplementation(() => [
-      mockUpdateResource,
-      {},
-    ]);
+    (useUpdateResourceMutation as jest.Mock).mockImplementation(() => [mockUpdateResource, {}]);
   });
 
   it('renders title', () => {

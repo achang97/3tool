@@ -3,12 +3,7 @@ import { useMemo } from 'react';
 
 export type SelectProps = TextFieldProps;
 
-export const Select = ({
-  placeholder,
-  value,
-  SelectProps,
-  ...rest
-}: SelectProps) => {
+export const Select = ({ placeholder, value, SelectProps, ...rest }: SelectProps) => {
   const theme = useTheme();
 
   const renderValue = useMemo(() => {

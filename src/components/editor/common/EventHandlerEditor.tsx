@@ -66,8 +66,7 @@ export const EventHandlerEditor = ({
   );
 
   const effectEditor = useMemo(() => {
-    const TypedEffectConfiguration =
-      EVENT_HANDLER_EFFECT_CONFIGURATION_MAP[eventHandler.type];
+    const TypedEffectConfiguration = EVENT_HANDLER_EFFECT_CONFIGURATION_MAP[eventHandler.type];
 
     if (!TypedEffectConfiguration) {
       return null;
@@ -108,12 +107,10 @@ export const EventHandlerEditor = ({
             value: eventHandler.type,
             data: {
               select: {
-                options: Object.values(EventHandlerType).map(
-                  (eventHandlerType) => ({
-                    label: EVENT_HANDLER_CONFIGS[eventHandlerType].label,
-                    value: eventHandlerType,
-                  })
-                ),
+                options: Object.values(EventHandlerType).map((eventHandlerType) => ({
+                  label: EVENT_HANDLER_CONFIGS[eventHandlerType].label,
+                  value: eventHandlerType,
+                })),
                 placeholder: 'Select effect',
               },
             },

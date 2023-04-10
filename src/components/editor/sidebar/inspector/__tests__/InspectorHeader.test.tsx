@@ -19,12 +19,7 @@ describe('InspectorHeader', () => {
 
   it('renders icon', () => {
     const result = render(
-      <InspectorHeader
-        title={mockTitle}
-        onSubmit={mockHandleSubmit}
-        icon={mockIcon}
-        isEditable
-      />
+      <InspectorHeader title={mockTitle} onSubmit={mockHandleSubmit} icon={mockIcon} isEditable />
     );
     expect(result.getByText(mockIcon)).toBeTruthy();
   });

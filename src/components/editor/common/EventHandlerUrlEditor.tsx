@@ -1,9 +1,5 @@
 import { EVENT_HANDLER_DATA_TYPES } from '@app/constants';
-import {
-  BaseEventHandlerEditorProps,
-  EventHandler,
-  EventHandlerType,
-} from '@app/types';
+import { BaseEventHandlerEditorProps, EventHandler, EventHandlerType } from '@app/types';
 import { useMemo } from 'react';
 import {
   BaseInspector,
@@ -18,34 +14,33 @@ export const EventHandlerUrlEditor = ({
   onDataChange,
   isAutosaved,
 }: BaseEventHandlerEditorProps<EventHandlerType.Url>) => {
-  const config: BaseInspectorSectionProps<EventHandler['data']['url']>[] =
-    useMemo(() => {
-      return [
-        {
-          fields: [
-            {
-              field: 'url',
-              label: 'URL',
-              value: data?.url,
-              data: {
-                text: {
-                  type: DATA_TYPES.url,
-                  placeholder: 'Add URL',
-                },
+  const config: BaseInspectorSectionProps<EventHandler['data']['url']>[] = useMemo(() => {
+    return [
+      {
+        fields: [
+          {
+            field: 'url',
+            label: 'URL',
+            value: data?.url,
+            data: {
+              text: {
+                type: DATA_TYPES.url,
+                placeholder: 'Add URL',
               },
             },
-            {
-              field: 'newTab',
-              label: 'New Tab',
-              value: data?.newTab,
-              data: {
-                switch: {},
-              },
+          },
+          {
+            field: 'newTab',
+            label: 'New Tab',
+            value: data?.newTab,
+            data: {
+              switch: {},
             },
-          ],
-        },
-      ];
-    }, [data]);
+          },
+        ],
+      },
+    ];
+  }, [data]);
 
   return (
     <BaseInspector

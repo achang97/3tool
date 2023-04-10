@@ -16,12 +16,7 @@ export const ApiErrorMessage = forwardRef(
     }, [error]);
 
     return (
-      <Typography
-        ref={ref}
-        color="error"
-        variant="body2"
-        sx={{ textAlign: 'center', ...sx }}
-      >
+      <Typography ref={ref} color="error" variant="body2" sx={{ textAlign: 'center', ...sx }}>
         {errorMessage}
       </Typography>
     );

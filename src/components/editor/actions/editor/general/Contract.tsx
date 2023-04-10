@@ -10,9 +10,7 @@ type ContractProps = {
 export const Contract = ({ contract, blockExplorerUrl }: ContractProps) => {
   const renderFunction = useCallback(
     (func: ethers.utils.FunctionFragment) => {
-      const inputsString = func.inputs
-        .map((input) => `${input.type} ${input.name}`)
-        .join(', ');
+      const inputsString = func.inputs.map((input) => `${input.type} ${input.name}`).join(', ');
 
       const handleFunctionClick = async () => {
         try {
@@ -28,10 +26,7 @@ export const Contract = ({ contract, blockExplorerUrl }: ContractProps) => {
       return (
         <Box key={func.name}>
           <Typography>
-            <Button
-              onClick={handleFunctionClick}
-              sx={{ textTransform: 'none' }}
-            >
+            <Button onClick={handleFunctionClick} sx={{ textTransform: 'none' }}>
               {func.payable && '[Payable]'} {func.name}({inputsString})
             </Button>
           </Typography>
@@ -44,16 +39,11 @@ export const Contract = ({ contract, blockExplorerUrl }: ContractProps) => {
   return (
     <Box key={contract.address}>
       {blockExplorerUrl && (
-        <Link
-          href={`${blockExplorerUrl}/address/${contract.address}`}
-          target="_blank"
-        >
+        <Link href={`${blockExplorerUrl}/address/${contract.address}`} target="_blank">
           Etherscan
         </Link>
       )}
-      {Object.values(contract.interface.functions).map((func) =>
-        renderFunction(func)
-      )}
+      {Object.values(contract.interface.functions).map((func) => renderFunction(func))}
     </Box>
   );
 };

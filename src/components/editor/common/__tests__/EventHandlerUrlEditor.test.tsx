@@ -1,8 +1,5 @@
 import { EVENT_HANDLER_DATA_TYPES } from '@app/constants';
-import {
-  validateSwitchField,
-  validateTextField,
-} from '@tests/testers/inspector';
+import { validateSwitchField, validateTextField } from '@tests/testers/inspector';
 import { render } from '@tests/utils/renderWithContext';
 import { EventHandlerUrlEditor } from '../EventHandlerUrlEditor';
 

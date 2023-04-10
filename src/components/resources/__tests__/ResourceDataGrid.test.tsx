@@ -47,9 +47,7 @@ describe('ResourceDataGrid', () => {
     // Check first row
     expect(result.getByText('Smart contract')).toBeTruthy();
     expect(result.getByText(mockResources[0].name)).toBeTruthy();
-    expect(
-      result.getByText(`(${mockResources[0].data.smartContract?.address})`)
-    ).toBeTruthy();
+    expect(result.getByText(`(${mockResources[0].data.smartContract?.address})`)).toBeTruthy();
     expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
   });
 });

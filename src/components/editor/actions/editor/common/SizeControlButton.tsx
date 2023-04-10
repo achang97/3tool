@@ -13,11 +13,7 @@ export const SizeControlButton = () => {
   }, [dispatch, isActionViewMaximized]);
 
   return (
-    <IconButton
-      onClick={handleClick}
-      size="small"
-      data-testid="size-control-button"
-    >
+    <IconButton onClick={handleClick} size="small" data-testid="size-control-button">
       {isActionViewMaximized ? (
         <FullscreenExit data-testid="size-control-button-minimize" />
       ) : (

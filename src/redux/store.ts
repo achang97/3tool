@@ -28,10 +28,7 @@ const authPersistConfig = {
 
 export const store = configureStore({
   reducer: {
-    auth: persistReducer<ReturnType<typeof authReducer>>(
-      authPersistConfig,
-      authReducer
-    ),
+    auth: persistReducer<ReturnType<typeof authReducer>>(authPersistConfig, authReducer),
     editor: editorReducer,
     resources: resourcesReducer,
     activeTool: activeToolReducer,
@@ -53,9 +50,7 @@ export const store = configureStore({
       usersApi.middleware,
     ];
 
-    const middleware = getDefaultMiddleware(middlewareConfig).concat(
-      ...apiMiddlewares
-    );
+    const middleware = getDefaultMiddleware(middlewareConfig).concat(...apiMiddlewares);
 
     return middleware;
   },

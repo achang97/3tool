@@ -21,14 +21,8 @@ describe('resourcesSlice', () => {
         },
       ] as ResourceStackElement[],
     };
-    const state = resourcesReducer(
-      initialState,
-      pushResource(mockResourceElement)
-    );
-    expect(state.resourceStack).toEqual([
-      mockResourceElement,
-      ...initialState.resourceStack,
-    ]);
+    const state = resourcesReducer(initialState, pushResource(mockResourceElement));
+    expect(state.resourceStack).toEqual([mockResourceElement, ...initialState.resourceStack]);
   });
 
   it('popResource: pops first element of stack', () => {

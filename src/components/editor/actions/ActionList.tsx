@@ -38,9 +38,7 @@ export const ActionList = () => {
           paddingX: 2,
         }}
       >
-        {tool.actions.length === 0 && (
-          <EmptyPlaceholder> No created actions </EmptyPlaceholder>
-        )}
+        {tool.actions.length === 0 && <EmptyPlaceholder> No created actions </EmptyPlaceholder>}
         {tool.actions.map((action) => (
           <ActionListItem key={action.name} action={action} />
         ))}

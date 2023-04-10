@@ -12,12 +12,7 @@ type ToolbarTemplateProps = {
   testId?: string;
 };
 
-export const ToolbarTemplate = ({
-  left,
-  middle,
-  right,
-  testId,
-}: ToolbarTemplateProps) => {
+export const ToolbarTemplate = ({ left, middle, right, testId }: ToolbarTemplateProps) => {
   return (
     <Box
       sx={{
@@ -35,21 +30,13 @@ export const ToolbarTemplate = ({
       <ToolbarSection sx={{ justifyContent: 'flex-start' }}>
         <Box sx={{ mr: 1 }}>
           <Link href="/" data-testid="toolbar-logo">
-            <Image
-              src={logo}
-              alt="Elixir logo"
-              style={{ height: '40px', width: 'auto' }}
-            />
+            <Image src={logo} alt="Elixir logo" style={{ height: '40px', width: 'auto' }} />
           </Link>
         </Box>
         {left}
       </ToolbarSection>
-      <ToolbarSection sx={{ justifyContent: 'center' }}>
-        {middle}
-      </ToolbarSection>
-      <ToolbarSection sx={{ justifyContent: 'flex-end' }}>
-        {right}
-      </ToolbarSection>
+      <ToolbarSection sx={{ justifyContent: 'center' }}>{middle}</ToolbarSection>
+      <ToolbarSection sx={{ justifyContent: 'flex-end' }}>{right}</ToolbarSection>
     </Box>
   );
 };

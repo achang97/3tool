@@ -27,21 +27,15 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
     });
 
-    builder.addMatcher(
-      authApi.endpoints.login.matchFulfilled,
-      (state, action) => {
-        const { accessToken, refreshToken, user } = action.payload;
-        state.accessToken = accessToken;
-        state.refreshToken = refreshToken;
-        state.user = user;
-      }
-    );
-    builder.addMatcher(
-      usersApi.endpoints.getMyUser.matchFulfilled,
-      (state, action) => {
-        state.user = action.payload;
-      }
-    );
+    builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, action) => {
+      const { accessToken, refreshToken, user } = action.payload;
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
+      state.user = user;
+    });
+    builder.addMatcher(usersApi.endpoints.getMyUser.matchFulfilled, (state, action) => {
+      state.user = action.payload;
+    });
   },
 });
 

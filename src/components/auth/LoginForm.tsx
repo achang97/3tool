@@ -12,12 +12,9 @@ export const LoginForm = () => {
     setEmail(e.target.value);
   }, []);
 
-  const handlePasswordChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
-    },
-    []
-  );
+  const handlePasswordChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }, []);
 
   const handleLogin = useCallback(
     (e: FormEvent<HTMLFormElement>) => {

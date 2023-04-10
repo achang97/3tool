@@ -78,9 +78,7 @@ describe('BaseResourceDialog', () => {
         />
       );
       expect(
-        result.getByText(
-          `${mockTitle} | ${RESOURCE_CONFIGS[mockResource.type].label}`
-        )
+        result.getByText(`${mockTitle} | ${RESOURCE_CONFIGS[mockResource.type].label}`)
       ).toBeTruthy();
     });
   });
@@ -116,13 +114,7 @@ describe('BaseResourceDialog', () => {
       ${ResourceType.Abi}           | ${'abi-form'}
     `(
       'renders $testId for $resourceType resource',
-      ({
-        resourceType,
-        testId,
-      }: {
-        resourceType: ResourceType;
-        testId: string;
-      }) => {
+      ({ resourceType, testId }: { resourceType: ResourceType; testId: string }) => {
         const result = render(
           <BaseResourceDialog
             title={mockTitle}

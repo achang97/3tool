@@ -1,11 +1,6 @@
 import { BaseCanvasComponentProps, ComponentType } from '@app/types';
 import { useCallback, useMemo } from 'react';
-import {
-  DataGrid,
-  GridColDef,
-  GridRowsProp,
-  GridSelectionModel,
-} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowsProp, GridSelectionModel } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import _ from 'lodash';
 import { useAppDispatch } from '@app/redux/hooks';
@@ -62,9 +57,7 @@ export const CanvasTable = ({
 
   const handleRowSelectionChange = useCallback(
     (selectedIds: GridSelectionModel) => {
-      const selectedRows = rows
-        .filter((_row, i) => selectedIds.includes(i))
-        .map((row) => row.data);
+      const selectedRows = rows.filter((_row, i) => selectedIds.includes(i)).map((row) => row.data);
 
       dispatch(setComponentInput({ name, input: { selectedRows } }));
     },
@@ -72,9 +65,7 @@ export const CanvasTable = ({
   );
 
   const NoRowsOverlay = useCallback(() => {
-    return (
-      <DataGridPlaceholder>{evalDataValues.emptyMessage}</DataGridPlaceholder>
-    );
+    return <DataGridPlaceholder>{evalDataValues.emptyMessage}</DataGridPlaceholder>;
   }, [evalDataValues.emptyMessage]);
 
   return (

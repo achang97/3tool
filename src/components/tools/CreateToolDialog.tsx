@@ -1,13 +1,7 @@
 import { useCreateToolMutation } from '@app/redux/services/tools';
 import { isSuccessfulApiResponse, parseApiError } from '@app/utils/api';
 import { LoadingButton } from '@mui/lab';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-} from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useCallback, useMemo, useState } from 'react';
 
@@ -18,10 +12,7 @@ type CreateToolDialogProps = {
 
 const FORM_ID = 'create-tool-form';
 
-export const CreateToolDialog = ({
-  onClose,
-  isOpen,
-}: CreateToolDialogProps) => {
+export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => {
   const [name, setName] = useState('');
 
   const [createTool, { isLoading, error }] = useCreateToolMutation();
@@ -52,12 +43,7 @@ export const CreateToolDialog = ({
   }, [error]);
 
   return (
-    <Dialog
-      onClose={onClose}
-      open={isOpen}
-      fullWidth
-      data-testid="create-tool-dialog"
-    >
+    <Dialog onClose={onClose} open={isOpen} fullWidth data-testid="create-tool-dialog">
       <DialogTitle>Create new tool</DialogTitle>
       <DialogContent>
         <form id={FORM_ID} onSubmit={handleCreateTool}>

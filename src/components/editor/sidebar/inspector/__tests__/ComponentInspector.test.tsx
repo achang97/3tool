@@ -1,11 +1,6 @@
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import { COMPONENT_CONFIGS, COMPONENT_DATA_TEMPLATES } from '@app/constants';
-import {
-  Component,
-  ComponentEvent,
-  ComponentType,
-  EventHandlerType,
-} from '@app/types';
+import { Component, ComponentEvent, ComponentType, EventHandlerType } from '@app/types';
 import { render, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DepGraph } from 'dependency-graph';
@@ -74,9 +69,7 @@ describe('ComponentInspector', () => {
     it('renders component name and type', () => {
       const result = render(<ComponentInspector component={mockComponent} />);
       expect(result.getByText(mockComponent.name)).toBeTruthy();
-      expect(
-        result.getByText(COMPONENT_CONFIGS[mockComponent.type].label)
-      ).toBeTruthy();
+      expect(result.getByText(COMPONENT_CONFIGS[mockComponent.type].label)).toBeTruthy();
     });
 
     it('toggles input on name click and updates component name on enter', async () => {
@@ -88,9 +81,7 @@ describe('ComponentInspector', () => {
       await userEvent.keyboard(newNameText);
       await userEvent.keyboard('[Enter]');
 
-      expect(mockUpdateComponentName).toHaveBeenCalledWith(
-        `${mockComponent.name}${newNameText}`
-      );
+      expect(mockUpdateComponentName).toHaveBeenCalledWith(`${mockComponent.name}${newNameText}`);
     });
   });
 
@@ -131,9 +122,7 @@ describe('ComponentInspector', () => {
           eventHandlers: [],
         } as unknown as Component;
 
-        const result = render(
-          <ComponentInspector component={mockActiveComponent} />
-        );
+        const result = render(<ComponentInspector component={mockActiveComponent} />);
 
         expect(result.getByTestId(inspectorId)).toBeTruthy();
       }
@@ -151,9 +140,7 @@ describe('ComponentInspector', () => {
         eventHandlers: [],
       } as unknown as Component;
 
-      const result = render(
-        <ComponentInspector component={mockActiveComponent} />
-      );
+      const result = render(<ComponentInspector component={mockActiveComponent} />);
       expect(result.getByText('hello')).toBeTruthy();
 
       const mockNewActiveComponent = {
@@ -167,9 +154,7 @@ describe('ComponentInspector', () => {
         eventHandlers: [],
       } as unknown as Component;
 
-      result.rerender(
-        <ComponentInspector component={mockNewActiveComponent} />
-      );
+      result.rerender(<ComponentInspector component={mockNewActiveComponent} />);
       expect(result.getByText('hello new!')).toBeTruthy();
     });
   });
@@ -197,13 +182,9 @@ describe('ComponentInspector', () => {
         dataDepCycles: {},
       }));
 
-      const result = render(
-        <ComponentInspector component={mockActiveComponent} />
-      );
+      const result = render(<ComponentInspector component={mockActiveComponent} />);
 
-      const textInput = within(
-        result.getByTestId('inspector-text-Text')
-      ).getByRole('textbox');
+      const textInput = within(result.getByTestId('inspector-text-Text')).getByRole('textbox');
       const newInputValue = 'h';
       await userEvent.type(textInput, newInputValue);
 
@@ -257,9 +238,7 @@ describe('ComponentInspector', () => {
         dataDepCycles: {},
       }));
 
-      const result = render(
-        <ComponentInspector component={mockActiveComponent} />
-      );
+      const result = render(<ComponentInspector component={mockActiveComponent} />);
 
       await userEvent.click(result.getByTestId('MoreVertIcon'));
       await userEvent.click(result.getByTestId('event-handler-delete-icon'));

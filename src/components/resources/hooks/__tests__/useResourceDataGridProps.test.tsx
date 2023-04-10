@@ -30,18 +30,14 @@ describe('useResourceDataGridProps', () => {
     });
 
     it('returns resources array', () => {
-      const { result } = renderHook(() =>
-        useResourceDataGridProps(mockResources)
-      );
+      const { result } = renderHook(() => useResourceDataGridProps(mockResources));
       expect(result.current.rows).toEqual(mockResources);
     });
   });
 
   describe('columns', () => {
     it('returns type as 1st column', () => {
-      const { result } = renderHook(() =>
-        useResourceDataGridProps(mockResources)
-      );
+      const { result } = renderHook(() => useResourceDataGridProps(mockResources));
       expect(result.current.columns[0]).toEqual({
         field: 'type',
         headerName: 'Type',
@@ -51,9 +47,7 @@ describe('useResourceDataGridProps', () => {
     });
 
     it('returns name as 2nd column', () => {
-      const { result } = renderHook(() =>
-        useResourceDataGridProps(mockResources)
-      );
+      const { result } = renderHook(() => useResourceDataGridProps(mockResources));
       expect(result.current.columns[1]).toEqual({
         field: 'name',
         headerName: 'Resource',
@@ -63,9 +57,7 @@ describe('useResourceDataGridProps', () => {
     });
 
     it('returns created at date as 3rd column', () => {
-      const { result } = renderHook(() =>
-        useResourceDataGridProps(mockResources)
-      );
+      const { result } = renderHook(() => useResourceDataGridProps(mockResources));
       expect(result.current.columns[2]).toEqual({
         field: 'createdAt',
         headerName: 'Created At',
@@ -76,9 +68,7 @@ describe('useResourceDataGridProps', () => {
     });
 
     it('returns actions as 4th column', () => {
-      const { result } = renderHook(() =>
-        useResourceDataGridProps(mockResources)
-      );
+      const { result } = renderHook(() => useResourceDataGridProps(mockResources));
       expect(result.current.columns[3]).toEqual({
         field: 'actions',
         type: 'actions',
@@ -89,9 +79,7 @@ describe('useResourceDataGridProps', () => {
 
     describe('getActions', () => {
       it('returns array with edit action', async () => {
-        const { result } = renderHook(() =>
-          useResourceDataGridProps(mockResources)
-        );
+        const { result } = renderHook(() => useResourceDataGridProps(mockResources));
 
         const mockGridRowParams = {
           id: 1,
@@ -121,9 +109,7 @@ describe('useResourceDataGridProps', () => {
 
   describe('getRowId', () => {
     it('returns _id field from resource', () => {
-      const { result } = renderHook(() =>
-        useResourceDataGridProps(mockResources)
-      );
+      const { result } = renderHook(() => useResourceDataGridProps(mockResources));
       expect(result.current.getRowId({ _id: 'id' } as Resource)).toEqual('id');
     });
   });

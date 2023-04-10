@@ -63,16 +63,12 @@ describe('SaveRunButton', () => {
     });
 
     it('displays "Save & Run" text if editing and in read mode', () => {
-      const result = render(
-        <SaveRunButton type={ActionType.SmartContractRead} />
-      );
+      const result = render(<SaveRunButton type={ActionType.SmartContractRead} />);
       expect(result.getByText('Save & Run')).toBeTruthy();
     });
 
     it('saves and executes action on click', async () => {
-      const result = render(
-        <SaveRunButton type={ActionType.SmartContractRead} />
-      );
+      const result = render(<SaveRunButton type={ActionType.SmartContractRead} />);
       await userEvent.click(result.getByText('Save & Run'));
       expect(mockSaveAndExecuteAction).toHaveBeenCalled();
     });

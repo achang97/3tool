@@ -16,34 +16,23 @@ describe('MenuItem', () => {
   });
 
   it('renders icon', () => {
-    const result = render(
-      <MenuItem icon={mockIcon} label={mockLabel} color={mockColor} />
-    );
+    const result = render(<MenuItem icon={mockIcon} label={mockLabel} color={mockColor} />);
     expect(result.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders label', () => {
-    const result = render(
-      <MenuItem icon={mockIcon} label={mockLabel} color={mockColor} />
-    );
+    const result = render(<MenuItem icon={mockIcon} label={mockLabel} color={mockColor} />);
     expect(result.getByText(mockLabel)).toBeTruthy();
   });
 
   it('passes color style into container', () => {
-    const result = render(
-      <MenuItem icon={mockIcon} label={mockLabel} color={mockColor} />
-    );
+    const result = render(<MenuItem icon={mockIcon} label={mockLabel} color={mockColor} />);
     expect(result.container.firstChild).toHaveStyle({ color: mockColor });
   });
 
   it('calls on click', async () => {
     const result = render(
-      <MenuItem
-        icon={mockIcon}
-        label={mockLabel}
-        color={mockColor}
-        onClick={mockHandleClick}
-      />
+      <MenuItem icon={mockIcon} label={mockLabel} color={mockColor} onClick={mockHandleClick} />
     );
     await userEvent.click(result.getByText(mockLabel));
     expect(mockHandleClick).toHaveBeenCalled();
@@ -51,16 +40,8 @@ describe('MenuItem', () => {
 
   it('adds href prop to item', async () => {
     const result = render(
-      <MenuItem
-        icon={mockIcon}
-        label={mockLabel}
-        color={mockColor}
-        href={mockHref}
-      />
+      <MenuItem icon={mockIcon} label={mockLabel} color={mockColor} href={mockHref} />
     );
-    expect(result.container.firstChild).toHaveProperty(
-      'href',
-      `${BASE_WINDOW_URL}${mockHref}`
-    );
+    expect(result.container.firstChild).toHaveProperty('href', `${BASE_WINDOW_URL}${mockHref}`);
   });
 });

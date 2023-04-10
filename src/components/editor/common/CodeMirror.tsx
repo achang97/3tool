@@ -61,10 +61,7 @@ export const CodeMirror = ({
   );
 
   return (
-    <Box
-      sx={{ position: 'relative' }}
-      data-testid={testId ?? `code-mirror-${label}`}
-    >
+    <Box sx={{ position: 'relative' }} data-testid={testId ?? `code-mirror-${label}`}>
       {label && <FormFieldLabel label={label} />}
       <BaseCodeMirror
         basicSetup={basicSetup}

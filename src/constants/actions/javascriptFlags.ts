@@ -13,11 +13,10 @@ const TRANSFORMER_DATA_JAVASCRIPT_FLAGS: {
   transformer: true,
 };
 
-const JAVASCRIPT_DATA_JAVASCRIPT_FLAGS: ActionDataJavascriptFlags<ActionType.Javascript> =
-  {
-    ...TRANSFORMER_DATA_JAVASCRIPT_FLAGS,
-    code: true,
-  };
+const JAVASCRIPT_DATA_JAVASCRIPT_FLAGS: ActionDataJavascriptFlags<ActionType.Javascript> = {
+  ...TRANSFORMER_DATA_JAVASCRIPT_FLAGS,
+  code: true,
+};
 
 const SMART_CONTRACT_READ_DATA_JAVASCRIPT_FLAGS: ActionDataJavascriptFlags<ActionType.SmartContractRead> =
   {

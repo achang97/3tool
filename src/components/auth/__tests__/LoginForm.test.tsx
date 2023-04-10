@@ -34,10 +34,7 @@ describe('LoginForm', () => {
         message: 'Error message',
       },
     };
-    (useLoginMutation as jest.Mock).mockImplementation(() => [
-      mockLogin,
-      { error: mockError },
-    ]);
+    (useLoginMutation as jest.Mock).mockImplementation(() => [mockLogin, { error: mockError }]);
 
     const result = render(<LoginForm />);
     expect(result.getByText(mockError.data.message)).toBeTruthy();

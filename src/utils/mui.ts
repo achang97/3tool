@@ -1,8 +1,4 @@
-import {
-  alpha,
-  experimental_extendTheme as extendTheme,
-  createTheme,
-} from '@mui/material/styles';
+import { alpha, experimental_extendTheme as extendTheme, createTheme } from '@mui/material/styles';
 import { gridClasses } from '@mui/x-data-grid';
 
 import type {} from '@mui/x-data-grid/themeAugmentation';
@@ -227,15 +223,9 @@ export const theme = extendTheme({
               backgroundColor: alpha(palette.primary.main, 0.2),
             },
             '&.Mui-selected': {
-              backgroundColor: alpha(
-                palette.primary.main,
-                0.05 + palette.action.selectedOpacity
-              ),
+              backgroundColor: alpha(palette.primary.main, 0.05 + palette.action.selectedOpacity),
               '&:hover': {
-                backgroundColor: alpha(
-                  palette.primary.main,
-                  0.2 + palette.action.selectedOpacity
-                ),
+                backgroundColor: alpha(palette.primary.main, 0.2 + palette.action.selectedOpacity),
               },
             },
           },

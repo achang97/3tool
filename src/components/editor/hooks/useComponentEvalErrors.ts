@@ -10,9 +10,7 @@ export type ComponentEvalError = {
   error: Error;
 };
 
-export const useComponentEvalErrors = (
-  component: Component
-): ComponentEvalError[] => {
+export const useComponentEvalErrors = (component: Component): ComponentEvalError[] => {
   const { evalData } = useComponentEvalData(component.name);
   const flattenElement = useElementFlattenFields({
     includePrefix: false,

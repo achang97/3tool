@@ -6,14 +6,10 @@ import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { useComponentEvalData } from '../../hooks/useComponentEvalData';
 import { useComponentInputs } from '../../hooks/useComponentInputs';
 
-export const CanvasNumberInput = ({
-  name,
-  eventHandlerCallbacks,
-}: BaseCanvasComponentProps) => {
+export const CanvasNumberInput = ({ name, eventHandlerCallbacks }: BaseCanvasComponentProps) => {
   const dispatch = useAppDispatch();
   const input = useComponentInputs<ComponentType.NumberInput>(name);
-  const { evalDataValues } =
-    useComponentEvalData<ComponentType.NumberInput>(name);
+  const { evalDataValues } = useComponentEvalData<ComponentType.NumberInput>(name);
 
   const handleUpdateValue = useCallback(
     (newValue: number) => {
@@ -38,27 +34,16 @@ export const CanvasNumberInput = ({
       return 'Input is required';
     }
 
-    if (
-      typeof evalDataValues.minimum === 'number' &&
-      input.value < evalDataValues.minimum
-    ) {
+    if (typeof evalDataValues.minimum === 'number' && input.value < evalDataValues.minimum) {
       return `Input must be at least ${evalDataValues.minimum}`;
     }
 
-    if (
-      typeof evalDataValues.maximum === 'number' &&
-      input.value > evalDataValues.maximum
-    ) {
+    if (typeof evalDataValues.maximum === 'number' && input.value > evalDataValues.maximum) {
       return `Input must be at most ${evalDataValues.maximum}`;
     }
 
     return '';
-  }, [
-    input.value,
-    evalDataValues.required,
-    evalDataValues.minimum,
-    evalDataValues.maximum,
-  ]);
+  }, [input.value, evalDataValues.required, evalDataValues.minimum, evalDataValues.maximum]);
 
   /**
    * Side effects

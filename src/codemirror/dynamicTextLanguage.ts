@@ -5,9 +5,7 @@ import { parser } from './dynamicLanguage/parser';
 
 const dynamicTextParser = parser.configure({
   wrap: parseMixed((node) => {
-    return node.name === 'DynamicTerm'
-      ? { parser: javascriptLanguage.parser }
-      : null;
+    return node.name === 'DynamicTerm' ? { parser: javascriptLanguage.parser } : null;
   }),
 });
 

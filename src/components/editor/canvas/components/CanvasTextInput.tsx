@@ -6,14 +6,10 @@ import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { useComponentEvalData } from '../../hooks/useComponentEvalData';
 import { useComponentInputs } from '../../hooks/useComponentInputs';
 
-export const CanvasTextInput = ({
-  name,
-  eventHandlerCallbacks,
-}: BaseCanvasComponentProps) => {
+export const CanvasTextInput = ({ name, eventHandlerCallbacks }: BaseCanvasComponentProps) => {
   const dispatch = useAppDispatch();
   const input = useComponentInputs<ComponentType.TextInput>(name);
-  const { evalDataValues } =
-    useComponentEvalData<ComponentType.TextInput>(name);
+  const { evalDataValues } = useComponentEvalData<ComponentType.TextInput>(name);
 
   const handleUpdateValue = useCallback(
     (newValue: string) => {
@@ -53,12 +49,7 @@ export const CanvasTextInput = ({
     }
 
     return '';
-  }, [
-    evalDataValues.maxLength,
-    evalDataValues.minLength,
-    evalDataValues.required,
-    input.value,
-  ]);
+  }, [evalDataValues.maxLength, evalDataValues.minLength, evalDataValues.required, input.value]);
 
   /**
    * Side effects

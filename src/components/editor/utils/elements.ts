@@ -10,11 +10,7 @@ import {
 import _ from 'lodash';
 
 export const getElementData = (
-  element:
-    | Action
-    | Component
-    | EventHandler<ActionEvent>
-    | EventHandler<ComponentEvent>
+  element: Action | Component | EventHandler<ActionEvent> | EventHandler<ComponentEvent>
 ) => {
   return _.get(element.data, element.type, {});
 };
@@ -23,9 +19,7 @@ export const isAction = (element: Action | Component): element is Action => {
   return Object.values(ActionType).includes(element.type as ActionType);
 };
 
-export const isComponent = (
-  element: Action | Component
-): element is Component => {
+export const isComponent = (element: Action | Component): element is Component => {
   return Object.values(ComponentType).includes(element.type as ComponentType);
 };
 
@@ -35,10 +29,7 @@ export const parseDepCycle = (cyclePath: string[]): string[] => {
   return cyclePath.slice(startIndex);
 };
 
-export const createNameWithPrefix = (
-  prefix: string,
-  currentNames: string[]
-): string => {
+export const createNameWithPrefix = (prefix: string, currentNames: string[]): string => {
   const prefixRegex = new RegExp(`${prefix}(\\d+)`);
 
   let numSuffix = 1;

@@ -26,9 +26,7 @@ export const useActionSaveHandlers = (): HookReturnType => {
   const saveAction = useCallback(async () => {
     return updateTool({
       actions: tool.actions.map((currAction) => {
-        return currAction.name === focusedAction?.name
-          ? focusedAction
-          : currAction;
+        return currAction.name === focusedAction?.name ? focusedAction : currAction;
       }),
     });
   }, [focusedAction, tool.actions, updateTool]);

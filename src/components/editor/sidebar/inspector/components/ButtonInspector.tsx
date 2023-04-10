@@ -1,9 +1,5 @@
 import { COMPONENT_CONFIGS, COMPONENT_DATA_TYPES } from '@app/constants';
-import {
-  BaseComponentInspectorProps,
-  Component,
-  ComponentType,
-} from '@app/types';
+import { BaseComponentInspectorProps, Component, ComponentType } from '@app/types';
 import { useMemo } from 'react';
 import { ComponentEventHandlers } from '../ComponentEventHandlers';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
@@ -18,62 +14,61 @@ export const ButtonInspector = ({
   onDataChange,
   onEventHandlersChange,
 }: BaseComponentInspectorProps<ComponentType.Button>) => {
-  const config: BaseInspectorSectionProps<Component['data']['button']>[] =
-    useMemo(() => {
-      return [
-        {
-          title: 'Basic',
-          fields: [
-            {
-              field: 'text',
-              label: 'Text',
-              value: data?.text,
-              data: {
-                text: {
-                  type: DATA_TYPES.text,
-                },
+  const config: BaseInspectorSectionProps<Component['data']['button']>[] = useMemo(() => {
+    return [
+      {
+        title: 'Basic',
+        fields: [
+          {
+            field: 'text',
+            label: 'Text',
+            value: data?.text,
+            data: {
+              text: {
+                type: DATA_TYPES.text,
               },
             },
-          ],
-        },
-        {
-          title: 'Interaction',
-          fields: [
-            {
-              field: 'disabled',
-              label: 'Disabled',
-              value: data?.disabled,
-              data: {
-                text: {
-                  type: DATA_TYPES.disabled,
-                },
+          },
+        ],
+      },
+      {
+        title: 'Interaction',
+        fields: [
+          {
+            field: 'disabled',
+            label: 'Disabled',
+            value: data?.disabled,
+            data: {
+              text: {
+                type: DATA_TYPES.disabled,
               },
             },
-            {
-              field: 'loading',
-              label: 'Loading',
-              value: data?.loading,
-              data: {
-                text: {
-                  type: DATA_TYPES.loading,
-                },
+          },
+          {
+            field: 'loading',
+            label: 'Loading',
+            value: data?.loading,
+            data: {
+              text: {
+                type: DATA_TYPES.loading,
               },
             },
-            {
-              field: 'eventHandlers',
-              component: (
-                <ComponentEventHandlers
-                  name={name}
-                  eventHandlers={eventHandlers}
-                  eventOptions={BUTTON_CONFIG.events}
-                  onChange={onEventHandlersChange}
-                />
-              ),
-            },
-          ],
-        },
-      ];
-    }, [data, eventHandlers, name, onEventHandlersChange]);
+          },
+          {
+            field: 'eventHandlers',
+            component: (
+              <ComponentEventHandlers
+                name={name}
+                eventHandlers={eventHandlers}
+                eventOptions={BUTTON_CONFIG.events}
+                onChange={onEventHandlersChange}
+              />
+            ),
+          },
+        ],
+      },
+    ];
+  }, [data, eventHandlers, name, onEventHandlersChange]);
 
   return (
     <BaseInspector

@@ -23,10 +23,7 @@ export const ETHERSCAN_CONFIGS: Record<
   },
 };
 
-export const getContractAbi = async (
-  address: string,
-  chainId: number
-): Promise<Abi> => {
+export const getContractAbi = async (address: string, chainId: number): Promise<Abi> => {
   const config = ETHERSCAN_CONFIGS[chainId];
 
   if (!config) {

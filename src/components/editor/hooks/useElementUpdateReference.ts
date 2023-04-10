@@ -6,10 +6,7 @@ import {
   replaceDynamicTermVariableName,
   replaceVariableName,
 } from '../utils/javascript';
-import {
-  FlatElement,
-  useElementFlattenFields,
-} from './useElementFlattenFields';
+import { FlatElement, useElementFlattenFields } from './useElementFlattenFields';
 
 export const useElementUpdateReference = () => {
   const flattenElement = useElementFlattenFields({
@@ -26,11 +23,7 @@ export const useElementUpdateReference = () => {
   }, []);
 
   const updateElement = useCallback(
-    <T extends Action | Component>(
-      element: T,
-      prevName: string,
-      newName: string
-    ): T => {
+    <T extends Action | Component>(element: T, prevName: string, newName: string): T => {
       const update: Record<string, unknown> = {};
       const flatElement = flattenElement(element);
       const eventHandlerTypeMap = getEventHandlerTypeMap(flatElement);

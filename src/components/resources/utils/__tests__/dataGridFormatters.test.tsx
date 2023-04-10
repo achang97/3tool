@@ -1,15 +1,8 @@
 import { RESOURCE_CONFIGS } from '@app/constants';
 import { ResourceType } from '@app/types';
-import {
-  GridRenderCellParams,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
+import { GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid';
 import { render } from '@testing-library/react';
-import {
-  formatResourceType,
-  formatCreatedAt,
-  renderNameCell,
-} from '../dataGridFormatters';
+import { formatResourceType, formatCreatedAt, renderNameCell } from '../dataGridFormatters';
 
 describe('dataGridFormatters', () => {
   describe('formatResourceType', () => {

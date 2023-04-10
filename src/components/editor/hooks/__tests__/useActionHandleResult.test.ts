@@ -59,24 +59,17 @@ describe('useActionHandleResult', () => {
       const { result } = renderHook(() => useActionHandleResult());
 
       result.current(mockAction, mockSuccessResult);
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-        `Executed ${mockAction.name}`,
-        {
-          variant: 'success',
-        }
-      );
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(`Executed ${mockAction.name}`, {
+        variant: 'success',
+      });
     });
 
     it('executes success event handlers', () => {
       const { result } = renderHook(() => useActionHandleResult());
 
       result.current(mockAction, mockSuccessResult);
-      expect(mockExecuteEventHandler).toHaveBeenCalledWith(
-        mockAction.eventHandlers[0]
-      );
-      expect(mockExecuteEventHandler).not.toHaveBeenCalledWith(
-        mockAction.eventHandlers[1]
-      );
+      expect(mockExecuteEventHandler).toHaveBeenCalledWith(mockAction.eventHandlers[0]);
+      expect(mockExecuteEventHandler).not.toHaveBeenCalledWith(mockAction.eventHandlers[1]);
     });
   });
 
@@ -85,22 +78,17 @@ describe('useActionHandleResult', () => {
       const { result } = renderHook(() => useActionHandleResult());
 
       result.current(mockAction, mockErrorResult);
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-        `Failed to execute ${mockAction.name}`,
-        { variant: 'error' }
-      );
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(`Failed to execute ${mockAction.name}`, {
+        variant: 'error',
+      });
     });
 
     it('executes error event handlers', () => {
       const { result } = renderHook(() => useActionHandleResult());
 
       result.current(mockAction, mockErrorResult);
-      expect(mockExecuteEventHandler).not.toHaveBeenCalledWith(
-        mockAction.eventHandlers[0]
-      );
-      expect(mockExecuteEventHandler).toHaveBeenCalledWith(
-        mockAction.eventHandlers[1]
-      );
+      expect(mockExecuteEventHandler).not.toHaveBeenCalledWith(mockAction.eventHandlers[0]);
+      expect(mockExecuteEventHandler).toHaveBeenCalledWith(mockAction.eventHandlers[1]);
     });
   });
 });

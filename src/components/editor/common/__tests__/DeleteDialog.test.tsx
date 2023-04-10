@@ -33,24 +33,14 @@ describe('DeleteDialog', () => {
 
   it('renders description in confirmation dialog', async () => {
     const result = render(
-      <DeleteDialog
-        name={mockName}
-        onClose={mockHandleClose}
-        onDelete={mockHandleDelete}
-        isOpen
-      />
+      <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
     expect(result.getByText(`Are you sure you want to delete ${mockName}?`));
   });
 
   it('renders list of dependent fields in confirmation dialog', async () => {
     const result = render(
-      <DeleteDialog
-        name={mockName}
-        onClose={mockHandleClose}
-        onDelete={mockHandleDelete}
-        isOpen
-      />
+      <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
     expect(result.getByTestId(dialogContentId)).toHaveTextContent(
       'You will need to manually delete the following JavaScript expression references: textInput1.text, table1.data'
@@ -59,12 +49,7 @@ describe('DeleteDialog', () => {
 
   it('closes confirmation dialog on Cancel click', async () => {
     const result = render(
-      <DeleteDialog
-        name={mockName}
-        onClose={mockHandleClose}
-        onDelete={mockHandleDelete}
-        isOpen
-      />
+      <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
 
     await userEvent.click(result.getByText('Cancel'));
@@ -76,12 +61,7 @@ describe('DeleteDialog', () => {
     mockHandleDelete.mockImplementation(() => true);
 
     const result = render(
-      <DeleteDialog
-        name={mockName}
-        onClose={mockHandleClose}
-        onDelete={mockHandleDelete}
-        isOpen
-      />
+      <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
 
     await userEvent.click(result.getByText('Confirm'));
@@ -93,12 +73,7 @@ describe('DeleteDialog', () => {
     mockHandleDelete.mockImplementation(() => false);
 
     const result = render(
-      <DeleteDialog
-        name={mockName}
-        onClose={mockHandleClose}
-        onDelete={mockHandleDelete}
-        isOpen
-      />
+      <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
 
     await userEvent.click(result.getByText('Confirm'));

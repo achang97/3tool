@@ -16,12 +16,9 @@ jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
 }));
 
-jest.mock(
-  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
-  () => ({
-    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
-  })
-);
+jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', () => ({
+  useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+}));
 
 jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => jest.fn()),
@@ -47,11 +44,7 @@ describe('BaseInspector', () => {
       },
     ];
     const result = render(
-      <BaseInspector
-        name={mockName}
-        config={mockConfig}
-        onChange={mockHandleDataChange}
-      />
+      <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
     );
     expect(result.queryByText('Text')).toBeNull();
     expect(result.queryByText('hello')).toBeNull();
@@ -65,11 +58,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       expect(result.getByText('Section 1')).toBeTruthy();
@@ -89,11 +78,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       expect(result.getByText('Custom Component')).toBeTruthy();
@@ -115,11 +100,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       expect(result.getByText('Custom Component')).toBeTruthy();
@@ -148,11 +129,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       await validateTextField(result, 'Section 1', {
@@ -188,11 +165,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       expect(result.getByText(mockPlaceholder)).toBeTruthy();
@@ -230,11 +203,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       await validateEnumField(result, 'Section 1', {
@@ -280,11 +249,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       await validateSelectField(result, 'Section 1', {
@@ -320,11 +285,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       expect(result.getByText(mockPlaceholder)).toBeTruthy();
@@ -351,11 +312,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       await userEvent.click(result.getByLabelText('Select'));
@@ -382,11 +339,7 @@ describe('BaseInspector', () => {
       ];
 
       const result = render(
-        <BaseInspector
-          name={mockName}
-          config={mockConfig}
-          onChange={mockHandleDataChange}
-        />
+        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
       );
 
       await validateSwitchField(result, 'Section 1', {

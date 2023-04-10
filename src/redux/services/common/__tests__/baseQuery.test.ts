@@ -70,9 +70,7 @@ describe('baseQuery', () => {
   describe('baseQueryWithReauth', () => {
     it('issues call to original endpoint', async () => {
       await baseQueryWithReauth('/test', mockBaseQueryApi, {});
-      expect(fetch).toHaveBeenCalledWith(
-        expect.objectContaining({ url: '/test' })
-      );
+      expect(fetch).toHaveBeenCalledWith(expect.objectContaining({ url: '/test' }));
     });
 
     it('does not refresh token if call does not return 401', async () => {
@@ -127,9 +125,7 @@ describe('baseQuery', () => {
       });
 
       it('dispatches call to logout if refresh fails', async () => {
-        (fetch as jest.Mock).mockImplementationOnce(
-          () => new Response(null, { status: 400 })
-        );
+        (fetch as jest.Mock).mockImplementationOnce(() => new Response(null, { status: 400 }));
         await baseQueryWithReauth('/test', mockBaseQueryApi, {});
         expect(mockDispatch).toHaveBeenCalledWith(logout());
       });
@@ -167,11 +163,7 @@ describe('baseQuery', () => {
               })
             )
         );
-        await baseQueryWithReauth(
-          { url: '/test', method: 'POST' },
-          mockBaseQueryApi,
-          {}
-        );
+        await baseQueryWithReauth({ url: '/test', method: 'POST' }, mockBaseQueryApi, {});
         await waitFor(() => {
           expect(fetch).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -215,10 +207,7 @@ describe('baseQuery', () => {
 
         const release = await mutex.acquire();
         await waitFor(() => {
-          expect(fetch).toHaveBeenNthCalledWith(
-            1,
-            expect.objectContaining({ url: '/test' })
-          );
+          expect(fetch).toHaveBeenNthCalledWith(1, expect.objectContaining({ url: '/test' }));
         });
 
         jest.advanceTimersByTime(5000);
@@ -228,10 +217,7 @@ describe('baseQuery', () => {
 
         release();
         await waitFor(() => {
-          expect(fetch).toHaveBeenNthCalledWith(
-            2,
-            expect.objectContaining({ url: '/test' })
-          );
+          expect(fetch).toHaveBeenNthCalledWith(2, expect.objectContaining({ url: '/test' }));
         });
       });
     });

@@ -11,15 +11,12 @@ const mockData: Action['data']['javascript'] = {
 
 const mockHandleDataChange = jest.fn();
 
-jest.mock(
-  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
-  () => ({
-    useCodeMirrorJavascriptAutocomplete: jest.fn(() => () => ({
-      from: 0,
-      options: [],
-    })),
-  })
-);
+jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', () => ({
+  useCodeMirrorJavascriptAutocomplete: jest.fn(() => () => ({
+    from: 0,
+    options: [],
+  })),
+}));
 
 describe('JavascriptEditor', () => {
   beforeEach(() => {
@@ -46,9 +43,9 @@ describe('JavascriptEditor', () => {
       const result = render(
         <JavascriptEditor data={mockData} onDataChange={mockHandleDataChange} />
       );
-      const input = within(
-        result.getByTestId('code-mirror-JS Code (JavaScript)')
-      ).getByRole('textbox');
+      const input = within(result.getByTestId('code-mirror-JS Code (JavaScript)')).getByRole(
+        'textbox'
+      );
       await userEvent.type(input, mockValue);
       expect(mockHandleDataChange).toHaveBeenCalledWith({
         code: `${mockValue}${mockData?.code}`,
@@ -69,9 +66,9 @@ describe('JavascriptEditor', () => {
       const result = render(
         <JavascriptEditor data={mockData} onDataChange={mockHandleDataChange} />
       );
-      const input = within(
-        result.getByTestId('code-mirror-Transformer (JavaScript)')
-      ).getByRole('textbox');
+      const input = within(result.getByTestId('code-mirror-Transformer (JavaScript)')).getByRole(
+        'textbox'
+      );
       await userEvent.type(input, mockValue);
       expect(mockHandleDataChange).toHaveBeenCalledWith({
         transformer: `${mockValue}${mockData?.transformer}`,

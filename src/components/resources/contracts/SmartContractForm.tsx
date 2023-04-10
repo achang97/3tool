@@ -111,9 +111,7 @@ export const SmartContractForm = ({
       />
       <Select
         value={data?.abiId}
-        placeholder={
-          abis.length === 0 ? 'No created ABIs' : 'Select contract ABI'
-        }
+        placeholder={abis.length === 0 ? 'No created ABIs' : 'Select contract ABI'}
         disabled={abis.length === 0}
         label="ABI"
         onChange={handleAbiChange}
@@ -128,11 +126,7 @@ export const SmartContractForm = ({
           </MenuItem>
         ))}
       </Select>
-      <Button
-        variant="text"
-        onClick={handleAbiDialogOpen}
-        sx={{ alignSelf: 'flex-start' }}
-      >
+      <Button variant="text" onClick={handleAbiDialogOpen} sx={{ alignSelf: 'flex-start' }}>
         Create new ABI
       </Button>
     </FormContainer>

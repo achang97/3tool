@@ -5,8 +5,7 @@ import { createAction } from '@reduxjs/toolkit';
 const LOGOUT = 'auth/logout';
 const SET_TOKENS = 'auth/setTokens';
 
-const setTokens =
-  createAction<{ accessToken: string; refreshToken: string }>(SET_TOKENS);
+const setTokens = createAction<{ accessToken: string; refreshToken: string }>(SET_TOKENS);
 const logout = createAction<void>(LOGOUT);
 
 export { setTokens, logout };

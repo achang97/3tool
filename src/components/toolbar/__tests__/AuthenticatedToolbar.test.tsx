@@ -35,9 +35,7 @@ describe('AuthenticatedToolbar', () => {
     expect(avatar.textContent).toEqual(mockUser.firstName[0]);
 
     await userEvent.click(avatar);
-    expect(
-      await result.findByTestId('authenticated-toolbar-menu')
-    ).toBeTruthy();
+    expect(await result.findByTestId('authenticated-toolbar-menu')).toBeTruthy();
   });
 
   it('renders link to Tools page', () => {
@@ -61,9 +59,7 @@ describe('AuthenticatedToolbar', () => {
 
     await userEvent.click(result.getByTestId(avatarId));
 
-    const settingsNav = await result.findByTestId(
-      'authenticated-toolbar-settings'
-    );
+    const settingsNav = await result.findByTestId('authenticated-toolbar-settings');
 
     expect(settingsNav.getAttribute('href')).toEqual('/settings');
     expect(settingsNav).toHaveTextContent('Settings');

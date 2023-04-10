@@ -9,9 +9,7 @@ export const useActionMountExecute = () => {
   const isMounted = useRef(false);
 
   const readActions = useMemo(() => {
-    return tool.actions.filter(
-      (action) => ACTION_CONFIGS[action.type].mode === 'read'
-    );
+    return tool.actions.filter((action) => ACTION_CONFIGS[action.type].mode === 'read');
   }, [tool]);
 
   useEffect(() => {

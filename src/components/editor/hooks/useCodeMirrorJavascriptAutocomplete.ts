@@ -1,8 +1,4 @@
-import {
-  CompletionContext,
-  CompletionResult,
-  CompletionSource,
-} from '@codemirror/autocomplete';
+import { CompletionContext, CompletionResult, CompletionSource } from '@codemirror/autocomplete';
 import _ from 'lodash';
 import { useCallback, useMemo } from 'react';
 import {
@@ -20,9 +16,7 @@ export const BOOST_CONFIG = {
   prototype: 1,
 };
 
-export const useCodeMirrorJavascriptAutocomplete = (
-  isDynamic: boolean
-): CompletionSource => {
+export const useCodeMirrorJavascriptAutocomplete = (isDynamic: boolean): CompletionSource => {
   const { dynamicEvalArgs, staticEvalArgs } = useEvalArgs();
   const { actionNames, componentNames } = useToolElementNames();
 

@@ -1,9 +1,6 @@
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
-import {
-  blurComponent,
-  focusToolSettings,
-} from '@app/redux/features/editorSlice';
+import { blurComponent, focusToolSettings } from '@app/redux/features/editorSlice';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { EditorCanvas } from '../EditorCanvas';

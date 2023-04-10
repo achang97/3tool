@@ -10,18 +10,12 @@ export const Inspector = () => {
   const { focusedComponentName } = useAppSelector((state) => state.editor);
 
   const component = useMemo(() => {
-    return tool.components.find(
-      (currComponent) => currComponent.name === focusedComponentName
-    );
+    return tool.components.find((currComponent) => currComponent.name === focusedComponentName);
   }, [focusedComponentName, tool.components]);
 
   return (
     <Box data-testid="inspector" sx={{ height: '100%' }}>
-      {component ? (
-        <ComponentInspector component={component} />
-      ) : (
-        <ToolInspector />
-      )}
+      {component ? <ComponentInspector component={component} /> : <ToolInspector />}
     </Box>
   );
 };

@@ -1,7 +1,4 @@
-import {
-  CodeMirror,
-  CodeMirrorProps,
-} from '@app/components/editor/common/CodeMirror';
+import { CodeMirror, CodeMirrorProps } from '@app/components/editor/common/CodeMirror';
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import { useEnqueueSnackbar } from '@app/components/editor/hooks/useEnqueueSnackbar';
 import { usePrevious } from '@app/hooks/usePrevious';

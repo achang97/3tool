@@ -21,10 +21,7 @@ describe('CanvasButton', () => {
       }));
 
       const result = render(
-        <CanvasButton
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
       expect(result.getByText(mockEvalDataValues.text)).toBeTruthy();
     });
@@ -36,10 +33,7 @@ describe('CanvasButton', () => {
       }));
 
       const result = render(
-        <CanvasButton
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
       expect(result.getByTestId(buttonId)).toBeDisabled();
     });
@@ -51,10 +45,7 @@ describe('CanvasButton', () => {
       }));
 
       const result = render(
-        <CanvasButton
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
       expect(result.getByTestId(buttonId)).toBeDisabled();
       expect(result.getByRole('progressbar')).toBeTruthy();
@@ -68,10 +59,7 @@ describe('CanvasButton', () => {
         evalDataValues: mockEvalDataValues,
       }));
       const result = render(
-        <CanvasButton
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
       await userEvent.click(result.getByText(mockEvalDataValues.text));
       expect(mockEventHandlerCallbacks.onClick).toHaveBeenCalled();

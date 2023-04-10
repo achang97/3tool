@@ -11,10 +11,7 @@ type ResponseHandlerEditorProps = {
   eventHandlers: EventHandler<ActionEvent>[];
 };
 
-export const ResponseHandlerEditor = ({
-  name,
-  eventHandlers,
-}: ResponseHandlerEditorProps) => {
+export const ResponseHandlerEditor = ({ name, eventHandlers }: ResponseHandlerEditorProps) => {
   const dispatch = useAppDispatch();
 
   const handleUpdateEventHandlers = useCallback(

@@ -5,12 +5,7 @@ import {
 } from '@app/components/editor/utils/eventHandlers';
 import { EventHandler } from '@app/types';
 import { Delete } from '@mui/icons-material';
-import {
-  GridActionsCellItem,
-  GridColDef,
-  GridRowParams,
-  GridRowsProp,
-} from '@mui/x-data-grid';
+import { GridActionsCellItem, GridColDef, GridRowParams, GridRowsProp } from '@mui/x-data-grid';
 import { useCallback, useMemo } from 'react';
 
 type HookArgs = {
@@ -23,10 +18,7 @@ type HookReturnType = {
   columns: GridColDef<EventHandlerData>[];
 };
 
-export const useEventHandlerGridProps = ({
-  eventHandlers,
-  onChange,
-}: HookArgs): HookReturnType => {
+export const useEventHandlerGridProps = ({ eventHandlers, onChange }: HookArgs): HookReturnType => {
   const handleDeleteEventHandler = useCallback(
     (id: number) => {
       onChange(eventHandlers.filter((_eventHandler, i) => i !== id));
@@ -45,12 +37,8 @@ export const useEventHandlerGridProps = ({
     (params: GridRowParams<EventHandlerData>) => {
       return [
         <GridActionsCellItem
-          icon={
-            <Delete
-              fontSize="inherit"
-              data-testid="event-handler-delete-icon"
-            />
-          }
+          key="delete"
+          icon={<Delete fontSize="inherit" data-testid="event-handler-delete-icon" />}
           label="Delete"
           onClick={() => handleDeleteEventHandler(params.row.id)}
           showInMenu

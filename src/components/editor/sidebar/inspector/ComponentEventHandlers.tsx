@@ -5,12 +5,7 @@ import {
 
 export type ComponentEventHandlersProps = Omit<
   InspectorEventHandlersProps,
-  | 'menuPosition'
-  | 'placeholder'
-  | 'label'
-  | 'hideEventColumn'
-  | 'hideColumnHeaders'
-  | 'isAutosaved'
+  'menuPosition' | 'placeholder' | 'label' | 'hideEventColumn' | 'hideColumnHeaders' | 'isAutosaved'
 >;
 
 export const ComponentEventHandlers = (props: ComponentEventHandlersProps) => {

@@ -22,11 +22,7 @@ export const CanvasDroppable = ({ isEditable }: CanvasDroppableProps) => {
 
   const gridChildren = useMemo(() => {
     return tool.components.map((component) => (
-      <CanvasComponent
-        key={component.name}
-        component={component}
-        isEditable={isEditable}
-      />
+      <CanvasComponent key={component.name} component={component} isEditable={isEditable} />
     ));
   }, [isEditable, tool.components]);
 

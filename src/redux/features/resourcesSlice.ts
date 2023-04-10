@@ -33,10 +33,7 @@ export const resourcesSlice = createSlice({
         update: RecursivePartial<Resource>;
       }>
     ) => {
-      if (
-        action.payload.index < 0 ||
-        action.payload.index >= state.resourceStack.length
-      ) {
+      if (action.payload.index < 0 || action.payload.index >= state.resourceStack.length) {
         return;
       }
 
@@ -48,7 +45,6 @@ export const resourcesSlice = createSlice({
   },
 });
 
-export const { pushResource, popResource, updateResource } =
-  resourcesSlice.actions;
+export const { pushResource, popResource, updateResource } = resourcesSlice.actions;
 
 export default resourcesSlice.reducer;

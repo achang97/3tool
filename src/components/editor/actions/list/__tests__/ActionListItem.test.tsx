@@ -75,9 +75,7 @@ describe('ActionListItem', () => {
     });
 
     it('does not focus action if user cancels in alert', async () => {
-      (useActionConfirmDiscard as jest.Mock).mockImplementation(
-        () => () => false
-      );
+      (useActionConfirmDiscard as jest.Mock).mockImplementation(() => () => false);
 
       const result = render(<ActionListItem action={mockAction} />);
       await userEvent.click(result.getByText(mockAction.name));
@@ -155,9 +153,7 @@ describe('ActionListItem', () => {
       const result = render(<ActionListItem action={mockAction} />);
       await userEvent.hover(result.getByTestId(editableDisabledIconId));
       expect(
-        await result.findByText(
-          'You must save any changes before this can be renamed.'
-        )
+        await result.findByText('You must save any changes before this can be renamed.')
       ).toBeTruthy();
     });
 
@@ -175,9 +171,7 @@ describe('ActionListItem', () => {
       await userEvent.keyboard(newNameText);
       await userEvent.keyboard('[Enter]');
 
-      expect(mockUpdateActionName).toHaveBeenCalledWith(
-        `${mockAction.name}${newNameText}`
-      );
+      expect(mockUpdateActionName).toHaveBeenCalledWith(`${mockAction.name}${newNameText}`);
     });
   });
 
@@ -204,9 +198,7 @@ describe('ActionListItem', () => {
       await userEvent.click(result.getByText('Delete'));
       expect(result.getByTestId(deleteDialogId)).toBeTruthy();
 
-      expect(
-        result.getByText(`Are you sure you want to delete ${mockAction.name}?`)
-      );
+      expect(result.getByText(`Are you sure you want to delete ${mockAction.name}?`));
     });
 
     it('renders list of dependent fields in confirmation dialog', async () => {

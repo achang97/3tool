@@ -63,8 +63,7 @@
   visibility: hidden;
 }
 
-.react-grid-item.react-grid-item-dragging
-  ~ .react-grid-item.react-grid-placeholder {
+.react-grid-item.react-grid-item-dragging ~ .react-grid-item.react-grid-placeholder {
   outline: var(--outline-focus);
 }
 
@@ -73,8 +72,7 @@
   visibility: hidden;
 }
 
-.react-grid-item-focused:not(.react-grid-item-dragging)
-  > .react-resizable-handle {
+.react-grid-item-focused:not(.react-grid-item-dragging) > .react-resizable-handle {
   visibility: visible;
 }
 

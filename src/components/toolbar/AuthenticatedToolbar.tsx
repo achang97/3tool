@@ -55,10 +55,7 @@ export const AuthenticatedToolbar = () => {
     return (
       <>
         {user && (
-          <IconButton
-            onClick={onMenuOpen}
-            data-testid="authenticated-toolbar-avatar"
-          >
+          <IconButton onClick={onMenuOpen} data-testid="authenticated-toolbar-avatar">
             <UserAvatar user={user} size={40} />
           </IconButton>
         )}
@@ -86,11 +83,5 @@ export const AuthenticatedToolbar = () => {
     );
   }, [onMenuOpen, user, menuAnchor, isMenuOpen, onMenuClose, handleLogout]);
 
-  return (
-    <ToolbarTemplate
-      middle={middle}
-      right={right}
-      testId="authenticated-toolbar"
-    />
-  );
+  return <ToolbarTemplate middle={middle} right={right} testId="authenticated-toolbar" />;
 };

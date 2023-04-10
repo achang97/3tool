@@ -7,9 +7,7 @@ const mockChildren = 'children';
 jest.mock('notistack', () => {
   const ActualNotistack = jest.requireActual('notistack');
   return {
-    SnackbarProvider: jest.fn((props) => (
-      <ActualNotistack.SnackbarProvider {...props} />
-    )),
+    SnackbarProvider: jest.fn((props) => <ActualNotistack.SnackbarProvider {...props} />),
   };
 });
 
@@ -19,9 +17,7 @@ describe('ToolSnackbarProvider', () => {
   });
 
   it('renders children', () => {
-    const result = render(
-      <ToolSnackbarProvider>{mockChildren}</ToolSnackbarProvider>
-    );
+    const result = render(<ToolSnackbarProvider>{mockChildren}</ToolSnackbarProvider>);
     expect(result.getByText(mockChildren)).toBeTruthy();
   });
 
@@ -45,9 +41,6 @@ describe('ToolSnackbarProvider', () => {
 
   it('passes max snack of 3 to base SnackbarProvider', () => {
     render(<ToolSnackbarProvider>{mockChildren}</ToolSnackbarProvider>);
-    expect(SnackbarProvider).toHaveBeenCalledWith(
-      expect.objectContaining({ maxSnack: 3 }),
-      {}
-    );
+    expect(SnackbarProvider).toHaveBeenCalledWith(expect.objectContaining({ maxSnack: 3 }), {});
   });
 });

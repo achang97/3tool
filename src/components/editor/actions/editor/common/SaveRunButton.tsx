@@ -11,8 +11,7 @@ type SaveRunButtonProps = {
 
 export const SaveRunButton = ({ type }: SaveRunButtonProps) => {
   const isEditing = useActionIsEditing();
-  const { saveAction, executeAction, saveAndExecuteAction } =
-    useActionSaveHandlers();
+  const { saveAction, executeAction, saveAndExecuteAction } = useActionSaveHandlers();
 
   const mode = useMemo(() => {
     return ACTION_CONFIGS[type].mode;
@@ -41,11 +40,7 @@ export const SaveRunButton = ({ type }: SaveRunButtonProps) => {
   }, [executeAction, isEditing, mode, saveAction, saveAndExecuteAction]);
 
   return (
-    <Button
-      size="small"
-      onClick={buttonProps.onClick}
-      data-testid="save-run-button"
-    >
+    <Button size="small" onClick={buttonProps.onClick} data-testid="save-run-button">
       {buttonProps.text}
     </Button>
   );

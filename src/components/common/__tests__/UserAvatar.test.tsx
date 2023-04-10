@@ -34,9 +34,7 @@ describe('UserAvatar', () => {
     const result = render(<UserAvatar user={mockUser} />);
 
     await userEvent.hover(result.getByText(mockUser.firstName[0]));
-    expect(
-      await result.findByText(`${mockUser.firstName} ${mockUser.lastName}`)
-    ).toBeTruthy();
+    expect(await result.findByText(`${mockUser.firstName} ${mockUser.lastName}`)).toBeTruthy();
   });
 
   it('uses default size of 30', () => {

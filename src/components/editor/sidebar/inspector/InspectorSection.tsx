@@ -7,10 +7,7 @@ type InspectorSectionProps = {
   children: ReactNode;
 };
 
-export const InspectorSection = ({
-  title,
-  children,
-}: InspectorSectionProps) => {
+export const InspectorSection = ({ title, children }: InspectorSectionProps) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleToggleSection = useCallback(() => {
@@ -48,9 +45,7 @@ export const InspectorSection = ({
         </IconButton>
       </Box>
       <Collapse in={isOpen}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {children}
-        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{children}</Box>
       </Collapse>
     </Box>
   );

@@ -7,11 +7,7 @@ type InspectorSwitchProps = {
   onChange: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void;
 };
 
-export const InspectorSwitch = ({
-  onChange,
-  label,
-  checked,
-}: InspectorSwitchProps) => {
+export const InspectorSwitch = ({ onChange, label, checked }: InspectorSwitchProps) => {
   return (
     <FormControlLabel
       data-testid={`inspector-switch-${label}`}

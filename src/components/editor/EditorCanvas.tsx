@@ -1,7 +1,4 @@
-import {
-  blurComponent,
-  focusToolSettings,
-} from '@app/redux/features/editorSlice';
+import { blurComponent, focusToolSettings } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
 import { Box, Button } from '@mui/material';
 import { useCallback, MouseEvent } from 'react';

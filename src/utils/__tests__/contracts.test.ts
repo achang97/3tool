@@ -20,15 +20,11 @@ describe('contracts', () => {
 
   describe('getContractAbi', () => {
     beforeEach(() => {
-      (etherscanInit as jest.Mock).mockImplementation(
-        () => mockEtherscanClient
-      );
+      (etherscanInit as jest.Mock).mockImplementation(() => mockEtherscanClient);
     });
 
     it('throws error if chain is unsupported', async () => {
-      expect(async () => getContractAbi('0x0', 0)).rejects.toThrow(
-        'Invalid chainId 0'
-      );
+      expect(async () => getContractAbi('0x0', 0)).rejects.toThrow('Invalid chainId 0');
     });
 
     it('calls etherscan-api init with correct arguments', async () => {
@@ -55,9 +51,7 @@ describe('contracts', () => {
         throw Error(mockErrorMessage);
       });
 
-      expect(async () => getContractAbi('0x0', mainnet.id)).rejects.toThrow(
-        mockErrorMessage
-      );
+      expect(async () => getContractAbi('0x0', mainnet.id)).rejects.toThrow(mockErrorMessage);
     });
 
     it('returns parsed ABI', async () => {

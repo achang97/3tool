@@ -34,10 +34,7 @@ describe('editorSlice', () => {
         isActionViewMaximized: false,
         isPreview: false,
       };
-      const state = editorReducer(
-        initialState,
-        startCreateComponentDrag(mockComponent)
-      );
+      const state = editorReducer(initialState, startCreateComponentDrag(mockComponent));
       expect(state.newComponent).toEqual(mockComponent);
     });
 
@@ -67,10 +64,7 @@ describe('editorSlice', () => {
         isActionViewMaximized: false,
         isPreview: false,
       };
-      const state = editorReducer(
-        initialState,
-        startMoveComponentDrag(mockComponentName)
-      );
+      const state = editorReducer(initialState, startMoveComponentDrag(mockComponentName));
       expect(state.movingComponentName).toEqual(mockComponentName);
     });
 
@@ -97,10 +91,7 @@ describe('editorSlice', () => {
         isActionViewMaximized: false,
         isPreview: false,
       };
-      const state = editorReducer(
-        initialState,
-        focusComponent(mockComponentName)
-      );
+      const state = editorReducer(initialState, focusComponent(mockComponentName));
       expect(state.focusedComponentName).toEqual(mockComponentName);
       expect(state.sidebarView).toEqual(SidebarViewType.Inspector);
     });
@@ -219,10 +210,7 @@ describe('editorSlice', () => {
             eventHandlers: [{ event: ActionEvent.Success }],
           } as Action,
         };
-        const state = editorReducer(
-          initialState,
-          updateFocusedAction({ eventHandlers: [] })
-        );
+        const state = editorReducer(initialState, updateFocusedAction({ eventHandlers: [] }));
         expect(state.focusedAction).toEqual({
           name: 'action1',
           type: ActionType.Javascript,
@@ -241,10 +229,7 @@ describe('editorSlice', () => {
         isActionViewMaximized: false,
         isPreview: false,
       };
-      const state = editorReducer(
-        initialState,
-        setActionView(ActionViewType.ResponseHandler)
-      );
+      const state = editorReducer(initialState, setActionView(ActionViewType.ResponseHandler));
       expect(state.actionView).toEqual(mockActionViewType);
     });
 

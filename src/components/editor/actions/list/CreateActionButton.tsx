@@ -58,30 +58,17 @@ export const CreateActionButton = () => {
 
   return (
     <>
-      <Button
-        size="small"
-        variant="text"
-        sx={{ gap: 0.5 }}
-        onClick={onMenuOpen}
-      >
+      <Button size="small" variant="text" sx={{ gap: 0.5 }} onClick={onMenuOpen}>
         <Box>New</Box>
         <Add fontSize="inherit" />
       </Button>
-      <Menu
-        anchorEl={menuAnchor}
-        open={isMenuOpen}
-        onClose={onMenuClose}
-        onClick={onMenuClose}
-      >
+      <Menu anchorEl={menuAnchor} open={isMenuOpen} onClose={onMenuClose} onClick={onMenuClose}>
         {ACTIONS.map((actionType) => (
           <MenuItem
             key={actionType}
             onClick={() => handleCreateAction(actionType)}
             icon={
-              <Image
-                alt={ACTION_CONFIGS[actionType].label}
-                src={ACTION_CONFIGS[actionType].icon}
-              />
+              <Image alt={ACTION_CONFIGS[actionType].label} src={ACTION_CONFIGS[actionType].icon} />
             }
             label={ACTION_CONFIGS[actionType].label}
           />

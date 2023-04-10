@@ -18,10 +18,7 @@ describe('CanvasText', () => {
       }));
 
       const result = render(
-        <CanvasText
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasText name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
       expect(result.getByText(mockEvalDataValues.value)).toBeTruthy();
     });
@@ -33,10 +30,7 @@ describe('CanvasText', () => {
       }));
 
       const result = render(
-        <CanvasText
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasText name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
       expect(result.getByTestId(textId)).toHaveStyle({
         textAlign: mockEvalDataValues.horizontalAlignment,

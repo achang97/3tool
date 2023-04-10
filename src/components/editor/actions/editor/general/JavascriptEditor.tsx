@@ -16,10 +16,7 @@ export const JavascriptEditor = ({
   );
 
   return (
-    <Box
-      sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
-      data-testid="javascript-editor"
-    >
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }} data-testid="javascript-editor">
       <CodeMirror
         label="JS Code (JavaScript)"
         value={data?.code}

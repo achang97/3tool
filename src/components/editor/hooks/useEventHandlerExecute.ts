@@ -35,10 +35,7 @@ export const useEventHandlerExecute = () => {
         return;
       }
       const { url, newTab } = data;
-      const { value: evalUrl } = evalValue(
-        url,
-        EVENT_HANDLER_DATA_TYPES.url.url
-      );
+      const { value: evalUrl } = evalValue(url, EVENT_HANDLER_DATA_TYPES.url.url);
       utils.openUrl(evalUrl?.toString() ?? '', { newTab });
     },
     [evalValue]

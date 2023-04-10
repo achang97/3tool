@@ -180,13 +180,7 @@ describe('EventHandlerEditor', () => {
       ${EventHandlerType.Url}    | ${'event-handler-url-editor'}
     `(
       'renders effect configuration component for $eventHandlerType',
-      ({
-        eventHandlerType,
-        testId,
-      }: {
-        eventHandlerType: EventHandlerType;
-        testId: string;
-      }) => {
+      ({ eventHandlerType, testId }: { eventHandlerType: EventHandlerType; testId: string }) => {
         const result = render(
           <EventHandlerEditor
             name={mockName}

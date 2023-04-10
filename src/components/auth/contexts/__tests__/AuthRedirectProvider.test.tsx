@@ -43,9 +43,7 @@ describe('AuthRedirectProvider', () => {
         push: mockPush,
       }));
 
-      const result = render(
-        <AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>
-      );
+      const result = render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
 
       expect(result.getByText(mockChildren)).toBeTruthy();
       expect(mockPush).not.toHaveBeenCalled();
@@ -57,9 +55,7 @@ describe('AuthRedirectProvider', () => {
         push: mockPush,
       }));
 
-      const result = render(
-        <AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>
-      );
+      const result = render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
 
       expect(result.getByTestId('fullscreen-loader')).toBeTruthy();
       expect(mockPush).toHaveBeenCalledWith('/');
@@ -77,9 +73,7 @@ describe('AuthRedirectProvider', () => {
         push: mockPush,
       }));
 
-      const result = render(
-        <AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>
-      );
+      const result = render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
 
       expect(result.getByText(mockChildren)).toBeTruthy();
       expect(mockPush).not.toHaveBeenCalled();
@@ -91,9 +85,7 @@ describe('AuthRedirectProvider', () => {
         push: mockPush,
       }));
 
-      const result = render(
-        <AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>
-      );
+      const result = render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
 
       expect(result.getByTestId('fullscreen-loader')).toBeTruthy();
       expect(mockPush).toHaveBeenCalledWith('/login');

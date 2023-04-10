@@ -1,7 +1,4 @@
-import {
-  EVENT_HANDLER_EVENT_CONFIGS,
-  EVENT_HANDLER_DATA_TEMPLATES,
-} from '@app/constants';
+import { EVENT_HANDLER_EVENT_CONFIGS, EVENT_HANDLER_DATA_TEMPLATES } from '@app/constants';
 import { ComponentEvent, EventHandler, EventHandlerType } from '@app/types';
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
@@ -19,10 +16,7 @@ const mockEventHandlers: EventHandler<ComponentEvent>[] = [
   },
 ];
 const mockPlaceholder = 'placeholder';
-const mockEventOptions: ComponentEvent[] = [
-  ComponentEvent.Click,
-  ComponentEvent.Submit,
-];
+const mockEventOptions: ComponentEvent[] = [ComponentEvent.Click, ComponentEvent.Submit];
 const mockHandleChange = jest.fn();
 
 jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
@@ -78,11 +72,7 @@ describe('InspectorEventHandlers', () => {
       />
     );
 
-    expect(
-      result.getByText(
-        EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label
-      )
-    );
+    expect(result.getByText(EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label));
     expect(result.getByText('utils.openUrl()'));
   });
 
@@ -158,9 +148,7 @@ describe('InspectorEventHandlers', () => {
     );
 
     await userEvent.click(
-      result.getByText(
-        EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label
-      )
+      result.getByText(EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label)
     );
     expect(result.getByTestId('event-handler-editor')).toBeTruthy();
 
@@ -190,9 +178,7 @@ describe('InspectorEventHandlers', () => {
     );
 
     await userEvent.click(
-      result.getByText(
-        EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label
-      )
+      result.getByText(EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label)
     );
     expect(result.getByTestId('event-handler-editor')).toBeTruthy();
 
@@ -218,9 +204,7 @@ describe('InspectorEventHandlers', () => {
 
     expect(result.queryByText('Event')).toBeNull();
     expect(
-      result.queryByText(
-        EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label
-      )
+      result.queryByText(EVENT_HANDLER_EVENT_CONFIGS[mockEventHandlers[0].event].label)
     ).toBeNull();
   });
 

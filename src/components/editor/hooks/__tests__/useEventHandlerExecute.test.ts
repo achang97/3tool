@@ -1,9 +1,4 @@
-import {
-  ActionMethod,
-  ComponentEvent,
-  EventHandler,
-  EventHandlerType,
-} from '@app/types';
+import { ActionMethod, ComponentEvent, EventHandler, EventHandlerType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import { utils } from '../../utils/public';
 import { useActionMethods } from '../useActionMethods';
@@ -32,9 +27,7 @@ describe('useEventHandlerExecute', () => {
           [ActionMethod.Trigger]: jest.fn(),
         },
       };
-      (useActionMethods as jest.Mock).mockImplementation(
-        () => mockActionMethods
-      );
+      (useActionMethods as jest.Mock).mockImplementation(() => mockActionMethods);
 
       const mockEventHandler: EventHandler = {
         event: ComponentEvent.Click,
@@ -48,9 +41,7 @@ describe('useEventHandlerExecute', () => {
       };
       const { result } = renderHook(() => useEventHandlerExecute());
       result.current(mockEventHandler);
-      expect(
-        mockActionMethods.action1[ActionMethod.Trigger]
-      ).toHaveBeenCalled();
+      expect(mockActionMethods.action1[ActionMethod.Trigger]).toHaveBeenCalled();
     });
 
     it('does not throw error if action is not defined in map', () => {
@@ -92,10 +83,7 @@ describe('useEventHandlerExecute', () => {
       };
       const { result } = renderHook(() => useEventHandlerExecute());
       result.current(mockEventHandler);
-      expect(utils.openUrl).toHaveBeenCalledWith(
-        'https://google.com?query=text',
-        { newTab: true }
-      );
+      expect(utils.openUrl).toHaveBeenCalledWith('https://google.com?query=text', { newTab: true });
     });
 
     it('calls openUrl util function with empty string if there is an error', () => {

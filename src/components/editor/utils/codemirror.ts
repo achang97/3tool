@@ -1,8 +1,4 @@
-import {
-  Completion,
-  CompletionContext,
-  snippetCompletion,
-} from '@codemirror/autocomplete';
+import { Completion, CompletionContext, snippetCompletion } from '@codemirror/autocomplete';
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNode } from '@lezer/common';
 import _ from 'lodash';
@@ -52,11 +48,7 @@ export const createAutocompleteSnippets = (
     }
 
     Object.entries(value).forEach(([entryKey, entryVal]) => {
-      createAutocompleteSnippetsHelper(
-        `${prefix}.${entryKey}`,
-        entryVal,
-        snippets
-      );
+      createAutocompleteSnippetsHelper(`${prefix}.${entryKey}`, entryVal, snippets);
     });
   };
 
@@ -82,18 +74,11 @@ export const parseTokenFromContext = (
       return null;
     }
 
-    if (
-      !['VariableName', 'PropertyName', 'MemberExpression', '.'].includes(
-        node.type.name
-      )
-    ) {
+    if (!['VariableName', 'PropertyName', 'MemberExpression', '.'].includes(node.type.name)) {
       return '';
     }
 
-    const prefix =
-      node.from === node.prevSibling?.to
-        ? getTokenHelper(node.prevSibling)
-        : '';
+    const prefix = node.from === node.prevSibling?.to ? getTokenHelper(node.prevSibling) : '';
 
     if (prefix === null) {
       return null;
@@ -112,8 +97,7 @@ export const parseTokenFromContext = (
   }
 
   const lastPeriodIndex = token.lastIndexOf('.');
-  const trimmedToken =
-    lastPeriodIndex !== -1 ? token.substring(0, lastPeriodIndex) : token;
+  const trimmedToken = lastPeriodIndex !== -1 ? token.substring(0, lastPeriodIndex) : token;
 
   if (lastPeriodIndex === -1) {
     return {

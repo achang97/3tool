@@ -11,9 +11,7 @@ export const useComponentDelete = (name: string) => {
 
   const handleDeleteComponent = useCallback(async () => {
     const response = await updateTool({
-      components: tool.components.filter(
-        (currComponent) => currComponent.name !== name
-      ),
+      components: tool.components.filter((currComponent) => currComponent.name !== name),
     });
 
     if (!isSuccessfulApiResponse(response)) {

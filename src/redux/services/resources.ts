@@ -15,10 +15,7 @@ export const resourcesApi = createApi({
       query: (id) => `/resources/${id}`,
       providesTags: ['Resource'],
     }),
-    createResource: builder.mutation<
-      Resource,
-      Pick<Resource, 'type' | 'name' | 'data'>
-    >({
+    createResource: builder.mutation<Resource, Pick<Resource, 'type' | 'name' | 'data'>>({
       query: (body) => ({
         url: '/resources',
         method: 'POST',

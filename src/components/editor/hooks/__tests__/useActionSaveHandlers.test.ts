@@ -1,10 +1,7 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { ActionType } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import {
-  mockApiErrorResponse,
-  mockApiSuccessResponse,
-} from '@tests/constants/api';
+import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { useActionSaveHandlers } from '../useActionSaveHandlers';
 
 const mockExecuteAction = jest.fn();
@@ -89,18 +86,14 @@ describe('useActionSaveHandlers', () => {
     });
 
     it('does not execute action if save fails', async () => {
-      (mockUpdateTool as jest.Mock).mockImplementation(
-        () => mockApiErrorResponse
-      );
+      (mockUpdateTool as jest.Mock).mockImplementation(() => mockApiErrorResponse);
       const { result } = renderHook(() => useActionSaveHandlers());
       await result.current.saveAndExecuteAction();
       expect(mockExecuteAction).not.toHaveBeenCalled();
     });
 
     it('executes action if save succeeds', async () => {
-      (mockUpdateTool as jest.Mock).mockImplementation(
-        () => mockApiSuccessResponse
-      );
+      (mockUpdateTool as jest.Mock).mockImplementation(() => mockApiSuccessResponse);
       const { result } = renderHook(() => useActionSaveHandlers());
       await result.current.saveAndExecuteAction();
       expect(mockExecuteAction).toHaveBeenCalledWith(mockFocusedAction);

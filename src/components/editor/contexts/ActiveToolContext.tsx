@@ -2,14 +2,7 @@ import { useUpdateToolMutation } from '@app/redux/services/tools';
 import { ApiResponse, Tool } from '@app/types';
 import { isSuccessfulApiResponse, parseApiError } from '@app/utils/api';
 import { DepGraph } from 'dependency-graph';
-import React, {
-  useCallback,
-  createContext,
-  ReactNode,
-  useMemo,
-  useState,
-  useEffect,
-} from 'react';
+import React, { useCallback, createContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import {
   useToolEvalDataMaps,
   ToolEvalDataMap,
@@ -45,10 +38,7 @@ type ActiveToolProviderProps = {
   children?: ReactNode;
 };
 
-export const ActiveToolProvider = ({
-  tool,
-  children,
-}: ActiveToolProviderProps) => {
+export const ActiveToolProvider = ({ tool, children }: ActiveToolProviderProps) => {
   const [activeTool, setActiveTool] = useState<Tool>(tool);
   const [updateTool] = useUpdateToolMutation();
 
@@ -96,18 +86,7 @@ export const ActiveToolProvider = ({
       evalDataMap,
       evalDataValuesMap,
     };
-  }, [
-    activeTool,
-    updateActiveTool,
-    dataDepGraph,
-    dataDepCycles,
-    evalDataMap,
-    evalDataValuesMap,
-  ]);
+  }, [activeTool, updateActiveTool, dataDepGraph, dataDepCycles, evalDataMap, evalDataValuesMap]);
 
-  return (
-    <ActiveToolContext.Provider value={contextValue}>
-      {children}
-    </ActiveToolContext.Provider>
-  );
+  return <ActiveToolContext.Provider value={contextValue}>{children}</ActiveToolContext.Provider>;
 };

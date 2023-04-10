@@ -18,17 +18,15 @@ const JAVASCRIPT_DATA_TYPES: ActionDataType<ActionType.Javascript> = {
   code: 'string',
 };
 
-const SMART_CONTRACT_READ_DATA_TYPES: ActionDataType<ActionType.SmartContractRead> =
-  {
-    ...TRANSFORMABLE_DATA_TYPES,
-    smartContractId: 'string',
-  };
+const SMART_CONTRACT_READ_DATA_TYPES: ActionDataType<ActionType.SmartContractRead> = {
+  ...TRANSFORMABLE_DATA_TYPES,
+  smartContractId: 'string',
+};
 
-const SMART_CONTRACT_WRITE_DATA_TYPES: ActionDataType<ActionType.SmartContractWrite> =
-  {
-    ...TRANSFORMABLE_DATA_TYPES,
-    smartContractId: 'string',
-  };
+const SMART_CONTRACT_WRITE_DATA_TYPES: ActionDataType<ActionType.SmartContractWrite> = {
+  ...TRANSFORMABLE_DATA_TYPES,
+  smartContractId: 'string',
+};
 
 export const ACTION_DATA_TYPES: ActionDataTypes = {
   [ActionType.Javascript]: JAVASCRIPT_DATA_TYPES,

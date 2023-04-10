@@ -3,10 +3,7 @@ import { focusAction, focusComponent } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType, Component, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import {
-  mockApiErrorResponse,
-  mockApiSuccessResponse,
-} from '@tests/constants/api';
+import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { useComponentUpdateName } from '../useComponentUpdateName';
 
 const mockPrevName = 'button1';
@@ -87,9 +84,7 @@ describe('useComponentUpdateName', () => {
       });
 
       it('does not focus component or rename component inputs if API call fails', async () => {
-        const { result } = renderHook(() =>
-          useComponentUpdateName(mockPrevName)
-        );
+        const { result } = renderHook(() => useComponentUpdateName(mockPrevName));
         await result.current(mockNewName);
 
         expect(mockDispatch).not.toHaveBeenCalled();
@@ -102,18 +97,14 @@ describe('useComponentUpdateName', () => {
       });
 
       it('focuses component with new name if API call succeeds', async () => {
-        const { result } = renderHook(() =>
-          useComponentUpdateName(mockPrevName)
-        );
+        const { result } = renderHook(() => useComponentUpdateName(mockPrevName));
         await result.current(mockNewName);
 
         expect(mockDispatch).toHaveBeenCalledWith(focusComponent(mockNewName));
       });
 
       it('renames component inputs with new name if API call succeeds', async () => {
-        const { result } = renderHook(() =>
-          useComponentUpdateName(mockPrevName)
-        );
+        const { result } = renderHook(() => useComponentUpdateName(mockPrevName));
         await result.current(mockNewName);
 
         expect(mockDispatch).toHaveBeenCalledWith(
@@ -131,9 +122,7 @@ describe('useComponentUpdateName', () => {
           focusedAction: mockAction,
         }));
 
-        const { result } = renderHook(() =>
-          useComponentUpdateName(mockPrevName)
-        );
+        const { result } = renderHook(() => useComponentUpdateName(mockPrevName));
         await result.current(mockNewName);
 
         expect(mockDispatch).toHaveBeenCalledWith(

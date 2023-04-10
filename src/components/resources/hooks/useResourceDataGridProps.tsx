@@ -10,11 +10,7 @@ import {
 import { useCallback, useMemo } from 'react';
 import { pushResource } from '@app/redux/features/resourcesSlice';
 import { useAppDispatch } from '@app/redux/hooks';
-import {
-  formatResourceType,
-  formatCreatedAt,
-  renderNameCell,
-} from '../utils/dataGridFormatters';
+import { formatResourceType, formatCreatedAt, renderNameCell } from '../utils/dataGridFormatters';
 
 type DataGridProps = {
   rows: GridRowsProp<Resource>;
@@ -22,9 +18,7 @@ type DataGridProps = {
   getRowId: GridRowIdGetter<Resource>;
 };
 
-export const useResourceDataGridProps = (
-  resources?: Resource[]
-): DataGridProps => {
+export const useResourceDataGridProps = (resources?: Resource[]): DataGridProps => {
   const dispatch = useAppDispatch();
 
   const rows: GridRowsProp<Resource> = useMemo(() => {
@@ -43,6 +37,7 @@ export const useResourceDataGridProps = (
       // TODO: Add delete action
       return [
         <GridActionsCellItem
+          key="edit"
           icon={<Edit />}
           label="Edit"
           onClick={() => handleEditDialogOpen(params.row)}
@@ -83,12 +78,9 @@ export const useResourceDataGridProps = (
     ];
   }, [getRowActions]);
 
-  const getRowId: GridRowIdGetter<Resource> = useCallback(
-    (resource: Resource) => {
-      return resource._id;
-    },
-    []
-  );
+  const getRowId: GridRowIdGetter<Resource> = useCallback((resource: Resource) => {
+    return resource._id;
+  }, []);
 
   return { rows, columns, getRowId };
 };

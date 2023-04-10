@@ -31,10 +31,7 @@ export const useActionMethods = () => {
   );
 
   const actionMethods = useMemo(() => {
-    return _.chain(tool.actions)
-      .keyBy('name')
-      .mapValues(getActionMethods)
-      .value();
+    return _.chain(tool.actions).keyBy('name').mapValues(getActionMethods).value();
   }, [getActionMethods, tool.actions]);
 
   return actionMethods;

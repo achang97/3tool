@@ -95,10 +95,7 @@ describe('useActionExecute', () => {
           data: undefined,
           error: 'asdf is not defined',
         };
-        expect(mockHandleActionResult).toHaveBeenCalledWith(
-          mockAction,
-          mockResult
-        );
+        expect(mockHandleActionResult).toHaveBeenCalledWith(mockAction, mockResult);
       });
     });
   });

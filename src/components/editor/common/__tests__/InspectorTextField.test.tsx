@@ -12,12 +12,9 @@ jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
 
-jest.mock(
-  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
-  () => ({
-    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
-  })
-);
+jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', () => ({
+  useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+}));
 
 jest.mock('@app/components/editor/hooks/useActiveTool');
 
@@ -33,11 +30,7 @@ describe('InspectorTextField', () => {
   it('renders label', () => {
     const mockLabel = 'label';
     const result = render(
-      <InspectorTextField
-        label={mockLabel}
-        name={mockName}
-        onChange={mockHandleChange}
-      />
+      <InspectorTextField label={mockLabel} name={mockName} onChange={mockHandleChange} />
     );
     expect(result.getByText(mockLabel)).toBeTruthy();
   });
@@ -58,18 +51,10 @@ describe('InspectorTextField', () => {
         [mockName]: ['1', '2'],
       },
     }));
-    const result = render(
-      <InspectorTextField name={mockName} onChange={mockHandleChange} />
-    );
+    const result = render(<InspectorTextField name={mockName} onChange={mockHandleChange} />);
     expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
 
-    result.rerender(
-      <InspectorTextField
-        name={mockName}
-        onChange={mockHandleChange}
-        value="1"
-      />
-    );
+    result.rerender(<InspectorTextField name={mockName} onChange={mockHandleChange} value="1" />);
     expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
   });
 
@@ -81,25 +66,15 @@ describe('InspectorTextField', () => {
       },
     }));
     const result = render(
-      <InspectorTextField
-        name={mockName}
-        onChange={mockHandleChange}
-        isAutosaved
-      />
+      <InspectorTextField name={mockName} onChange={mockHandleChange} isAutosaved />
     );
     expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
 
     result.rerender(
-      <InspectorTextField
-        name={mockName}
-        onChange={mockHandleChange}
-        value="1"
-        isAutosaved
-      />
+      <InspectorTextField name={mockName} onChange={mockHandleChange} value="1" isAutosaved />
     );
-    expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-      'Dependency Cycle Found: 1 → 2',
-      { variant: 'error' }
-    );
+    expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Dependency Cycle Found: 1 → 2', {
+      variant: 'error',
+    });
   });
 });

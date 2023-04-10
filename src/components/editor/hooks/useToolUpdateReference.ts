@@ -15,9 +15,7 @@ export const useToolUpdateReference = () => {
         components: tool.components.map((component) =>
           updateElementReference(component, prevName, newName)
         ),
-        actions: tool.actions.map((action) =>
-          updateElementReference(action, prevName, newName)
-        ),
+        actions: tool.actions.map((action) => updateElementReference(action, prevName, newName)),
       };
     },
     [tool.actions, tool.components, updateElementReference]

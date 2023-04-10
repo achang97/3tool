@@ -29,9 +29,7 @@ describe('useComponentEventHandlerCallbacks', () => {
       },
     ] as EventHandler<ComponentEvent>[];
 
-    const { result } = renderHook(() =>
-      useComponentEventHandlerCallbacks(mockEventHandlers)
-    );
+    const { result } = renderHook(() => useComponentEventHandlerCallbacks(mockEventHandlers));
 
     result.current.onClick(new Event(''));
     expect(mockExecuteEventHandler).toHaveBeenCalledWith(mockEventHandlers[0]);
@@ -50,13 +48,9 @@ describe('useComponentEventHandlerCallbacks', () => {
         },
       ] as EventHandler<ComponentEvent>[];
 
-      const { result } = renderHook(() =>
-        useComponentEventHandlerCallbacks(mockEventHandlers)
-      );
+      const { result } = renderHook(() => useComponentEventHandlerCallbacks(mockEventHandlers));
       result.current.onClick(new Event(''));
-      expect(mockExecuteEventHandler).toHaveBeenCalledWith(
-        mockEventHandlers[0]
-      );
+      expect(mockExecuteEventHandler).toHaveBeenCalledWith(mockEventHandlers[0]);
     });
   });
 
@@ -69,13 +63,9 @@ describe('useComponentEventHandlerCallbacks', () => {
         },
       ] as EventHandler<ComponentEvent>[];
 
-      const { result } = renderHook(() =>
-        useComponentEventHandlerCallbacks(mockEventHandlers)
-      );
+      const { result } = renderHook(() => useComponentEventHandlerCallbacks(mockEventHandlers));
       result.current.onKeyDown(new KeyboardEvent('', { key: 'Enter' }));
-      expect(mockExecuteEventHandler).toHaveBeenCalledWith(
-        mockEventHandlers[0]
-      );
+      expect(mockExecuteEventHandler).toHaveBeenCalledWith(mockEventHandlers[0]);
     });
 
     it('does not execute event handlers if key is not Enter', () => {
@@ -86,9 +76,7 @@ describe('useComponentEventHandlerCallbacks', () => {
         },
       ] as EventHandler<ComponentEvent>[];
 
-      const { result } = renderHook(() =>
-        useComponentEventHandlerCallbacks(mockEventHandlers)
-      );
+      const { result } = renderHook(() => useComponentEventHandlerCallbacks(mockEventHandlers));
       result.current.onKeyDown(new KeyboardEvent('', { key: 'Space' }));
       expect(mockExecuteEventHandler).not.toHaveBeenCalled();
     });

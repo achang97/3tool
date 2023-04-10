@@ -56,14 +56,11 @@ describe('ActiveToolContext', () => {
 
   it('updates tool if tool prop changes', () => {
     let tool: Tool = mockTool;
-    const { result, rerender } = renderHook(
-      () => useContext(ActiveToolContext),
-      {
-        wrapper: ({ children }: { children: ReactElement }) => (
-          <ActiveToolProvider tool={tool}>{children}</ActiveToolProvider>
-        ),
-      }
-    );
+    const { result, rerender } = renderHook(() => useContext(ActiveToolContext), {
+      wrapper: ({ children }: { children: ReactElement }) => (
+        <ActiveToolProvider tool={tool}>{children}</ActiveToolProvider>
+      ),
+    });
     expect(result.current.tool).toEqual(tool);
 
     tool = { ...mockTool, name: 'Updated Tool!' };
@@ -123,9 +120,7 @@ describe('ActiveToolContext', () => {
           <ActiveToolProvider tool={mockTool}>{children}</ActiveToolProvider>
         ),
       });
-      expect(result.current.evalDataValuesMap).toEqual(
-        mockElementEvalDataValuesMap
-      );
+      expect(result.current.evalDataValuesMap).toEqual(mockElementEvalDataValuesMap);
     });
 
     it('returns evalDataMap', () => {
@@ -211,10 +206,9 @@ describe('ActiveToolContext', () => {
 
       await waitFor(async () => {
         await result.current.updateTool(mockToolUpdate);
-        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-          mockApiError.data.message,
-          { variant: 'error' }
-        );
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(mockApiError.data.message, {
+          variant: 'error',
+        });
       });
     });
   });

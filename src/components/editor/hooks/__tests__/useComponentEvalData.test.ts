@@ -29,9 +29,7 @@ describe('useComponentEvalData', () => {
     });
 
     it('returns EvalData object if component name is valid', () => {
-      const { result } = renderHook(() =>
-        useComponentEvalData<ComponentType.Button>('button1')
-      );
+      const { result } = renderHook(() => useComponentEvalData<ComponentType.Button>('button1'));
       expect(result.current.evalData).toEqual({
         text: {
           value: 'hello',
@@ -49,9 +47,7 @@ describe('useComponentEvalData', () => {
     });
 
     it('returns EvalDataValues if component name is valid', () => {
-      const { result } = renderHook(() =>
-        useComponentEvalData<ComponentType.Button>('button1')
-      );
+      const { result } = renderHook(() => useComponentEvalData<ComponentType.Button>('button1'));
       expect(result.current.evalDataValues).toEqual({
         text: 'hello',
       });

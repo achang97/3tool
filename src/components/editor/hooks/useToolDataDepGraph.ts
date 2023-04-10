@@ -49,10 +49,7 @@ export const useToolDataDepGraph = (tool: Tool): HookReturnType => {
         element.fields
           .filter((field) => field.isLeaf && !field.isJavascript)
           .forEach((field) => {
-            const elementReferences = parseDynamicTermVariables(
-              field.value,
-              elementNames
-            );
+            const elementReferences = parseDynamicTermVariables(field.value, elementNames);
 
             elementReferences.forEach((elementReference) => {
               if (!graph.hasNode(elementReference)) {

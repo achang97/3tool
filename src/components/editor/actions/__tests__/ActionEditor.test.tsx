@@ -1,7 +1,4 @@
-import {
-  setActionView,
-  updateFocusedAction,
-} from '@app/redux/features/editorSlice';
+import { setActionView, updateFocusedAction } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType, ActionViewType } from '@app/types';
 import { within } from '@testing-library/dom';
@@ -18,15 +15,12 @@ const mockAction = {
 } as Action;
 const mockDispatch = jest.fn();
 
-jest.mock(
-  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
-  () => ({
-    useCodeMirrorJavascriptAutocomplete: jest.fn(() => () => ({
-      from: 0,
-      options: [],
-    })),
-  })
-);
+jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', () => ({
+  useCodeMirrorJavascriptAutocomplete: jest.fn(() => () => ({
+    from: 0,
+    options: [],
+  })),
+}));
 
 jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => jest.fn()),
@@ -82,9 +76,7 @@ describe('ActionEditor', () => {
 
       const result = render(<ActionEditor action={mockAction} />);
       await userEvent.click(result.getByText('General'));
-      expect(mockDispatch).toHaveBeenCalledWith(
-        setActionView(ActionViewType.General)
-      );
+      expect(mockDispatch).toHaveBeenCalledWith(setActionView(ActionViewType.General));
     });
 
     it('navigates to Response Handler tab', async () => {
@@ -94,9 +86,7 @@ describe('ActionEditor', () => {
 
       const result = render(<ActionEditor action={mockAction} />);
       await userEvent.click(result.getByText('Response Handler'));
-      expect(mockDispatch).toHaveBeenCalledWith(
-        setActionView(ActionViewType.ResponseHandler)
-      );
+      expect(mockDispatch).toHaveBeenCalledWith(setActionView(ActionViewType.ResponseHandler));
     });
   });
 
@@ -113,9 +103,7 @@ describe('ActionEditor', () => {
           actionView: ActionViewType.General,
         }));
 
-        const result = render(
-          <ActionEditor action={{ ...mockAction, type }} />
-        );
+        const result = render(<ActionEditor action={{ ...mockAction, type }} />);
         expect(result.getByTestId(testId)).toBeTruthy();
       }
     );
@@ -142,9 +130,9 @@ describe('ActionEditor', () => {
         <ActionEditor action={{ ...mockAction, type: ActionType.Javascript }} />
       );
 
-      const input = within(
-        result.getByTestId('code-mirror-JS Code (JavaScript)')
-      ).getByRole('textbox');
+      const input = within(result.getByTestId('code-mirror-JS Code (JavaScript)')).getByRole(
+        'textbox'
+      );
 
       const mockValue = '123';
       await userEvent.type(input, mockValue);

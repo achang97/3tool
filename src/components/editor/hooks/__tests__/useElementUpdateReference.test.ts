@@ -25,9 +25,7 @@ describe('useElementUpdateReference', () => {
     } as unknown as Component;
 
     const { result } = renderHook(() => useElementUpdateReference());
-    expect(result.current(mockElement, 'button1', 'newButton')).toEqual(
-      mockElement
-    );
+    expect(result.current(mockElement, 'button1', 'newButton')).toEqual(mockElement);
   });
 
   describe('components', () => {

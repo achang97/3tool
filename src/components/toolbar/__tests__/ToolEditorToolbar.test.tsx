@@ -1,9 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { render } from '@testing-library/react';
-import {
-  focusToolSettings,
-  setIsPreview,
-} from '@app/redux/features/editorSlice';
+import { focusToolSettings, setIsPreview } from '@app/redux/features/editorSlice';
 import { mockTool } from '@tests/constants/data';
 import { useAppSelector } from '@app/redux/hooks';
 import { ToolEditorToolbar } from '../ToolEditorToolbar';

@@ -1,8 +1,4 @@
-import {
-  evalDynamicExpression,
-  asyncEvalWithArgs,
-  stringifyByType,
-} from '../eval';
+import { evalDynamicExpression, asyncEvalWithArgs, stringifyByType } from '../eval';
 
 describe('eval', () => {
   describe('stringifyByType', () => {
@@ -58,18 +54,14 @@ describe('eval', () => {
 
     describe('has return value', () => {
       it('evaluates function without added return keyword', async () => {
-        const result = await asyncEvalWithArgs(
-          'const test = 5; return 5;',
-          {},
-          true
-        );
+        const result = await asyncEvalWithArgs('const test = 5; return 5;', {}, true);
         expect(result).toEqual(5);
       });
 
       it('does not override "Unexpected token" error', async () => {
-        expect(async () =>
-          asyncEvalWithArgs('++', {}, true)
-        ).rejects.toThrowError("Unexpected token '}'");
+        expect(async () => asyncEvalWithArgs('++', {}, true)).rejects.toThrowError(
+          "Unexpected token '}'"
+        );
       });
     });
 
@@ -80,15 +72,15 @@ describe('eval', () => {
       });
 
       it('overrides "Unexpected token" error', async () => {
-        expect(async () =>
-          asyncEvalWithArgs('++', {}, false)
-        ).rejects.toThrowError("Invalid JavaScript syntax: '++'");
+        expect(async () => asyncEvalWithArgs('++', {}, false)).rejects.toThrowError(
+          "Invalid JavaScript syntax: '++'"
+        );
       });
 
       it('does not override error', async () => {
-        expect(async () =>
-          asyncEvalWithArgs('asdf', {}, false)
-        ).rejects.toThrowError('asdf is not defined');
+        expect(async () => asyncEvalWithArgs('asdf', {}, false)).rejects.toThrowError(
+          'asdf is not defined'
+        );
       });
     });
   });
@@ -96,14 +88,10 @@ describe('eval', () => {
   describe('evalDynamicExpression', () => {
     describe('general', () => {
       it('evaluates multiple dynamic terms', () => {
-        const result = evalDynamicExpression(
-          '{{ button1.text }} {{ button2.text }}!',
-          'string',
-          {
-            button1: { text: 'hello' },
-            button2: { text: 'world' },
-          }
-        );
+        const result = evalDynamicExpression('{{ button1.text }} {{ button2.text }}!', 'string', {
+          button1: { text: 'hello' },
+          button2: { text: 'world' },
+        });
         expect(result).toEqual({
           parsedExpression: 'hello world!',
           value: 'hello world!',
@@ -121,15 +109,11 @@ describe('eval', () => {
       });
 
       it('evaluates dynamic input as number', () => {
-        const result = evalDynamicExpression(
-          ' {{ textInput1.minLength }} ',
-          'number',
-          {
-            textInput1: {
-              minLength: 4,
-            },
-          }
-        );
+        const result = evalDynamicExpression(' {{ textInput1.minLength }} ', 'number', {
+          textInput1: {
+            minLength: 4,
+          },
+        });
         expect(result).toEqual({
           parsedExpression: '4',
           value: 4,
@@ -163,9 +147,7 @@ describe('eval', () => {
       it('returns error if field does not evaluate to number', () => {
         const result = evalDynamicExpression('asdf', 'number', {});
         expect(result).toEqual({
-          error: new Error(
-            "Expected value of type 'number', received value of type 'string'"
-          ),
+          error: new Error("Expected value of type 'number', received value of type 'string'"),
         });
       });
     });
@@ -180,15 +162,11 @@ describe('eval', () => {
       });
 
       it('evaluates dynamic input as array', () => {
-        const result = evalDynamicExpression(
-          ' {{ [{ test: textInput1.minLength }] }} ',
-          'array',
-          {
-            textInput1: {
-              minLength: 4,
-            },
-          }
-        );
+        const result = evalDynamicExpression(' {{ [{ test: textInput1.minLength }] }} ', 'array', {
+          textInput1: {
+            minLength: 4,
+          },
+        });
         expect(result).toEqual({
           parsedExpression: '[{"test":4}]',
           value: [{ test: 4 }],
@@ -196,11 +174,7 @@ describe('eval', () => {
       });
 
       it('evaluates null to stringified value', () => {
-        const result = evalDynamicExpression(
-          '[{ test: {{ null }} }]',
-          'array',
-          {}
-        );
+        const result = evalDynamicExpression('[{ test: {{ null }} }]', 'array', {});
         expect(result).toEqual({
           parsedExpression: '[{ test: null }]',
           value: [{ test: null }],
@@ -208,11 +182,7 @@ describe('eval', () => {
       });
 
       it('evaluates undefined to stringified value', () => {
-        const result = evalDynamicExpression(
-          '[{ test: {{ undefined }} }]',
-          'array',
-          {}
-        );
+        const result = evalDynamicExpression('[{ test: {{ undefined }} }]', 'array', {});
         expect(result).toEqual({
           parsedExpression: '[{ test: undefined }]',
           value: [{ test: undefined }],
@@ -222,9 +192,7 @@ describe('eval', () => {
       it('returns error if field does not evaluate to array', () => {
         const result = evalDynamicExpression('asdf', 'array', {});
         expect(result).toEqual({
-          error: new Error(
-            "Expected value of type 'array', received value of type 'string'"
-          ),
+          error: new Error("Expected value of type 'array', received value of type 'string'"),
         });
       });
     });
@@ -239,15 +207,11 @@ describe('eval', () => {
       });
 
       it('evaluates dynamic input as object', () => {
-        const result = evalDynamicExpression(
-          ' {{ { test: textInput1.minLength } }} ',
-          'object',
-          {
-            textInput1: {
-              minLength: 4,
-            },
-          }
-        );
+        const result = evalDynamicExpression(' {{ { test: textInput1.minLength } }} ', 'object', {
+          textInput1: {
+            minLength: 4,
+          },
+        });
         expect(result).toEqual({
           parsedExpression: '{"test":4}',
           value: { test: 4 },
@@ -255,11 +219,7 @@ describe('eval', () => {
       });
 
       it('evaluates null to stringified value', () => {
-        const result = evalDynamicExpression(
-          '{ test: {{ null }} }',
-          'object',
-          {}
-        );
+        const result = evalDynamicExpression('{ test: {{ null }} }', 'object', {});
         expect(result).toEqual({
           parsedExpression: '{ test: null }',
           value: { test: null },
@@ -267,11 +227,7 @@ describe('eval', () => {
       });
 
       it('evaluates undefined to stringified value', () => {
-        const result = evalDynamicExpression(
-          '{ test: {{ undefined }} }',
-          'object',
-          {}
-        );
+        const result = evalDynamicExpression('{ test: {{ undefined }} }', 'object', {});
         expect(result).toEqual({
           parsedExpression: '{ test: undefined }',
           value: { test: undefined },
@@ -281,18 +237,14 @@ describe('eval', () => {
       it('returns error if field does not evaluate to object', () => {
         const result = evalDynamicExpression('asdf', 'object', {});
         expect(result).toEqual({
-          error: new Error(
-            "Expected value of type 'object', received value of type 'string'"
-          ),
+          error: new Error("Expected value of type 'object', received value of type 'string'"),
         });
       });
 
       it('returns error if field evaluates to null', () => {
         const result = evalDynamicExpression('null', 'object', {});
         expect(result).toEqual({
-          error: new Error(
-            "Expected value of type 'object', received value of type 'null'"
-          ),
+          error: new Error("Expected value of type 'object', received value of type 'null'"),
         });
       });
     });
@@ -307,31 +259,24 @@ describe('eval', () => {
       });
 
       it('evaluates dynamic input as boolean', () => {
-        const result = evalDynamicExpression(
-          ' {{ textInput1.minLength !== 4 }} ',
-          'boolean',
-          {
-            textInput1: {
-              minLength: 4,
-            },
-          }
-        );
+        const result = evalDynamicExpression(' {{ textInput1.minLength !== 4 }} ', 'boolean', {
+          textInput1: {
+            minLength: 4,
+          },
+        });
         expect(result).toEqual({
           parsedExpression: 'false',
           value: false,
         });
       });
 
-      it.each(['true', '1', '2'])(
-        'evaluates truthy input "%s" as true',
-        (input: string) => {
-          const result = evalDynamicExpression(input, 'boolean', {});
-          expect(result).toEqual({
-            parsedExpression: input,
-            value: true,
-          });
-        }
-      );
+      it.each(['true', '1', '2'])('evaluates truthy input "%s" as true', (input: string) => {
+        const result = evalDynamicExpression(input, 'boolean', {});
+        expect(result).toEqual({
+          parsedExpression: input,
+          value: true,
+        });
+      });
 
       it.each(['false', '0', 'null', 'undefined'])(
         'evaluates falsy input "%s" as false',
@@ -355,15 +300,11 @@ describe('eval', () => {
       });
 
       it('evaluates dynamic input as string', () => {
-        const result = evalDynamicExpression(
-          ' {{ textInput1.minLength }} ',
-          'string',
-          {
-            textInput1: {
-              minLength: 4,
-            },
-          }
-        );
+        const result = evalDynamicExpression(' {{ textInput1.minLength }} ', 'string', {
+          textInput1: {
+            minLength: 4,
+          },
+        });
         expect(result).toEqual({
           parsedExpression: '4',
           value: '4',
@@ -378,16 +319,13 @@ describe('eval', () => {
         });
       });
 
-      it.each(['null', 'undefined'])(
-        'evaluates "%s" as literal value',
-        (input: string) => {
-          const result = evalDynamicExpression(input, 'string', {});
-          expect(result).toEqual({
-            parsedExpression: input,
-            value: input,
-          });
-        }
-      );
+      it.each(['null', 'undefined'])('evaluates "%s" as literal value', (input: string) => {
+        const result = evalDynamicExpression(input, 'string', {});
+        expect(result).toEqual({
+          parsedExpression: input,
+          value: input,
+        });
+      });
 
       it.each(['null', 'undefined'])(
         'evaluates "%s" within dynamic term as empty string',

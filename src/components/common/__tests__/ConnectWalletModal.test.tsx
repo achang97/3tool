@@ -39,10 +39,7 @@ describe('ConnectWalletModal', () => {
 
   it('passes ethereumClient to Web3Modal', () => {
     render(<ConnectWalletModal />);
-    expect(Web3Modal).toHaveBeenCalledWith(
-      expect.objectContaining({ ethereumClient }),
-      {}
-    );
+    expect(Web3Modal).toHaveBeenCalledWith(expect.objectContaining({ ethereumClient }), {});
   });
 
   it('passes theme variables to Web3Modal', () => {

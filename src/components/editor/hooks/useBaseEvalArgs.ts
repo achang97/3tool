@@ -17,9 +17,7 @@ export const GLOBAL_LIBRARY_MAP = _.chain(GLOBAL_LIBRARIES)
   .value();
 
 export const useBaseEvalArgs = (tool: Tool) => {
-  const { componentInputs, actionResults } = useAppSelector(
-    (state) => state.activeTool
-  );
+  const { componentInputs, actionResults } = useAppSelector((state) => state.activeTool);
 
   const defaultComponentInputs = useMemo(() => {
     return _.chain(tool.components)
@@ -44,12 +42,7 @@ export const useBaseEvalArgs = (tool: Tool) => {
       componentInputs,
       actionResults
     );
-  }, [
-    actionResults,
-    componentInputs,
-    defaultComponentInputs,
-    defaultActionResults,
-  ]);
+  }, [actionResults, componentInputs, defaultComponentInputs, defaultActionResults]);
 
   return evalArgs;
 };

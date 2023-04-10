@@ -19,11 +19,5 @@ export const ToolViewerToolbar = () => {
     );
   }, [tool._id]);
 
-  return (
-    <ToolbarTemplate
-      middle={middle}
-      right={right}
-      testId="tool-viewer-toolbar"
-    />
-  );
+  return <ToolbarTemplate middle={middle} right={right} testId="tool-viewer-toolbar" />;
 };

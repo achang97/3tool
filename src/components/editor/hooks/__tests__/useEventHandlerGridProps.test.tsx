@@ -1,16 +1,8 @@
-import {
-  ActionMethod,
-  ComponentEvent,
-  EventHandler,
-  EventHandlerType,
-} from '@app/types';
+import { ActionMethod, ComponentEvent, EventHandler, EventHandlerType } from '@app/types';
 import { render, renderHook } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
-import {
-  formatEventHandlerEvent,
-  renderEventHandlerType,
-} from '../../utils/eventHandlers';
+import { formatEventHandlerEvent, renderEventHandlerType } from '../../utils/eventHandlers';
 import { useEventHandlerGridProps } from '../useEventHandlerGridProps';
 
 const mockEventHandlers: EventHandler<ComponentEvent>[] = [

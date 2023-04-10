@@ -6,10 +6,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createRef } from 'react';
 import { useComponentEvalData } from '../../hooks/useComponentEvalData';
-import {
-  ComponentEvalError,
-  useComponentEvalErrors,
-} from '../../hooks/useComponentEvalErrors';
+import { ComponentEvalError, useComponentEvalErrors } from '../../hooks/useComponentEvalErrors';
 import { useComponentEventHandlerCallbacks } from '../../hooks/useComponentEventHandlerCallbacks';
 import { CanvasComponent } from '../CanvasComponent';
 
@@ -90,9 +87,7 @@ describe('CanvasComponent', () => {
       </Box>
     );
     await userEvent.click(result.getByText(mockChildren));
-    expect(mockDispatch).toHaveBeenCalledWith(
-      focusComponent(mockComponent.name)
-    );
+    expect(mockDispatch).toHaveBeenCalledWith(focusComponent(mockComponent.name));
     expect(mockContainerHandleClick).not.toHaveBeenCalled();
   });
 
@@ -100,11 +95,7 @@ describe('CanvasComponent', () => {
     it('assigns className to component', () => {
       const mockClassName = 'some-class';
       const result = render(
-        <CanvasComponent
-          component={mockComponent}
-          className={mockClassName}
-          isEditable
-        >
+        <CanvasComponent component={mockComponent} className={mockClassName} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
@@ -120,11 +111,7 @@ describe('CanvasComponent', () => {
       const mockClassName = 'some-class';
 
       const result = render(
-        <CanvasComponent
-          component={mockComponent}
-          className={mockClassName}
-          isEditable
-        >
+        <CanvasComponent component={mockComponent} className={mockClassName} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
@@ -209,9 +196,7 @@ describe('CanvasComponent', () => {
 
     describe('error', () => {
       it('assigns "react-grid-item-error" class if there are eval errors', () => {
-        (useComponentEvalErrors as jest.Mock).mockImplementation(() => [
-          mockComponentEvalError,
-        ]);
+        (useComponentEvalErrors as jest.Mock).mockImplementation(() => [mockComponentEvalError]);
         const result = render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
@@ -287,9 +272,7 @@ describe('CanvasComponent', () => {
     });
 
     it('renders handle if there are eval errors', async () => {
-      (useComponentEvalErrors as jest.Mock).mockImplementation(() => [
-        mockComponentEvalError,
-      ]);
+      (useComponentEvalErrors as jest.Mock).mockImplementation(() => [mockComponentEvalError]);
 
       const result = render(
         <CanvasComponent component={mockComponent} isEditable>

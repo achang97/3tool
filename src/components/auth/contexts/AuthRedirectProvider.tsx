@@ -10,9 +10,7 @@ type AuthRedirectProviderProps = {
 
 const UNAUTHED_ROUTES = ['/login'];
 
-export const AuthRedirectProvider = ({
-  children,
-}: AuthRedirectProviderProps) => {
+export const AuthRedirectProvider = ({ children }: AuthRedirectProviderProps) => {
   const user = useUser();
 
   // Refresh the current user if authed

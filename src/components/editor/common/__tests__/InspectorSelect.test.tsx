@@ -34,9 +34,7 @@ describe('InspectorSelect', () => {
     );
 
     await userEvent.click(result.getByLabelText(mockLabel));
-    await userEvent.click(
-      result.getByRole('option', { name: mockOptions[0].label })
-    );
+    await userEvent.click(result.getByRole('option', { name: mockOptions[0].label }));
     expect(mockHandleChange).toHaveBeenCalledWith(mockOptions[0].value);
   });
 
@@ -54,9 +52,7 @@ describe('InspectorSelect', () => {
     const options = result.getAllByRole('option');
 
     expect(options.length).toEqual(mockOptions.length);
-    expect(
-      result.getByRole('option', { name: mockOptions[0].label })
-    ).toBeTruthy();
+    expect(result.getByRole('option', { name: mockOptions[0].label })).toBeTruthy();
     expect(result.getByRole('option', { name: mockOptions[1].label }));
   });
 });

@@ -23,9 +23,7 @@ describe('CreateResourceButton', () => {
       const result = render(<CreateResourceButton />);
 
       await userEvent.click(result.getByText('Add new resource'));
-      await userEvent.click(
-        result.getByText(RESOURCE_CONFIGS[resourceType].label)
-      );
+      await userEvent.click(result.getByText(RESOURCE_CONFIGS[resourceType].label));
 
       expect(mockDispatch).toHaveBeenCalledWith(
         pushResource({

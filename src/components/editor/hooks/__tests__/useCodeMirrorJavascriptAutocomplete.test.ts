@@ -70,9 +70,7 @@ const mockRootOptions = [
 describe('useCodeMirrorJavascriptAutocomplete', () => {
   describe('root options', () => {
     it('assigns "action" detail and element boost for action', () => {
-      const { result } = renderHook(() =>
-        useCodeMirrorJavascriptAutocomplete(true)
-      );
+      const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
       const completionContext = createCompletionContext('{{}}', 2, true);
       // @ts-ignore options field exists on result
@@ -86,9 +84,7 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
     });
 
     it('assigns "component" detail and element boost for component', () => {
-      const { result } = renderHook(() =>
-        useCodeMirrorJavascriptAutocomplete(true)
-      );
+      const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
       const completionContext = createCompletionContext('{{}}', 2, true);
       // @ts-ignore options field exists on result
       expect(result.current(completionContext)?.options).toContainEqual(
@@ -101,9 +97,7 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
     });
 
     it('assigns default detail and global boost for global object', () => {
-      const { result } = renderHook(() =>
-        useCodeMirrorJavascriptAutocomplete(true)
-      );
+      const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
       const completionContext = createCompletionContext('{{}}', 2, true);
       // @ts-ignore options field exists on result
       expect(result.current(completionContext)?.options).toContainEqual(
@@ -118,15 +112,9 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
 
   describe('dynamic', () => {
     it('does not recognize static eval args', () => {
-      const { result } = renderHook(() =>
-        useCodeMirrorJavascriptAutocomplete(true)
-      );
+      const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
-      const completionContext = createCompletionContext(
-        '{{ utils. }}',
-        9,
-        true
-      );
+      const completionContext = createCompletionContext('{{ utils. }}', 9, true);
       expect(result.current(completionContext)).toEqual({
         from: 8,
         options: [],
@@ -135,9 +123,7 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
 
     describe('empty options', () => {
       it('returns empty options if cursor is after invalid floating period', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorJavascriptAutocomplete(true)
-        );
+        const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
         const completionContext = createCompletionContext('{{ a . }}', 6, true);
         expect(result.current(completionContext)).toEqual({
@@ -147,15 +133,9 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
       });
 
       it('returns empty options if beginning new expression', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorJavascriptAutocomplete(true)
-        );
+        const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
-        const completionContext = createCompletionContext(
-          '{{ textInput1|| }}',
-          15,
-          true
-        );
+        const completionContext = createCompletionContext('{{ textInput1|| }}', 15, true);
         expect(result.current(completionContext)).toMatchObject({
           from: 15,
           options: [],
@@ -165,9 +145,7 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
 
     describe('root options', () => {
       it('returns root options if expression is empty', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorJavascriptAutocomplete(true)
-        );
+        const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
         const completionContext = createCompletionContext('{{}}', 2, true);
         expect(result.current(completionContext)).toMatchObject({
@@ -177,15 +155,9 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
       });
 
       it('returns root options if cursor follows completed expression', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorJavascriptAutocomplete(true)
-        );
+        const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
-        const completionContext = createCompletionContext(
-          '{{ table1.data[0]b }}',
-          18,
-          true
-        );
+        const completionContext = createCompletionContext('{{ table1.data[0]b }}', 18, true);
         expect(result.current(completionContext)).toMatchObject({
           from: 17,
           options: mockRootOptions,
@@ -193,15 +165,9 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
       });
 
       it('returns root options if there are no periods in discovered token', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorJavascriptAutocomplete(true)
-        );
+        const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
-        const completionContext = createCompletionContext(
-          '{{ textInput1 }}',
-          13,
-          true
-        );
+        const completionContext = createCompletionContext('{{ textInput1 }}', 13, true);
         expect(result.current(completionContext)).toMatchObject({
           from: 3,
           options: mockRootOptions,
@@ -211,15 +177,9 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
 
     describe('context-dependent', () => {
       it('returns root-level snippets', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorJavascriptAutocomplete(true)
-        );
+        const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
-        const completionContext = createCompletionContext(
-          '{{ textInput1. }}',
-          14,
-          true
-        );
+        const completionContext = createCompletionContext('{{ textInput1. }}', 14, true);
         expect(result.current(completionContext)).toMatchObject({
           from: 13,
           options: [
@@ -233,15 +193,9 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
       });
 
       it('returns recursive snippets', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorJavascriptAutocomplete(true)
-        );
+        const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
-        const completionContext = createCompletionContext(
-          '{{ table1. }}',
-          10,
-          true
-        );
+        const completionContext = createCompletionContext('{{ table1. }}', 10, true);
         expect(result.current(completionContext)).toMatchObject({
           from: 9,
           options: [
@@ -265,15 +219,9 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
       });
 
       it('returns current level snippets based on existing component token', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorJavascriptAutocomplete(true)
-        );
+        const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(true));
 
-        const completionContext = createCompletionContext(
-          '{{ table1.data[0].em }}',
-          20,
-          true
-        );
+        const completionContext = createCompletionContext('{{ table1.data[0].em }}', 20, true);
         expect(result.current(completionContext)).toMatchObject({
           from: 17,
           options: [
@@ -290,15 +238,9 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
 
   describe('not dynamic', () => {
     it('recognizes static eval args', () => {
-      const { result } = renderHook(() =>
-        useCodeMirrorJavascriptAutocomplete(false)
-      );
+      const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(false));
 
-      const completionContext = createCompletionContext(
-        '{{ utils. }}',
-        9,
-        false
-      );
+      const completionContext = createCompletionContext('{{ utils. }}', 9, false);
       expect(result.current(completionContext)).toMatchObject({
         from: 8,
         options: [
@@ -311,9 +253,7 @@ describe('useCodeMirrorJavascriptAutocomplete', () => {
     });
 
     it('returns empty options if expression is empty', () => {
-      const { result } = renderHook(() =>
-        useCodeMirrorJavascriptAutocomplete(false)
-      );
+      const { result } = renderHook(() => useCodeMirrorJavascriptAutocomplete(false));
 
       const completionContext = createCompletionContext('', 0, false);
       expect(result.current(completionContext)).toMatchObject({

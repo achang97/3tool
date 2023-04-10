@@ -21,9 +21,7 @@ describe('FormFieldLabel', () => {
   });
 
   it('renders tooltip on hover', async () => {
-    const result = render(
-      <FormFieldLabel label={mockLabel} tooltip={mockTooltip} />
-    );
+    const result = render(<FormFieldLabel label={mockLabel} tooltip={mockTooltip} />);
 
     await userEvent.hover(result.getByTestId('form-field-label-help'));
     expect(await result.findByText(mockTooltip)).toBeTruthy();

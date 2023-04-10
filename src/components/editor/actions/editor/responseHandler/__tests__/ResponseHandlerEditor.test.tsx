@@ -1,10 +1,5 @@
 import { updateFocusedAction } from '@app/redux/features/editorSlice';
-import {
-  ActionEvent,
-  ActionMethod,
-  EventHandlerType,
-  EventHandler,
-} from '@app/types';
+import { ActionEvent, ActionMethod, EventHandlerType, EventHandler } from '@app/types';
 import { within } from '@testing-library/dom';
 import { RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -40,16 +35,12 @@ describe('ResponseHandlerEditor', () => {
 
   describe('general', () => {
     it('does not render event column', () => {
-      const result = render(
-        <ResponseHandlerEditor name={mockName} eventHandlers={[]} />
-      );
+      const result = render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
       expect(result.queryByText('Event')).toBeNull();
     });
 
     it('does not render column headers', () => {
-      const result = render(
-        <ResponseHandlerEditor name={mockName} eventHandlers={[]} />
-      );
+      const result = render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
 
       expect(getSuccessContainer(result).getByText('Effect')).not.toBeVisible();
       expect(getErrorContainer(result).getByText('Effect')).not.toBeVisible();
@@ -74,10 +65,7 @@ describe('ResponseHandlerEditor', () => {
         },
       ];
       const result = render(
-        <ResponseHandlerEditor
-          name={mockName}
-          eventHandlers={mockEventHandlers}
-        />
+        <ResponseHandlerEditor name={mockName} eventHandlers={mockEventHandlers} />
       );
 
       const container = getErrorContainer(result);
@@ -104,18 +92,14 @@ describe('ResponseHandlerEditor', () => {
 
   describe('success handlers', () => {
     it('renders label', () => {
-      const result = render(
-        <ResponseHandlerEditor name={mockName} eventHandlers={[]} />
-      );
+      const result = render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
       const container = getSuccessContainer(result);
 
       expect(container.getByText('Success handlers')).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      const result = render(
-        <ResponseHandlerEditor name={mockName} eventHandlers={[]} />
-      );
+      const result = render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
       const container = getSuccessContainer(result);
 
       expect(
@@ -144,9 +128,7 @@ describe('ResponseHandlerEditor', () => {
     });
 
     it('creates new success handler', async () => {
-      const result = render(
-        <ResponseHandlerEditor name={mockName} eventHandlers={[]} />
-      );
+      const result = render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
       const container = getSuccessContainer(result);
 
       await userEvent.click(container.getByText('Add event handler'));
@@ -183,26 +165,22 @@ describe('ResponseHandlerEditor', () => {
       await userEvent.click(container.getByText('utils.openUrl()'));
       await userEvent.click(result.getByLabelText('Event'));
       const options = result.getAllByRole('option');
-      expect(
-        options.map((option) => option.getAttribute('data-value'))
-      ).toEqual([ActionEvent.Success]);
+      expect(options.map((option) => option.getAttribute('data-value'))).toEqual([
+        ActionEvent.Success,
+      ]);
     });
   });
 
   describe('error handlers', () => {
     it('renders label', () => {
-      const result = render(
-        <ResponseHandlerEditor name={mockName} eventHandlers={[]} />
-      );
+      const result = render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
       const container = getErrorContainer(result);
 
       expect(container.getByText('Error handlers')).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      const result = render(
-        <ResponseHandlerEditor name={mockName} eventHandlers={[]} />
-      );
+      const result = render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
       const container = getErrorContainer(result);
 
       expect(
@@ -231,9 +209,7 @@ describe('ResponseHandlerEditor', () => {
     });
 
     it('creates new error handler', async () => {
-      const result = render(
-        <ResponseHandlerEditor name={mockName} eventHandlers={[]} />
-      );
+      const result = render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
       const container = getErrorContainer(result);
 
       await userEvent.click(container.getByText('Add event handler'));
@@ -270,9 +246,9 @@ describe('ResponseHandlerEditor', () => {
       await userEvent.click(container.getByText('utils.openUrl()'));
       await userEvent.click(result.getByLabelText('Event'));
       const options = result.getAllByRole('option');
-      expect(
-        options.map((option) => option.getAttribute('data-value'))
-      ).toEqual([ActionEvent.Error]);
+      expect(options.map((option) => option.getAttribute('data-value'))).toEqual([
+        ActionEvent.Error,
+      ]);
     });
   });
 });

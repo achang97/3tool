@@ -26,22 +26,14 @@ describe('DraggableComponent', () => {
 
   it('renders icon', () => {
     const result = render(
-      <DraggableComponent
-        icon={mockIcon}
-        label={mockLabel}
-        type={mockComponentType}
-      />
+      <DraggableComponent icon={mockIcon} label={mockLabel} type={mockComponentType} />
     );
     expect(result.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders label', () => {
     const result = render(
-      <DraggableComponent
-        icon={mockIcon}
-        label={mockLabel}
-        type={mockComponentType}
-      />
+      <DraggableComponent icon={mockIcon} label={mockLabel} type={mockComponentType} />
     );
     expect(result.getByText(mockLabel)).toBeTruthy();
   });
@@ -51,11 +43,7 @@ describe('DraggableComponent', () => {
       newComponent: { type: mockComponentType },
     }));
     const result = render(
-      <DraggableComponent
-        icon={mockIcon}
-        label={mockLabel}
-        type={mockComponentType}
-      />
+      <DraggableComponent icon={mockIcon} label={mockLabel} type={mockComponentType} />
     );
     expect(result.container.firstChild).toHaveStyle({ opacity: 0.5 });
   });
@@ -63,11 +51,7 @@ describe('DraggableComponent', () => {
   it('sets opacity to 1 if not currently dragging type', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({}));
     const result = render(
-      <DraggableComponent
-        icon={mockIcon}
-        label={mockLabel}
-        type={mockComponentType}
-      />
+      <DraggableComponent icon={mockIcon} label={mockLabel} type={mockComponentType} />
     );
     expect(result.container.firstChild).toHaveStyle({ opacity: 1 });
   });

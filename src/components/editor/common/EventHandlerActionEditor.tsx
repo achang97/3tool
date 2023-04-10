@@ -20,47 +20,43 @@ export const EventHandlerActionEditor = ({
 }: BaseEventHandlerEditorProps<EventHandlerType.Action>) => {
   const { actionNames } = useToolElementNames();
 
-  const config: BaseInspectorSectionProps<EventHandler['data']['action']>[] =
-    useMemo(() => {
-      return [
-        {
-          fields: [
-            {
-              field: 'actionName',
-              label: 'Action',
-              value: data?.actionName,
-              data: {
-                select: {
-                  options: actionNames.map((actionName) => ({
-                    label: actionName,
-                    value: actionName,
-                  })),
-                  placeholder:
-                    actionNames.length === 0
-                      ? 'No created actions'
-                      : 'Select action',
-                  disabled: actionNames.length === 0,
-                },
+  const config: BaseInspectorSectionProps<EventHandler['data']['action']>[] = useMemo(() => {
+    return [
+      {
+        fields: [
+          {
+            field: 'actionName',
+            label: 'Action',
+            value: data?.actionName,
+            data: {
+              select: {
+                options: actionNames.map((actionName) => ({
+                  label: actionName,
+                  value: actionName,
+                })),
+                placeholder: actionNames.length === 0 ? 'No created actions' : 'Select action',
+                disabled: actionNames.length === 0,
               },
             },
-            {
-              field: 'method',
-              label: 'Method',
-              value: data?.method,
-              data: {
-                select: {
-                  options: Object.values(ActionMethod).map((method) => ({
-                    label: ACTION_METHOD_CONFIGS[method].label,
-                    value: method,
-                  })),
-                  placeholder: 'Select method',
-                },
+          },
+          {
+            field: 'method',
+            label: 'Method',
+            value: data?.method,
+            data: {
+              select: {
+                options: Object.values(ActionMethod).map((method) => ({
+                  label: ACTION_METHOD_CONFIGS[method].label,
+                  value: method,
+                })),
+                placeholder: 'Select method',
               },
             },
-          ],
-        },
-      ];
-    }, [actionNames, data]);
+          },
+        ],
+      },
+    ];
+  }, [actionNames, data]);
 
   return (
     <BaseInspector

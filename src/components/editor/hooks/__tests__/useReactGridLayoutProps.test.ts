@@ -8,10 +8,7 @@ import {
 import { useAppSelector } from '@app/redux/hooks';
 import { Component, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import {
-  mockApiErrorResponse,
-  mockApiSuccessResponse,
-} from '@tests/constants/api';
+import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { mockComponentLayout } from '@tests/constants/data';
 import { Layout } from 'react-grid-layout';
 import { createNewComponent } from '../../utils/components';
@@ -118,9 +115,7 @@ describe('useReactGridLayoutProps', () => {
 
       const { result } = renderHook(() => useReactGridLayoutProps());
 
-      expect(result.current.droppingItem).toMatchObject(
-        COMPONENT_CONFIGS.button.dimensions
-      );
+      expect(result.current.droppingItem).toMatchObject(COMPONENT_CONFIGS.button.dimensions);
     });
   });
 
@@ -156,9 +151,7 @@ describe('useReactGridLayoutProps', () => {
       const { result } = renderHook(() => useReactGridLayoutProps());
 
       result.current.onDrag([], {} as Layout, mockLayout);
-      expect(mockDispatch).toHaveBeenCalledWith(
-        startMoveComponentDrag(mockLayout.i)
-      );
+      expect(mockDispatch).toHaveBeenCalledWith(startMoveComponentDrag(mockLayout.i));
       expect(mockDispatch).toHaveBeenCalledWith(focusComponent(mockLayout.i));
     });
   });
@@ -204,24 +197,15 @@ describe('useReactGridLayoutProps', () => {
 
       const { result } = renderHook(() => useReactGridLayoutProps());
 
-      await result.current.onDrop([
-        ...getLayoutFromComponents(mockComponents),
-        mockLayout,
-      ]);
+      await result.current.onDrop([...getLayoutFromComponents(mockComponents), mockLayout]);
 
       expect(mockUpdateTool).toHaveBeenCalledWith({
         components: [
           ...mockComponents,
-          createNewComponent(
-            mockNewComponent.type,
-            mockNewComponent.name,
-            mockLayout
-          ),
+          createNewComponent(mockNewComponent.type, mockNewComponent.name, mockLayout),
         ],
       });
-      expect(mockDispatch).toHaveBeenCalledWith(
-        focusComponent(mockNewComponent.name)
-      );
+      expect(mockDispatch).toHaveBeenCalledWith(focusComponent(mockNewComponent.name));
     });
 
     it('calls updateTool with new component and does not focus component on failure', async () => {
@@ -232,14 +216,9 @@ describe('useReactGridLayoutProps', () => {
 
       const { result } = renderHook(() => useReactGridLayoutProps());
 
-      await result.current.onDrop([
-        ...getLayoutFromComponents(mockComponents),
-        mockLayout,
-      ]);
+      await result.current.onDrop([...getLayoutFromComponents(mockComponents), mockLayout]);
       expect(mockUpdateTool).toHaveBeenCalled();
-      expect(mockDispatch).not.toHaveBeenCalledWith(
-        focusComponent(mockNewComponent.name)
-      );
+      expect(mockDispatch).not.toHaveBeenCalledWith(focusComponent(mockNewComponent.name));
     });
   });
 

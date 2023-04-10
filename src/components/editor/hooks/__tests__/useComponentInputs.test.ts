@@ -13,9 +13,7 @@ jest.mock('@app/redux/hooks', () => ({
 
 describe('useComponentInputs', () => {
   it('returns empty object if component name is invalid', () => {
-    const { result } = renderHook(() =>
-      useComponentInputs('invalid-component-name')
-    );
+    const { result } = renderHook(() => useComponentInputs('invalid-component-name'));
     expect(result.current).toEqual({});
   });
 

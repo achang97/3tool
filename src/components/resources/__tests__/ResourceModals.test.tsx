@@ -2,10 +2,7 @@ import { useAppSelector } from '@app/redux/hooks';
 import { mockValidAddress } from '@tests/constants/data';
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
-import {
-  popResource,
-  updateResource,
-} from '@app/redux/features/resourcesSlice';
+import { popResource, updateResource } from '@app/redux/features/resourcesSlice';
 import { Resource, ResourceType } from '@app/types';
 import { mainnet } from 'wagmi';
 import { ResourceModals } from '../ResourceModals';

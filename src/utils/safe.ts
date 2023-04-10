@@ -7,9 +7,7 @@ import {
   SafeTransaction,
   SafeTransactionDataPartial,
 } from '@safe-global/safe-core-sdk-types';
-import SafeServiceClient, {
-  SignatureResponse,
-} from '@safe-global/safe-service-client';
+import SafeServiceClient, { SignatureResponse } from '@safe-global/safe-service-client';
 
 export const getSigner = async (): Promise<ethers.Signer> => {
   const signer = await fetchSigner();
@@ -104,9 +102,7 @@ export const confirmTransaction = async (
   const { safeSdk, safeService } = await getSafeClients(safeAddress);
 
   // Sign the transaction
-  const senderSignature = await safeSdk.signTransactionHash(
-    safeTransactionHash
-  );
+  const senderSignature = await safeSdk.signTransactionHash(safeTransactionHash);
 
   // Confirm the transaction
   const signatureResponse = await safeService.confirmTransaction(
@@ -142,9 +138,7 @@ export const createSafeTransaction = async (
     receipt = await executeTxResponse.transactionResponse?.wait();
   } else {
     // Propose a transaction to the relayer
-    const senderSignature = await safeSdk.signTransactionHash(
-      safeTransactionHash
-    );
+    const senderSignature = await safeSdk.signTransactionHash(safeTransactionHash);
     await safeService.proposeTransaction({
       safeAddress: safeSdk.getAddress(),
       safeTransactionData: safeTransaction.data,

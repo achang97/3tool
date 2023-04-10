@@ -81,9 +81,7 @@ describe('safe', () => {
 
     (fetchSigner as jest.Mock).mockImplementation(() => mockSigner);
     (SafeServiceClient as jest.Mock).mockImplementation(() => mockSafeService);
-    (mockSafeService.getTransaction as jest.Mock).mockImplementation(
-      () => mockSafeTransaction
-    );
+    (mockSafeService.getTransaction as jest.Mock).mockImplementation(() => mockSafeTransaction);
     (EthersAdapter as jest.Mock).mockImplementation(() => mockEthAdapter);
   });
 
@@ -147,9 +145,7 @@ describe('safe', () => {
 
     it('returns Safe service', async () => {
       const result = await getSafeClients(mockSafeAddress);
-      expect(result.safeService).toEqual(
-        getSafeService(mockEthAdapter as unknown as EthAdapter)
-      );
+      expect(result.safeService).toEqual(getSafeService(mockEthAdapter as unknown as EthAdapter));
     });
 
     it('returns Safe SDK', async () => {
@@ -166,31 +162,21 @@ describe('safe', () => {
     describe('current signer already confirmed', () => {
       it('returns false if number of confirmations < threshold', async () => {
         (mockSafeSdk.getThreshold as jest.Mock).mockImplementation(() => 2);
-        (mockSafeService.getTransaction as jest.Mock).mockImplementation(
-          () => ({
-            confirmations: [{ owner: mockSigner.getAddress() }],
-          })
-        );
+        (mockSafeService.getTransaction as jest.Mock).mockImplementation(() => ({
+          confirmations: [{ owner: mockSigner.getAddress() }],
+        }));
 
-        const result = await canExecuteTransaction(
-          mockSafeAddress,
-          mockSafeTransactionHash
-        );
+        const result = await canExecuteTransaction(mockSafeAddress, mockSafeTransactionHash);
         expect(result).toEqual(false);
       });
 
       it('returns true if number of confirmations >= threshold', async () => {
         (mockSafeSdk.getThreshold as jest.Mock).mockImplementation(() => 2);
-        (mockSafeService.getTransaction as jest.Mock).mockImplementation(
-          () => ({
-            confirmations: [{ owner: mockSigner.getAddress() }, {}],
-          })
-        );
+        (mockSafeService.getTransaction as jest.Mock).mockImplementation(() => ({
+          confirmations: [{ owner: mockSigner.getAddress() }, {}],
+        }));
 
-        const result = await canExecuteTransaction(
-          mockSafeAddress,
-          mockSafeTransactionHash
-        );
+        const result = await canExecuteTransaction(mockSafeAddress, mockSafeTransactionHash);
         expect(result).toEqual(true);
       });
     });
@@ -198,31 +184,21 @@ describe('safe', () => {
     describe('current signer has not yet confirmed', () => {
       it('returns false if number of confirmations < threshold - 1', async () => {
         (mockSafeSdk.getThreshold as jest.Mock).mockImplementation(() => 2);
-        (mockSafeService.getTransaction as jest.Mock).mockImplementation(
-          () => ({
-            confirmations: undefined,
-          })
-        );
+        (mockSafeService.getTransaction as jest.Mock).mockImplementation(() => ({
+          confirmations: undefined,
+        }));
 
-        const result = await canExecuteTransaction(
-          mockSafeAddress,
-          mockSafeTransactionHash
-        );
+        const result = await canExecuteTransaction(mockSafeAddress, mockSafeTransactionHash);
         expect(result).toEqual(false);
       });
 
       it('returns true if number of confirmations >= threshold - 1', async () => {
         (mockSafeSdk.getThreshold as jest.Mock).mockImplementation(() => 2);
-        (mockSafeService.getTransaction as jest.Mock).mockImplementation(
-          () => ({
-            confirmations: new Array(1),
-          })
-        );
+        (mockSafeService.getTransaction as jest.Mock).mockImplementation(() => ({
+          confirmations: new Array(1),
+        }));
 
-        const result = await canExecuteTransaction(
-          mockSafeAddress,
-          mockSafeTransactionHash
-        );
+        const result = await canExecuteTransaction(mockSafeAddress, mockSafeTransactionHash);
         expect(result).toEqual(true);
       });
     });
@@ -230,14 +206,9 @@ describe('safe', () => {
 
   describe('confirmTransaction', () => {
     it('signs and confirms the transaction', async () => {
-      const result = await confirmTransaction(
-        mockSafeAddress,
-        mockSafeTransactionHash
-      );
+      const result = await confirmTransaction(mockSafeAddress, mockSafeTransactionHash);
 
-      expect(mockSafeSdk.signTransactionHash).toHaveBeenCalledWith(
-        mockSafeTransactionHash
-      );
+      expect(mockSafeSdk.signTransactionHash).toHaveBeenCalledWith(mockSafeTransactionHash);
       expect(mockSafeService.confirmTransaction).toHaveBeenCalledWith(
         mockSafeTransactionHash,
         mockSenderSignature.data
@@ -249,14 +220,9 @@ describe('safe', () => {
 
   describe('executeTransaction', () => {
     it('executes transaction', async () => {
-      const result = await executeTransaction(
-        mockSafeAddress,
-        mockSafeTransactionHash
-      );
+      const result = await executeTransaction(mockSafeAddress, mockSafeTransactionHash);
 
-      expect(mockSafeSdk.executeTransaction).toHaveBeenCalledWith(
-        mockSafeTransaction
-      );
+      expect(mockSafeSdk.executeTransaction).toHaveBeenCalledWith(mockSafeTransaction);
 
       expect(result).toEqual(mockExecutionReceipt);
     });
@@ -264,10 +230,7 @@ describe('safe', () => {
 
   describe('createSafeTransaction', () => {
     it('creates safe transaction', async () => {
-      const result = await createSafeTransaction(
-        mockSafeAddress,
-        mockSafeTransactionData
-      );
+      const result = await createSafeTransaction(mockSafeAddress, mockSafeTransactionData);
 
       expect(mockSafeSdk.createTransaction).toHaveBeenCalledWith({
         safeTransactionData: mockSafeTransactionData,
@@ -280,14 +243,9 @@ describe('safe', () => {
     it('executes transaction if threshold is 1', async () => {
       (mockSafeSdk.getThreshold as jest.Mock).mockImplementation(() => 1);
 
-      const result = await createSafeTransaction(
-        mockSafeAddress,
-        mockSafeTransactionData
-      );
+      const result = await createSafeTransaction(mockSafeAddress, mockSafeTransactionData);
 
-      expect(mockSafeSdk.executeTransaction).toHaveBeenCalledWith(
-        mockSafeTransaction
-      );
+      expect(mockSafeSdk.executeTransaction).toHaveBeenCalledWith(mockSafeTransaction);
 
       expect(result.receipt).toEqual(mockExecutionReceipt);
     });
@@ -295,14 +253,9 @@ describe('safe', () => {
     it('proposes the transaction if threshold is >= 1', async () => {
       (mockSafeSdk.getThreshold as jest.Mock).mockImplementation(() => 2);
 
-      const result = await createSafeTransaction(
-        mockSafeAddress,
-        mockSafeTransactionData
-      );
+      const result = await createSafeTransaction(mockSafeAddress, mockSafeTransactionData);
 
-      expect(mockSafeSdk.signTransactionHash).toHaveBeenCalledWith(
-        mockSafeTransactionHash
-      );
+      expect(mockSafeSdk.signTransactionHash).toHaveBeenCalledWith(mockSafeTransactionHash);
       expect(mockSafeService.proposeTransaction).toHaveBeenCalledWith({
         safeAddress: mockSafeAddress,
         safeTransactionData: mockSafeTransactionData,

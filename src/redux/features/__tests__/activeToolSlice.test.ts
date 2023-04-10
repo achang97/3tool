@@ -28,10 +28,7 @@ describe('activeToolSlice', () => {
         actionResults: {},
         componentInputs: { [mockName]: { value: '1' } },
       };
-      const state = activeToolReducer(
-        initialState,
-        resetComponentInput(mockName)
-      );
+      const state = activeToolReducer(initialState, resetComponentInput(mockName));
       expect(state.componentInputs[mockName]).toBeUndefined();
     });
 
@@ -76,10 +73,7 @@ describe('activeToolSlice', () => {
         actionResults: { [mockName]: { data: 'data' } },
         componentInputs: {},
       };
-      const state = activeToolReducer(
-        initialState,
-        resetActionResult(mockName)
-      );
+      const state = activeToolReducer(initialState, resetActionResult(mockName));
       expect(state.actionResults[mockName]).toBeUndefined();
     });
 

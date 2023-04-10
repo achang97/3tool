@@ -155,11 +155,7 @@ describe('codemirror', () => {
     });
 
     it('returns root token if cursor follows completed expression', () => {
-      const completionContext = createCompletionContext(
-        'table1.data[0]b',
-        15,
-        false
-      );
+      const completionContext = createCompletionContext('table1.data[0]b', 15, false);
       const result = parseTokenFromContext(completionContext);
       expect(result).toEqual({ from: 14, isRoot: true, token: 'b' });
     });
@@ -175,11 +171,7 @@ describe('codemirror', () => {
     });
 
     it('returns non-root substring of token up until last period', () => {
-      const completionContext = createCompletionContext(
-        'table1.data[0].em',
-        17,
-        false
-      );
+      const completionContext = createCompletionContext('table1.data[0].em', 17, false);
       const result = parseTokenFromContext(completionContext);
       expect(result).toEqual({
         token: 'table1.data[0]',

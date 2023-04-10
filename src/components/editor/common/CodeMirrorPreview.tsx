@@ -7,11 +7,7 @@ type CodeMirrorPreviewProps = {
   message: ReactNode;
 };
 
-export const CodeMirrorPreview = ({
-  alertType,
-  type,
-  message,
-}: CodeMirrorPreviewProps) => {
+export const CodeMirrorPreview = ({ alertType, type, message }: CodeMirrorPreviewProps) => {
   return (
     <Box
       sx={{

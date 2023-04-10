@@ -1,9 +1,6 @@
 import { EVENT_HANDLER_EVENT_CONFIGS } from '@app/constants';
 import { ComponentEvent, EventHandlerType } from '@app/types';
-import {
-  GridRenderCellParams,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
+import { GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid';
 import {
   EventHandlerData,
   formatEventHandlerEvent,

@@ -12,18 +12,14 @@ export type EvalData<T extends ComponentType> = Partial<
   }
 >;
 
-export type EvalDataValues<T extends ComponentType> = Partial<
-  NonNullable<ComponentEvalData[T]>
->;
+export type EvalDataValues<T extends ComponentType> = Partial<NonNullable<ComponentEvalData[T]>>;
 
 type HookReturnType<T extends ComponentType> = {
   evalData: EvalData<T>;
   evalDataValues: EvalDataValues<T>;
 };
 
-export const useComponentEvalData = <T extends ComponentType>(
-  name: string
-): HookReturnType<T> => {
+export const useComponentEvalData = <T extends ComponentType>(name: string): HookReturnType<T> => {
   const { evalDataMap, evalDataValuesMap } = useActiveTool();
 
   const evalData = useMemo(() => {

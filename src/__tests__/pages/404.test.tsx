@@ -7,9 +7,7 @@ describe('Error404', () => {
     const result = render(<Error404 />);
 
     expect(result.getByText('Whoops!')).toBeTruthy();
-    expect(
-      result.getByText('It seems like the page you’re looking for is missing.')
-    ).toBeTruthy();
+    expect(result.getByText('It seems like the page you’re looking for is missing.')).toBeTruthy();
   });
 
   it('renders button that navigates back to Home', () => {

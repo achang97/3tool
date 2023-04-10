@@ -29,9 +29,10 @@ describe('useToolDataDepGraph', () => {
           actions: [],
         } as unknown as Tool)
       );
-      expect(
-        result.current.dataDepGraph.directDependenciesOf('button1')
-      ).toEqual(['button1.text', 'button1.eventHandlers']);
+      expect(result.current.dataDepGraph.directDependenciesOf('button1')).toEqual([
+        'button1.text',
+        'button1.eventHandlers',
+      ]);
     });
 
     it('returns DepGraph instance with invalid property names', () => {
@@ -52,9 +53,9 @@ describe('useToolDataDepGraph', () => {
           actions: [],
         } as unknown as Tool)
       );
-      expect(
-        result.current.dataDepGraph.directDependenciesOf('button1.text')
-      ).toEqual(['button1.asdfasdf']);
+      expect(result.current.dataDepGraph.directDependenciesOf('button1.text')).toEqual([
+        'button1.asdfasdf',
+      ]);
     });
 
     it('returns DepGraph instance without invalid element names', () => {
@@ -75,9 +76,7 @@ describe('useToolDataDepGraph', () => {
           actions: [],
         } as unknown as Tool)
       );
-      expect(
-        result.current.dataDepGraph.directDependenciesOf('button1.text')
-      ).toEqual([]);
+      expect(result.current.dataDepGraph.directDependenciesOf('button1.text')).toEqual([]);
     });
 
     it('returns DepGraph instance without JavaScript field dependencies', () => {
@@ -109,9 +108,7 @@ describe('useToolDataDepGraph', () => {
           ],
         } as unknown as Tool)
       );
-      expect(
-        result.current.dataDepGraph.directDependenciesOf('action1.code')
-      ).toEqual([]);
+      expect(result.current.dataDepGraph.directDependenciesOf('action1.code')).toEqual([]);
     });
 
     it('returns DepGraph instance from multiple elements', () => {
@@ -164,21 +161,15 @@ describe('useToolDataDepGraph', () => {
         } as unknown as Tool)
       );
 
+      expect(result.current.dataDepGraph.directDependenciesOf('button1.text')).toEqual([
+        'action1.code',
+      ]);
       expect(
-        result.current.dataDepGraph.directDependenciesOf('button1.text')
-      ).toEqual(['action1.code']);
-      expect(
-        result.current.dataDepGraph.directDependenciesOf(
-          'button1.eventHandlers[0].actionName'
-        )
+        result.current.dataDepGraph.directDependenciesOf('button1.eventHandlers[0].actionName')
       ).toEqual(['button1.text']);
+      expect(result.current.dataDepGraph.directDependenciesOf('action1.code')).toEqual([]);
       expect(
-        result.current.dataDepGraph.directDependenciesOf('action1.code')
-      ).toEqual([]);
-      expect(
-        result.current.dataDepGraph.directDependenciesOf(
-          'action1.eventHandlers[0].actionName'
-        )
+        result.current.dataDepGraph.directDependenciesOf('action1.eventHandlers[0].actionName')
       ).toEqual(['button1.eventHandlers']);
     });
   });
@@ -206,11 +197,7 @@ describe('useToolDataDepGraph', () => {
 
       expect(result.current.dataDepCycles).toEqual({
         'button1.text': ['button1.text', 'button1.disabled', 'button1.text'],
-        'button1.disabled': [
-          'button1.disabled',
-          'button1.text',
-          'button1.disabled',
-        ],
+        'button1.disabled': ['button1.disabled', 'button1.text', 'button1.disabled'],
       });
     });
 

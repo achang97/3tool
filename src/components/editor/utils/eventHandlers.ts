@@ -1,14 +1,6 @@
 import { EVENT_HANDLER_EVENT_CONFIGS } from '@app/constants';
-import {
-  ActionEvent,
-  ComponentEvent,
-  EventHandler,
-  EventHandlerType,
-} from '@app/types';
-import {
-  GridRenderCellParams,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
+import { ActionEvent, ComponentEvent, EventHandler, EventHandlerType } from '@app/types';
+import { GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid';
 
 export type EventHandlerData = EventHandler & {
   id: number;

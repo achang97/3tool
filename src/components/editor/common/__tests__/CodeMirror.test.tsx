@@ -35,12 +35,7 @@ describe('CodeMirror', () => {
     it('renders label', () => {
       const mockLabel = 'Label';
       const result = render(
-        <CodeMirror
-          label={mockLabel}
-          type={mockType}
-          onChange={mockHandleChange}
-          language="text"
-        />
+        <CodeMirror label={mockLabel} type={mockType} onChange={mockHandleChange} language="text" />
       );
       expect(result.getByText(mockLabel)).toBeTruthy();
     });
@@ -60,11 +55,7 @@ describe('CodeMirror', () => {
 
     it('calls onChange on input change', async () => {
       const result = render(
-        <CodeMirror
-          type={mockType}
-          onChange={mockHandleChange}
-          language="text"
-        />
+        <CodeMirror type={mockType} onChange={mockHandleChange} language="text" />
       );
 
       const newValue = 'h';
@@ -72,22 +63,14 @@ describe('CodeMirror', () => {
       const input = result.getByRole('textbox');
       await userEvent.type(input, newValue);
 
-      expect(mockHandleChange).toHaveBeenCalledWith(
-        newValue,
-        expect.any(Object)
-      );
+      expect(mockHandleChange).toHaveBeenCalledWith(newValue, expect.any(Object));
     });
 
     it('sets initial input value to value prop', () => {
       const mockValue = 'hello';
 
       const result = render(
-        <CodeMirror
-          value={mockValue}
-          type={mockType}
-          onChange={mockHandleChange}
-          language="text"
-        />
+        <CodeMirror value={mockValue} type={mockType} onChange={mockHandleChange} language="text" />
       );
 
       expect(result.getByText(mockValue)).toBeTruthy();
@@ -128,12 +111,7 @@ describe('CodeMirror', () => {
       const mockNewValue = 'hello world!';
 
       const result = render(
-        <CodeMirror
-          value={mockValue}
-          type={mockType}
-          onChange={mockHandleChange}
-          language="text"
-        />
+        <CodeMirror value={mockValue} type={mockType} onChange={mockHandleChange} language="text" />
       );
 
       expect(result.getByText(mockValue)).toBeTruthy();
@@ -156,11 +134,7 @@ describe('CodeMirror', () => {
 
     it('renders dynamic preview when input is focused', async () => {
       const result = render(
-        <CodeMirror
-          type={mockType}
-          onChange={mockHandleChange}
-          language="text"
-        />
+        <CodeMirror type={mockType} onChange={mockHandleChange} language="text" />
       );
 
       await userEvent.click(result.getByRole('textbox'));
@@ -171,19 +145,13 @@ describe('CodeMirror', () => {
 
     it('does not render dynamic preview when input is not focused', () => {
       const result = render(
-        <CodeMirror
-          type={mockType}
-          onChange={mockHandleChange}
-          language="text"
-        />
+        <CodeMirror type={mockType} onChange={mockHandleChange} language="text" />
       );
       expect(result.queryByTestId(previewId)).toBeNull();
     });
 
     it('does not render dynamic preview if language is javascript', async () => {
-      const result = render(
-        <CodeMirror onChange={mockHandleChange} language="javascript" />
-      );
+      const result = render(<CodeMirror onChange={mockHandleChange} language="javascript" />);
 
       await userEvent.click(result.getByRole('textbox'));
       expect(result.queryByTestId(previewId)).toBeNull();
@@ -191,9 +159,7 @@ describe('CodeMirror', () => {
 
     it('does not render dynamic preview if preview data is null', async () => {
       (useCodeMirrorPreview as jest.Mock).mockImplementation(() => null);
-      const result = render(
-        <CodeMirror onChange={mockHandleChange} language="javascript" />
-      );
+      const result = render(<CodeMirror onChange={mockHandleChange} language="javascript" />);
 
       await userEvent.click(result.getByRole('textbox'));
       expect(result.queryByTestId(previewId)).toBeNull();
@@ -213,21 +179,15 @@ describe('CodeMirror', () => {
           label: 'ignored',
         }),
       ];
-      (useCodeMirrorJavascriptAutocomplete as jest.Mock).mockImplementation(
-        () => {
-          return () => ({
-            from: 2,
-            options: mockAutocompleteOptions,
-          });
-        }
-      );
+      (useCodeMirrorJavascriptAutocomplete as jest.Mock).mockImplementation(() => {
+        return () => ({
+          from: 2,
+          options: mockAutocompleteOptions,
+        });
+      });
 
       const result = render(
-        <CodeMirror
-          type={mockType}
-          onChange={mockHandleChange}
-          language="text"
-        />
+        <CodeMirror type={mockType} onChange={mockHandleChange} language="text" />
       );
 
       const input = result.getByRole('textbox');
@@ -239,9 +199,7 @@ describe('CodeMirror', () => {
       expect(options[1]).toHaveTextContent('someFunctionTwo');
 
       await userEvent.click(options[0]);
-      expect(result.getByRole('textbox')).toHaveTextContent(
-        '{{someFunctionOne}}'
-      );
+      expect(result.getByRole('textbox')).toHaveTextContent('{{someFunctionOne}}');
     });
   });
 });

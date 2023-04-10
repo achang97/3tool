@@ -1,7 +1,4 @@
-import {
-  dynamicSqlLanguage,
-  sqlLanguage,
-} from '@app/codemirror/dynamicSqlLanguage';
+import { dynamicSqlLanguage, sqlLanguage } from '@app/codemirror/dynamicSqlLanguage';
 import { dynamicTextLanguage } from '@app/codemirror/dynamicTextLanguage';
 import { CompletionSource } from '@codemirror/autocomplete';
 import { javascriptLanguage } from '@codemirror/lang-javascript';
@@ -15,9 +12,7 @@ const mockJavascriptAutocomplete: CompletionSource = () => ({
 });
 
 jest.mock('../../hooks/useCodeMirrorJavascriptAutocomplete', () => ({
-  useCodeMirrorJavascriptAutocomplete: jest.fn(
-    () => mockJavascriptAutocomplete
-  ),
+  useCodeMirrorJavascriptAutocomplete: jest.fn(() => mockJavascriptAutocomplete),
 }));
 
 describe('useCodeMirrorProps', () => {

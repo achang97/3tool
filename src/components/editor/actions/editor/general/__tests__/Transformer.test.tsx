@@ -4,15 +4,12 @@ import { Transformer } from '../Transformer';
 
 const mockHandleDataChange = jest.fn();
 
-jest.mock(
-  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
-  () => ({
-    useCodeMirrorJavascriptAutocomplete: jest.fn(() => () => ({
-      from: 0,
-      options: [],
-    })),
-  })
-);
+jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', () => ({
+  useCodeMirrorJavascriptAutocomplete: jest.fn(() => () => ({
+    from: 0,
+    options: [],
+  })),
+}));
 
 describe('Transformer', () => {
   beforeEach(() => {
@@ -26,18 +23,14 @@ describe('Transformer', () => {
 
   it('renders value', () => {
     const mockValue = 'value';
-    const result = render(
-      <Transformer value={mockValue} onDataChange={mockHandleDataChange} />
-    );
+    const result = render(<Transformer value={mockValue} onDataChange={mockHandleDataChange} />);
     expect(result.getByText(mockValue)).toBeTruthy();
   });
 
   it('renders placeholder', () => {
     const result = render(<Transformer onDataChange={mockHandleDataChange} />);
     expect(
-      result.getByText(
-        'return formatDataAsArray(data).filter(row => row.quantity > 20)'
-      )
+      result.getByText('return formatDataAsArray(data).filter(row => row.quantity > 20)')
     ).toBeTruthy();
   });
 

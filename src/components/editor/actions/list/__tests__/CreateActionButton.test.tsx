@@ -4,10 +4,7 @@ import { focusAction } from '@app/redux/features/editorSlice';
 import { Action, ActionType } from '@app/types';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  mockApiErrorResponse,
-  mockApiSuccessResponse,
-} from '@tests/constants/api';
+import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { CreateActionButton } from '../CreateActionButton';
 
 const mockDispatch = jest.fn();
@@ -57,9 +54,7 @@ describe('CreateActionButton', () => {
   );
 
   it('does not create new action if user cancels in alert', async () => {
-    (useActionConfirmDiscard as jest.Mock).mockImplementation(
-      () => () => false
-    );
+    (useActionConfirmDiscard as jest.Mock).mockImplementation(() => () => false);
 
     const result = render(<CreateActionButton />);
     await userEvent.click(result.getByText('New'));
@@ -95,9 +90,7 @@ describe('CreateActionButton', () => {
     const result = render(<CreateActionButton />);
 
     await userEvent.click(result.getByText('New'));
-    await userEvent.click(
-      result.getByText(ACTION_CONFIGS[ActionType.Javascript].label)
-    );
+    await userEvent.click(result.getByText(ACTION_CONFIGS[ActionType.Javascript].label));
 
     expect(mockDispatch).not.toHaveBeenCalled();
   });
@@ -107,9 +100,7 @@ describe('CreateActionButton', () => {
     const result = render(<CreateActionButton />);
 
     await userEvent.click(result.getByText('New'));
-    await userEvent.click(
-      result.getByText(ACTION_CONFIGS[ActionType.Javascript].label)
-    );
+    await userEvent.click(result.getByText(ACTION_CONFIGS[ActionType.Javascript].label));
 
     const newAction: Action = {
       type: ActionType.Javascript,

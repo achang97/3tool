@@ -43,10 +43,7 @@ describe('useToolFlattenedElements', () => {
   });
 
   it('returns flattened elements from components', () => {
-    const mockComponents = [
-      { name: 'button1' },
-      { name: 'button2' },
-    ] as Component[];
+    const mockComponents = [{ name: 'button1' }, { name: 'button2' }] as Component[];
     const { result } = renderHook(() =>
       useToolFlattenedElements({
         tool: {

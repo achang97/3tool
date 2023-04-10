@@ -2,10 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { Box, Button, IconButton } from '@mui/material';
 import { Tune } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import {
-  focusToolSettings,
-  setIsPreview,
-} from '@app/redux/features/editorSlice';
+import { focusToolSettings, setIsPreview } from '@app/redux/features/editorSlice';
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import { EditableTextField } from '@app/components/common/EditableTextField';
 import { ToolbarTemplate } from './common/ToolbarTemplate';
@@ -55,10 +52,7 @@ export const ToolEditorToolbar = () => {
   const right = useMemo(() => {
     return (
       <Box sx={{ display: 'flex', gap: 1 }}>
-        <IconButton
-          onClick={handleSettingsClick}
-          data-testid="tool-editor-toolbar-settings-button"
-        >
+        <IconButton onClick={handleSettingsClick} data-testid="tool-editor-toolbar-settings-button">
           <Tune />
         </IconButton>
         <Button color="secondary" size="small" onClick={handlePreviewClick}>
@@ -68,11 +62,5 @@ export const ToolEditorToolbar = () => {
     );
   }, [handlePreviewClick, handleSettingsClick, isPreview]);
 
-  return (
-    <ToolbarTemplate
-      middle={middle}
-      right={right}
-      testId="tool-editor-toolbar"
-    />
-  );
+  return <ToolbarTemplate middle={middle} right={right} testId="tool-editor-toolbar" />;
 };

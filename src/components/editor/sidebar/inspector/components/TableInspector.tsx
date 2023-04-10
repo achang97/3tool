@@ -1,9 +1,5 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
-import {
-  BaseComponentInspectorProps,
-  Component,
-  ComponentType,
-} from '@app/types';
+import { BaseComponentInspectorProps, Component, ComponentType } from '@app/types';
 import { useMemo } from 'react';
 import { BaseInspector, BaseInspectorSectionProps } from './BaseInspector';
 
@@ -14,51 +10,50 @@ export const TableInspector = ({
   data,
   onDataChange,
 }: BaseComponentInspectorProps<ComponentType.Table>) => {
-  const config: BaseInspectorSectionProps<Component['data']['table']>[] =
-    useMemo(() => {
-      return [
-        {
-          title: 'Data',
-          fields: [
-            {
-              field: 'data',
-              label: 'Data',
-              value: data?.data,
-              data: {
-                text: {
-                  type: DATA_TYPES.data,
-                },
+  const config: BaseInspectorSectionProps<Component['data']['table']>[] = useMemo(() => {
+    return [
+      {
+        title: 'Data',
+        fields: [
+          {
+            field: 'data',
+            label: 'Data',
+            value: data?.data,
+            data: {
+              text: {
+                type: DATA_TYPES.data,
               },
             },
-            {
-              field: 'emptyMessage',
-              label: 'Empty message',
-              value: data?.emptyMessage,
-              data: {
-                text: {
-                  type: DATA_TYPES.emptyMessage,
-                },
+          },
+          {
+            field: 'emptyMessage',
+            label: 'Empty message',
+            value: data?.emptyMessage,
+            data: {
+              text: {
+                type: DATA_TYPES.emptyMessage,
               },
             },
-          ],
-        },
-        {
-          title: 'Row selection',
-          fields: [
-            {
-              field: 'multiselect',
-              label: 'Enable multi-row selection',
-              value: data?.multiselect,
-              data: {
-                text: {
-                  type: DATA_TYPES.multiselect,
-                },
+          },
+        ],
+      },
+      {
+        title: 'Row selection',
+        fields: [
+          {
+            field: 'multiselect',
+            label: 'Enable multi-row selection',
+            value: data?.multiselect,
+            data: {
+              text: {
+                type: DATA_TYPES.multiselect,
               },
             },
-          ],
-        },
-      ];
-    }, [data]);
+          },
+        ],
+      },
+    ];
+  }, [data]);
 
   return (
     <BaseInspector

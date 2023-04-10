@@ -84,11 +84,7 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
         onEventHandlersChange={debouncedHandleUpdateEventHandlers}
       />
     );
-  }, [
-    component,
-    debouncedHandleUpdateData,
-    debouncedHandleUpdateEventHandlers,
-  ]);
+  }, [component, debouncedHandleUpdateData, debouncedHandleUpdateEventHandlers]);
 
   return (
     <Box

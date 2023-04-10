@@ -25,10 +25,7 @@ export type FlatElement = {
   fields: ExtendedFlatField[];
 };
 
-export const useElementFlattenFields = ({
-  includePrefix,
-  onlyLeaves,
-}: HookArgs) => {
+export const useElementFlattenFields = ({ includePrefix, onlyLeaves }: HookArgs) => {
   const getFlattenOptions = useCallback(
     (element: Action | Component) => {
       return {
@@ -48,9 +45,7 @@ export const useElementFlattenFields = ({
     ) => {
       const { prefix } = getFlattenOptions(element);
       return fields.map((field) => {
-        const fieldKey = prefix
-          ? field.name.split(`${prefix}.`)[1]
-          : field.name;
+        const fieldKey = prefix ? field.name.split(`${prefix}.`)[1] : field.name;
 
         const evalType = _.get(evalTypes, fieldKey, 'any');
         const isJavascript = _.get(javascriptFlags, fieldKey) === true;
@@ -58,8 +53,7 @@ export const useElementFlattenFields = ({
         return {
           ...field,
           // NOTE: We can probably improve this by converting FieldType into a enum.
-          evalType:
-            typeof evalType === 'string' ? (evalType as FieldType) : 'any',
+          evalType: typeof evalType === 'string' ? (evalType as FieldType) : 'any',
           isJavascript,
         };
       });
@@ -75,10 +69,7 @@ export const useElementFlattenFields = ({
           ...eventHandler.data[eventHandler.type],
         })),
       };
-      const fields = flattenObjectFields(
-        eventsObject,
-        getFlattenOptions(element)
-      );
+      const fields = flattenObjectFields(eventsObject, getFlattenOptions(element));
 
       const evalFieldTypes = {
         eventHandlers: element.eventHandlers.map(
@@ -123,12 +114,7 @@ export const useElementFlattenFields = ({
         fields: [...dataFields, ...eventHandlerFields],
       };
     },
-    [
-      getElementTypeMaps,
-      getFlattenOptions,
-      extendFieldsWithEvalType,
-      flattenEventHandlerFields,
-    ]
+    [getElementTypeMaps, getFlattenOptions, extendFieldsWithEvalType, flattenEventHandlerFields]
   );
 
   return flattenElement;

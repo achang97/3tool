@@ -3,10 +3,7 @@ import { ApiSuccessResponse, Tool } from '@app/types';
 import { isSuccessfulApiResponse } from '@app/utils/api';
 import { validateVariableName } from '@app/utils/namespace';
 import { useActiveTool } from './useActiveTool';
-import {
-  ReferenceUpdate,
-  useToolUpdateReference,
-} from './useToolUpdateReference';
+import { ReferenceUpdate, useToolUpdateReference } from './useToolUpdateReference';
 import { useEnqueueSnackbar } from './useEnqueueSnackbar';
 import { useToolElementNames } from './useToolElementNames';
 
@@ -16,11 +13,7 @@ type HookArgs = {
   onSuccess: (newName: string, response: ApiSuccessResponse<Tool>) => void;
 };
 
-export const useBaseElementUpdateName = ({
-  prevName,
-  extendUpdate,
-  onSuccess,
-}: HookArgs) => {
+export const useBaseElementUpdateName = ({ prevName, extendUpdate, onSuccess }: HookArgs) => {
   const enqueueSnackbar = useEnqueueSnackbar();
   const { updateTool } = useActiveTool();
 

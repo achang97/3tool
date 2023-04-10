@@ -43,12 +43,7 @@ export const CreateResourceButton = () => {
       >
         Add new resource
       </Button>
-      <Menu
-        anchorEl={menuAnchor}
-        open={isMenuOpen}
-        onClose={onMenuClose}
-        onClick={onMenuClose}
-      >
+      <Menu anchorEl={menuAnchor} open={isMenuOpen} onClose={onMenuClose} onClick={onMenuClose}>
         {RESOURCES.map((resourceType) => (
           <MenuItem
             key={resourceType}

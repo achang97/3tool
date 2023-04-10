@@ -20,42 +20,29 @@ export const activeToolSlice = createSlice({
   initialState,
   reducers: {
     // Component Inputs
-    setComponentInput: (
-      state,
-      action: PayloadAction<{ name: string; input: unknown }>
-    ) => {
+    setComponentInput: (state, action: PayloadAction<{ name: string; input: unknown }>) => {
       const { name, input } = action.payload;
       state.componentInputs[name] = input;
     },
     resetComponentInput: (state, action: PayloadAction<string>) => {
       delete state.componentInputs[action.payload];
     },
-    renameComponentInput: (
-      state,
-      action: PayloadAction<{ prevName: string; newName: string }>
-    ) => {
+    renameComponentInput: (state, action: PayloadAction<{ prevName: string; newName: string }>) => {
       state.componentInputs[action.payload.newName] =
         state.componentInputs[action.payload.prevName];
       delete state.componentInputs[action.payload.prevName];
     },
 
     // Action Results
-    setActionResult: (
-      state,
-      action: PayloadAction<{ name: string; result: ActionResult }>
-    ) => {
+    setActionResult: (state, action: PayloadAction<{ name: string; result: ActionResult }>) => {
       const { name, result } = action.payload;
       state.actionResults[name] = result;
     },
     resetActionResult: (state, action: PayloadAction<string>) => {
       delete state.actionResults[action.payload];
     },
-    renameActionResult: (
-      state,
-      action: PayloadAction<{ prevName: string; newName: string }>
-    ) => {
-      state.actionResults[action.payload.newName] =
-        state.actionResults[action.payload.prevName];
+    renameActionResult: (state, action: PayloadAction<{ prevName: string; newName: string }>) => {
+      state.actionResults[action.payload.newName] = state.actionResults[action.payload.prevName];
       delete state.actionResults[action.payload.prevName];
     },
   },

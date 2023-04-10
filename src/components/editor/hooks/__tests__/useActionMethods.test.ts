@@ -51,17 +51,12 @@ describe('useActionMethods', () => {
     const mockActionResult: ActionResult = {
       data: 'something',
     };
-    mockEnqueueAction.mockImplementation((_action, onExecute) =>
-      onExecute(mockActionResult)
-    );
+    mockEnqueueAction.mockImplementation((_action, onExecute) => onExecute(mockActionResult));
 
     const { result } = renderHook(() => useActionMethods());
     const triggerResult = await result.current.action1[ActionMethod.Trigger]();
 
-    expect(mockEnqueueAction).toHaveBeenCalledWith(
-      mockActions[0],
-      expect.any(Function)
-    );
+    expect(mockEnqueueAction).toHaveBeenCalledWith(mockActions[0], expect.any(Function));
     expect(triggerResult).toEqual(mockActionResult.data);
   });
 });

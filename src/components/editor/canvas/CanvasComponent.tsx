@@ -28,10 +28,7 @@ type CanvasComponentProps = {
   children?: ReactNode;
 };
 
-const CANVAS_COMPONENT_MAP: Record<
-  ComponentType,
-  FC<BaseCanvasComponentProps>
-> = {
+const CANVAS_COMPONENT_MAP: Record<ComponentType, FC<BaseCanvasComponentProps>> = {
   [ComponentType.Button]: CanvasButton,
   [ComponentType.TextInput]: CanvasTextInput,
   [ComponentType.NumberInput]: CanvasNumberInput,
@@ -41,22 +38,12 @@ const CANVAS_COMPONENT_MAP: Record<
 
 export const CanvasComponent = forwardRef(
   (
-    {
-      component,
-      isEditable,
-      children,
-      className,
-      ...rest
-    }: CanvasComponentProps,
+    { component, isEditable, children, className, ...rest }: CanvasComponentProps,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const dispatch = useAppDispatch();
-    const { movingComponentName, focusedComponentName } = useAppSelector(
-      (state) => state.editor
-    );
-    const eventHandlerCallbacks = useComponentEventHandlerCallbacks(
-      component.eventHandlers
-    );
+    const { movingComponentName, focusedComponentName } = useAppSelector((state) => state.editor);
+    const eventHandlerCallbacks = useComponentEventHandlerCallbacks(component.eventHandlers);
 
     const errors = useComponentEvalErrors(component);
     const { isHovered, onMouseEnter, onMouseLeave } = useIsHovered();
@@ -71,12 +58,7 @@ export const CanvasComponent = forwardRef(
 
     const typedComponent = useMemo(() => {
       const TypedComponent = CANVAS_COMPONENT_MAP[component.type];
-      return (
-        <TypedComponent
-          name={component.name}
-          eventHandlerCallbacks={eventHandlerCallbacks}
-        />
-      );
+      return <TypedComponent name={component.name} eventHandlerCallbacks={eventHandlerCallbacks} />;
     }, [component.name, component.type, eventHandlerCallbacks]);
 
     const handleClick = useCallback(
@@ -110,14 +92,7 @@ export const CanvasComponent = forwardRef(
         classes.push('react-grid-item-error');
       }
       return classes.join(' ');
-    }, [
-      className,
-      errors.length,
-      isDragging,
-      isEditable,
-      isFocused,
-      isHovered,
-    ]);
+    }, [className, errors.length, isDragging, isEditable, isFocused, isHovered]);
 
     return (
       <Box
@@ -134,9 +109,7 @@ export const CanvasComponent = forwardRef(
         {isEditable && (
           <>
             {children}
-            {isHandleShown && (
-              <CanvasComponentHandle name={component.name} errors={errors} />
-            )}
+            {isHandleShown && <CanvasComponentHandle name={component.name} errors={errors} />}
           </>
         )}
       </Box>

@@ -16,22 +16,14 @@ describe('InspectorEnumField', () => {
 
   it('renders label', () => {
     const result = render(
-      <InspectorEnumField
-        label={mockLabel}
-        options={mockOptions}
-        onChange={mockHandleChange}
-      />
+      <InspectorEnumField label={mockLabel} options={mockOptions} onChange={mockHandleChange} />
     );
     expect(result.getByText(mockLabel)).toBeTruthy();
   });
 
   it('renders options', () => {
     const result = render(
-      <InspectorEnumField
-        label={mockLabel}
-        options={mockOptions}
-        onChange={mockHandleChange}
-      />
+      <InspectorEnumField label={mockLabel} options={mockOptions} onChange={mockHandleChange} />
     );
     expect(result.getByText(mockOptions[0].label)).toBeTruthy();
     expect(result.getByText(mockOptions[1].label)).toBeTruthy();
@@ -39,11 +31,7 @@ describe('InspectorEnumField', () => {
 
   it('calls onChange', async () => {
     const result = render(
-      <InspectorEnumField
-        label={mockLabel}
-        options={mockOptions}
-        onChange={mockHandleChange}
-      />
+      <InspectorEnumField label={mockLabel} options={mockOptions} onChange={mockHandleChange} />
     );
 
     await userEvent.click(result.getByText(mockOptions[0].label));

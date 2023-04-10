@@ -11,10 +11,7 @@ type CanvasComponentHandleProps = {
 
 export const CANVAS_COMPONENT_HANDLE_CLASSNAME = 'canvas-component-handle';
 
-export const CanvasComponentHandle = ({
-  name,
-  errors,
-}: CanvasComponentHandleProps) => {
+export const CanvasComponentHandle = ({ name, errors }: CanvasComponentHandleProps) => {
   const errorProps: SxProps = useMemo(() => {
     if (errors.length === 0) {
       return {};
@@ -58,10 +55,7 @@ export const CanvasComponentHandle = ({
       <Box sx={{ ...lineClamp(1), display: 'block' }}>{name}</Box>
       {errorMessage && (
         <Tooltip title={errorMessage} placement="top">
-          <ErrorOutline
-            data-testid="canvas-component-handle-error-icon"
-            fontSize="inherit"
-          />
+          <ErrorOutline data-testid="canvas-component-handle-error-icon" fontSize="inherit" />
         </Tooltip>
       )}
     </Box>

@@ -19,9 +19,6 @@ describe('ToolViewerToolbar', () => {
     const result = render(<ToolViewerToolbar />);
 
     const editAppButton = result.getByText('Edit app');
-    expect(editAppButton).toHaveProperty(
-      'href',
-      `${BASE_WINDOW_URL}/editor/${mockTool._id}`
-    );
+    expect(editAppButton).toHaveProperty('href', `${BASE_WINDOW_URL}/editor/${mockTool._id}`);
   });
 });

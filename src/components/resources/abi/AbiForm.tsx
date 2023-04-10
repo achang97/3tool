@@ -56,9 +56,7 @@ export const AbiForm = ({
         required
       />
       <FormControlLabel
-        control={
-          <Checkbox checked={data?.isProxy} onChange={handleIsProxyChange} />
-        }
+        control={<Checkbox checked={data?.isProxy} onChange={handleIsProxyChange} />}
         label="Add logic ABI"
         componentsProps={{ typography: { variant: 'body2' } }}
       />

@@ -1,10 +1,6 @@
 import { COMPONENT_DATA_TYPES } from '@app/constants';
 import { Component, ComponentEvent, EventHandler } from '@app/types';
-import {
-  validateTextField,
-  validateEnumField,
-  validateSection,
-} from '@tests/testers/inspector';
+import { validateTextField, validateEnumField, validateSection } from '@tests/testers/inspector';
 import { render } from '@tests/utils/renderWithContext';
 import { TextInspector } from '../TextInspector';
 
@@ -22,12 +18,9 @@ jest.mock('@app/components/editor/hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => ({})),
 }));
 
-jest.mock(
-  '@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete',
-  () => ({
-    useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
-  })
-);
+jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', () => ({
+  useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
+}));
 
 jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => jest.fn()),

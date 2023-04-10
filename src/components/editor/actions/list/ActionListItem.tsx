@@ -90,30 +90,15 @@ export const ActionListItem = ({ action }: ActionListItemProps) => {
             height={30}
             onSubmit={handleUpdateActionName}
             iconTooltip={
-              !isNameEditable
-                ? 'You must save any changes before this can be renamed.'
-                : ''
+              !isNameEditable ? 'You must save any changes before this can be renamed.' : ''
             }
           />
         </Box>
-        <IconButton
-          size="small"
-          onClick={onMenuOpen}
-          data-testid="action-list-item-menu-button"
-        >
+        <IconButton size="small" onClick={onMenuOpen} data-testid="action-list-item-menu-button">
           <MoreVert fontSize="small" />
         </IconButton>
-        <Menu
-          anchorEl={menuAnchor}
-          open={isMenuOpen}
-          onClose={onMenuClose}
-          onClick={onMenuClose}
-        >
-          <MenuItem
-            onClick={handleDeleteDialogOpen}
-            color="error.main"
-            label="Delete"
-          />
+        <Menu anchorEl={menuAnchor} open={isMenuOpen} onClose={onMenuClose} onClick={onMenuClose}>
+          <MenuItem onClick={handleDeleteDialogOpen} color="error.main" label="Delete" />
         </Menu>
       </Box>
       <DeleteDialog

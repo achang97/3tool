@@ -4,12 +4,7 @@ import { EventHandlerEditor } from '@app/components/editor/common/EventHandlerEd
 import { useEventHandlerGridProps } from '@app/components/editor/hooks/useEventHandlerGridProps';
 import { EventHandlerData } from '@app/components/editor/utils/eventHandlers';
 import { EVENT_HANDLER_DATA_TEMPLATES } from '@app/constants';
-import {
-  ActionEvent,
-  ComponentEvent,
-  EventHandler,
-  EventHandlerType,
-} from '@app/types';
+import { ActionEvent, ComponentEvent, EventHandler, EventHandlerType } from '@app/types';
 import { Add } from '@mui/icons-material';
 import { Box, Button, Menu, MenuProps } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
@@ -60,33 +55,27 @@ export const InspectorEventHandlers = ({
     return <DataGridPlaceholder>{placeholder}</DataGridPlaceholder>;
   }, [placeholder]);
 
-  const menuPositionProps: Pick<MenuProps, 'anchorOrigin' | 'transformOrigin'> =
-    useMemo(() => {
-      if (menuPosition === 'left') {
-        return {
-          anchorOrigin: { vertical: 'top', horizontal: 'left' },
-          transformOrigin: { vertical: 'top', horizontal: 'right' },
-        };
-      }
-
+  const menuPositionProps: Pick<MenuProps, 'anchorOrigin' | 'transformOrigin'> = useMemo(() => {
+    if (menuPosition === 'left') {
       return {
-        anchorOrigin: { vertical: 'top', horizontal: 'center' },
-        transformOrigin: { vertical: 'bottom', horizontal: 'center' },
+        anchorOrigin: { vertical: 'top', horizontal: 'left' },
+        transformOrigin: { vertical: 'top', horizontal: 'right' },
       };
-    }, [menuPosition]);
+    }
+
+    return {
+      anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      transformOrigin: { vertical: 'bottom', horizontal: 'center' },
+    };
+  }, [menuPosition]);
 
   const activeEventHandler = useMemo(() => {
-    return typeof activeIndex === 'number'
-      ? eventHandlers[activeIndex]
-      : undefined;
+    return typeof activeIndex === 'number' ? eventHandlers[activeIndex] : undefined;
   }, [activeIndex, eventHandlers]);
 
-  const handleRowClick = useCallback(
-    ({ row }: GridRowParams<EventHandlerData>) => {
-      setActiveIndex(row.id);
-    },
-    []
-  );
+  const handleRowClick = useCallback(({ row }: GridRowParams<EventHandlerData>) => {
+    setActiveIndex(row.id);
+  }, []);
 
   const handleMenuClose = useCallback(() => {
     setActiveIndex(undefined);
@@ -111,9 +100,7 @@ export const InspectorEventHandlers = ({
   const handleUpdateEventHandler = useCallback(
     (update: RecursivePartial<EventHandler>) => {
       const newEventHandlers = eventHandlers.map((eventHandler) =>
-        eventHandler === activeEventHandler
-          ? _.merge({}, activeEventHandler, update)
-          : eventHandler
+        eventHandler === activeEventHandler ? _.merge({}, activeEventHandler, update) : eventHandler
       );
       onChange(newEventHandlers);
     },
@@ -133,9 +120,7 @@ export const InspectorEventHandlers = ({
         headerHeight={hideColumnHeaders ? 0 : DATA_GRID_HEADER_HEIGHT}
         sx={{
           gridRow: { cursor: 'pointer' },
-          '.MuiDataGrid-columnHeaders': hideColumnHeaders
-            ? { visibility: 'hidden' }
-            : undefined,
+          '.MuiDataGrid-columnHeaders': hideColumnHeaders ? { visibility: 'hidden' } : undefined,
         }}
         autoHeight
         disableColumnMenu

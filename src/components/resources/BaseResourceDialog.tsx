@@ -1,12 +1,6 @@
 import { ApiError, Resource, ResourceType } from '@app/types';
 import { LoadingButton } from '@mui/lab';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { SerializedError } from '@reduxjs/toolkit';
 import { FC, FormEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { BaseResourceFormProps } from '@app/types/resources';

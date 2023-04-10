@@ -21,27 +21,14 @@ describe('CodeMirrorPreview', () => {
 
   it('renders alert with type and message', () => {
     const result = render(
-      <CodeMirrorPreview
-        alertType={mockAlertType}
-        type={mockType}
-        message={mockMessage}
-      />
+      <CodeMirrorPreview alertType={mockAlertType} type={mockType} message={mockMessage} />
     );
     expect(result.getByText(mockType)).toBeTruthy();
     expect(result.getByText(mockMessage)).toBeTruthy();
   });
 
   it('passes alertType to Alert component as color', () => {
-    render(
-      <CodeMirrorPreview
-        alertType={mockAlertType}
-        type={mockType}
-        message={mockMessage}
-      />
-    );
-    expect(Alert).toHaveBeenCalledWith(
-      expect.objectContaining({ color: mockAlertType }),
-      {}
-    );
+    render(<CodeMirrorPreview alertType={mockAlertType} type={mockType} message={mockMessage} />);
+    expect(Alert).toHaveBeenCalledWith(expect.objectContaining({ color: mockAlertType }), {});
   });
 });

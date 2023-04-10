@@ -196,9 +196,7 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(
-        result.getByPlaceholderText('Enter logic contract ABI')
-      ).toBeTruthy();
+      expect(result.getByPlaceholderText('Enter logic contract ABI')).toBeTruthy();
     });
 
     it('renders value', () => {
@@ -210,9 +208,7 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Logic ABI/)).toHaveDisplayValue(
-        'logicAbi'
-      );
+      expect(result.getByLabelText(/^Logic ABI/)).toHaveDisplayValue('logicAbi');
     });
 
     it('calls onDataChange on value change', async () => {

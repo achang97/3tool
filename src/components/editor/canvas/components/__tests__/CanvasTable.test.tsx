@@ -31,10 +31,7 @@ describe('CanvasTable', () => {
           }));
 
           const result = render(
-            <CanvasTable
-              name={mockName}
-              eventHandlerCallbacks={mockEventHandlerCallbacks}
-            />
+            <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
           );
           expect(result.getByText('col1')).toBeTruthy();
           expect(result.getByText('col2')).toBeTruthy();
@@ -49,10 +46,7 @@ describe('CanvasTable', () => {
           }));
 
           const result = render(
-            <CanvasTable
-              name={mockName}
-              eventHandlerCallbacks={mockEventHandlerCallbacks}
-            />
+            <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
           );
           expect(result.getByText('col1')).toBeTruthy();
         });
@@ -68,17 +62,10 @@ describe('CanvasTable', () => {
           }));
 
           const result = render(
-            <CanvasTable
-              name={mockName}
-              eventHandlerCallbacks={mockEventHandlerCallbacks}
-            />
+            <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
           );
-          expect(
-            result.getByText(mockEvalDataValues.data[0].col1)
-          ).toBeTruthy();
-          expect(
-            result.getByText(mockEvalDataValues.data[1].col1)
-          ).toBeTruthy();
+          expect(result.getByText(mockEvalDataValues.data[0].col1)).toBeTruthy();
+          expect(result.getByText(mockEvalDataValues.data[1].col1)).toBeTruthy();
         });
       });
     });
@@ -94,14 +81,9 @@ describe('CanvasTable', () => {
         }));
 
         const result = render(
-          <CanvasTable
-            name={mockName}
-            eventHandlerCallbacks={mockEventHandlerCallbacks}
-          />
+          <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
         );
-        expect(
-          result.queryAllByRole('checkbox', { name: 'Select row' })
-        ).toHaveLength(0);
+        expect(result.queryAllByRole('checkbox', { name: 'Select row' })).toHaveLength(0);
       });
 
       it('renders checkboxes in each row if true', () => {
@@ -114,14 +96,9 @@ describe('CanvasTable', () => {
         }));
 
         const result = render(
-          <CanvasTable
-            name={mockName}
-            eventHandlerCallbacks={mockEventHandlerCallbacks}
-          />
+          <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
         );
-        expect(
-          result.getAllByRole('checkbox', { name: 'Select row' })
-        ).toHaveLength(2);
+        expect(result.getAllByRole('checkbox', { name: 'Select row' })).toHaveLength(2);
       });
     });
 
@@ -132,10 +109,7 @@ describe('CanvasTable', () => {
       }));
 
       const result = render(
-        <CanvasTable
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
       expect(result.getByText(mockEvalDataValues.emptyMessage)).toBeTruthy();
     });
@@ -152,10 +126,7 @@ describe('CanvasTable', () => {
       }));
 
       const result = render(
-        <CanvasTable
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
 
       await userEvent.click(result.getByText(mockEvalDataValues.data[0].col1));
@@ -185,10 +156,7 @@ describe('CanvasTable', () => {
       }));
 
       const result = render(
-        <CanvasTable
-          name={mockName}
-          eventHandlerCallbacks={mockEventHandlerCallbacks}
-        />
+        <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
       const checkboxes = result.getAllByRole('checkbox', {
         name: 'Select row',

@@ -7,16 +7,12 @@ const mockHandleChange = jest.fn();
 
 describe('InspectorSwitch', () => {
   it('renders label', () => {
-    const result = render(
-      <InspectorSwitch label={mockLabel} onChange={mockHandleChange} />
-    );
+    const result = render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
     expect(result.getByText(mockLabel)).toBeTruthy();
   });
 
   it('calls onChange on click', async () => {
-    const result = render(
-      <InspectorSwitch label={mockLabel} onChange={mockHandleChange} />
-    );
+    const result = render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
     await userEvent.click(result.getByRole('checkbox'));
     expect(mockHandleChange).toHaveBeenCalled();
   });
@@ -29,9 +25,7 @@ describe('InspectorSwitch', () => {
   });
 
   it('renders checked value as false', () => {
-    const result = render(
-      <InspectorSwitch label={mockLabel} onChange={mockHandleChange} />
-    );
+    const result = render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
     expect(result.getByRole('checkbox')).not.toBeChecked();
   });
 });

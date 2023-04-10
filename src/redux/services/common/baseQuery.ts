@@ -1,11 +1,7 @@
 import { Mutex } from 'async-mutex';
 import { API_BASE_URL } from '@app/constants';
 import { ApiError } from '@app/types';
-import {
-  BaseQueryFn,
-  FetchArgs,
-  fetchBaseQuery,
-} from '@reduxjs/toolkit/query/react';
+import { BaseQueryFn, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { logout, setTokens } from '@app/redux/actions/auth';
 import type { RootState } from '@app/redux/store';
 
@@ -26,11 +22,7 @@ export const baseQuery = fetchBaseQuery({
 // Code source: https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#automatic-re-authorization-by-extending-fetchbasequery
 export const mutex = new Mutex();
 
-export const baseQueryWithReauth: CustomBaseQueryFn = async (
-  args,
-  api,
-  extraOptions
-) => {
+export const baseQueryWithReauth: CustomBaseQueryFn = async (args, api, extraOptions) => {
   // Wait until the mutex is available without locking it
   await mutex.waitForUnlock();
 
@@ -65,8 +57,7 @@ export const baseQueryWithReauth: CustomBaseQueryFn = async (
           api.dispatch(setTokens(newTokens));
 
           // Retry the initial query
-          const baseArgs: FetchArgs =
-            typeof args === 'string' ? { url: args } : args;
+          const baseArgs: FetchArgs = typeof args === 'string' ? { url: args } : args;
           result = await baseQuery(
             {
               ...baseArgs,

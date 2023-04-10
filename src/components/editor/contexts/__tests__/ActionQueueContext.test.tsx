@@ -1,11 +1,7 @@
 import { Action, ActionType } from '@app/types';
 import { act, renderHook } from '@testing-library/react';
 import { ReactElement, useContext } from 'react';
-import {
-  ActionQueueContext,
-  ActionQueueElement,
-  ActionQueueProvider,
-} from '../ActionQueueContext';
+import { ActionQueueContext, ActionQueueElement, ActionQueueProvider } from '../ActionQueueContext';
 
 describe('ActionQueueContext', () => {
   it('returns default state', () => {

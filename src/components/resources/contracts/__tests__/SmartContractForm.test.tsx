@@ -115,9 +115,9 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(
-        result.getByTestId('smart-contract-form-network-select')
-      ).toHaveDisplayValue(mainnet.id.toString());
+      expect(result.getByTestId('smart-contract-form-network-select')).toHaveDisplayValue(
+        mainnet.id.toString()
+      );
     });
 
     it('calls onDataChange on value change', async () => {
@@ -157,9 +157,7 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(
-        result.getByPlaceholderText('Enter contract address')
-      ).toBeTruthy();
+      expect(result.getByPlaceholderText('Enter contract address')).toBeTruthy();
     });
 
     it('renders value', () => {
@@ -191,9 +189,7 @@ describe('SmartContractForm', () => {
 
   describe('abi', () => {
     beforeEach(() => {
-      (useAbiResources as jest.Mock).mockImplementation(() => [
-        { _id: '1', name: 'abi1' },
-      ]);
+      (useAbiResources as jest.Mock).mockImplementation(() => [{ _id: '1', name: 'abi1' }]);
     });
 
     it('renders label', () => {
@@ -246,9 +242,7 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(
-        result.getByTestId('smart-contract-form-abi-select')
-      ).toBeDisabled();
+      expect(result.getByTestId('smart-contract-form-abi-select')).toBeDisabled();
     });
 
     it('renders value', () => {
@@ -260,9 +254,7 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(
-        result.getByTestId('smart-contract-form-abi-select')
-      ).toHaveDisplayValue('1');
+      expect(result.getByTestId('smart-contract-form-abi-select')).toHaveDisplayValue('1');
     });
 
     it('calls onDataChange on value change', async () => {

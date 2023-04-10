@@ -27,9 +27,7 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
   const { tool, updateTool } = useActiveTool();
   const components = useMemo(() => tool.components, [tool]);
 
-  const { newComponent, movingComponentName } = useAppSelector(
-    (state) => state.editor
-  );
+  const { newComponent, movingComponentName } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
   const getComponentsWithLayout = useCallback(
@@ -99,9 +97,7 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
         return;
       }
 
-      const prevComponents = getComponentsWithLayout(
-        newLayout.slice(0, newLayout.length)
-      );
+      const prevComponents = getComponentsWithLayout(newLayout.slice(0, newLayout.length));
       const newToolComponent = createNewComponent(
         newComponent.type,
         newComponent.name,
@@ -125,17 +121,14 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
         return;
       }
 
-      const hasSameIds = newLayout.every(
-        (_, i) => newLayout[i].i === layout[i].i
-      );
+      const hasSameIds = newLayout.every((_, i) => newLayout[i].i === layout[i].i);
       if (!hasSameIds) {
         return;
       }
 
       const hasMovedOrResized = newLayout.some(
         (_, i) =>
-          hasLayoutResized(layout[i], newLayout[i]) ||
-          hasLayoutMoved(layout[i], newLayout[i])
+          hasLayoutResized(layout[i], newLayout[i]) || hasLayoutMoved(layout[i], newLayout[i])
       );
       if (!hasMovedOrResized) {
         return;
