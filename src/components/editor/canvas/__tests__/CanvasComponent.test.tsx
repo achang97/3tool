@@ -2,7 +2,7 @@ import { focusComponent } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { Component, ComponentType } from '@app/types';
 import { Box } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createRef } from 'react';
 import { useComponentEvalData } from '../../hooks/useComponentEvalData';
@@ -60,33 +60,33 @@ describe('CanvasComponent', () => {
   });
 
   it('renders children if editable', () => {
-    const result = render(
+    render(
       <CanvasComponent component={mockComponent} isEditable>
         {mockChildren}
       </CanvasComponent>
     );
-    expect(result.getByText(mockChildren)).toBeTruthy();
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
   it('does not render children if not editable', () => {
-    const result = render(
+    render(
       <CanvasComponent component={mockComponent} isEditable={false}>
         {mockChildren}
       </CanvasComponent>
     );
-    expect(result.queryByText(mockChildren)).toBeNull();
+    expect(screen.queryByText(mockChildren)).toBeNull();
   });
 
   it('focuses component on click and stops propagation of click event', async () => {
     const mockContainerHandleClick = jest.fn();
-    const result = render(
+    render(
       <Box onClick={mockContainerHandleClick}>
         <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       </Box>
     );
-    await userEvent.click(result.getByText(mockChildren));
+    await userEvent.click(screen.getByText(mockChildren));
     expect(mockDispatch).toHaveBeenCalledWith(focusComponent(mockComponent.name));
     expect(mockContainerHandleClick).not.toHaveBeenCalled();
   });
@@ -94,12 +94,12 @@ describe('CanvasComponent', () => {
   describe('classNames', () => {
     it('assigns className to component', () => {
       const mockClassName = 'some-class';
-      const result = render(
+      render(
         <CanvasComponent component={mockComponent} className={mockClassName} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
-      const component = result.getByText(mockChildren);
+      const component = screen.getByText(mockChildren);
       expect(component).toHaveClass(mockClassName);
     });
 
@@ -110,12 +110,12 @@ describe('CanvasComponent', () => {
       }));
       const mockClassName = 'some-class';
 
-      const result = render(
+      render(
         <CanvasComponent component={mockComponent} className={mockClassName} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
-      const component = result.getByText(mockChildren);
+      const component = screen.getByText(mockChildren);
       expect(component).toHaveClass(mockClassName);
     });
 
@@ -125,22 +125,22 @@ describe('CanvasComponent', () => {
           componentInputs: {},
           focusedComponentName: mockComponent.name,
         }));
-        const result = render(
+        render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
-        const component = result.getByText(mockChildren);
+        const component = screen.getByText(mockChildren);
         expect(component).toHaveClass('react-grid-item-focused');
       });
 
       it('does not assign "react-grid-item-focused" class if name is not equal to focused component name', () => {
-        const result = render(
+        render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
-        const component = result.getByText(mockChildren);
+        const component = screen.getByText(mockChildren);
         expect(component).not.toHaveClass('react-grid-item-focused');
       });
     });
@@ -151,45 +151,45 @@ describe('CanvasComponent', () => {
           componentInputs: {},
           movingComponentName: mockComponent.name,
         }));
-        const result = render(
+        render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
-        const component = result.getByText(mockChildren);
+        const component = screen.getByText(mockChildren);
         expect(component).toHaveClass('react-grid-item-dragging');
       });
 
       it('does not assign "react-grid-item-dragging" class if name is not equal to moving component name', () => {
-        const result = render(
+        render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
-        const component = result.getByText(mockChildren);
+        const component = screen.getByText(mockChildren);
         expect(component).not.toHaveClass('react-grid-item-dragging');
       });
     });
 
     describe('hovered', () => {
       it('assigns "react-grid-item-hovered" class if hovered over component', async () => {
-        const result = render(
+        render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
-        const component = result.getByText(mockChildren);
+        const component = screen.getByText(mockChildren);
         await userEvent.hover(component);
         expect(component).toHaveClass('react-grid-item-hovered');
       });
 
       it('does not assign "react-grid-item-dragging" class if not hovered over component', () => {
-        const result = render(
+        render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
-        const component = result.getByText(mockChildren);
+        const component = screen.getByText(mockChildren);
         expect(component).not.toHaveClass('react-grid-item-hovered');
       });
     });
@@ -197,23 +197,23 @@ describe('CanvasComponent', () => {
     describe('error', () => {
       it('assigns "react-grid-item-error" class if there are eval errors', () => {
         (useComponentEvalErrors as jest.Mock).mockImplementation(() => [mockComponentEvalError]);
-        const result = render(
+        render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
-        const component = result.getByText(mockChildren);
+        const component = screen.getByText(mockChildren);
         expect(component).toHaveClass('react-grid-item-error');
       });
 
       it('does not assign "react-grid-item-error" class if there are no eval errors', () => {
         (useComponentEvalErrors as jest.Mock).mockImplementation(() => []);
-        const result = render(
+        render(
           <CanvasComponent component={mockComponent} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
-        const component = result.getByText(mockChildren);
+        const component = screen.getByText(mockChildren);
         expect(component).not.toHaveClass('react-grid-item-error');
       });
     });
@@ -227,12 +227,12 @@ describe('CanvasComponent', () => {
         movingComponentName: undefined,
       }));
       (useComponentEvalErrors as jest.Mock).mockImplementation(() => []);
-      const result = render(
+      render(
         <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
-      expect(result.queryByTestId(handleId)).toBeNull();
+      expect(screen.queryByTestId(handleId)).toBeNull();
     });
 
     it('does not render handle if not editable', () => {
@@ -240,12 +240,12 @@ describe('CanvasComponent', () => {
         componentInputs: {},
         focusedComponentName: mockComponent.name,
       }));
-      const result = render(
+      render(
         <CanvasComponent component={mockComponent} isEditable={false}>
           {mockChildren}
         </CanvasComponent>
       );
-      expect(result.queryByTestId(handleId)).toBeNull();
+      expect(screen.queryByTestId(handleId)).toBeNull();
     });
 
     it('renders handle on focus', () => {
@@ -253,38 +253,38 @@ describe('CanvasComponent', () => {
         componentInputs: {},
         focusedComponentName: mockComponent.name,
       }));
-      const result = render(
+      render(
         <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
-      expect(result.getByTestId(handleId)).toBeTruthy();
+      expect(screen.getByTestId(handleId)).toBeTruthy();
     });
 
     it('renders handle on hover', async () => {
-      const result = render(
+      render(
         <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
-      await userEvent.hover(result.getByText(mockChildren));
-      expect(await result.findByTestId(handleId)).toBeTruthy();
+      await userEvent.hover(screen.getByText(mockChildren));
+      expect(await screen.findByTestId(handleId)).toBeTruthy();
     });
 
     it('renders handle if there are eval errors', async () => {
       (useComponentEvalErrors as jest.Mock).mockImplementation(() => [mockComponentEvalError]);
 
-      const result = render(
+      render(
         <CanvasComponent component={mockComponent} isEditable>
           {mockChildren}
         </CanvasComponent>
       );
 
-      expect(result.getByTestId(handleId)).toBeTruthy();
-      const errorIcon = await result.findByTestId(handleErrorIconId);
+      expect(screen.getByTestId(handleId)).toBeTruthy();
+      const errorIcon = await screen.findByTestId(handleErrorIconId);
       await userEvent.hover(errorIcon);
       expect(
-        await result.findByText(
+        await screen.findByText(
           `${mockComponentEvalError.name}: ${mockComponentEvalError.error.message}`
         )
       );
@@ -302,13 +302,13 @@ describe('CanvasComponent', () => {
     `(
       'renders $type canvas component',
       ({ type, componentId }: { type: ComponentType; componentId: string }) => {
-        const result = render(
+        render(
           <CanvasComponent component={{ ...mockComponent, type }} isEditable>
             {mockChildren}
           </CanvasComponent>
         );
 
-        expect(result.getByTestId(componentId)).toBeTruthy();
+        expect(screen.getByTestId(componentId)).toBeTruthy();
       }
     );
 
@@ -326,7 +326,7 @@ describe('CanvasComponent', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
+      render(
         <CanvasComponent
           component={
             {
@@ -341,7 +341,7 @@ describe('CanvasComponent', () => {
         </CanvasComponent>
       );
 
-      await userEvent.click(result.getByText(mockEvalDataValues.text));
+      await userEvent.click(screen.getByText(mockEvalDataValues.text));
       expect(mockEventHandlerCallbacks.onClick).toHaveBeenCalled();
     });
   });

@@ -1,5 +1,5 @@
 import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { CanvasText } from '../CanvasText';
 
 const mockName = 'name';
@@ -17,10 +17,8 @@ describe('CanvasText', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasText name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByText(mockEvalDataValues.value)).toBeTruthy();
+      render(<CanvasText name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByText(mockEvalDataValues.value)).toBeTruthy();
     });
 
     it('horizontalAlignment: sets textAlign prop', () => {
@@ -29,10 +27,8 @@ describe('CanvasText', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasText name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByTestId(textId)).toHaveStyle({
+      render(<CanvasText name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByTestId(textId)).toHaveStyle({
         textAlign: mockEvalDataValues.horizontalAlignment,
       });
     });

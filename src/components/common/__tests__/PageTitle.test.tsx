@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { PageTitle } from '../PageTitle';
 
 const mockTitle = 'Title';
@@ -18,8 +18,8 @@ describe('PageTitle', () => {
   });
 
   it('renders children', () => {
-    const result = render(<PageTitle>{mockTitle}</PageTitle>);
-    expect(result.getByText(mockTitle)).toBeTruthy();
+    render(<PageTitle>{mockTitle}</PageTitle>);
+    expect(screen.getByText(mockTitle)).toBeTruthy();
   });
 
   it('passes sx prop to Typography', () => {

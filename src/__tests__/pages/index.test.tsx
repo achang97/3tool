@@ -1,6 +1,7 @@
 import ToolsPage from '@app/pages';
 import { mockUser } from '@tests/constants/data';
 import { Tool } from '@app/types';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 
 const mockTools: Tool[] = [
@@ -30,17 +31,17 @@ describe('Home', () => {
   });
 
   it('renders page title', () => {
-    const result = render(<ToolsPage />);
-    expect(result.getByText('Tools')).toBeTruthy();
+    render(<ToolsPage />);
+    expect(screen.getByText('Tools')).toBeTruthy();
   });
 
   it('renders create tool thumbnail', async () => {
-    const result = render(<ToolsPage />);
-    expect(result.findByTestId('create-tool-thumbnail')).toBeDefined();
+    render(<ToolsPage />);
+    expect(screen.findByTestId('create-tool-thumbnail')).toBeDefined();
   });
 
   it('renders tools', () => {
-    const result = render(<ToolsPage />);
-    expect(result.getByText('Tool 1')).toBeTruthy();
+    render(<ToolsPage />);
+    expect(screen.getByText('Tool 1')).toBeTruthy();
   });
 });

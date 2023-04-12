@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BASE_WINDOW_URL } from '@tests/constants/window';
 import { ThumbnailContainer } from '../ThumbnailContainer';
@@ -12,26 +12,26 @@ describe('ThumbnailContainer', () => {
   });
 
   it('renders children', () => {
-    const result = render(<ThumbnailContainer icon={mockIcon}>{mockChildren}</ThumbnailContainer>);
+    render(<ThumbnailContainer icon={mockIcon}>{mockChildren}</ThumbnailContainer>);
 
-    expect(result.getByText(mockIcon)).toBeTruthy();
+    expect(screen.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders children', () => {
-    const result = render(<ThumbnailContainer icon={mockIcon}>{mockChildren}</ThumbnailContainer>);
+    render(<ThumbnailContainer icon={mockIcon}>{mockChildren}</ThumbnailContainer>);
 
-    expect(result.getByText(mockChildren)).toBeTruthy();
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
   it('calls onClick when container is clicked', async () => {
     const mockHandleClick = jest.fn();
-    const result = render(
+    render(
       <ThumbnailContainer icon={mockIcon} onClick={mockHandleClick}>
         {mockChildren}
       </ThumbnailContainer>
     );
 
-    await userEvent.click(result.getByText(mockChildren));
+    await userEvent.click(screen.getByText(mockChildren));
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
 

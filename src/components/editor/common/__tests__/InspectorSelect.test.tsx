@@ -1,4 +1,5 @@
 import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { InspectorSelect } from '../InspectorSelect';
 
@@ -11,7 +12,7 @@ const mockOptions = [
 
 describe('InspectorSelect', () => {
   it('renders label', async () => {
-    const result = render(
+    render(
       <InspectorSelect
         label={mockLabel}
         onChange={mockHandleChange}
@@ -20,11 +21,11 @@ describe('InspectorSelect', () => {
       />
     );
 
-    expect(result.getByLabelText(mockLabel)).toBeTruthy();
+    expect(screen.getByLabelText(mockLabel)).toBeTruthy();
   });
 
   it('calls onChange with new value', async () => {
-    const result = render(
+    render(
       <InspectorSelect
         label={mockLabel}
         onChange={mockHandleChange}
@@ -33,13 +34,13 @@ describe('InspectorSelect', () => {
       />
     );
 
-    await userEvent.click(result.getByLabelText(mockLabel));
-    await userEvent.click(result.getByRole('option', { name: mockOptions[0].label }));
+    await userEvent.click(screen.getByLabelText(mockLabel));
+    await userEvent.click(screen.getByRole('option', { name: mockOptions[0].label }));
     expect(mockHandleChange).toHaveBeenCalledWith(mockOptions[0].value);
   });
 
   it('renders options', async () => {
-    const result = render(
+    render(
       <InspectorSelect
         label={mockLabel}
         onChange={mockHandleChange}
@@ -48,11 +49,11 @@ describe('InspectorSelect', () => {
       />
     );
 
-    await userEvent.click(result.getByLabelText(mockLabel));
-    const options = result.getAllByRole('option');
+    await userEvent.click(screen.getByLabelText(mockLabel));
+    const options = screen.getAllByRole('option');
 
     expect(options.length).toEqual(mockOptions.length);
-    expect(result.getByRole('option', { name: mockOptions[0].label })).toBeTruthy();
-    expect(result.getByRole('option', { name: mockOptions[1].label }));
+    expect(screen.getByRole('option', { name: mockOptions[0].label })).toBeTruthy();
+    expect(screen.getByRole('option', { name: mockOptions[1].label }));
   });
 });

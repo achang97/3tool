@@ -1,4 +1,5 @@
 import { mockTool } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
 import { Action, ActionType } from '@app/types';
@@ -40,16 +41,16 @@ describe('ActionList', () => {
   });
 
   it('renders title', () => {
-    const result = render(<ActionList />);
-    expect(result.getByText('Action list')).toBeTruthy();
+    render(<ActionList />);
+    expect(screen.getByText('Action list')).toBeTruthy();
   });
 
   it('creates new action by clicking on "New" button and an action option', async () => {
     const mockType = ActionType.Javascript;
-    const result = render(<ActionList />);
+    render(<ActionList />);
 
-    await userEvent.click(result.getByText('New'));
-    await userEvent.click(result.getByText(ACTION_CONFIGS[mockType].label));
+    await userEvent.click(screen.getByText('New'));
+    await userEvent.click(screen.getByText(ACTION_CONFIGS[mockType].label));
 
     expect(mockUpdateTool).toHaveBeenCalledWith({
       actions: [
@@ -71,14 +72,14 @@ describe('ActionList', () => {
       tool: { actions: [] },
     }));
 
-    const result = render(<ActionList />);
-    expect(result.getByText('No created actions')).toBeTruthy();
+    render(<ActionList />);
+    expect(screen.getByText('No created actions')).toBeTruthy();
   });
 
   it('renders list of actions', () => {
-    const result = render(<ActionList />);
+    render(<ActionList />);
 
-    expect(result.getByText(mockActions[0].name)).toBeTruthy();
-    expect(result.getByText(mockActions[1].name)).toBeTruthy();
+    expect(screen.getByText(mockActions[0].name)).toBeTruthy();
+    expect(screen.getByText(mockActions[1].name)).toBeTruthy();
   });
 });

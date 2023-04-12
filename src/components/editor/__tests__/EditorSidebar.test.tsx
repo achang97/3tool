@@ -1,3 +1,4 @@
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
 import { mockTool } from '@tests/constants/data';
@@ -9,27 +10,27 @@ jest.mock('../hooks/useActiveTool', () => ({
 
 describe('EditorSidebar', () => {
   it('renders Components and Inspector tabs', () => {
-    const result = render(<EditorSidebar />);
+    render(<EditorSidebar />);
 
-    expect(result.getByText('Components')).toBeTruthy();
-    expect(result.getByText('Inspector')).toBeTruthy();
+    expect(screen.getByText('Components')).toBeTruthy();
+    expect(screen.getByText('Inspector')).toBeTruthy();
   });
 
   it('switches to Inspector panel on tab click', async () => {
-    const result = render(<EditorSidebar />);
+    render(<EditorSidebar />);
 
-    await userEvent.click(result.getByText('Components'));
-    await userEvent.click(result.getByText('Inspector'));
+    await userEvent.click(screen.getByText('Components'));
+    await userEvent.click(screen.getByText('Inspector'));
 
-    expect(await result.findByTestId('inspector')).toBeTruthy();
+    expect(await screen.findByTestId('inspector')).toBeTruthy();
   });
 
   it('switches to Component panel on tab click', async () => {
-    const result = render(<EditorSidebar />);
+    render(<EditorSidebar />);
 
-    await userEvent.click(result.getByText('Inspector'));
-    await userEvent.click(result.getByText('Components'));
+    await userEvent.click(screen.getByText('Inspector'));
+    await userEvent.click(screen.getByText('Components'));
 
-    expect(await result.findByTestId('component-picker')).toBeTruthy();
+    expect(await screen.findByTestId('component-picker')).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InspectorHeader } from '../InspectorHeader';
 
@@ -18,14 +18,14 @@ describe('InspectorHeader', () => {
   });
 
   it('renders icon', () => {
-    const result = render(
+    render(
       <InspectorHeader title={mockTitle} onSubmit={mockHandleSubmit} icon={mockIcon} isEditable />
     );
-    expect(result.getByText(mockIcon)).toBeTruthy();
+    expect(screen.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders subtitle', () => {
-    const result = render(
+    render(
       <InspectorHeader
         title={mockTitle}
         onSubmit={mockHandleSubmit}
@@ -34,11 +34,11 @@ describe('InspectorHeader', () => {
         isEditable
       />
     );
-    expect(result.getByText(mockSubtitle)).toBeTruthy();
+    expect(screen.getByText(mockSubtitle)).toBeTruthy();
   });
 
   it('renders value', () => {
-    const result = render(
+    render(
       <InspectorHeader
         title={mockTitle}
         onSubmit={mockHandleSubmit}
@@ -47,11 +47,11 @@ describe('InspectorHeader', () => {
         isEditable
       />
     );
-    expect(result.getByText(mockTitle)).toBeTruthy();
+    expect(screen.getByText(mockTitle)).toBeTruthy();
   });
 
   it('toggles input and calls onSubmit on enter if isEditable is true', async () => {
-    const result = render(
+    render(
       <InspectorHeader
         title={mockTitle}
         onSubmit={mockHandleSubmit}
@@ -61,8 +61,8 @@ describe('InspectorHeader', () => {
       />
     );
 
-    await userEvent.click(result.getByTestId(editableTextId));
-    await result.findByTestId(editableInputId);
+    await userEvent.click(screen.getByTestId(editableTextId));
+    await screen.findByTestId(editableInputId);
 
     const newNameText = '1234';
     await userEvent.keyboard(newNameText);
@@ -72,7 +72,7 @@ describe('InspectorHeader', () => {
   });
 
   it('does not toggle input field on click if isEditable is false', async () => {
-    const result = render(
+    render(
       <InspectorHeader
         title={mockTitle}
         onSubmit={mockHandleSubmit}
@@ -82,12 +82,12 @@ describe('InspectorHeader', () => {
       />
     );
 
-    await userEvent.click(result.getByTestId(editableTextId));
-    expect(result.queryByTestId(editableInputId)).toBeNull();
+    await userEvent.click(screen.getByTestId(editableTextId));
+    expect(screen.queryByTestId(editableInputId)).toBeNull();
   });
 
   it('shows icon if isEditable is true and hovering', async () => {
-    const result = render(
+    render(
       <InspectorHeader
         title={mockTitle}
         onSubmit={mockHandleSubmit}
@@ -97,12 +97,12 @@ describe('InspectorHeader', () => {
       />
     );
 
-    await userEvent.hover(result.getByTestId(editableTextId));
-    expect(result.getByTestId(editableEditIconId)).toBeVisible();
+    await userEvent.hover(screen.getByTestId(editableTextId));
+    expect(screen.getByTestId(editableEditIconId)).toBeVisible();
   });
 
   it('does not show icon if isEditable is false and hovering', async () => {
-    const result = render(
+    render(
       <InspectorHeader
         title={mockTitle}
         onSubmit={mockHandleSubmit}
@@ -112,7 +112,7 @@ describe('InspectorHeader', () => {
       />
     );
 
-    await userEvent.hover(result.getByTestId(editableTextId));
-    expect(result.getByTestId(editableDisabledIconId)).not.toBeVisible();
+    await userEvent.hover(screen.getByTestId(editableTextId));
+    expect(screen.getByTestId(editableDisabledIconId)).not.toBeVisible();
   });
 });

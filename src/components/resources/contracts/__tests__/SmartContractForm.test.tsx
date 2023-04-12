@@ -3,6 +3,7 @@ import { goerli, mainnet } from 'wagmi';
 import { ResourceType } from '@app/types';
 import { RESOURCE_DATA_TEMPLATES } from '@app/constants';
 import { pushResource } from '@app/redux/features/resourcesSlice';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { SmartContractForm } from '../SmartContractForm';
 import { useAbiResources } from '../../hooks/useAbiResources';
@@ -29,7 +30,7 @@ describe('SmartContractForm', () => {
 
   describe('name', () => {
     it('renders label', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -37,11 +38,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Name/)).toBeTruthy();
+      expect(screen.getByLabelText(/^Name/)).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -49,12 +50,12 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByPlaceholderText('Enter contract name')).toBeTruthy();
+      expect(screen.getByPlaceholderText('Enter contract name')).toBeTruthy();
     });
 
     it('renders value', () => {
       const mockName = 'name';
-      const result = render(
+      render(
         <SmartContractForm
           name={mockName}
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -62,11 +63,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Name/)).toHaveDisplayValue(mockName);
+      expect(screen.getByLabelText(/^Name/)).toHaveDisplayValue(mockName);
     });
 
     it('calls onNameChange on value change', async () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -75,14 +76,14 @@ describe('SmartContractForm', () => {
         />
       );
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^Name/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^Name/), mockValue);
       expect(mockHandleNameChange).toHaveBeenCalledWith(mockValue);
     });
   });
 
   describe('network', () => {
     it('renders label', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -90,11 +91,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Network/)).toBeTruthy();
+      expect(screen.getByLabelText(/^Network/)).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           // @ts-ignore Intentionally passing in undefined
@@ -103,11 +104,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByText('Select contract network')).toBeTruthy();
+      expect(screen.getByText('Select contract network')).toBeTruthy();
     });
 
     it('renders value', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -115,13 +116,13 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByTestId('smart-contract-form-network-select')).toHaveDisplayValue(
+      expect(screen.getByTestId('smart-contract-form-network-select')).toHaveDisplayValue(
         mainnet.id.toString()
       );
     });
 
     it('calls onDataChange on value change', async () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -129,15 +130,15 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      await userEvent.click(result.getByLabelText(/^Network/));
-      await userEvent.click(result.getByText(goerli.name));
+      await userEvent.click(screen.getByLabelText(/^Network/));
+      await userEvent.click(screen.getByText(goerli.name));
       expect(mockHandleDataChange).toHaveBeenCalledWith({ chainId: goerli.id });
     });
   });
 
   describe('address', () => {
     it('renders label', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -145,11 +146,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Address/)).toBeTruthy();
+      expect(screen.getByLabelText(/^Address/)).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -157,11 +158,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByPlaceholderText('Enter contract address')).toBeTruthy();
+      expect(screen.getByPlaceholderText('Enter contract address')).toBeTruthy();
     });
 
     it('renders value', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: 'address', chainId: mainnet.id, abiId: '' }}
@@ -169,11 +170,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Address/)).toHaveDisplayValue('address');
+      expect(screen.getByLabelText(/^Address/)).toHaveDisplayValue('address');
     });
 
     it('calls onDataChange on value change', async () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -182,7 +183,7 @@ describe('SmartContractForm', () => {
         />
       );
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^Address/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^Address/), mockValue);
       expect(mockHandleDataChange).toHaveBeenCalledWith({ address: mockValue });
     });
   });
@@ -193,7 +194,7 @@ describe('SmartContractForm', () => {
     });
 
     it('renders label', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -201,11 +202,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^ABI/)).toBeTruthy();
+      expect(screen.getByLabelText(/^ABI/)).toBeTruthy();
     });
 
     it('renders "Select contract ABI" placeholder', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           // @ts-ignore Intentionally passing in undefined
@@ -214,12 +215,12 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByText('Select contract ABI')).toBeTruthy();
+      expect(screen.getByText('Select contract ABI')).toBeTruthy();
     });
 
     it('renders "No created ABIs" placeholder', () => {
       (useAbiResources as jest.Mock).mockImplementation(() => []);
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           // @ts-ignore Intentionally passing in undefined
@@ -228,12 +229,12 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByText('No created ABIs')).toBeTruthy();
+      expect(screen.getByText('No created ABIs')).toBeTruthy();
     });
 
     it('disables select when there are no abis', () => {
       (useAbiResources as jest.Mock).mockImplementation(() => []);
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           // @ts-ignore Intentionally passing in undefined
@@ -242,11 +243,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByTestId('smart-contract-form-abi-select')).toBeDisabled();
+      expect(screen.getByTestId('smart-contract-form-abi-select')).toBeDisabled();
     });
 
     it('renders value', () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '1' }}
@@ -254,11 +255,11 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByTestId('smart-contract-form-abi-select')).toHaveDisplayValue('1');
+      expect(screen.getByTestId('smart-contract-form-abi-select')).toHaveDisplayValue('1');
     });
 
     it('calls onDataChange on value change', async () => {
-      const result = render(
+      render(
         <SmartContractForm
           name=""
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -266,8 +267,8 @@ describe('SmartContractForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      await userEvent.click(result.getByLabelText(/^ABI/));
-      await userEvent.click(result.getByText('abi1'));
+      await userEvent.click(screen.getByLabelText(/^ABI/));
+      await userEvent.click(screen.getByText('abi1'));
       expect(mockHandleDataChange).toHaveBeenCalledWith({ abiId: '1' });
     });
 
@@ -277,7 +278,7 @@ describe('SmartContractForm', () => {
 
       (useFetchAbi as jest.Mock).mockImplementation(() => ({ abi: mockAbi }));
 
-      const result = render(
+      render(
         <SmartContractForm
           name={mockName}
           data={{ address: '', chainId: mainnet.id, abiId: '' }}
@@ -286,7 +287,7 @@ describe('SmartContractForm', () => {
         />
       );
 
-      await userEvent.click(result.getByText('Create new ABI'));
+      await userEvent.click(screen.getByText('Create new ABI'));
       expect(mockDispatch).toHaveBeenCalledWith(
         pushResource({
           type: 'create',

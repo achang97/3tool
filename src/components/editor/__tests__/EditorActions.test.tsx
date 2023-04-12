@@ -1,5 +1,5 @@
 import { useAppSelector } from '@app/redux/hooks';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { EditorActions, MAXIMIZED_HEIGHT, MINIMIZED_HEIGHT } from '../EditorActions';
@@ -31,21 +31,21 @@ describe('EditorActions', () => {
   });
 
   it('renders action list', () => {
-    const result = render(<EditorActions />);
-    expect(result.getByTestId('action-list')).toBeTruthy();
+    render(<EditorActions />);
+    expect(screen.getByTestId('action-list')).toBeTruthy();
   });
 
   it('renders placeholder if no action is focused', () => {
-    const result = render(<EditorActions />);
-    expect(result.getByTestId('action-editor-placeholder')).toBeTruthy();
+    render(<EditorActions />);
+    expect(screen.getByTestId('action-editor-placeholder')).toBeTruthy();
   });
 
   it('renders action editor if action is focused', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       focusedAction: mockTool.actions[0],
     }));
-    const result = render(<EditorActions />);
-    expect(result.getByTestId('action-editor')).toBeTruthy();
+    render(<EditorActions />);
+    expect(screen.getByTestId('action-editor')).toBeTruthy();
   });
 
   describe('height', () => {

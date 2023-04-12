@@ -1,35 +1,36 @@
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { ToolbarTemplate } from '../ToolbarTemplate';
 
 describe('ToolbarTemplate', () => {
   it('renders logo as a link to /', () => {
-    const result = render(<ToolbarTemplate />);
+    render(<ToolbarTemplate />);
 
-    const logo = result.getByTestId('toolbar-logo');
+    const logo = screen.getByTestId('toolbar-logo');
     expect(logo.getAttribute('href')).toEqual('/');
   });
 
   it('renders left component', () => {
     const mockLeft = 'left';
 
-    const result = render(<ToolbarTemplate left={mockLeft} />);
+    render(<ToolbarTemplate left={mockLeft} />);
 
-    expect(result.getByText(mockLeft)).toBeTruthy();
+    expect(screen.getByText(mockLeft)).toBeTruthy();
   });
 
   it('renders middle component', () => {
     const mockMiddle = 'middle';
 
-    const result = render(<ToolbarTemplate middle={mockMiddle} />);
+    render(<ToolbarTemplate middle={mockMiddle} />);
 
-    expect(result.getByText(mockMiddle)).toBeTruthy();
+    expect(screen.getByText(mockMiddle)).toBeTruthy();
   });
 
   it('renders right component', () => {
     const mockRight = 'right';
 
-    const result = render(<ToolbarTemplate right={mockRight} />);
+    render(<ToolbarTemplate right={mockRight} />);
 
-    expect(result.getByText(mockRight)).toBeTruthy();
+    expect(screen.getByText(mockRight)).toBeTruthy();
   });
 });

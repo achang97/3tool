@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockUser } from '@tests/constants/data';
 import { UserAvatar } from '../UserAvatar';
@@ -25,16 +25,16 @@ describe('UserAvatar', () => {
   });
 
   it('renders first letter of name', () => {
-    const result = render(<UserAvatar user={mockUser} />);
+    render(<UserAvatar user={mockUser} />);
 
-    expect(result.getByText(mockUser.firstName[0])).toBeTruthy();
+    expect(screen.getByText(mockUser.firstName[0])).toBeTruthy();
   });
 
   it('shows tooltip of full name on hover', async () => {
-    const result = render(<UserAvatar user={mockUser} />);
+    render(<UserAvatar user={mockUser} />);
 
-    await userEvent.hover(result.getByText(mockUser.firstName[0]));
-    expect(await result.findByText(`${mockUser.firstName} ${mockUser.lastName}`)).toBeTruthy();
+    await userEvent.hover(screen.getByText(mockUser.firstName[0]));
+    expect(await screen.findByText(`${mockUser.firstName} ${mockUser.lastName}`)).toBeTruthy();
   });
 
   it('uses default size of 30', () => {

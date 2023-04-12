@@ -1,6 +1,6 @@
 import { useActionIsEditing } from '@app/components/editor/hooks/useActionIsEditing';
 import { ActionType } from '@app/types';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SaveRunButton } from '../SaveRunButton';
 
@@ -29,13 +29,13 @@ describe('SaveRunButton', () => {
     });
 
     it('displays "Run" text if not editing', () => {
-      const result = render(<SaveRunButton type={ActionType.Javascript} />);
-      expect(result.getByText('Run')).toBeTruthy();
+      render(<SaveRunButton type={ActionType.Javascript} />);
+      expect(screen.getByText('Run')).toBeTruthy();
     });
 
     it('executes action on click', async () => {
-      const result = render(<SaveRunButton type={ActionType.Javascript} />);
-      await userEvent.click(result.getByText('Run'));
+      render(<SaveRunButton type={ActionType.Javascript} />);
+      await userEvent.click(screen.getByText('Run'));
       expect(mockExecuteAction).toHaveBeenCalled();
     });
   });
@@ -46,13 +46,13 @@ describe('SaveRunButton', () => {
     });
 
     it('displays "Save" text if editing and in write mode', () => {
-      const result = render(<SaveRunButton type={ActionType.Javascript} />);
-      expect(result.getByText('Save')).toBeTruthy();
+      render(<SaveRunButton type={ActionType.Javascript} />);
+      expect(screen.getByText('Save')).toBeTruthy();
     });
 
     it('saves action on click', async () => {
-      const result = render(<SaveRunButton type={ActionType.Javascript} />);
-      await userEvent.click(result.getByText('Save'));
+      render(<SaveRunButton type={ActionType.Javascript} />);
+      await userEvent.click(screen.getByText('Save'));
       expect(mockSaveAction).toHaveBeenCalled();
     });
   });
@@ -63,13 +63,13 @@ describe('SaveRunButton', () => {
     });
 
     it('displays "Save & Run" text if editing and in read mode', () => {
-      const result = render(<SaveRunButton type={ActionType.SmartContractRead} />);
-      expect(result.getByText('Save & Run')).toBeTruthy();
+      render(<SaveRunButton type={ActionType.SmartContractRead} />);
+      expect(screen.getByText('Save & Run')).toBeTruthy();
     });
 
     it('saves and executes action on click', async () => {
-      const result = render(<SaveRunButton type={ActionType.SmartContractRead} />);
-      await userEvent.click(result.getByText('Save & Run'));
+      render(<SaveRunButton type={ActionType.SmartContractRead} />);
+      await userEvent.click(screen.getByText('Save & Run'));
       expect(mockSaveAndExecuteAction).toHaveBeenCalled();
     });
   });

@@ -1,5 +1,5 @@
 import { useAppSelector } from '@app/redux/hooks';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { Editor } from '../Editor';
@@ -38,23 +38,23 @@ describe('Editor', () => {
     });
 
     it('renders editor toolbar', () => {
-      const result = render(<Editor />);
-      expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
+      render(<Editor />);
+      expect(screen.getByTestId('canvas-toolbar')).toBeTruthy();
     });
 
     it('renders editor sidebar', async () => {
-      const result = render(<Editor />);
-      expect(result.getByTestId('editor-sidebar')).toBeTruthy();
+      render(<Editor />);
+      expect(screen.getByTestId('editor-sidebar')).toBeTruthy();
     });
 
     it('renders editor canvas', async () => {
-      const result = render(<Editor />);
-      expect(result.getByTestId('editor-canvas')).toBeTruthy();
+      render(<Editor />);
+      expect(screen.getByTestId('editor-canvas')).toBeTruthy();
     });
 
     it('renders editor actions', async () => {
-      const result = render(<Editor />);
-      expect(result.getByTestId('editor-actions')).toBeTruthy();
+      render(<Editor />);
+      expect(screen.getByTestId('editor-actions')).toBeTruthy();
     });
   });
 
@@ -66,23 +66,23 @@ describe('Editor', () => {
     });
 
     it('renders editor toolbar', () => {
-      const result = render(<Editor />);
-      expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
+      render(<Editor />);
+      expect(screen.getByTestId('canvas-toolbar')).toBeTruthy();
     });
 
     it('renders editor canvas', async () => {
-      const result = render(<Editor />);
-      expect(result.getByTestId('editor-canvas')).toBeTruthy();
+      render(<Editor />);
+      expect(screen.getByTestId('editor-canvas')).toBeTruthy();
     });
 
     it('does not render editor sidebar', () => {
-      const result = render(<Editor />);
-      expect(result.queryByTestId('editor-sidebar')).toBeNull();
+      render(<Editor />);
+      expect(screen.queryByTestId('editor-sidebar')).toBeNull();
     });
 
     it('does not render editor actions', () => {
-      const result = render(<Editor />);
-      expect(result.queryByTestId('editor-actions')).toBeNull();
+      render(<Editor />);
+      expect(screen.queryByTestId('editor-actions')).toBeNull();
     });
   });
 });

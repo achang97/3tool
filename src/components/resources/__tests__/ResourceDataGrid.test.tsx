@@ -1,5 +1,5 @@
 import { Resource } from '@app/types';
-import { waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
 import { render } from '@tests/utils/renderWithContext';
@@ -20,9 +20,9 @@ jest.mock('@app/redux/services/resources', () => ({
 
 describe('ResourceDataGrid', () => {
   it('queries resources with input value', async () => {
-    const result = render(<ResourceDataGrid />);
+    render(<ResourceDataGrid />);
 
-    const input = result.getByTestId('resource-data-grid-search-input');
+    const input = screen.getByTestId('resource-data-grid-search-input');
 
     await userEvent.type(input, 'abc');
 
@@ -34,20 +34,20 @@ describe('ResourceDataGrid', () => {
   });
 
   it('renders columns', () => {
-    const result = render(<ResourceDataGrid />);
+    render(<ResourceDataGrid />);
 
-    expect(result.getByText('Type')).toBeTruthy();
-    expect(result.getByText('Resource')).toBeTruthy();
-    expect(result.getByText('Created At')).toBeTruthy();
+    expect(screen.getByText('Type')).toBeTruthy();
+    expect(screen.getByText('Resource')).toBeTruthy();
+    expect(screen.getByText('Created At')).toBeTruthy();
   });
 
   it('renders resources as rows in data grid', () => {
-    const result = render(<ResourceDataGrid />);
+    render(<ResourceDataGrid />);
 
     // Check first row
-    expect(result.getByText('Smart contract')).toBeTruthy();
-    expect(result.getByText(mockResources[0].name)).toBeTruthy();
-    expect(result.getByText(`(${mockResources[0].data.smartContract?.address})`)).toBeTruthy();
-    expect(result.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
+    expect(screen.getByText('Smart contract')).toBeTruthy();
+    expect(screen.getByText(mockResources[0].name)).toBeTruthy();
+    expect(screen.getByText(`(${mockResources[0].data.smartContract?.address})`)).toBeTruthy();
+    expect(screen.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
   });
 });

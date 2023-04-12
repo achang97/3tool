@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { useRouter } from 'next/router';
 import { useUser } from '@app/hooks/useUser';
 import { mockUser } from '@tests/constants/data';
@@ -43,9 +43,9 @@ describe('AuthRedirectProvider', () => {
         push: mockPush,
       }));
 
-      const result = render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
+      render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
 
-      expect(result.getByText(mockChildren)).toBeTruthy();
+      expect(screen.getByText(mockChildren)).toBeTruthy();
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -55,9 +55,9 @@ describe('AuthRedirectProvider', () => {
         push: mockPush,
       }));
 
-      const result = render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
+      render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
 
-      expect(result.getByTestId('fullscreen-loader')).toBeTruthy();
+      expect(screen.getByTestId('fullscreen-loader')).toBeTruthy();
       expect(mockPush).toHaveBeenCalledWith('/');
     });
   });
@@ -73,9 +73,9 @@ describe('AuthRedirectProvider', () => {
         push: mockPush,
       }));
 
-      const result = render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
+      render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
 
-      expect(result.getByText(mockChildren)).toBeTruthy();
+      expect(screen.getByText(mockChildren)).toBeTruthy();
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -85,9 +85,9 @@ describe('AuthRedirectProvider', () => {
         push: mockPush,
       }));
 
-      const result = render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
+      render(<AuthRedirectProvider>{mockChildren}</AuthRedirectProvider>);
 
-      expect(result.getByTestId('fullscreen-loader')).toBeTruthy();
+      expect(screen.getByTestId('fullscreen-loader')).toBeTruthy();
       expect(mockPush).toHaveBeenCalledWith('/login');
     });
   });

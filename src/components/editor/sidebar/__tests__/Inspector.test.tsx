@@ -1,5 +1,6 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { mockTool } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { DepGraph } from 'dependency-graph';
 import { Inspector } from '../Inspector';
@@ -36,8 +37,8 @@ describe('Inspector', () => {
       focusedComponentName: mockTool.components[0].name,
     }));
 
-    const result = render(<Inspector />);
-    expect(result.getByTestId('component-inspector')).toBeTruthy();
+    render(<Inspector />);
+    expect(screen.getByTestId('component-inspector')).toBeTruthy();
   });
 
   it('renders tool inspector if there is no focused component', () => {
@@ -45,7 +46,7 @@ describe('Inspector', () => {
       focusedComponentName: undefined,
     }));
 
-    const result = render(<Inspector />);
-    expect(result.getByTestId('tool-inspector')).toBeTruthy();
+    render(<Inspector />);
+    expect(screen.getByTestId('tool-inspector')).toBeTruthy();
   });
 });

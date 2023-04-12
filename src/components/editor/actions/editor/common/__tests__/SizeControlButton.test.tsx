@@ -1,6 +1,6 @@
 import { setIsActionViewMaximized } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SizeControlButton } from '../SizeControlButton';
 
@@ -17,8 +17,8 @@ describe('SizeControlButton', () => {
       isActionViewMaximized: true,
     }));
 
-    const result = render(<SizeControlButton />);
-    const icon = result.getByTestId('size-control-button-minimize');
+    render(<SizeControlButton />);
+    const icon = screen.getByTestId('size-control-button-minimize');
 
     await userEvent.click(icon);
     expect(mockDispatch).toHaveBeenCalledWith(setIsActionViewMaximized(false));
@@ -29,8 +29,8 @@ describe('SizeControlButton', () => {
       isActionViewMaximized: false,
     }));
 
-    const result = render(<SizeControlButton />);
-    const icon = result.getByTestId('size-control-button-maximize');
+    render(<SizeControlButton />);
+    const icon = screen.getByTestId('size-control-button-maximize');
 
     await userEvent.click(icon);
     expect(mockDispatch).toHaveBeenCalledWith(setIsActionViewMaximized(true));

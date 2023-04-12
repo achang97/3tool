@@ -1,9 +1,10 @@
 import Login from '@app/pages/login';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 
 describe('Login', () => {
   it('renders login form', () => {
-    const result = render(<Login />);
-    expect(result.getByTestId('login-form')).toBeTruthy();
+    render(<Login />);
+    expect(screen.getByTestId('login-form')).toBeTruthy();
   });
 });

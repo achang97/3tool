@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DeleteComponentButton } from '../DeleteComponentButton';
 
@@ -24,46 +24,46 @@ describe('DeleteComponentButton', () => {
   });
 
   it('renders Delete text', () => {
-    const result = render(<DeleteComponentButton name={mockName} />);
-    expect(result.getByText('Delete')).toBeTruthy();
+    render(<DeleteComponentButton name={mockName} />);
+    expect(screen.getByText('Delete')).toBeTruthy();
   });
 
   it('opens confirmation dialog on click', async () => {
-    const result = render(<DeleteComponentButton name={mockName} />);
+    render(<DeleteComponentButton name={mockName} />);
 
-    await userEvent.click(result.getByText('Delete'));
-    expect(result.getByTestId(dialogId)).toBeTruthy();
+    await userEvent.click(screen.getByText('Delete'));
+    expect(screen.getByTestId(dialogId)).toBeTruthy();
   });
 
   it('renders description in confirmation dialog', async () => {
-    const result = render(<DeleteComponentButton name={mockName} />);
+    render(<DeleteComponentButton name={mockName} />);
 
-    await userEvent.click(result.getByText('Delete'));
-    expect(result.getByTestId(dialogId)).toBeTruthy();
+    await userEvent.click(screen.getByText('Delete'));
+    expect(screen.getByTestId(dialogId)).toBeTruthy();
 
-    expect(result.getByText(`Are you sure you want to delete ${mockName}?`));
+    expect(screen.getByText(`Are you sure you want to delete ${mockName}?`));
   });
 
   it('renders list of dependent fields in confirmation dialog', async () => {
-    const result = render(<DeleteComponentButton name={mockName} />);
+    render(<DeleteComponentButton name={mockName} />);
 
-    await userEvent.click(result.getByText('Delete'));
-    expect(result.getByTestId(dialogId)).toBeTruthy();
+    await userEvent.click(screen.getByText('Delete'));
+    expect(screen.getByTestId(dialogId)).toBeTruthy();
 
-    expect(result.getByTestId(dialogContentId)).toHaveTextContent(
+    expect(screen.getByTestId(dialogContentId)).toHaveTextContent(
       'You will need to manually delete the following JavaScript expression references: textInput1.text, table1.data'
     );
   });
 
   it('closes confirmation dialog on Cancel click', async () => {
-    const result = render(<DeleteComponentButton name={mockName} />);
+    render(<DeleteComponentButton name={mockName} />);
 
-    await userEvent.click(result.getByText('Delete'));
-    expect(result.getByTestId(dialogId)).toBeTruthy();
+    await userEvent.click(screen.getByText('Delete'));
+    expect(screen.getByTestId(dialogId)).toBeTruthy();
 
-    await userEvent.click(result.getByText('Cancel'));
+    await userEvent.click(screen.getByText('Cancel'));
     await waitFor(() => {
-      expect(result.queryByTestId(dialogId)).toBeNull();
+      expect(screen.queryByTestId(dialogId)).toBeNull();
       expect(mockDeleteComponent).not.toHaveBeenCalled();
     });
   });
@@ -71,30 +71,30 @@ describe('DeleteComponentButton', () => {
   it('closes dialog after successful deletion on Confirm click', async () => {
     mockDeleteComponent.mockImplementation(() => true);
 
-    const result = render(<DeleteComponentButton name={mockName} />);
+    render(<DeleteComponentButton name={mockName} />);
 
-    await userEvent.click(result.getByText('Delete'));
-    expect(result.getByTestId(dialogId)).toBeTruthy();
+    await userEvent.click(screen.getByText('Delete'));
+    expect(screen.getByTestId(dialogId)).toBeTruthy();
 
-    await userEvent.click(result.getByText('Confirm'));
+    await userEvent.click(screen.getByText('Confirm'));
     await waitFor(() => {
       expect(mockDeleteComponent).toHaveBeenCalled();
-      expect(result.queryByTestId(dialogId)).toBeNull();
+      expect(screen.queryByTestId(dialogId)).toBeNull();
     });
   });
 
   it('does not close dialog after failed deletion on Confirm click', async () => {
     mockDeleteComponent.mockImplementation(() => false);
 
-    const result = render(<DeleteComponentButton name={mockName} />);
+    render(<DeleteComponentButton name={mockName} />);
 
-    await userEvent.click(result.getByText('Delete'));
-    expect(result.getByTestId(dialogId)).toBeTruthy();
+    await userEvent.click(screen.getByText('Delete'));
+    expect(screen.getByTestId(dialogId)).toBeTruthy();
 
-    await userEvent.click(result.getByText('Confirm'));
+    await userEvent.click(screen.getByText('Confirm'));
     await waitFor(() => {
       expect(mockDeleteComponent).toHaveBeenCalled();
-      expect(result.getByTestId(dialogId)).toBeTruthy();
+      expect(screen.getByTestId(dialogId)).toBeTruthy();
     });
   });
 });

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { SnackbarProvider } from 'notistack';
 import { ToolSnackbarProvider } from '../ToolSnackbarProvider';
 
@@ -17,8 +17,8 @@ describe('ToolSnackbarProvider', () => {
   });
 
   it('renders children', () => {
-    const result = render(<ToolSnackbarProvider>{mockChildren}</ToolSnackbarProvider>);
-    expect(result.getByText(mockChildren)).toBeTruthy();
+    render(<ToolSnackbarProvider>{mockChildren}</ToolSnackbarProvider>);
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
   it('passes duration of 3000 ms to base SnackbarProvider', () => {

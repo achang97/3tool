@@ -36,7 +36,7 @@ describe('TableInspector', () => {
 
   describe('Data', () => {
     it('renders "Data" title', () => {
-      const result = render(
+      render(
         <TableInspector
           name={mockName}
           data={mockData}
@@ -45,11 +45,11 @@ describe('TableInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Data');
+      validateSection('Data');
     });
 
     it('data: renders "Data" text field', async () => {
-      const result = render(
+      render(
         <TableInspector
           name={mockName}
           data={mockData}
@@ -59,7 +59,7 @@ describe('TableInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Data', {
+      await validateTextField('Data', {
         field: 'data',
         label: 'Data',
         value: mockData.data,
@@ -69,7 +69,7 @@ describe('TableInspector', () => {
     });
 
     it('emptyMessage: renders "Empty message" text field', async () => {
-      const result = render(
+      render(
         <TableInspector
           name={mockName}
           data={mockData}
@@ -79,7 +79,7 @@ describe('TableInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Data', {
+      await validateTextField('Data', {
         field: 'emptyMessage',
         label: 'Empty message',
         value: mockData.emptyMessage,
@@ -91,7 +91,7 @@ describe('TableInspector', () => {
 
   describe('Row selection', () => {
     it('renders "Row selection" title', () => {
-      const result = render(
+      render(
         <TableInspector
           name={mockName}
           data={mockData}
@@ -100,11 +100,11 @@ describe('TableInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Row selection');
+      validateSection('Row selection');
     });
 
     it('multiselect: renders "Enable multi-row selection" text field', async () => {
-      const result = render(
+      render(
         <TableInspector
           name={mockName}
           data={mockData}
@@ -114,7 +114,7 @@ describe('TableInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Row selection', {
+      await validateTextField('Row selection', {
         field: 'multiselect',
         label: 'Enable multi-row selection',
         value: mockData.multiselect,

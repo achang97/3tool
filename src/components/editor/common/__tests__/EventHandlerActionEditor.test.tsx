@@ -2,6 +2,7 @@ import { ACTION_METHOD_CONFIGS } from '@app/constants';
 import { ActionMethod } from '@app/types';
 import userEvent from '@testing-library/user-event';
 import { validateSelectField } from '@tests/testers/inspector';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { useToolElementNames } from '../../hooks/useToolElementNames';
 import { EventHandlerActionEditor } from '../EventHandlerActionEditor';
@@ -26,7 +27,7 @@ describe('EventHandlerActionEditor', () => {
         actionNames: mockActionNames,
       }));
 
-      const result = render(
+      render(
         <EventHandlerActionEditor
           name={mockName}
           data={{
@@ -36,7 +37,7 @@ describe('EventHandlerActionEditor', () => {
           onDataChange={mockHandleDataChange}
         />
       );
-      await validateSelectField(result, undefined, {
+      await validateSelectField(undefined, {
         field: 'actionName',
         label: 'Action',
         value: 'action1',
@@ -55,14 +56,14 @@ describe('EventHandlerActionEditor', () => {
         actionNames: [],
       }));
 
-      const result = render(
+      render(
         <EventHandlerActionEditor
           name={mockName}
           data={{ actionName: '', method: ActionMethod.Trigger }}
           onDataChange={mockHandleDataChange}
         />
       );
-      expect(result.getByText('No created actions')).toBeTruthy();
+      expect(screen.getByText('No created actions')).toBeTruthy();
     });
 
     it('renders "Select action" placeholder if there are created actions', () => {
@@ -71,14 +72,14 @@ describe('EventHandlerActionEditor', () => {
         actionNames: mockActionNames,
       }));
 
-      const result = render(
+      render(
         <EventHandlerActionEditor
           name={mockName}
           data={{ actionName: '', method: ActionMethod.Trigger }}
           onDataChange={mockHandleDataChange}
         />
       );
-      expect(result.getByText('Select action')).toBeTruthy();
+      expect(screen.getByText('Select action')).toBeTruthy();
     });
 
     it('disables select if there are no created actions', async () => {
@@ -86,21 +87,21 @@ describe('EventHandlerActionEditor', () => {
         actionNames: [],
       }));
 
-      const result = render(
+      render(
         <EventHandlerActionEditor
           name={mockName}
           data={{ actionName: '', method: ActionMethod.Trigger }}
           onDataChange={mockHandleDataChange}
         />
       );
-      await userEvent.click(result.getByLabelText('Action'));
-      expect(result.queryByRole('option')).toBeNull();
+      await userEvent.click(screen.getByLabelText('Action'));
+      expect(screen.queryByRole('option')).toBeNull();
     });
   });
 
   describe('actionMethod', () => {
     it('renders select', async () => {
-      const result = render(
+      render(
         <EventHandlerActionEditor
           name={mockName}
           data={{
@@ -110,7 +111,7 @@ describe('EventHandlerActionEditor', () => {
           onDataChange={mockHandleDataChange}
         />
       );
-      await validateSelectField(result, undefined, {
+      await validateSelectField(undefined, {
         field: 'method',
         label: 'Method',
         value: ActionMethod.Trigger,
@@ -125,7 +126,7 @@ describe('EventHandlerActionEditor', () => {
     });
 
     it('renders "Select method" placeholder', () => {
-      const result = render(
+      render(
         <EventHandlerActionEditor
           name={mockName}
           data={{
@@ -135,7 +136,7 @@ describe('EventHandlerActionEditor', () => {
           onDataChange={mockHandleDataChange}
         />
       );
-      expect(result.getByText('Select method')).toBeTruthy();
+      expect(screen.getByText('Select method')).toBeTruthy();
     });
   });
 });

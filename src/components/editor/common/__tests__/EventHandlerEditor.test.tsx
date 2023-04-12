@@ -7,6 +7,7 @@ import { ActionMethod, ComponentEvent, EventHandlerType } from '@app/types';
 import userEvent from '@testing-library/user-event';
 import { validateSelectField } from '@tests/testers/inspector';
 import { render } from '@tests/utils/renderWithContext';
+import { screen } from '@testing-library/react';
 import { EventHandlerEditor } from '../EventHandlerEditor';
 
 const mockName = 'name';
@@ -29,7 +30,7 @@ jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
 describe('EventHandlerEditor', () => {
   describe('event', () => {
     it('renders select', async () => {
-      const result = render(
+      render(
         <EventHandlerEditor
           name={mockName}
           eventOptions={mockEventOptions}
@@ -47,7 +48,7 @@ describe('EventHandlerEditor', () => {
         />
       );
 
-      await validateSelectField(result, undefined, {
+      await validateSelectField(undefined, {
         field: 'event',
         label: 'Event',
         value: ComponentEvent.Click,
@@ -62,7 +63,7 @@ describe('EventHandlerEditor', () => {
     });
 
     it('displays "Select event" placeholder', () => {
-      const result = render(
+      render(
         <EventHandlerEditor
           name={mockName}
           eventOptions={mockEventOptions}
@@ -80,13 +81,13 @@ describe('EventHandlerEditor', () => {
         />
       );
 
-      expect(result.getByText('Select event')).toBeTruthy();
+      expect(screen.getByText('Select event')).toBeTruthy();
     });
   });
 
   describe('type', () => {
     it('renders select', async () => {
-      const result = render(
+      render(
         <EventHandlerEditor
           name={mockName}
           eventOptions={mockEventOptions}
@@ -104,7 +105,7 @@ describe('EventHandlerEditor', () => {
         />
       );
 
-      await validateSelectField(result, undefined, {
+      await validateSelectField(undefined, {
         field: 'type',
         label: 'Effect',
         value: EventHandlerType.Action,
@@ -119,7 +120,7 @@ describe('EventHandlerEditor', () => {
     });
 
     it('renders "Select effect" placeholder', () => {
-      const result = render(
+      render(
         <EventHandlerEditor
           name={mockName}
           eventOptions={mockEventOptions}
@@ -137,11 +138,11 @@ describe('EventHandlerEditor', () => {
         />
       );
 
-      expect(result.getByText('Select effect')).toBeTruthy();
+      expect(screen.getByText('Select effect')).toBeTruthy();
     });
 
     it('updates data field on type change', async () => {
-      const result = render(
+      render(
         <EventHandlerEditor
           name={mockName}
           eventOptions={mockEventOptions}
@@ -159,9 +160,9 @@ describe('EventHandlerEditor', () => {
         />
       );
 
-      await userEvent.click(result.getByLabelText('Effect'));
+      await userEvent.click(screen.getByLabelText('Effect'));
       await userEvent.click(
-        result.getByRole('option', { name: EVENT_HANDLER_CONFIGS.action.label })
+        screen.getByRole('option', { name: EVENT_HANDLER_CONFIGS.action.label })
       );
 
       expect(mockHandleChange).toHaveBeenCalledWith({
@@ -181,7 +182,7 @@ describe('EventHandlerEditor', () => {
     `(
       'renders effect configuration component for $eventHandlerType',
       ({ eventHandlerType, testId }: { eventHandlerType: EventHandlerType; testId: string }) => {
-        const result = render(
+        render(
           <EventHandlerEditor
             name={mockName}
             eventOptions={mockEventOptions}
@@ -199,12 +200,12 @@ describe('EventHandlerEditor', () => {
           />
         );
 
-        expect(result.getByTestId(testId)).toBeTruthy();
+        expect(screen.getByTestId(testId)).toBeTruthy();
       }
     );
 
     it('updates data field on change', async () => {
-      const result = render(
+      render(
         <EventHandlerEditor
           name={mockName}
           eventOptions={mockEventOptions}
@@ -222,8 +223,8 @@ describe('EventHandlerEditor', () => {
         />
       );
 
-      await userEvent.click(result.getByLabelText('Action'));
-      await userEvent.click(result.getByRole('option', { name: 'action1' }));
+      await userEvent.click(screen.getByLabelText('Action'));
+      await userEvent.click(screen.getByRole('option', { name: 'action1' }));
 
       expect(mockHandleChange).toHaveBeenCalledWith({
         data: {

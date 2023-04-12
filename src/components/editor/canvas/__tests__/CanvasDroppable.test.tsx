@@ -1,5 +1,6 @@
 import { Component, ComponentType } from '@app/types';
 import { mockComponentLayout } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { DepGraph } from 'dependency-graph';
 import React from 'react';
@@ -41,7 +42,7 @@ describe('CanvasDroppable', () => {
   });
 
   it('renders tool components', () => {
-    const result = render(<CanvasDroppable isEditable />);
-    expect(result.getByTestId('canvas-component-button1')).toBeTruthy();
+    render(<CanvasDroppable isEditable />);
+    expect(screen.getByTestId('canvas-component-button1')).toBeTruthy();
   });
 });

@@ -1,4 +1,5 @@
 import { mockTool } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { DepGraph } from 'dependency-graph';
 import { EditorApp } from '../EditorApp';
@@ -31,12 +32,12 @@ describe('EditorApp', () => {
   });
 
   it('renders canvas toolbar', () => {
-    const result = render(<EditorApp isEditable />);
-    expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
+    render(<EditorApp isEditable />);
+    expect(screen.getByTestId('canvas-toolbar')).toBeTruthy();
   });
 
   it('renders droppable canvas', () => {
-    const result = render(<EditorApp isEditable />);
-    expect(result.getByTestId('canvas-droppable')).toBeTruthy();
+    render(<EditorApp isEditable />);
+    expect(screen.getByTestId('canvas-droppable')).toBeTruthy();
   });
 });

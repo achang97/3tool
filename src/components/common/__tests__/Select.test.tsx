@@ -1,5 +1,5 @@
 import { MenuItem } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { Select } from '../Select';
 
 const mockValue = '1';
@@ -13,21 +13,21 @@ jest.mock('@mui/material', () => ({
 
 describe('Select', () => {
   it('renders placeholder', () => {
-    const result = render(
+    render(
       <Select placeholder={mockPlaceholder} value="">
         {mockChildren}
       </Select>
     );
-    expect(result.getByText(mockPlaceholder)).toBeTruthy();
+    expect(screen.getByText(mockPlaceholder)).toBeTruthy();
   });
 
   it('renders value', () => {
-    const result = render(
+    render(
       <Select value={mockValue} placeholder={mockPlaceholder}>
         {mockChildren}
       </Select>
     );
-    expect(result.getByTestId('select')).toHaveValue(mockValue);
-    expect(result.queryByTestId(mockPlaceholder)).toBeNull();
+    expect(screen.getByTestId('select')).toHaveValue(mockValue);
+    expect(screen.queryByTestId(mockPlaceholder)).toBeNull();
   });
 });

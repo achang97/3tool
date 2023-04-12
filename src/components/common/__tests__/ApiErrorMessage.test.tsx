@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { Typography } from '@mui/material';
 import { ApiErrorMessage } from '../ApiErrorMessage';
 
@@ -23,8 +23,8 @@ describe('ApiErrorMessage', () => {
   });
 
   it('renders error', () => {
-    const result = render(<ApiErrorMessage error={mockApiError} />);
-    expect(result.getByText(mockApiError.data.message)).toBeTruthy();
+    render(<ApiErrorMessage error={mockApiError} />);
+    expect(screen.getByText(mockApiError.data.message)).toBeTruthy();
   });
 
   it('passes sx to Typography', () => {

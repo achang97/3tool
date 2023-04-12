@@ -1,5 +1,6 @@
 import { waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { silenceConsoleError } from '@tests/utils/silenceConsoleError';
 import { mockUser } from '@tests/constants/data';
@@ -29,37 +30,37 @@ describe('AuthenticatedToolbar', () => {
   });
 
   it('renders user avatar to open the menu', async () => {
-    const result = render(<AuthenticatedToolbar />);
+    render(<AuthenticatedToolbar />);
 
-    const avatar = result.getByTestId(avatarId);
+    const avatar = screen.getByTestId(avatarId);
     expect(avatar.textContent).toEqual(mockUser.firstName[0]);
 
     await userEvent.click(avatar);
-    expect(await result.findByTestId('authenticated-toolbar-menu')).toBeTruthy();
+    expect(await screen.findByTestId('authenticated-toolbar-menu')).toBeTruthy();
   });
 
   it('renders link to Tools page', () => {
-    const result = render(<AuthenticatedToolbar />);
+    render(<AuthenticatedToolbar />);
 
-    const toolsNav = result.getByText('Tools');
+    const toolsNav = screen.getByText('Tools');
     expect(toolsNav.getAttribute('href')).toEqual('/');
   });
 
   it('renders link to Resources page', () => {
-    const result = render(<AuthenticatedToolbar />);
+    render(<AuthenticatedToolbar />);
 
-    const resourcesNav = result.getByText('Resources');
+    const resourcesNav = screen.getByText('Resources');
     expect(resourcesNav.getAttribute('href')).toEqual('/resources');
   });
 
   it('renders link to Settings page', async () => {
     silenceConsoleError('inside a test was not wrapped in act(...)');
 
-    const result = render(<AuthenticatedToolbar />);
+    render(<AuthenticatedToolbar />);
 
-    await userEvent.click(result.getByTestId(avatarId));
+    await userEvent.click(screen.getByTestId(avatarId));
 
-    const settingsNav = await result.findByTestId('authenticated-toolbar-settings');
+    const settingsNav = await screen.findByTestId('authenticated-toolbar-settings');
 
     expect(settingsNav.getAttribute('href')).toEqual('/settings');
     expect(settingsNav).toHaveTextContent('Settings');
@@ -68,16 +69,16 @@ describe('AuthenticatedToolbar', () => {
   it('logs out the user and toggles dropdown menu', async () => {
     silenceConsoleError('inside a test was not wrapped in act(...)');
 
-    const result = render(<AuthenticatedToolbar />);
+    render(<AuthenticatedToolbar />);
 
-    await userEvent.click(result.getByTestId(avatarId));
+    await userEvent.click(screen.getByTestId(avatarId));
 
-    const logoutButton = await result.findByText('Logout');
+    const logoutButton = await screen.findByText('Logout');
     await userEvent.click(logoutButton);
 
     expect(mockLogout).toHaveBeenCalled();
     await waitFor(() => {
-      expect(result.queryByText('Logout')).toBeNull();
+      expect(screen.queryByText('Logout')).toBeNull();
     });
   });
 });

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useCreateToolMutation } from '@app/redux/services/tools';
 import { ApiError } from '@app/types';
@@ -27,21 +27,21 @@ describe('CreateToolDialog', () => {
   });
 
   it('does not render dialog if isOpen is false', () => {
-    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen={false} />);
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen={false} />);
 
-    expect(result.queryByTestId('create-tool-dialog')).toBeNull();
+    expect(screen.queryByTestId('create-tool-dialog')).toBeNull();
   });
 
   it('renders dialog title', () => {
-    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
-    expect(result.getByText('Create new tool')).toBeTruthy();
+    expect(screen.getByText('Create new tool')).toBeTruthy();
   });
 
   it('does not call API to create tool if no tool name is provided', async () => {
-    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
-    const submitButton = result.getByText('Create tool');
+    const submitButton = screen.getByText('Create tool');
     expect(() => userEvent.click(submitButton)).rejects.toThrow(/pointer-events: none/);
 
     expect(mockCreateTool).not.toHaveBeenCalled();
@@ -50,12 +50,12 @@ describe('CreateToolDialog', () => {
   it('calls API to create tool on submit click', async () => {
     const mockName = 'New Tool Name';
 
-    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
-    const input = result.getByTestId('create-tool-dialog-input');
+    const input = screen.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, mockName);
 
-    const submitButton = result.getByText('Create tool');
+    const submitButton = screen.getByText('Create tool');
     await userEvent.click(submitButton);
 
     expect(mockCreateTool).toHaveBeenCalledWith({ name: mockName });
@@ -64,12 +64,12 @@ describe('CreateToolDialog', () => {
   it('does not navigate to new page after failed creation of tool', async () => {
     mockCreateTool.mockImplementation(() => mockApiErrorResponse);
 
-    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
-    const input = result.getByTestId('create-tool-dialog-input');
+    const input = screen.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, 'New Tool Name');
 
-    const submitButton = result.getByText('Create tool');
+    const submitButton = screen.getByText('Create tool');
     await userEvent.click(submitButton);
 
     expect(mockPush).not.toHaveBeenCalled();
@@ -80,12 +80,12 @@ describe('CreateToolDialog', () => {
     const mockNewTool = { _id: 'new-tool-id' };
     mockCreateTool.mockImplementation(() => ({ data: mockNewTool }));
 
-    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
-    const input = result.getByTestId('create-tool-dialog-input');
+    const input = screen.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, 'New Tool Name');
 
-    const submitButton = result.getByText('Create tool');
+    const submitButton = screen.getByText('Create tool');
     await userEvent.click(submitButton);
 
     expect(mockPush).toHaveBeenCalledWith(`/editor/${mockNewTool._id}`);
@@ -104,7 +104,7 @@ describe('CreateToolDialog', () => {
       { error: mockError },
     ]);
 
-    const result = render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
-    expect(result.getByText('Mock Error Message')).toBeTruthy();
+    render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
+    expect(screen.getByText('Mock Error Message')).toBeTruthy();
   });
 });

@@ -1,6 +1,7 @@
 import { ApiError, Resource, ResourceType } from '@app/types';
 import userEvent from '@testing-library/user-event';
 import { mockValidAddress } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { mainnet } from 'wagmi';
 import { RESOURCE_CONFIGS, RESOURCE_DATA_TEMPLATES } from '@app/constants';
@@ -31,7 +32,7 @@ describe('BaseResourceDialog', () => {
 
   describe('dialog', () => {
     it('does not render dialog', () => {
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={mockResource}
@@ -43,7 +44,7 @@ describe('BaseResourceDialog', () => {
           testId={mockTestId}
         />
       );
-      expect(result.queryByTestId(mockTestId)).toBeNull();
+      expect(screen.queryByTestId(mockTestId)).toBeNull();
     });
 
     it('calls onClose when dialog is closed', async () => {
@@ -65,7 +66,7 @@ describe('BaseResourceDialog', () => {
     });
 
     it('renders title', () => {
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={mockResource}
@@ -78,7 +79,7 @@ describe('BaseResourceDialog', () => {
         />
       );
       expect(
-        result.getByText(`${mockTitle} | ${RESOURCE_CONFIGS[mockResource.type].label}`)
+        screen.getByText(`${mockTitle} | ${RESOURCE_CONFIGS[mockResource.type].label}`)
       ).toBeTruthy();
     });
   });
@@ -92,7 +93,7 @@ describe('BaseResourceDialog', () => {
         },
       };
 
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={mockResource}
@@ -105,7 +106,7 @@ describe('BaseResourceDialog', () => {
           testId={mockTestId}
         />
       );
-      expect(result.getByText('Mock Error')).toBeTruthy();
+      expect(screen.getByText('Mock Error')).toBeTruthy();
     });
 
     it.each`
@@ -115,7 +116,7 @@ describe('BaseResourceDialog', () => {
     `(
       'renders $testId for $resourceType resource',
       ({ resourceType, testId }: { resourceType: ResourceType; testId: string }) => {
-        const result = render(
+        render(
           <BaseResourceDialog
             title={mockTitle}
             resource={
@@ -135,12 +136,12 @@ describe('BaseResourceDialog', () => {
             testId={mockTestId}
           />
         );
-        expect(result.getByTestId(testId)).toBeTruthy();
+        expect(screen.getByTestId(testId)).toBeTruthy();
       }
     );
 
     it('calls onChange with name', async () => {
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={
@@ -161,12 +162,12 @@ describe('BaseResourceDialog', () => {
         />
       );
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^Name/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^Name/), mockValue);
       expect(mockHandleChange).toHaveBeenCalledWith({ name: mockValue });
     });
 
     it('calls onChange with data', async () => {
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={
@@ -187,7 +188,7 @@ describe('BaseResourceDialog', () => {
         />
       );
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^Address/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^Address/), mockValue);
       expect(mockHandleChange).toHaveBeenCalledWith({
         data: {
           [ResourceType.SmartContract]: { address: mockValue },
@@ -198,7 +199,7 @@ describe('BaseResourceDialog', () => {
 
   describe('actions', () => {
     it('renders "Go back" button to close dialog', async () => {
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={mockResource}
@@ -210,12 +211,12 @@ describe('BaseResourceDialog', () => {
           testId={mockTestId}
         />
       );
-      await userEvent.click(result.getByText('Go back'));
+      await userEvent.click(screen.getByText('Go back'));
       expect(mockHandleClose).toHaveBeenCalled();
     });
 
     it('does not render "Go back" button', () => {
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={mockResource}
@@ -227,11 +228,11 @@ describe('BaseResourceDialog', () => {
           testId={mockTestId}
         />
       );
-      expect(result.queryByText('Go back')).toBeNull();
+      expect(screen.queryByText('Go back')).toBeNull();
     });
 
     it('does not call onSubmit if validation fails', async () => {
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={
@@ -248,12 +249,12 @@ describe('BaseResourceDialog', () => {
           testId={mockTestId}
         />
       );
-      await userEvent.click(result.getByText('Save'));
+      await userEvent.click(screen.getByText('Save'));
       expect(mockHandleSubmit).not.toHaveBeenCalled();
     });
 
     it('calls onSubmit on Save button click', async () => {
-      const result = render(
+      render(
         <BaseResourceDialog
           title={mockTitle}
           resource={
@@ -278,7 +279,7 @@ describe('BaseResourceDialog', () => {
           testId={mockTestId}
         />
       );
-      await userEvent.click(result.getByText('Save'));
+      await userEvent.click(screen.getByText('Save'));
       expect(mockHandleSubmit).toHaveBeenCalled();
     });
   });

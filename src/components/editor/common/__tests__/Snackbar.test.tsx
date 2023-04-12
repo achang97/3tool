@@ -1,5 +1,5 @@
 import { Alert } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { Snackbar } from '../Snackbar';
 
 const mockMessage = 'message';
@@ -18,8 +18,8 @@ describe('Snackbar', () => {
   });
 
   it('renders message', () => {
-    const result = render(<Snackbar message={mockMessage} variant="success" />);
-    expect(result.getByText(mockMessage)).toBeTruthy();
+    render(<Snackbar message={mockMessage} variant="success" />);
+    expect(screen.getByText(mockMessage)).toBeTruthy();
   });
 
   it('passes success variant as severity into Alert', () => {

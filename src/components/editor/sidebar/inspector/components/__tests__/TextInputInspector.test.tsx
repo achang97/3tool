@@ -59,7 +59,7 @@ describe('TextInputInspector', () => {
 
   describe('Basic', () => {
     it('renders "Basic" title', () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -68,11 +68,11 @@ describe('TextInputInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Basic');
+      validateSection('Basic');
     });
 
     it('defaultValue: renders "Default Value" text field', async () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -82,7 +82,7 @@ describe('TextInputInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Basic', {
+      await validateTextField('Basic', {
         field: 'defaultValue',
         label: 'Default Value',
         value: mockData.defaultValue,
@@ -92,7 +92,7 @@ describe('TextInputInspector', () => {
     });
 
     it('placeholder: renders "Placeholder" text field', async () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -102,7 +102,7 @@ describe('TextInputInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Basic', {
+      await validateTextField('Basic', {
         field: 'placeholder',
         label: 'Placeholder',
         value: mockData.placeholder,
@@ -114,7 +114,7 @@ describe('TextInputInspector', () => {
 
   describe('Label', () => {
     it('renders "Label" title', () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -123,11 +123,11 @@ describe('TextInputInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Label');
+      validateSection('Label');
     });
 
     it('label: renders "Label" text field', async () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -137,7 +137,7 @@ describe('TextInputInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Label', {
+      await validateTextField('Label', {
         field: 'label',
         label: 'Label',
         value: mockData.label,
@@ -149,7 +149,7 @@ describe('TextInputInspector', () => {
 
   describe('Interaction', () => {
     it('renders "Interaction" title', () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -158,11 +158,11 @@ describe('TextInputInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Interaction');
+      validateSection('Interaction');
     });
 
     it('disabled: renders "Disabled" text field', async () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -172,7 +172,7 @@ describe('TextInputInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Interaction', {
+      await validateTextField('Interaction', {
         field: 'disabled',
         label: 'Disabled',
         value: mockData.disabled,
@@ -182,7 +182,7 @@ describe('TextInputInspector', () => {
     });
 
     it('eventHandlers: renders event handlers component', async () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -192,7 +192,7 @@ describe('TextInputInspector', () => {
         />
       );
 
-      await validateComponentEventHandlers(result, 'Interaction', {
+      await validateComponentEventHandlers('Interaction', {
         eventHandlers: mockEventHandlers,
         eventOptions: COMPONENT_CONFIGS.textInput.events,
         onChange: mockHandleEventHandlersChange,
@@ -202,7 +202,7 @@ describe('TextInputInspector', () => {
 
   describe('Validation', () => {
     it('renders "Validation" title', () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -211,11 +211,11 @@ describe('TextInputInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Validation');
+      validateSection('Validation');
     });
 
     it('required: renders "Required" text field', async () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -225,7 +225,7 @@ describe('TextInputInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Validation', {
+      await validateTextField('Validation', {
         field: 'required',
         label: 'Required',
         value: mockData.required,
@@ -235,7 +235,7 @@ describe('TextInputInspector', () => {
     });
 
     it('minLength: renders "Min Length" text field', async () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -245,7 +245,7 @@ describe('TextInputInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Validation', {
+      await validateTextField('Validation', {
         field: 'minLength',
         label: 'Min Length',
         value: mockData.minLength,
@@ -255,7 +255,7 @@ describe('TextInputInspector', () => {
     });
 
     it('maxLength: renders "Max Length" text field', async () => {
-      const result = render(
+      render(
         <TextInputInspector
           name={mockName}
           data={mockData}
@@ -265,7 +265,7 @@ describe('TextInputInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Validation', {
+      await validateTextField('Validation', {
         field: 'maxLength',
         label: 'Max Length',
         value: mockData.maxLength,

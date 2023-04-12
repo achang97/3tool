@@ -1,6 +1,6 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { ComponentType } from '@app/types';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { DraggableComponent } from '../DraggableComponent';
 
 const mockDispatch = jest.fn();
@@ -25,17 +25,13 @@ describe('DraggableComponent', () => {
   });
 
   it('renders icon', () => {
-    const result = render(
-      <DraggableComponent icon={mockIcon} label={mockLabel} type={mockComponentType} />
-    );
-    expect(result.getByText(mockIcon)).toBeTruthy();
+    render(<DraggableComponent icon={mockIcon} label={mockLabel} type={mockComponentType} />);
+    expect(screen.getByText(mockIcon)).toBeTruthy();
   });
 
   it('renders label', () => {
-    const result = render(
-      <DraggableComponent icon={mockIcon} label={mockLabel} type={mockComponentType} />
-    );
-    expect(result.getByText(mockLabel)).toBeTruthy();
+    render(<DraggableComponent icon={mockIcon} label={mockLabel} type={mockComponentType} />);
+    expect(screen.getByText(mockLabel)).toBeTruthy();
   });
 
   it('sets opacity to 0.5 if currently dragging type', () => {

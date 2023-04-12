@@ -1,7 +1,7 @@
 import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
 import { useComponentInputs } from '@app/components/editor/hooks/useComponentInputs';
 import { setComponentInput } from '@app/redux/features/activeToolSlice';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CanvasNumberInput } from '../CanvasNumberInput';
 
@@ -31,10 +31,10 @@ describe('CanvasNumberInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByRole('spinbutton')).toHaveProperty(
+      expect(screen.getByRole('spinbutton')).toHaveProperty(
         'defaultValue',
         mockEvalDataValues.defaultValue.toString()
       );
@@ -46,10 +46,10 @@ describe('CanvasNumberInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByPlaceholderText(mockEvalDataValues.placeholder)).toBeTruthy();
+      expect(screen.getByPlaceholderText(mockEvalDataValues.placeholder)).toBeTruthy();
     });
 
     it('label: renders label', () => {
@@ -58,10 +58,10 @@ describe('CanvasNumberInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByLabelText(mockEvalDataValues.label)).toBeTruthy();
+      expect(screen.getByLabelText(mockEvalDataValues.label)).toBeTruthy();
     });
 
     it('disabled: sets number input to be disabled', () => {
@@ -70,10 +70,10 @@ describe('CanvasNumberInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByRole('spinbutton')).toBeDisabled();
+      expect(screen.getByRole('spinbutton')).toBeDisabled();
     });
 
     it('required: sets number input to be required', () => {
@@ -82,10 +82,10 @@ describe('CanvasNumberInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByRole('spinbutton')).toBeRequired();
+      expect(screen.getByRole('spinbutton')).toBeRequired();
     });
 
     it('minimum: sets min prop', () => {
@@ -94,10 +94,10 @@ describe('CanvasNumberInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByRole('spinbutton')).toHaveProperty(
+      expect(screen.getByRole('spinbutton')).toHaveProperty(
         'min',
         mockEvalDataValues.minimum.toString()
       );
@@ -109,10 +109,10 @@ describe('CanvasNumberInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByRole('spinbutton')).toHaveProperty(
+      expect(screen.getByRole('spinbutton')).toHaveProperty(
         'max',
         mockEvalDataValues.maximum.toString()
       );
@@ -125,40 +125,40 @@ describe('CanvasNumberInput', () => {
         const mockInputs = { value: 24 };
         (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-        const result = render(
+        render(
           <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
         );
-        expect(result.getByRole('spinbutton')).toHaveValue(mockInputs.value);
+        expect(screen.getByRole('spinbutton')).toHaveValue(mockInputs.value);
       });
 
       it('sets float value', () => {
         const mockInputs = { value: 24.3 };
         (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-        const result = render(
+        render(
           <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
         );
-        expect(result.getByRole('spinbutton')).toHaveValue(mockInputs.value);
+        expect(screen.getByRole('spinbutton')).toHaveValue(mockInputs.value);
       });
 
       it('sets value to null if NaN', () => {
         const mockInputs = { value: NaN };
         (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-        const result = render(
+        render(
           <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
         );
-        expect(result.getByRole('spinbutton')).toHaveValue(null);
+        expect(screen.getByRole('spinbutton')).toHaveValue(null);
       });
     });
 
     it('dispatches action to update component inputs on change', async () => {
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
 
       const mockInput = '1';
-      await userEvent.type(result.getByRole('spinbutton'), mockInput);
+      await userEvent.type(screen.getByRole('spinbutton'), mockInput);
       expect(mockDispatch).toHaveBeenCalledWith(
         setComponentInput({
           name: mockName,
@@ -212,10 +212,10 @@ describe('CanvasNumberInput', () => {
       }));
       (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByText('Input is required')).toBeTruthy();
+      expect(screen.getByText('Input is required')).toBeTruthy();
     });
 
     it('renders min length error message if user input is smaller than minimum', () => {
@@ -227,10 +227,10 @@ describe('CanvasNumberInput', () => {
       }));
       (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByText('Input must be at least 2')).toBeTruthy();
+      expect(screen.getByText('Input must be at least 2')).toBeTruthy();
     });
 
     it('renders max length error message if user input is bigger than maximum', () => {
@@ -242,10 +242,10 @@ describe('CanvasNumberInput', () => {
       }));
       (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(result.getByText('Input must be at most 2')).toBeTruthy();
+      expect(screen.getByText('Input must be at most 2')).toBeTruthy();
     });
 
     it('renders no error message if all conditions are met', () => {
@@ -266,10 +266,10 @@ describe('CanvasNumberInput', () => {
 
   describe('event handlers', () => {
     it('passes event handlers to input', async () => {
-      const result = render(
+      render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      await userEvent.click(result.getByRole('spinbutton'));
+      await userEvent.click(screen.getByRole('spinbutton'));
       expect(mockEventHandlerCallbacks.onClick).toHaveBeenCalled();
     });
   });

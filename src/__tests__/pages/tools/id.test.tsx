@@ -1,6 +1,7 @@
 import { useQueryTool } from '@app/components/editor/hooks/useQueryTool';
 import Tool from '@app/pages/tools/[id]';
 import { mockTool } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 
 jest.mock('@app/redux/services/tools', () => ({
@@ -28,8 +29,8 @@ describe('Tools/Id', () => {
     describe('loading', () => {
       it('renders fullscreen loader', () => {
         (useQueryTool as jest.Mock).mockImplementation(() => undefined);
-        const result = render(<Tool />);
-        expect(result.getByTestId('fullscreen-loader')).toBeTruthy();
+        render(<Tool />);
+        expect(screen.getByTestId('fullscreen-loader')).toBeTruthy();
       });
     });
 
@@ -39,13 +40,13 @@ describe('Tools/Id', () => {
       });
 
       it('renders tool viewer toolbar', () => {
-        const result = render(<Tool />);
-        expect(result.getByTestId('tool-viewer-toolbar')).toBeTruthy();
+        render(<Tool />);
+        expect(screen.getByTestId('tool-viewer-toolbar')).toBeTruthy();
       });
 
       it('renders editor app', () => {
-        const result = render(<Tool />);
-        expect(result.getByTestId('editor-app')).toBeTruthy();
+        render(<Tool />);
+        expect(screen.getByTestId('editor-app')).toBeTruthy();
       });
     });
   });

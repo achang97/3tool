@@ -3,7 +3,7 @@ import { useActionIsEditing } from '@app/components/editor/hooks/useActionIsEdit
 import { focusAction } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType } from '@app/types';
-import { render, waitFor } from '@testing-library/react';
+import { screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ActionListItem } from '../ActionListItem';
 
@@ -53,14 +53,14 @@ describe('ActionListItem', () => {
   });
 
   it('renders name', () => {
-    const result = render(<ActionListItem action={mockAction} />);
-    expect(result.getByText(mockAction.name)).toBeTruthy();
+    render(<ActionListItem action={mockAction} />);
+    expect(screen.getByText(mockAction.name)).toBeTruthy();
   });
 
   describe('focus', () => {
     it('focuses action on click', async () => {
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.click(result.getByText(mockAction.name));
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.click(screen.getByText(mockAction.name));
       expect(mockDispatch).toHaveBeenCalledWith(focusAction(mockAction));
     });
 
@@ -69,16 +69,16 @@ describe('ActionListItem', () => {
         focusedAction: mockAction,
       }));
 
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.click(result.getByText(mockAction.name));
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.click(screen.getByText(mockAction.name));
       expect(mockDispatch).not.toHaveBeenCalled();
     });
 
     it('does not focus action if user cancels in alert', async () => {
       (useActionConfirmDiscard as jest.Mock).mockImplementation(() => () => false);
 
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.click(result.getByText(mockAction.name));
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.click(screen.getByText(mockAction.name));
       expect(mockDispatch).not.toHaveBeenCalled();
     });
 
@@ -108,9 +108,9 @@ describe('ActionListItem', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         focusedAction: undefined,
       }));
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.click(result.getByText(mockAction.name));
-      expect(result.queryByTestId(editableInputId)).toBeNull();
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.click(screen.getByText(mockAction.name));
+      expect(screen.queryByTestId(editableInputId)).toBeNull();
     });
 
     it('does not toggle edit mode for name if focused and editing action', async () => {
@@ -119,18 +119,18 @@ describe('ActionListItem', () => {
       }));
       (useActionIsEditing as jest.Mock).mockImplementation(() => true);
 
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.click(result.getByText(mockAction.name));
-      expect(result.queryByTestId(editableInputId)).toBeNull();
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.click(screen.getByText(mockAction.name));
+      expect(screen.queryByTestId(editableInputId)).toBeNull();
     });
 
     it('does not show icon on hover if not focused', async () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         focusedAction: undefined,
       }));
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.hover(result.getByText(mockAction.name));
-      expect(result.getByTestId(editableDisabledIconId)).not.toBeVisible();
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.hover(screen.getByText(mockAction.name));
+      expect(screen.getByTestId(editableDisabledIconId)).not.toBeVisible();
     });
 
     it('shows icon on hover if focused', async () => {
@@ -139,9 +139,9 @@ describe('ActionListItem', () => {
       }));
       (useActionIsEditing as jest.Mock).mockImplementation(() => false);
 
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.hover(result.getByText(mockAction.name));
-      expect(result.getByTestId(editableEditIconId)).toBeVisible();
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.hover(screen.getByText(mockAction.name));
+      expect(screen.getByTestId(editableEditIconId)).toBeVisible();
     });
 
     it('shows tooltip on icon hover if not editable', async () => {
@@ -150,10 +150,10 @@ describe('ActionListItem', () => {
       }));
       (useActionIsEditing as jest.Mock).mockImplementation(() => true);
 
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.hover(result.getByTestId(editableDisabledIconId));
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.hover(screen.getByTestId(editableDisabledIconId));
       expect(
-        await result.findByText('You must save any changes before this can be renamed.')
+        await screen.findByText('You must save any changes before this can be renamed.')
       ).toBeTruthy();
     });
 
@@ -163,9 +163,9 @@ describe('ActionListItem', () => {
       }));
       (useActionIsEditing as jest.Mock).mockImplementation(() => false);
 
-      const result = render(<ActionListItem action={mockAction} />);
-      await userEvent.click(result.getByText(mockAction.name));
-      await result.findByTestId(editableInputId);
+      render(<ActionListItem action={mockAction} />);
+      await userEvent.click(screen.getByText(mockAction.name));
+      await screen.findByTestId(editableInputId);
 
       const newNameText = '1234';
       await userEvent.keyboard(newNameText);
@@ -177,52 +177,52 @@ describe('ActionListItem', () => {
 
   describe('delete', () => {
     it('renders Delete text in menu', async () => {
-      const result = render(<ActionListItem action={mockAction} />);
+      render(<ActionListItem action={mockAction} />);
 
-      await userEvent.click(result.getByTestId(menuButtonId));
-      expect(result.getByText('Delete')).toBeTruthy();
+      await userEvent.click(screen.getByTestId(menuButtonId));
+      expect(screen.getByText('Delete')).toBeTruthy();
     });
 
     it('opens confirmation dialog on click', async () => {
-      const result = render(<ActionListItem action={mockAction} />);
+      render(<ActionListItem action={mockAction} />);
 
-      await userEvent.click(result.getByTestId(menuButtonId));
-      await userEvent.click(result.getByText('Delete'));
-      expect(result.getByTestId(deleteDialogId)).toBeTruthy();
+      await userEvent.click(screen.getByTestId(menuButtonId));
+      await userEvent.click(screen.getByText('Delete'));
+      expect(screen.getByTestId(deleteDialogId)).toBeTruthy();
     });
 
     it('renders description in confirmation dialog', async () => {
-      const result = render(<ActionListItem action={mockAction} />);
+      render(<ActionListItem action={mockAction} />);
 
-      await userEvent.click(result.getByTestId(menuButtonId));
-      await userEvent.click(result.getByText('Delete'));
-      expect(result.getByTestId(deleteDialogId)).toBeTruthy();
+      await userEvent.click(screen.getByTestId(menuButtonId));
+      await userEvent.click(screen.getByText('Delete'));
+      expect(screen.getByTestId(deleteDialogId)).toBeTruthy();
 
-      expect(result.getByText(`Are you sure you want to delete ${mockAction.name}?`));
+      expect(screen.getByText(`Are you sure you want to delete ${mockAction.name}?`));
     });
 
     it('renders list of dependent fields in confirmation dialog', async () => {
-      const result = render(<ActionListItem action={mockAction} />);
+      render(<ActionListItem action={mockAction} />);
 
-      await userEvent.click(result.getByTestId(menuButtonId));
-      await userEvent.click(result.getByText('Delete'));
-      expect(result.getByTestId(deleteDialogId)).toBeTruthy();
+      await userEvent.click(screen.getByTestId(menuButtonId));
+      await userEvent.click(screen.getByText('Delete'));
+      expect(screen.getByTestId(deleteDialogId)).toBeTruthy();
 
-      expect(result.getByTestId(deleteDialogContentId)).toHaveTextContent(
+      expect(screen.getByTestId(deleteDialogContentId)).toHaveTextContent(
         'You will need to manually delete the following JavaScript expression references: textInput1.text, table1.data'
       );
     });
 
     it('closes confirmation dialog on Cancel click', async () => {
-      const result = render(<ActionListItem action={mockAction} />);
+      render(<ActionListItem action={mockAction} />);
 
-      await userEvent.click(result.getByTestId(menuButtonId));
-      await userEvent.click(result.getByText('Delete'));
-      expect(result.getByTestId(deleteDialogId)).toBeTruthy();
+      await userEvent.click(screen.getByTestId(menuButtonId));
+      await userEvent.click(screen.getByText('Delete'));
+      expect(screen.getByTestId(deleteDialogId)).toBeTruthy();
 
-      await userEvent.click(result.getByText('Cancel'));
+      await userEvent.click(screen.getByText('Cancel'));
       await waitFor(() => {
-        expect(result.queryByTestId(deleteDialogId)).toBeNull();
+        expect(screen.queryByTestId(deleteDialogId)).toBeNull();
         expect(mockDeleteAction).not.toHaveBeenCalled();
       });
     });
@@ -230,32 +230,32 @@ describe('ActionListItem', () => {
     it('closes dialog after successful deletion on Confirm click', async () => {
       mockDeleteAction.mockImplementation(() => true);
 
-      const result = render(<ActionListItem action={mockAction} />);
+      render(<ActionListItem action={mockAction} />);
 
-      await userEvent.click(result.getByTestId(menuButtonId));
-      await userEvent.click(result.getByText('Delete'));
-      expect(result.getByTestId(deleteDialogId)).toBeTruthy();
+      await userEvent.click(screen.getByTestId(menuButtonId));
+      await userEvent.click(screen.getByText('Delete'));
+      expect(screen.getByTestId(deleteDialogId)).toBeTruthy();
 
-      await userEvent.click(result.getByText('Confirm'));
+      await userEvent.click(screen.getByText('Confirm'));
       await waitFor(() => {
         expect(mockDeleteAction).toHaveBeenCalled();
-        expect(result.queryByTestId(deleteDialogId)).toBeNull();
+        expect(screen.queryByTestId(deleteDialogId)).toBeNull();
       });
     });
 
     it('does not close dialog after failed deletion on Confirm click', async () => {
       mockDeleteAction.mockImplementation(() => false);
 
-      const result = render(<ActionListItem action={mockAction} />);
+      render(<ActionListItem action={mockAction} />);
 
-      await userEvent.click(result.getByTestId(menuButtonId));
-      await userEvent.click(result.getByText('Delete'));
-      expect(result.getByTestId(deleteDialogId)).toBeTruthy();
+      await userEvent.click(screen.getByTestId(menuButtonId));
+      await userEvent.click(screen.getByText('Delete'));
+      expect(screen.getByTestId(deleteDialogId)).toBeTruthy();
 
-      await userEvent.click(result.getByText('Confirm'));
+      await userEvent.click(screen.getByText('Confirm'));
       await waitFor(() => {
         expect(mockDeleteAction).toHaveBeenCalled();
-        expect(result.getByTestId(deleteDialogId)).toBeTruthy();
+        expect(screen.getByTestId(deleteDialogId)).toBeTruthy();
       });
     });
   });

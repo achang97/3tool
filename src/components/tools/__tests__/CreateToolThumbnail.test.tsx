@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CreateToolThumbnail } from '../CreateToolThumbnail';
 
@@ -23,28 +23,28 @@ describe('CreateToolThumbnail', () => {
   });
 
   it('renders description', () => {
-    const result = render(<CreateToolThumbnail />);
+    render(<CreateToolThumbnail />);
 
-    expect(result.getByText('New tool')).toBeTruthy();
+    expect(screen.getByText('New tool')).toBeTruthy();
   });
 
   it('opens dialog on click', async () => {
-    const result = render(<CreateToolThumbnail />);
+    render(<CreateToolThumbnail />);
 
-    await userEvent.click(result.getByText('New tool'));
+    await userEvent.click(screen.getByText('New tool'));
 
-    expect(await result.findByTestId(createToolDialogId)).toBeTruthy();
+    expect(await screen.findByTestId(createToolDialogId)).toBeTruthy();
   });
 
   it('closes dialog on blur', async () => {
-    const result = render(<CreateToolThumbnail />);
+    render(<CreateToolThumbnail />);
 
-    await userEvent.click(result.getByText('New tool'));
-    expect(await result.findByTestId(createToolDialogId)).toBeTruthy();
+    await userEvent.click(screen.getByText('New tool'));
+    expect(await screen.findByTestId(createToolDialogId)).toBeTruthy();
 
     await userEvent.keyboard('[Escape]');
     await waitFor(() => {
-      expect(result.queryByTestId(createToolDialogId)).toBeNull();
+      expect(screen.queryByTestId(createToolDialogId)).toBeNull();
     });
   });
 });

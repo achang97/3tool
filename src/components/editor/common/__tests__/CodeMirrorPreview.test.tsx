@@ -1,5 +1,5 @@
 import { Alert } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { CodeMirrorPreview } from '../CodeMirrorPreview';
 
 const mockAlertType = 'success';
@@ -20,11 +20,9 @@ describe('CodeMirrorPreview', () => {
   });
 
   it('renders alert with type and message', () => {
-    const result = render(
-      <CodeMirrorPreview alertType={mockAlertType} type={mockType} message={mockMessage} />
-    );
-    expect(result.getByText(mockType)).toBeTruthy();
-    expect(result.getByText(mockMessage)).toBeTruthy();
+    render(<CodeMirrorPreview alertType={mockAlertType} type={mockType} message={mockMessage} />);
+    expect(screen.getByText(mockType)).toBeTruthy();
+    expect(screen.getByText(mockMessage)).toBeTruthy();
   });
 
   it('passes alertType to Alert component as color', () => {

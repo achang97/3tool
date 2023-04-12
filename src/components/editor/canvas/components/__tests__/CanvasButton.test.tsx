@@ -1,5 +1,5 @@
 import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CanvasButton } from '../CanvasButton';
 
@@ -20,10 +20,8 @@ describe('CanvasButton', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByText(mockEvalDataValues.text)).toBeTruthy();
+      render(<CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByText(mockEvalDataValues.text)).toBeTruthy();
     });
 
     it('disabled: sets disabled prop', () => {
@@ -32,10 +30,8 @@ describe('CanvasButton', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByTestId(buttonId)).toBeDisabled();
+      render(<CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByTestId(buttonId)).toBeDisabled();
     });
 
     it('loading: sets loading prop', () => {
@@ -44,11 +40,9 @@ describe('CanvasButton', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByTestId(buttonId)).toBeDisabled();
-      expect(result.getByRole('progressbar')).toBeTruthy();
+      render(<CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByTestId(buttonId)).toBeDisabled();
+      expect(screen.getByRole('progressbar')).toBeTruthy();
     });
   });
 
@@ -58,10 +52,8 @@ describe('CanvasButton', () => {
       (useComponentEvalData as jest.Mock).mockImplementation(() => ({
         evalDataValues: mockEvalDataValues,
       }));
-      const result = render(
-        <CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      await userEvent.click(result.getByText(mockEvalDataValues.text));
+      render(<CanvasButton name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      await userEvent.click(screen.getByText(mockEvalDataValues.text));
       expect(mockEventHandlerCallbacks.onClick).toHaveBeenCalled();
     });
   });

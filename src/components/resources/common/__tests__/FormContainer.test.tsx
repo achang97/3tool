@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { FormContainer } from '../FormContainer';
 
 const mockChildren = 'children';
@@ -18,8 +18,8 @@ describe('FormContainer', () => {
   });
 
   it('renders children', () => {
-    const result = render(<FormContainer>{mockChildren}</FormContainer>);
-    expect(result.getByText(mockChildren)).toBeTruthy();
+    render(<FormContainer>{mockChildren}</FormContainer>);
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
   it('passes sx prop to Box', () => {

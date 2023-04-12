@@ -33,7 +33,7 @@ describe('TextInspector', () => {
 
   describe('Basic', () => {
     it('renders "Basic" title', () => {
-      const result = render(
+      render(
         <TextInspector
           name={mockName}
           data={mockData}
@@ -42,11 +42,11 @@ describe('TextInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Basic');
+      validateSection('Basic');
     });
 
     it('value: renders "Value" text field', async () => {
-      const result = render(
+      render(
         <TextInspector
           name={mockName}
           data={mockData}
@@ -56,7 +56,7 @@ describe('TextInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Basic', {
+      await validateTextField('Basic', {
         field: 'value',
         label: 'Value',
         value: mockData.value,
@@ -68,7 +68,7 @@ describe('TextInspector', () => {
 
   describe('Layout', () => {
     it('renders "Layout" title', () => {
-      const result = render(
+      render(
         <TextInspector
           name={mockName}
           data={mockData}
@@ -77,11 +77,11 @@ describe('TextInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Layout');
+      validateSection('Layout');
     });
 
     it('horizontalAlignment: renders "Horizontal Alignment" enum field', async () => {
-      const result = render(
+      render(
         <TextInspector
           name={mockName}
           data={mockData}
@@ -91,7 +91,7 @@ describe('TextInspector', () => {
         />
       );
 
-      await validateEnumField(result, 'Layout', {
+      await validateEnumField('Layout', {
         field: 'horizontalAlignment',
         label: 'Horizontal Alignment',
         value: mockData.horizontalAlignment,

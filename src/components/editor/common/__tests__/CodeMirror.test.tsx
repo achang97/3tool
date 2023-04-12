@@ -1,5 +1,5 @@
 import { snippetCompletion } from '@codemirror/autocomplete';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { replaceSpecialChars } from '@tests/utils/userEvent';
 import { useCodeMirrorJavascriptAutocomplete } from '../../hooks/useCodeMirrorJavascriptAutocomplete';
@@ -34,15 +34,15 @@ describe('CodeMirror', () => {
   describe('general', () => {
     it('renders label', () => {
       const mockLabel = 'Label';
-      const result = render(
+      render(
         <CodeMirror label={mockLabel} type={mockType} onChange={mockHandleChange} language="text" />
       );
-      expect(result.getByText(mockLabel)).toBeTruthy();
+      expect(screen.getByText(mockLabel)).toBeTruthy();
     });
 
     it('renders placeholder', () => {
       const mockPlaceholder = 'Placeholder';
-      const result = render(
+      render(
         <CodeMirror
           type={mockType}
           placeholder={mockPlaceholder}
@@ -50,17 +50,15 @@ describe('CodeMirror', () => {
           language="text"
         />
       );
-      expect(result.getByText(mockPlaceholder)).toBeTruthy();
+      expect(screen.getByText(mockPlaceholder)).toBeTruthy();
     });
 
     it('calls onChange on input change', async () => {
-      const result = render(
-        <CodeMirror type={mockType} onChange={mockHandleChange} language="text" />
-      );
+      render(<CodeMirror type={mockType} onChange={mockHandleChange} language="text" />);
 
       const newValue = 'h';
 
-      const input = result.getByRole('textbox');
+      const input = screen.getByRole('textbox');
       await userEvent.type(input, newValue);
 
       expect(mockHandleChange).toHaveBeenCalledWith(newValue, expect.any(Object));
@@ -69,11 +67,11 @@ describe('CodeMirror', () => {
     it('sets initial input value to value prop', () => {
       const mockValue = 'hello';
 
-      const result = render(
+      render(
         <CodeMirror value={mockValue} type={mockType} onChange={mockHandleChange} language="text" />
       );
 
-      expect(result.getByText(mockValue)).toBeTruthy();
+      expect(screen.getByText(mockValue)).toBeTruthy();
     });
 
     it('does not update input value to match value prop if isAutosaved is true', () => {
@@ -90,7 +88,7 @@ describe('CodeMirror', () => {
         />
       );
 
-      expect(result.getByText(mockValue)).toBeTruthy();
+      expect(screen.getByText(mockValue)).toBeTruthy();
 
       result.rerender(
         <CodeMirror
@@ -102,8 +100,8 @@ describe('CodeMirror', () => {
         />
       );
 
-      expect(result.getByText(mockValue)).toBeTruthy();
-      expect(result.queryByText(mockNewValue)).toBeNull();
+      expect(screen.getByText(mockValue)).toBeTruthy();
+      expect(screen.queryByText(mockNewValue)).toBeNull();
     });
 
     it('updates input value to match value prop if isAutosaved is false', () => {
@@ -114,7 +112,7 @@ describe('CodeMirror', () => {
         <CodeMirror value={mockValue} type={mockType} onChange={mockHandleChange} language="text" />
       );
 
-      expect(result.getByText(mockValue)).toBeTruthy();
+      expect(screen.getByText(mockValue)).toBeTruthy();
 
       result.rerender(
         <CodeMirror
@@ -125,7 +123,7 @@ describe('CodeMirror', () => {
         />
       );
 
-      expect(result.getByText(mockNewValue)).toBeTruthy();
+      expect(screen.getByText(mockNewValue)).toBeTruthy();
     });
   });
 
@@ -133,36 +131,32 @@ describe('CodeMirror', () => {
     const previewId = 'code-mirror-preview';
 
     it('renders dynamic preview when input is focused', async () => {
-      const result = render(
-        <CodeMirror type={mockType} onChange={mockHandleChange} language="text" />
-      );
+      render(<CodeMirror type={mockType} onChange={mockHandleChange} language="text" />);
 
-      await userEvent.click(result.getByRole('textbox'));
+      await userEvent.click(screen.getByRole('textbox'));
 
-      expect(result.getByText(mockPreview.type)).toBeTruthy();
-      expect(result.getByText(mockPreview.message)).toBeTruthy();
+      expect(screen.getByText(mockPreview.type)).toBeTruthy();
+      expect(screen.getByText(mockPreview.message)).toBeTruthy();
     });
 
     it('does not render dynamic preview when input is not focused', () => {
-      const result = render(
-        <CodeMirror type={mockType} onChange={mockHandleChange} language="text" />
-      );
-      expect(result.queryByTestId(previewId)).toBeNull();
+      render(<CodeMirror type={mockType} onChange={mockHandleChange} language="text" />);
+      expect(screen.queryByTestId(previewId)).toBeNull();
     });
 
     it('does not render dynamic preview if language is javascript', async () => {
-      const result = render(<CodeMirror onChange={mockHandleChange} language="javascript" />);
+      render(<CodeMirror onChange={mockHandleChange} language="javascript" />);
 
-      await userEvent.click(result.getByRole('textbox'));
-      expect(result.queryByTestId(previewId)).toBeNull();
+      await userEvent.click(screen.getByRole('textbox'));
+      expect(screen.queryByTestId(previewId)).toBeNull();
     });
 
     it('does not render dynamic preview if preview data is null', async () => {
       (useCodeMirrorPreview as jest.Mock).mockImplementation(() => null);
-      const result = render(<CodeMirror onChange={mockHandleChange} language="javascript" />);
+      render(<CodeMirror onChange={mockHandleChange} language="javascript" />);
 
-      await userEvent.click(result.getByRole('textbox'));
-      expect(result.queryByTestId(previewId)).toBeNull();
+      await userEvent.click(screen.getByRole('textbox'));
+      expect(screen.queryByTestId(previewId)).toBeNull();
     });
   });
 
@@ -186,20 +180,18 @@ describe('CodeMirror', () => {
         });
       });
 
-      const result = render(
-        <CodeMirror type={mockType} onChange={mockHandleChange} language="text" />
-      );
+      render(<CodeMirror type={mockType} onChange={mockHandleChange} language="text" />);
 
-      const input = result.getByRole('textbox');
+      const input = screen.getByRole('textbox');
       await userEvent.type(input, replaceSpecialChars('{{someFunction'));
 
-      const options = await result.findAllByRole('option');
+      const options = await screen.findAllByRole('option');
       expect(options).toHaveLength(2);
       expect(options[0]).toHaveTextContent('someFunctionOne');
       expect(options[1]).toHaveTextContent('someFunctionTwo');
 
       await userEvent.click(options[0]);
-      expect(result.getByRole('textbox')).toHaveTextContent('{{someFunctionOne}}');
+      expect(screen.getByRole('textbox')).toHaveTextContent('{{someFunctionOne}}');
     });
   });
 });

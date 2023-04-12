@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { useLoginMutation } from '@app/redux/services/auth';
 import userEvent from '@testing-library/user-event';
 import { LoginForm } from '../LoginForm';
@@ -16,15 +16,15 @@ describe('LoginForm', () => {
   });
 
   it('renders email field', () => {
-    const result = render(<LoginForm />);
-    expect(result.getByLabelText(/Email/)).toBeTruthy();
-    expect(result.getByPlaceholderText('Enter email')).toBeTruthy();
+    render(<LoginForm />);
+    expect(screen.getByLabelText(/Email/)).toBeTruthy();
+    expect(screen.getByPlaceholderText('Enter email')).toBeTruthy();
   });
 
   it('renders password field', () => {
-    const result = render(<LoginForm />);
-    expect(result.getByLabelText(/Password/)).toBeTruthy();
-    expect(result.getByPlaceholderText('Enter password')).toBeTruthy();
+    render(<LoginForm />);
+    expect(screen.getByLabelText(/Password/)).toBeTruthy();
+    expect(screen.getByPlaceholderText('Enter password')).toBeTruthy();
   });
 
   it('renders error from login API', () => {
@@ -36,25 +36,25 @@ describe('LoginForm', () => {
     };
     (useLoginMutation as jest.Mock).mockImplementation(() => [mockLogin, { error: mockError }]);
 
-    const result = render(<LoginForm />);
-    expect(result.getByText(mockError.data.message)).toBeTruthy();
+    render(<LoginForm />);
+    expect(screen.getByText(mockError.data.message)).toBeTruthy();
   });
 
   describe('submit', () => {
     it('does not login if email is not given', async () => {
-      const result = render(<LoginForm />);
+      render(<LoginForm />);
 
-      await userEvent.type(result.getByLabelText(/Password/), 'password');
-      await userEvent.click(result.getByText('Login'));
+      await userEvent.type(screen.getByLabelText(/Password/), 'password');
+      await userEvent.click(screen.getByText('Login'));
 
       expect(mockLogin).not.toHaveBeenCalled();
     });
 
     it('does not login if password is not given', async () => {
-      const result = render(<LoginForm />);
+      render(<LoginForm />);
 
-      await userEvent.type(result.getByLabelText(/Email/), 'email');
-      await userEvent.click(result.getByText('Login'));
+      await userEvent.type(screen.getByLabelText(/Email/), 'email');
+      await userEvent.click(screen.getByText('Login'));
 
       expect(mockLogin).not.toHaveBeenCalled();
     });
@@ -63,11 +63,11 @@ describe('LoginForm', () => {
       const mockEmail = 'andrew@tryelixir.io';
       const mockPassword = 'password';
 
-      const result = render(<LoginForm />);
+      render(<LoginForm />);
 
-      await userEvent.type(result.getByLabelText(/Email/), mockEmail);
-      await userEvent.type(result.getByLabelText(/Password/), mockPassword);
-      await userEvent.click(result.getByText('Login'));
+      await userEvent.type(screen.getByLabelText(/Email/), mockEmail);
+      await userEvent.type(screen.getByLabelText(/Password/), mockPassword);
+      await userEvent.click(screen.getByText('Login'));
 
       expect(mockLogin).toHaveBeenCalledWith({
         email: mockEmail,

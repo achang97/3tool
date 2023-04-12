@@ -55,7 +55,7 @@ describe('ButtonInspector', () => {
 
   describe('Basic', () => {
     it('renders "Basic" title', () => {
-      const result = render(
+      render(
         <ButtonInspector
           name={mockName}
           data={mockData}
@@ -64,11 +64,11 @@ describe('ButtonInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Basic');
+      validateSection('Basic');
     });
 
     it('text: renders "Text" text field', async () => {
-      const result = render(
+      render(
         <ButtonInspector
           name={mockName}
           data={mockData}
@@ -78,7 +78,7 @@ describe('ButtonInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Basic', {
+      await validateTextField('Basic', {
         field: 'text',
         label: 'Text',
         value: mockData.text,
@@ -90,7 +90,7 @@ describe('ButtonInspector', () => {
 
   describe('Interaction', () => {
     it('renders "Interaction" title', () => {
-      const result = render(
+      render(
         <ButtonInspector
           name={mockName}
           data={mockData}
@@ -99,11 +99,11 @@ describe('ButtonInspector', () => {
           onEventHandlersChange={mockHandleEventHandlersChange}
         />
       );
-      validateSection(result, 'Interaction');
+      validateSection('Interaction');
     });
 
     it('disabled: renders "Disabled" text field', async () => {
-      const result = render(
+      render(
         <ButtonInspector
           name={mockName}
           data={mockData}
@@ -113,7 +113,7 @@ describe('ButtonInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Interaction', {
+      await validateTextField('Interaction', {
         field: 'disabled',
         label: 'Disabled',
         value: mockData.disabled,
@@ -123,7 +123,7 @@ describe('ButtonInspector', () => {
     });
 
     it('loading: renders "Loading" text field', async () => {
-      const result = render(
+      render(
         <ButtonInspector
           name={mockName}
           data={mockData}
@@ -133,7 +133,7 @@ describe('ButtonInspector', () => {
         />
       );
 
-      await validateTextField(result, 'Interaction', {
+      await validateTextField('Interaction', {
         field: 'loading',
         label: 'Loading',
         value: mockData.loading,
@@ -143,7 +143,7 @@ describe('ButtonInspector', () => {
     });
 
     it('eventHandlers: renders event handlers component', async () => {
-      const result = render(
+      render(
         <ButtonInspector
           name={mockName}
           data={mockData}
@@ -153,7 +153,7 @@ describe('ButtonInspector', () => {
         />
       );
 
-      await validateComponentEventHandlers(result, 'Interaction', {
+      await validateComponentEventHandlers('Interaction', {
         eventHandlers: mockEventHandlers,
         eventOptions: COMPONENT_CONFIGS.button.events,
         onChange: mockHandleEventHandlersChange,

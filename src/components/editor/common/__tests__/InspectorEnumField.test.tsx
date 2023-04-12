@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InspectorEnumField } from '../InspectorEnumField';
 
@@ -15,34 +15,34 @@ describe('InspectorEnumField', () => {
   });
 
   it('renders label', () => {
-    const result = render(
+    render(
       <InspectorEnumField label={mockLabel} options={mockOptions} onChange={mockHandleChange} />
     );
-    expect(result.getByText(mockLabel)).toBeTruthy();
+    expect(screen.getByText(mockLabel)).toBeTruthy();
   });
 
   it('renders options', () => {
-    const result = render(
+    render(
       <InspectorEnumField label={mockLabel} options={mockOptions} onChange={mockHandleChange} />
     );
-    expect(result.getByText(mockOptions[0].label)).toBeTruthy();
-    expect(result.getByText(mockOptions[1].label)).toBeTruthy();
+    expect(screen.getByText(mockOptions[0].label)).toBeTruthy();
+    expect(screen.getByText(mockOptions[1].label)).toBeTruthy();
   });
 
   it('calls onChange', async () => {
-    const result = render(
+    render(
       <InspectorEnumField label={mockLabel} options={mockOptions} onChange={mockHandleChange} />
     );
 
-    await userEvent.click(result.getByText(mockOptions[0].label));
+    await userEvent.click(screen.getByText(mockOptions[0].label));
     expect(mockHandleChange).toHaveBeenCalledWith(mockOptions[0].value);
 
-    await userEvent.click(result.getByText(mockOptions[1].label));
+    await userEvent.click(screen.getByText(mockOptions[1].label));
     expect(mockHandleChange).toHaveBeenCalledWith(mockOptions[1].value);
   });
 
   it('does not call onChange if value is already selected', async () => {
-    const result = render(
+    render(
       <InspectorEnumField
         label={mockLabel}
         options={mockOptions}
@@ -51,7 +51,7 @@ describe('InspectorEnumField', () => {
       />
     );
 
-    await userEvent.click(result.getByText(mockOptions[0].label));
+    await userEvent.click(screen.getByText(mockOptions[0].label));
     expect(mockHandleChange).not.toHaveBeenCalled();
   });
 });

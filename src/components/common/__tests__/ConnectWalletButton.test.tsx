@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { Web3Button } from '@web3modal/react';
 import { ConnectWalletButton } from '../ConnectWalletButton';
 
@@ -15,8 +15,8 @@ describe('ConnectWalletButton', () => {
     const mockWeb3Button = 'Web3 Button';
     (Web3Button as jest.Mock).mockImplementation(() => mockWeb3Button);
 
-    const result = render(<ConnectWalletButton />);
-    expect(result.getByTestId('connect-wallet-button')).toBeTruthy();
-    expect(result.getByText(mockWeb3Button)).toBeTruthy();
+    render(<ConnectWalletButton />);
+    expect(screen.getByTestId('connect-wallet-button')).toBeTruthy();
+    expect(screen.getByText(mockWeb3Button)).toBeTruthy();
   });
 });

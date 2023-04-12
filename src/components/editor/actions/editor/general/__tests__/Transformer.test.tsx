@@ -1,4 +1,5 @@
 import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { Transformer } from '../Transformer';
 
@@ -17,27 +18,27 @@ describe('Transformer', () => {
   });
 
   it('renders label', () => {
-    const result = render(<Transformer onDataChange={mockHandleDataChange} />);
-    expect(result.getByText('Transformer (JavaScript)')).toBeTruthy();
+    render(<Transformer onDataChange={mockHandleDataChange} />);
+    expect(screen.getByText('Transformer (JavaScript)')).toBeTruthy();
   });
 
   it('renders value', () => {
     const mockValue = 'value';
-    const result = render(<Transformer value={mockValue} onDataChange={mockHandleDataChange} />);
-    expect(result.getByText(mockValue)).toBeTruthy();
+    render(<Transformer value={mockValue} onDataChange={mockHandleDataChange} />);
+    expect(screen.getByText(mockValue)).toBeTruthy();
   });
 
   it('renders placeholder', () => {
-    const result = render(<Transformer onDataChange={mockHandleDataChange} />);
+    render(<Transformer onDataChange={mockHandleDataChange} />);
     expect(
-      result.getByText('return formatDataAsArray(data).filter(row => row.quantity > 20)')
+      screen.getByText('return formatDataAsArray(data).filter(row => row.quantity > 20)')
     ).toBeTruthy();
   });
 
   it('calls onDataChange on value change', async () => {
     const mockValue = 'value';
-    const result = render(<Transformer onDataChange={mockHandleDataChange} />);
-    const input = result.getByRole('textbox');
+    render(<Transformer onDataChange={mockHandleDataChange} />);
+    const input = screen.getByRole('textbox');
     await userEvent.type(input, mockValue);
     expect(mockHandleDataChange).toHaveBeenCalledWith({
       transformer: mockValue,

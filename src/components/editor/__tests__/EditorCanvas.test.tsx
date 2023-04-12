@@ -1,3 +1,4 @@
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
 import { blurComponent, focusToolSettings } from '@app/redux/features/editorSlice';
@@ -33,32 +34,32 @@ describe('EditorCanvas', () => {
   });
 
   it('blurs component focus on canvas click', async () => {
-    const result = render(<EditorCanvas isEditable />);
+    render(<EditorCanvas isEditable />);
 
-    await userEvent.click(result.getByTestId('editor-canvas'));
+    await userEvent.click(screen.getByTestId('editor-canvas'));
     expect(mockDispatch).toHaveBeenCalledWith(blurComponent());
   });
 
   it('does not render tool text if not editable', () => {
-    const result = render(<EditorCanvas isEditable={false} />);
-    expect(result.queryByText('tool')).toBeNull();
+    render(<EditorCanvas isEditable={false} />);
+    expect(screen.queryByText('tool')).toBeNull();
   });
 
   it('focuses tool settings on tool text click', async () => {
-    const result = render(<EditorCanvas isEditable />);
+    render(<EditorCanvas isEditable />);
 
-    await userEvent.click(result.getByText('tool'));
+    await userEvent.click(screen.getByText('tool'));
     expect(mockDispatch).toHaveBeenCalledWith(focusToolSettings());
     expect(mockDispatch).not.toHaveBeenCalledWith(blurComponent());
   });
 
   it('renders canvas toolbar', () => {
-    const result = render(<EditorCanvas isEditable />);
-    expect(result.getByTestId('canvas-toolbar')).toBeTruthy();
+    render(<EditorCanvas isEditable />);
+    expect(screen.getByTestId('canvas-toolbar')).toBeTruthy();
   });
 
   it('renders droppable canvas', () => {
-    const result = render(<EditorCanvas isEditable />);
-    expect(result.getByTestId('canvas-droppable')).toBeTruthy();
+    render(<EditorCanvas isEditable />);
+    expect(screen.getByTestId('canvas-droppable')).toBeTruthy();
   });
 });

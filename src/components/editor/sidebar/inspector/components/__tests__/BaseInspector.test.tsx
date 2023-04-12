@@ -6,6 +6,7 @@ import {
   validateSwitchField,
   validateSelectField,
 } from '@tests/testers/inspector';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { BaseInspector, BaseInspectorSectionProps } from '../BaseInspector';
 
@@ -43,11 +44,9 @@ describe('BaseInspector', () => {
         ],
       },
     ];
-    const result = render(
-      <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-    );
-    expect(result.queryByText('Text')).toBeNull();
-    expect(result.queryByText('hello')).toBeNull();
+    render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
+    expect(screen.queryByText('Text')).toBeNull();
+    expect(screen.queryByText('hello')).toBeNull();
   });
 
   describe('section', () => {
@@ -57,12 +56,10 @@ describe('BaseInspector', () => {
         { title: 'Section 2', fields: [] },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      expect(result.getByText('Section 1')).toBeTruthy();
-      expect(result.getByText('Section 2')).toBeTruthy();
+      expect(screen.getByText('Section 1')).toBeTruthy();
+      expect(screen.getByText('Section 2')).toBeTruthy();
     });
 
     it('renders sections without titles', () => {
@@ -77,11 +74,9 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      expect(result.getByText('Custom Component')).toBeTruthy();
+      expect(screen.getByText('Custom Component')).toBeTruthy();
     });
   });
 
@@ -99,11 +94,9 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      expect(result.getByText('Custom Component')).toBeTruthy();
+      expect(screen.getByText('Custom Component')).toBeTruthy();
     });
   });
 
@@ -128,11 +121,9 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      await validateTextField(result, 'Section 1', {
+      await validateTextField('Section 1', {
         field: 'text',
         label: 'Text',
         value: '{{ something }}',
@@ -164,11 +155,9 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      expect(result.getByText(mockPlaceholder)).toBeTruthy();
+      expect(screen.getByText(mockPlaceholder)).toBeTruthy();
     });
   });
 
@@ -202,11 +191,9 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      await validateEnumField(result, 'Section 1', {
+      await validateEnumField('Section 1', {
         field: 'enum',
         label: 'Enum',
         value: 1,
@@ -248,11 +235,9 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      await validateSelectField(result, 'Section 1', {
+      await validateSelectField('Section 1', {
         field: 'select',
         label: 'Select',
         value: 1,
@@ -284,11 +269,9 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      expect(result.getByText(mockPlaceholder)).toBeTruthy();
+      expect(screen.getByText(mockPlaceholder)).toBeTruthy();
     });
 
     it('disables select', async () => {
@@ -311,12 +294,10 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      await userEvent.click(result.getByLabelText('Select'));
-      expect(result.queryByRole('option')).toBeNull();
+      await userEvent.click(screen.getByLabelText('Select'));
+      expect(screen.queryByRole('option')).toBeNull();
     });
   });
 
@@ -338,11 +319,9 @@ describe('BaseInspector', () => {
         },
       ];
 
-      const result = render(
-        <BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />
-      );
+      render(<BaseInspector name={mockName} config={mockConfig} onChange={mockHandleDataChange} />);
 
-      await validateSwitchField(result, 'Section 1', {
+      await validateSwitchField('Section 1', {
         field: 'switch',
         label: 'Switch',
         value: false,

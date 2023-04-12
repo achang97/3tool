@@ -1,6 +1,6 @@
 import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
 import { setComponentInput } from '@app/redux/features/activeToolSlice';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CanvasTable } from '../CanvasTable';
 
@@ -30,11 +30,9 @@ describe('CanvasTable', () => {
             evalDataValues: mockEvalDataValues,
           }));
 
-          const result = render(
-            <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-          );
-          expect(result.getByText('col1')).toBeTruthy();
-          expect(result.getByText('col2')).toBeTruthy();
+          render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+          expect(screen.getByText('col1')).toBeTruthy();
+          expect(screen.getByText('col2')).toBeTruthy();
         });
 
         it('handles duplicate column names', () => {
@@ -45,10 +43,8 @@ describe('CanvasTable', () => {
             evalDataValues: mockEvalDataValues,
           }));
 
-          const result = render(
-            <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-          );
-          expect(result.getByText('col1')).toBeTruthy();
+          render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+          expect(screen.getByText('col1')).toBeTruthy();
         });
       });
 
@@ -61,11 +57,9 @@ describe('CanvasTable', () => {
             evalDataValues: mockEvalDataValues,
           }));
 
-          const result = render(
-            <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-          );
-          expect(result.getByText(mockEvalDataValues.data[0].col1)).toBeTruthy();
-          expect(result.getByText(mockEvalDataValues.data[1].col1)).toBeTruthy();
+          render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+          expect(screen.getByText(mockEvalDataValues.data[0].col1)).toBeTruthy();
+          expect(screen.getByText(mockEvalDataValues.data[1].col1)).toBeTruthy();
         });
       });
     });
@@ -80,10 +74,8 @@ describe('CanvasTable', () => {
           evalDataValues: mockEvalDataValues,
         }));
 
-        const result = render(
-          <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-        );
-        expect(result.queryAllByRole('checkbox', { name: 'Select row' })).toHaveLength(0);
+        render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+        expect(screen.queryAllByRole('checkbox', { name: 'Select row' })).toHaveLength(0);
       });
 
       it('renders checkboxes in each row if true', () => {
@@ -95,10 +87,8 @@ describe('CanvasTable', () => {
           evalDataValues: mockEvalDataValues,
         }));
 
-        const result = render(
-          <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-        );
-        expect(result.getAllByRole('checkbox', { name: 'Select row' })).toHaveLength(2);
+        render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+        expect(screen.getAllByRole('checkbox', { name: 'Select row' })).toHaveLength(2);
       });
     });
 
@@ -108,10 +98,8 @@ describe('CanvasTable', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByText(mockEvalDataValues.emptyMessage)).toBeTruthy();
+      render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByText(mockEvalDataValues.emptyMessage)).toBeTruthy();
     });
   });
 
@@ -125,11 +113,9 @@ describe('CanvasTable', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
+      render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
 
-      await userEvent.click(result.getByText(mockEvalDataValues.data[0].col1));
+      await userEvent.click(screen.getByText(mockEvalDataValues.data[0].col1));
       expect(mockDispatch).toHaveBeenCalledWith(
         setComponentInput({
           name: mockName,
@@ -137,7 +123,7 @@ describe('CanvasTable', () => {
         })
       );
 
-      await userEvent.click(result.getByText(mockEvalDataValues.data[1].col1));
+      await userEvent.click(screen.getByText(mockEvalDataValues.data[1].col1));
       expect(mockDispatch).toHaveBeenCalledWith(
         setComponentInput({
           name: mockName,
@@ -155,10 +141,8 @@ describe('CanvasTable', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      const checkboxes = result.getAllByRole('checkbox', {
+      render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      const checkboxes = screen.getAllByRole('checkbox', {
         name: 'Select row',
       });
 

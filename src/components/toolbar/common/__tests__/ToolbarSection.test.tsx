@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { ToolbarSection } from '../ToolbarSection';
 
 const mockChildren = 'children';
@@ -18,8 +18,8 @@ describe('ToolbarSection', () => {
   });
 
   it('renders children', () => {
-    const result = render(<ToolbarSection>{mockChildren}</ToolbarSection>);
-    expect(result.getByText(mockChildren)).toBeTruthy();
+    render(<ToolbarSection>{mockChildren}</ToolbarSection>);
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
   it('passes sx prop to Box', () => {

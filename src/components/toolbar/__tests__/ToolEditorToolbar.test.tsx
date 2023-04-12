@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { focusToolSettings, setIsPreview } from '@app/redux/features/editorSlice';
 import { mockTool } from '@tests/constants/data';
 import { useAppSelector } from '@app/redux/hooks';
@@ -37,15 +37,15 @@ describe('ToolEditorToolbar', () => {
 
   describe('edit name', () => {
     it('renders name', () => {
-      const result = render(<ToolEditorToolbar />);
-      expect(result.getByText(mockTool.name)).toBeTruthy();
+      render(<ToolEditorToolbar />);
+      expect(screen.getByText(mockTool.name)).toBeTruthy();
     });
 
     it('toggles editable input and updates name', async () => {
-      const result = render(<ToolEditorToolbar />);
+      render(<ToolEditorToolbar />);
 
-      await userEvent.click(result.getByText(mockTool.name));
-      await result.findByTestId('editable-text-field-edit');
+      await userEvent.click(screen.getByText(mockTool.name));
+      await screen.findByTestId('editable-text-field-edit');
 
       const newNameText = '1234';
       await userEvent.keyboard(newNameText);
@@ -58,9 +58,9 @@ describe('ToolEditorToolbar', () => {
   });
 
   it('renders settings icon button and focuses tool settings on click', async () => {
-    const result = render(<ToolEditorToolbar />);
+    render(<ToolEditorToolbar />);
 
-    const button = result.getByTestId(settingsButtonId);
+    const button = screen.getByTestId(settingsButtonId);
     await userEvent.click(button);
 
     expect(mockDispatch).toHaveBeenCalledWith(focusToolSettings());
@@ -70,9 +70,9 @@ describe('ToolEditorToolbar', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       isPreview: false,
     }));
-    const result = render(<ToolEditorToolbar />);
+    render(<ToolEditorToolbar />);
 
-    await userEvent.click(result.getByText('Preview'));
+    await userEvent.click(screen.getByText('Preview'));
     expect(mockDispatch).toHaveBeenCalledWith(setIsPreview(true));
   });
 
@@ -80,9 +80,9 @@ describe('ToolEditorToolbar', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       isPreview: true,
     }));
-    const result = render(<ToolEditorToolbar />);
+    render(<ToolEditorToolbar />);
 
-    await userEvent.click(result.getByText('Editor'));
+    await userEvent.click(screen.getByText('Editor'));
     expect(mockDispatch).toHaveBeenCalledWith(setIsPreview(false));
   });
 });

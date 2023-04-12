@@ -1,5 +1,6 @@
 import { EVENT_HANDLER_DATA_TYPES } from '@app/constants';
 import { validateSwitchField, validateTextField } from '@tests/testers/inspector';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { EventHandlerUrlEditor } from '../EventHandlerUrlEditor';
 
@@ -15,7 +16,7 @@ jest.mock('@app/components/editor/hooks/useCodeMirrorPreview');
 describe('EventHandlerUrlEditor', () => {
   describe('url', () => {
     it('renders text field', async () => {
-      const result = render(
+      render(
         <EventHandlerUrlEditor
           name={mockName}
           data={{ url: 'url', newTab: false }}
@@ -23,7 +24,7 @@ describe('EventHandlerUrlEditor', () => {
         />
       );
 
-      await validateTextField(result, undefined, {
+      await validateTextField(undefined, {
         field: 'url',
         label: 'URL',
         value: 'url',
@@ -36,7 +37,7 @@ describe('EventHandlerUrlEditor', () => {
     });
 
     it('renders "Add URL" placeholder', async () => {
-      const result = render(
+      render(
         <EventHandlerUrlEditor
           name={mockName}
           data={{ url: '', newTab: false }}
@@ -44,12 +45,12 @@ describe('EventHandlerUrlEditor', () => {
         />
       );
 
-      expect(result.getByText('Add URL')).toBeDefined();
+      expect(screen.getByText('Add URL')).toBeDefined();
     });
   });
 
   it('newTab: renders switch field', async () => {
-    const result = render(
+    render(
       <EventHandlerUrlEditor
         name={mockName}
         data={{ url: 'url', newTab: true }}
@@ -57,7 +58,7 @@ describe('EventHandlerUrlEditor', () => {
       />
     );
 
-    await validateSwitchField(result, undefined, {
+    await validateSwitchField(undefined, {
       field: 'newTab',
       label: 'New Tab',
       value: true,

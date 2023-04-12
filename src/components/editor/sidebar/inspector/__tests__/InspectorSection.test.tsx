@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InspectorSection } from '../InspectorSection';
 
@@ -7,42 +7,42 @@ const mockChildren = 'Children';
 
 describe('InspectorSection', () => {
   it('renders visible children if open', () => {
-    const result = render(<InspectorSection title={mockTitle}>{mockChildren}</InspectorSection>);
-    expect(result.getByText(mockChildren)).toBeVisible();
+    render(<InspectorSection title={mockTitle}>{mockChildren}</InspectorSection>);
+    expect(screen.getByText(mockChildren)).toBeVisible();
   });
 
   it('does not render visible children if closed', async () => {
-    const result = render(<InspectorSection title={mockTitle}>{mockChildren}</InspectorSection>);
+    render(<InspectorSection title={mockTitle}>{mockChildren}</InspectorSection>);
 
-    await userEvent.click(result.getByText(mockTitle));
+    await userEvent.click(screen.getByText(mockTitle));
     await waitFor(() => {
-      expect(result.getByText(mockChildren)).not.toBeVisible();
+      expect(screen.getByText(mockChildren)).not.toBeVisible();
     });
   });
 
   it('renders title and toggles section on click', async () => {
-    const result = render(<InspectorSection title={mockTitle}>{mockChildren}</InspectorSection>);
+    render(<InspectorSection title={mockTitle}>{mockChildren}</InspectorSection>);
 
-    const title = result.getByText(mockTitle);
+    const title = screen.getByText(mockTitle);
 
     await userEvent.click(title);
     await waitFor(() => {
-      expect(result.getByText(mockChildren)).not.toBeVisible();
+      expect(screen.getByText(mockChildren)).not.toBeVisible();
     });
 
     await userEvent.click(title);
-    expect(result.getByText(mockChildren)).toBeVisible();
+    expect(screen.getByText(mockChildren)).toBeVisible();
   });
 
   it('renders arrow icons and toggles section on click', async () => {
-    const result = render(<InspectorSection title={mockTitle}>{mockChildren}</InspectorSection>);
+    render(<InspectorSection title={mockTitle}>{mockChildren}</InspectorSection>);
 
-    await userEvent.click(result.getByTestId('inspector-section-arrow-up'));
+    await userEvent.click(screen.getByTestId('inspector-section-arrow-up'));
     await waitFor(() => {
-      expect(result.getByText(mockChildren)).not.toBeVisible();
+      expect(screen.getByText(mockChildren)).not.toBeVisible();
     });
 
-    await userEvent.click(result.getByTestId('inspector-section-arrow-down'));
-    expect(result.getByText(mockChildren)).toBeVisible();
+    await userEvent.click(screen.getByTestId('inspector-section-arrow-down'));
+    expect(screen.getByText(mockChildren)).toBeVisible();
   });
 });

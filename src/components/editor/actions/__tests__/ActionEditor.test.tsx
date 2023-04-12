@@ -2,7 +2,7 @@ import { setActionView, updateFocusedAction } from '@app/redux/features/editorSl
 import { useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType, ActionViewType } from '@app/types';
 import { within } from '@testing-library/dom';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockTool } from '@tests/constants/data';
 import { useActionCycleListener } from '../../hooks/useActionCycleListener';
@@ -48,19 +48,19 @@ describe('ActionEditor', () => {
   });
 
   it('renders tabs', () => {
-    const result = render(<ActionEditor action={mockAction} />);
-    expect(result.getByText('General')).toBeTruthy();
-    expect(result.getByText('Response Handler')).toBeTruthy();
+    render(<ActionEditor action={mockAction} />);
+    expect(screen.getByText('General')).toBeTruthy();
+    expect(screen.getByText('Response Handler')).toBeTruthy();
   });
 
   it('renders button to run and save', () => {
-    const result = render(<ActionEditor action={mockAction} />);
-    expect(result.getByTestId('save-run-button')).toBeTruthy();
+    render(<ActionEditor action={mockAction} />);
+    expect(screen.getByTestId('save-run-button')).toBeTruthy();
   });
 
   it('renders button to maximize / minimize editor', () => {
-    const result = render(<ActionEditor action={mockAction} />);
-    expect(result.getByTestId('size-control-button')).toBeTruthy();
+    render(<ActionEditor action={mockAction} />);
+    expect(screen.getByTestId('size-control-button')).toBeTruthy();
   });
 
   it('calls useActionCycleListener to start listening for cycle changes', () => {
@@ -74,8 +74,8 @@ describe('ActionEditor', () => {
         actionView: ActionViewType.ResponseHandler,
       }));
 
-      const result = render(<ActionEditor action={mockAction} />);
-      await userEvent.click(result.getByText('General'));
+      render(<ActionEditor action={mockAction} />);
+      await userEvent.click(screen.getByText('General'));
       expect(mockDispatch).toHaveBeenCalledWith(setActionView(ActionViewType.General));
     });
 
@@ -84,8 +84,8 @@ describe('ActionEditor', () => {
         actionView: ActionViewType.General,
       }));
 
-      const result = render(<ActionEditor action={mockAction} />);
-      await userEvent.click(result.getByText('Response Handler'));
+      render(<ActionEditor action={mockAction} />);
+      await userEvent.click(screen.getByText('Response Handler'));
       expect(mockDispatch).toHaveBeenCalledWith(setActionView(ActionViewType.ResponseHandler));
     });
   });
@@ -103,8 +103,8 @@ describe('ActionEditor', () => {
           actionView: ActionViewType.General,
         }));
 
-        const result = render(<ActionEditor action={{ ...mockAction, type }} />);
-        expect(result.getByTestId(testId)).toBeTruthy();
+        render(<ActionEditor action={{ ...mockAction, type }} />);
+        expect(screen.getByTestId(testId)).toBeTruthy();
       }
     );
   });
@@ -115,8 +115,8 @@ describe('ActionEditor', () => {
         actionView: ActionViewType.ResponseHandler,
       }));
 
-      const result = render(<ActionEditor action={mockAction} />);
-      expect(result.getByTestId('response-handler-editor')).toBeTruthy();
+      render(<ActionEditor action={mockAction} />);
+      expect(screen.getByTestId('response-handler-editor')).toBeTruthy();
     });
   });
 
@@ -126,11 +126,9 @@ describe('ActionEditor', () => {
         actionView: ActionViewType.General,
       }));
 
-      const result = render(
-        <ActionEditor action={{ ...mockAction, type: ActionType.Javascript }} />
-      );
+      render(<ActionEditor action={{ ...mockAction, type: ActionType.Javascript }} />);
 
-      const input = within(result.getByTestId('code-mirror-JS Code (JavaScript)')).getByRole(
+      const input = within(screen.getByTestId('code-mirror-JS Code (JavaScript)')).getByRole(
         'textbox'
       );
 

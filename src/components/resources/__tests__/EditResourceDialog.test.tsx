@@ -2,6 +2,7 @@ import { useUpdateResourceMutation } from '@app/redux/services/resources';
 import { ApiError, Resource, ResourceType } from '@app/types';
 import userEvent from '@testing-library/user-event';
 import { mockValidAddress } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { mainnet } from 'wagmi';
@@ -43,7 +44,7 @@ describe('EditResourceDialog', () => {
   });
 
   it('renders title', () => {
-    const result = render(
+    render(
       <EditResourceDialog
         resource={mockResource}
         onClose={mockHandleClose}
@@ -52,7 +53,7 @@ describe('EditResourceDialog', () => {
         isBackButtonVisible
       />
     );
-    expect(result.getByText(/Edit Resource/)).toBeTruthy();
+    expect(screen.getByText(/Edit Resource/)).toBeTruthy();
   });
 
   it('renders error message', () => {
@@ -68,7 +69,7 @@ describe('EditResourceDialog', () => {
       { error: mockError },
     ]);
 
-    const result = render(
+    render(
       <EditResourceDialog
         resource={mockResource}
         onClose={mockHandleClose}
@@ -77,13 +78,13 @@ describe('EditResourceDialog', () => {
         isBackButtonVisible
       />
     );
-    expect(result.getByText('Mock Error')).toBeTruthy();
+    expect(screen.getByText('Mock Error')).toBeTruthy();
   });
 
   it('calls onClose on successful update of resource', async () => {
     mockUpdateResource.mockImplementation(() => mockApiSuccessResponse);
 
-    const result = render(
+    render(
       <EditResourceDialog
         resource={mockResource}
         onClose={mockHandleClose}
@@ -92,7 +93,7 @@ describe('EditResourceDialog', () => {
         isBackButtonVisible
       />
     );
-    await userEvent.click(result.getByText('Save'));
+    await userEvent.click(screen.getByText('Save'));
     expect(mockUpdateResource).toHaveBeenCalledWith(mockResource);
     expect(mockHandleClose).toHaveBeenCalled();
   });
@@ -100,7 +101,7 @@ describe('EditResourceDialog', () => {
   it('does not call onClose on failed update of resource', async () => {
     mockUpdateResource.mockImplementation(() => mockApiErrorResponse);
 
-    const result = render(
+    render(
       <EditResourceDialog
         resource={mockResource}
         onClose={mockHandleClose}
@@ -109,7 +110,7 @@ describe('EditResourceDialog', () => {
         isBackButtonVisible
       />
     );
-    await userEvent.click(result.getByText('Save'));
+    await userEvent.click(screen.getByText('Save'));
     expect(mockUpdateResource).toHaveBeenCalledWith(mockResource);
     expect(mockHandleClose).not.toHaveBeenCalled();
   });

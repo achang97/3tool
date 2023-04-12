@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InspectorSwitch } from '../InspectorSwitch';
 
@@ -7,25 +7,23 @@ const mockHandleChange = jest.fn();
 
 describe('InspectorSwitch', () => {
   it('renders label', () => {
-    const result = render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
-    expect(result.getByText(mockLabel)).toBeTruthy();
+    render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
+    expect(screen.getByText(mockLabel)).toBeTruthy();
   });
 
   it('calls onChange on click', async () => {
-    const result = render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
-    await userEvent.click(result.getByRole('checkbox'));
+    render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
+    await userEvent.click(screen.getByRole('checkbox'));
     expect(mockHandleChange).toHaveBeenCalled();
   });
 
   it('renders checked value as true', () => {
-    const result = render(
-      <InspectorSwitch label={mockLabel} onChange={mockHandleChange} checked />
-    );
-    expect(result.getByRole('checkbox')).toBeChecked();
+    render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} checked />);
+    expect(screen.getByRole('checkbox')).toBeChecked();
   });
 
   it('renders checked value as false', () => {
-    const result = render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
-    expect(result.getByRole('checkbox')).not.toBeChecked();
+    render(<InspectorSwitch label={mockLabel} onChange={mockHandleChange} />);
+    expect(screen.getByRole('checkbox')).not.toBeChecked();
   });
 });

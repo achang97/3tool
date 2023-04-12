@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { EditorToolbar } from '../EditorToolbar';
 
 jest.mock('@mui/material', () => {
@@ -18,8 +18,8 @@ describe('EditorToolbar', () => {
   });
 
   it('renders children', () => {
-    const result = render(<EditorToolbar>{mockChildren}</EditorToolbar>);
-    expect(result.getByText(mockChildren)).toBeTruthy();
+    render(<EditorToolbar>{mockChildren}</EditorToolbar>);
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
   it('passes sx prop to Box', () => {

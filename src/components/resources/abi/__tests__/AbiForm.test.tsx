@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AbiForm } from '../AbiForm';
 
@@ -8,7 +8,7 @@ const mockHandleNameChange = jest.fn();
 describe('AbiForm', () => {
   describe('name', () => {
     it('renders label', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false }}
@@ -16,11 +16,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Name/)).toBeTruthy();
+      expect(screen.getByLabelText(/^Name/)).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false }}
@@ -28,12 +28,12 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByPlaceholderText('Enter ABI name')).toBeTruthy();
+      expect(screen.getByPlaceholderText('Enter ABI name')).toBeTruthy();
     });
 
     it('renders value', () => {
       const mockName = 'name';
-      const result = render(
+      render(
         <AbiForm
           name={mockName}
           data={{ abi: '', isProxy: false }}
@@ -41,11 +41,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Name/)).toHaveDisplayValue(mockName);
+      expect(screen.getByLabelText(/^Name/)).toHaveDisplayValue(mockName);
     });
 
     it('calls onNameChange on value change', async () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false }}
@@ -54,14 +54,14 @@ describe('AbiForm', () => {
         />
       );
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^Name/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^Name/), mockValue);
       expect(mockHandleNameChange).toHaveBeenCalledWith(mockValue);
     });
   });
 
   describe('ABI', () => {
     it('renders label', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false }}
@@ -69,11 +69,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^ABI/)).toBeTruthy();
+      expect(screen.getByLabelText(/^ABI/)).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false }}
@@ -81,11 +81,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByPlaceholderText('Enter contract ABI')).toBeTruthy();
+      expect(screen.getByPlaceholderText('Enter contract ABI')).toBeTruthy();
     });
 
     it('renders value', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: 'abi', isProxy: false }}
@@ -93,11 +93,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^ABI/)).toHaveDisplayValue('abi');
+      expect(screen.getByLabelText(/^ABI/)).toHaveDisplayValue('abi');
     });
 
     it('calls onDataChange on value change', async () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false }}
@@ -106,14 +106,14 @@ describe('AbiForm', () => {
         />
       );
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^ABI/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^ABI/), mockValue);
       expect(mockHandleDataChange).toHaveBeenCalledWith({ abi: mockValue });
     });
   });
 
   describe('proxy', () => {
     it('renders label', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false }}
@@ -121,11 +121,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText('Add logic ABI')).toBeTruthy();
+      expect(screen.getByLabelText('Add logic ABI')).toBeTruthy();
     });
 
     it('renders value', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: true }}
@@ -133,11 +133,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText('Add logic ABI')).toBeChecked();
+      expect(screen.getByLabelText('Add logic ABI')).toBeChecked();
     });
 
     it('calls onDataChange on value change', async () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false }}
@@ -145,14 +145,14 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      await userEvent.click(result.getByLabelText('Add logic ABI'));
+      await userEvent.click(screen.getByLabelText('Add logic ABI'));
       expect(mockHandleDataChange).toHaveBeenCalledWith({ isProxy: true });
     });
   });
 
   describe('logic ABI', () => {
     it('hides logic ABI if not proxy', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: false, logicAbi: '' }}
@@ -160,11 +160,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Logic ABI/)).not.toBeVisible();
+      expect(screen.getByLabelText(/^Logic ABI/)).not.toBeVisible();
     });
 
     it('shows logic ABI if proxy', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: true, logicAbi: '' }}
@@ -172,11 +172,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Logic ABI/)).toBeVisible();
+      expect(screen.getByLabelText(/^Logic ABI/)).toBeVisible();
     });
 
     it('renders label', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: true, logicAbi: '' }}
@@ -184,11 +184,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Logic ABI/)).toBeTruthy();
+      expect(screen.getByLabelText(/^Logic ABI/)).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: true, logicAbi: '' }}
@@ -196,11 +196,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByPlaceholderText('Enter logic contract ABI')).toBeTruthy();
+      expect(screen.getByPlaceholderText('Enter logic contract ABI')).toBeTruthy();
     });
 
     it('renders value', () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: true, logicAbi: 'logicAbi' }}
@@ -208,11 +208,11 @@ describe('AbiForm', () => {
           onNameChange={mockHandleNameChange}
         />
       );
-      expect(result.getByLabelText(/^Logic ABI/)).toHaveDisplayValue('logicAbi');
+      expect(screen.getByLabelText(/^Logic ABI/)).toHaveDisplayValue('logicAbi');
     });
 
     it('calls onDataChange on value change', async () => {
-      const result = render(
+      render(
         <AbiForm
           name=""
           data={{ abi: '', isProxy: true, logicAbi: '' }}
@@ -221,7 +221,7 @@ describe('AbiForm', () => {
         />
       );
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^Logic ABI/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^Logic ABI/), mockValue);
       expect(mockHandleDataChange).toHaveBeenCalledWith({
         logicAbi: mockValue,
       });

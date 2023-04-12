@@ -1,7 +1,7 @@
 import { useComponentEvalData } from '@app/components/editor/hooks/useComponentEvalData';
 import { useComponentInputs } from '@app/components/editor/hooks/useComponentInputs';
 import { setComponentInput } from '@app/redux/features/activeToolSlice';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CanvasTextInput } from '../CanvasTextInput';
 
@@ -31,10 +31,8 @@ describe('CanvasTextInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByRole('textbox')).toHaveProperty(
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByRole('textbox')).toHaveProperty(
         'defaultValue',
         mockEvalDataValues.defaultValue
       );
@@ -46,10 +44,8 @@ describe('CanvasTextInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByPlaceholderText(mockEvalDataValues.placeholder)).toBeTruthy();
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByPlaceholderText(mockEvalDataValues.placeholder)).toBeTruthy();
     });
 
     it('label: renders label', () => {
@@ -58,10 +54,8 @@ describe('CanvasTextInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByLabelText(mockEvalDataValues.label)).toBeTruthy();
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByLabelText(mockEvalDataValues.label)).toBeTruthy();
     });
 
     it('disabled: sets text input to be disabled', () => {
@@ -70,10 +64,8 @@ describe('CanvasTextInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByRole('textbox')).toBeDisabled();
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByRole('textbox')).toBeDisabled();
     });
 
     it('required: sets text input to be required', () => {
@@ -82,10 +74,8 @@ describe('CanvasTextInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByRole('textbox')).toBeRequired();
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByRole('textbox')).toBeRequired();
     });
   });
 
@@ -94,19 +84,15 @@ describe('CanvasTextInput', () => {
       const mockInputs = { value: 'value' };
       (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByRole('textbox')).toHaveValue(mockInputs.value);
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByRole('textbox')).toHaveValue(mockInputs.value);
     });
 
     it('dispatches action to update component inputs on change', async () => {
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
 
       const mockInput = 'n';
-      await userEvent.type(result.getByRole('textbox'), mockInput);
+      await userEvent.type(screen.getByRole('textbox'), mockInput);
       expect(mockDispatch).toHaveBeenCalledWith(
         setComponentInput({
           name: mockName,
@@ -121,10 +107,8 @@ describe('CanvasTextInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByRole('textbox')).toHaveProperty('minLength', mockEvalDataValues.minLength);
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByRole('textbox')).toHaveProperty('minLength', mockEvalDataValues.minLength);
     });
 
     it('maxLength: sets maxLength prop', () => {
@@ -133,10 +117,8 @@ describe('CanvasTextInput', () => {
         evalDataValues: mockEvalDataValues,
       }));
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByRole('textbox')).toHaveProperty('maxLength', mockEvalDataValues.maxLength);
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByRole('textbox')).toHaveProperty('maxLength', mockEvalDataValues.maxLength);
     });
   });
 
@@ -182,10 +164,8 @@ describe('CanvasTextInput', () => {
       }));
       (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByText('Input is required')).toBeTruthy();
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByText('Input is required')).toBeTruthy();
     });
 
     it('renders min length error message if user input is shorter than min length', () => {
@@ -197,10 +177,8 @@ describe('CanvasTextInput', () => {
       }));
       (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByText('Input must be at least 2 character(s)')).toBeTruthy();
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByText('Input must be at least 2 character(s)')).toBeTruthy();
     });
 
     it('renders max length error message if user input is longer than max length', () => {
@@ -212,10 +190,8 @@ describe('CanvasTextInput', () => {
       }));
       (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(result.getByText('Input must be at most 2 character(s)')).toBeTruthy();
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByText('Input must be at most 2 character(s)')).toBeTruthy();
     });
 
     it('renders no error message if all conditions are met', () => {
@@ -236,10 +212,8 @@ describe('CanvasTextInput', () => {
 
   describe('event handlers', () => {
     it('passes event handlers to input', async () => {
-      const result = render(
-        <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      await userEvent.click(result.getByRole('textbox'));
+      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      await userEvent.click(screen.getByRole('textbox'));
       expect(mockEventHandlerCallbacks.onClick).toHaveBeenCalled();
     });
   });

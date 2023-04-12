@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { useUser } from '@app/hooks/useUser';
 import { mockUser } from '@tests/constants/data';
@@ -20,8 +21,8 @@ describe('Toolbar', () => {
   it('renders unauthenticated toolbar', () => {
     (useUser as jest.Mock).mockImplementation(() => undefined);
 
-    const result = render(<Toolbar />);
-    expect(result.getByTestId('unauthenticated-toolbar')).toBeTruthy();
+    render(<Toolbar />);
+    expect(screen.getByTestId('unauthenticated-toolbar')).toBeTruthy();
   });
 
   it('renders nothing if on /tools/[id] route', () => {
@@ -51,7 +52,7 @@ describe('Toolbar', () => {
       pathname: '/',
     }));
 
-    const result = render(<Toolbar />);
-    expect(result.getByTestId('authenticated-toolbar')).toBeTruthy();
+    render(<Toolbar />);
+    expect(screen.getByTestId('authenticated-toolbar')).toBeTruthy();
   });
 });

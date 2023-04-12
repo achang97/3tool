@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { PageContainer } from '../PageContainer';
 
 jest.mock('@mui/material', () => {
@@ -18,8 +18,8 @@ describe('PageContainer', () => {
   });
 
   it('renders children', () => {
-    const result = render(<PageContainer>{mockChildren}</PageContainer>);
-    expect(result.getByText(mockChildren)).toBeTruthy();
+    render(<PageContainer>{mockChildren}</PageContainer>);
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
   it('passes sx prop to Box', () => {

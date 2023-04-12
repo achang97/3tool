@@ -2,7 +2,7 @@ import { useActionConfirmDiscard } from '@app/components/editor/hooks/useActionC
 import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants';
 import { focusAction } from '@app/redux/features/editorSlice';
 import { Action, ActionType } from '@app/types';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { CreateActionButton } from '../CreateActionButton';
@@ -39,37 +39,37 @@ describe('CreateActionButton', () => {
   });
 
   it('renders "New" text', () => {
-    const result = render(<CreateActionButton />);
-    expect(result.getByText('New')).toBeTruthy();
+    render(<CreateActionButton />);
+    expect(screen.getByText('New')).toBeTruthy();
   });
 
   it.each([ActionType.Javascript, ActionType.SmartContractRead])(
     'opens menu with available action types',
     async (actionType: ActionType) => {
-      const result = render(<CreateActionButton />);
-      await userEvent.click(result.getByText('New'));
+      render(<CreateActionButton />);
+      await userEvent.click(screen.getByText('New'));
 
-      expect(result.getByText(ACTION_CONFIGS[actionType].label)).toBeTruthy();
+      expect(screen.getByText(ACTION_CONFIGS[actionType].label)).toBeTruthy();
     }
   );
 
   it('does not create new action if user cancels in alert', async () => {
     (useActionConfirmDiscard as jest.Mock).mockImplementation(() => () => false);
 
-    const result = render(<CreateActionButton />);
-    await userEvent.click(result.getByText('New'));
+    render(<CreateActionButton />);
+    await userEvent.click(screen.getByText('New'));
 
-    await userEvent.click(result.getByText(ACTION_CONFIGS.javascript.label));
+    await userEvent.click(screen.getByText(ACTION_CONFIGS.javascript.label));
     expect(mockUpdateTool).not.toHaveBeenCalled();
   });
 
   it.each([ActionType.Javascript, ActionType.SmartContractRead])(
     'creates new action with automatically generated name on menu option click',
     async (actionType: ActionType) => {
-      const result = render(<CreateActionButton />);
-      await userEvent.click(result.getByText('New'));
+      render(<CreateActionButton />);
+      await userEvent.click(screen.getByText('New'));
 
-      await userEvent.click(result.getByText(ACTION_CONFIGS[actionType].label));
+      await userEvent.click(screen.getByText(ACTION_CONFIGS[actionType].label));
 
       const newAction: Action = {
         type: actionType,
@@ -87,20 +87,20 @@ describe('CreateActionButton', () => {
 
   it('does not focus action on failed creation', async () => {
     mockUpdateTool.mockImplementation(() => mockApiErrorResponse);
-    const result = render(<CreateActionButton />);
+    render(<CreateActionButton />);
 
-    await userEvent.click(result.getByText('New'));
-    await userEvent.click(result.getByText(ACTION_CONFIGS[ActionType.Javascript].label));
+    await userEvent.click(screen.getByText('New'));
+    await userEvent.click(screen.getByText(ACTION_CONFIGS[ActionType.Javascript].label));
 
     expect(mockDispatch).not.toHaveBeenCalled();
   });
 
   it('focuses action on successful creation', async () => {
     mockUpdateTool.mockImplementation(() => mockApiSuccessResponse);
-    const result = render(<CreateActionButton />);
+    render(<CreateActionButton />);
 
-    await userEvent.click(result.getByText('New'));
-    await userEvent.click(result.getByText(ACTION_CONFIGS[ActionType.Javascript].label));
+    await userEvent.click(screen.getByText('New'));
+    await userEvent.click(screen.getByText(ACTION_CONFIGS[ActionType.Javascript].label));
 
     const newAction: Action = {
       type: ActionType.Javascript,

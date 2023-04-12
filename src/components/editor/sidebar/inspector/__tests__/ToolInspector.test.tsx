@@ -1,19 +1,19 @@
 import { GLOBAL_LIBRARIES } from '@app/constants';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { ToolInspector } from '../ToolInspector';
 
 describe('ToolInspector', () => {
   it('renders tool title', () => {
-    const result = render(<ToolInspector />);
-    expect(result.getByText('tool')).toBeTruthy();
+    render(<ToolInspector />);
+    expect(screen.getByText('tool')).toBeTruthy();
   });
 
   it('renders libraries section', () => {
-    const result = render(<ToolInspector />);
-    expect(result.getByText('Libraries')).toBeTruthy();
+    render(<ToolInspector />);
+    expect(screen.getByText('Libraries')).toBeTruthy();
 
     GLOBAL_LIBRARIES.forEach(({ label }) => {
-      expect(result.getByText(label)).toBeTruthy();
+      expect(screen.getByText(label)).toBeTruthy();
     });
   });
 });

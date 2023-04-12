@@ -1,7 +1,7 @@
 import { RESOURCE_CONFIGS } from '@app/constants';
 import { ResourceType } from '@app/types';
 import { GridRenderCellParams, GridValueFormatterParams } from '@mui/x-data-grid';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { formatResourceType, formatCreatedAt, renderNameCell } from '../dataGridFormatters';
 
 describe('dataGridFormatters', () => {
@@ -28,21 +28,21 @@ describe('dataGridFormatters', () => {
     it('renders name', () => {
       const mockName = 'Name';
 
-      const result = render(
+      render(
         renderNameCell({
           value: mockName,
           row: { type: ResourceType.Abi },
         } as GridRenderCellParams)
       );
 
-      expect(result.getByText(mockName)).toBeTruthy();
+      expect(screen.getByText(mockName)).toBeTruthy();
     });
 
     it('renders address within parentheses if type is smart_contract', () => {
       const mockName = 'Name';
       const mockAddress = '0x123';
 
-      const result = render(
+      render(
         renderNameCell({
           value: mockName,
           row: {
@@ -52,7 +52,7 @@ describe('dataGridFormatters', () => {
         } as GridRenderCellParams)
       );
 
-      expect(result.getByText(`(${mockAddress})`)).toBeTruthy();
+      expect(screen.getByText(`(${mockAddress})`)).toBeTruthy();
     });
   });
 });

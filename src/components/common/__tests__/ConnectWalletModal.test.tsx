@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { Web3Modal } from '@web3modal/react';
 import { WALLETCONNECT_PROJECT_ID } from '@app/constants';
 import { ethereumClient } from '@app/utils/wallet';
@@ -25,8 +25,8 @@ describe('ConnectWalletModal', () => {
   it('renders Web3Modal', () => {
     const mockWeb3Modal = 'Web3 Modal';
     (Web3Modal as unknown as jest.Mock).mockImplementation(() => mockWeb3Modal);
-    const result = render(<ConnectWalletModal />);
-    expect(result.getByText(mockWeb3Modal)).toBeTruthy();
+    render(<ConnectWalletModal />);
+    expect(screen.getByText(mockWeb3Modal)).toBeTruthy();
   });
 
   it('passes project id to Web3Modal', () => {

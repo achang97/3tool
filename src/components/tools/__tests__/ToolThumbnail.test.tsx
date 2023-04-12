@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { User } from '@app/types';
 import { mockUser } from '@tests/constants/data';
 import { BASE_WINDOW_URL } from '@tests/constants/window';
@@ -15,7 +15,7 @@ describe('ToolThumbnail', () => {
   });
 
   it('renders name', () => {
-    const result = render(
+    render(
       <ToolThumbnail
         id={mockId}
         name={mockName}
@@ -24,11 +24,11 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    expect(result.getByText(mockName)).toBeTruthy();
+    expect(screen.getByText(mockName)).toBeTruthy();
   });
 
   it('renders avatar for creatorUser', () => {
-    const result = render(
+    render(
       <ToolThumbnail
         id={mockId}
         name={mockName}
@@ -37,7 +37,7 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    expect(result.getByText(mockCreator.firstName[0])).toBeTruthy();
+    expect(screen.getByText(mockCreator.firstName[0])).toBeTruthy();
   });
 
   it('renders date when tool was last updated', () => {
@@ -46,7 +46,7 @@ describe('ToolThumbnail', () => {
 
     Date.now = jest.fn(() => mockNow.valueOf());
 
-    const result = render(
+    render(
       <ToolThumbnail
         id={mockId}
         name={mockName}
@@ -55,7 +55,7 @@ describe('ToolThumbnail', () => {
       />
     );
 
-    expect(result.getByText('Updated a month ago')).toBeTruthy();
+    expect(screen.getByText('Updated a month ago')).toBeTruthy();
   });
 
   it('navigates to /tools/:id route on click', () => {

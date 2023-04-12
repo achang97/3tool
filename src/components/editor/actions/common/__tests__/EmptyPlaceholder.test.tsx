@@ -1,10 +1,10 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { EmptyPlaceholder } from '../EmptyPlaceholder';
 
 describe('EmptyPlaceholder', () => {
   it('renders children', () => {
     const mockChildren = 'children';
-    const result = render(<EmptyPlaceholder>{mockChildren}</EmptyPlaceholder>);
-    expect(result.getByText(mockChildren)).toBeTruthy();
+    render(<EmptyPlaceholder>{mockChildren}</EmptyPlaceholder>);
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 });

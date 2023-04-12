@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormFieldLabel } from '../FormFieldLabel';
 
@@ -16,15 +16,15 @@ jest.mock('@mui/material', () => {
 
 describe('FormFieldLabel', () => {
   it('renders label', () => {
-    const result = render(<FormFieldLabel label={mockLabel} />);
-    expect(result.getByText(mockLabel)).toBeTruthy();
+    render(<FormFieldLabel label={mockLabel} />);
+    expect(screen.getByText(mockLabel)).toBeTruthy();
   });
 
   it('renders tooltip on hover', async () => {
-    const result = render(<FormFieldLabel label={mockLabel} tooltip={mockTooltip} />);
+    render(<FormFieldLabel label={mockLabel} tooltip={mockTooltip} />);
 
-    await userEvent.hover(result.getByTestId('form-field-label-help'));
-    expect(await result.findByText(mockTooltip)).toBeTruthy();
+    await userEvent.hover(screen.getByTestId('form-field-label-help'));
+    expect(await screen.findByText(mockTooltip)).toBeTruthy();
   });
 
   it('passes sx prop to Box', () => {

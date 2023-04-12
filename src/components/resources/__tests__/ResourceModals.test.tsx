@@ -1,5 +1,6 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { mockValidAddress } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
 import { popResource, updateResource } from '@app/redux/features/resourcesSlice';
@@ -54,14 +55,14 @@ describe('ResourceModals', () => {
     });
 
     it('renders create resource dialog', () => {
-      const result = render(<ResourceModals />);
-      expect(result.getByTestId('create-resource-dialog')).toBeTruthy();
+      render(<ResourceModals />);
+      expect(screen.getByTestId('create-resource-dialog')).toBeTruthy();
     });
 
     it('dispatches action to update resource', async () => {
-      const result = render(<ResourceModals />);
+      render(<ResourceModals />);
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^Name/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^Name/), mockValue);
       expect(mockDispatch).toHaveBeenCalledWith(
         updateResource({
           index: 0,
@@ -83,8 +84,8 @@ describe('ResourceModals', () => {
           { type: 'create', resource: mockResource },
         ],
       }));
-      const result = render(<ResourceModals />);
-      expect(result.getByText('Go back')).toBeTruthy();
+      render(<ResourceModals />);
+      expect(screen.getByText('Go back')).toBeTruthy();
     });
   });
 
@@ -96,14 +97,14 @@ describe('ResourceModals', () => {
     });
 
     it('renders edit resource dialog', () => {
-      const result = render(<ResourceModals />);
-      expect(result.getByTestId('edit-resource-dialog')).toBeTruthy();
+      render(<ResourceModals />);
+      expect(screen.getByTestId('edit-resource-dialog')).toBeTruthy();
     });
 
     it('dispatches action to update resource', async () => {
-      const result = render(<ResourceModals />);
+      render(<ResourceModals />);
       const mockValue = 'a';
-      await userEvent.type(result.getByLabelText(/^Name/), mockValue);
+      await userEvent.type(screen.getByLabelText(/^Name/), mockValue);
       expect(mockDispatch).toHaveBeenCalledWith(
         updateResource({
           index: 0,
@@ -125,8 +126,8 @@ describe('ResourceModals', () => {
           { type: 'edit', resource: mockResource },
         ],
       }));
-      const result = render(<ResourceModals />);
-      expect(result.getByText('Go back')).toBeTruthy();
+      render(<ResourceModals />);
+      expect(screen.getByText('Go back')).toBeTruthy();
     });
   });
 
@@ -152,8 +153,8 @@ describe('ResourceModals', () => {
         },
       ],
     }));
-    const result = render(<ResourceModals />);
-    await userEvent.click(result.getByText('Save'));
+    render(<ResourceModals />);
+    await userEvent.click(screen.getByText('Save'));
     expect(mockDispatch).toHaveBeenCalledWith(
       updateResource({
         index: 1,
@@ -172,7 +173,7 @@ describe('ResourceModals', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       resourceStack: [],
     }));
-    const result = render(<ResourceModals />);
-    expect(result.getByTestId('resource-modals').firstChild).toBeNull();
+    render(<ResourceModals />);
+    expect(screen.getByTestId('resource-modals').firstChild).toBeNull();
   });
 });

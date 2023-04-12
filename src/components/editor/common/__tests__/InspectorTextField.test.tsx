@@ -1,5 +1,6 @@
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import { mockTool } from '@tests/constants/data';
+import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { InspectorTextField } from '../InspectorTextField';
 
@@ -29,10 +30,8 @@ describe('InspectorTextField', () => {
 
   it('renders label', () => {
     const mockLabel = 'label';
-    const result = render(
-      <InspectorTextField label={mockLabel} name={mockName} onChange={mockHandleChange} />
-    );
-    expect(result.getByText(mockLabel)).toBeTruthy();
+    render(<InspectorTextField label={mockLabel} name={mockName} onChange={mockHandleChange} />);
+    expect(screen.getByText(mockLabel)).toBeTruthy();
   });
 
   it('does not enqueue error snackbar if there is no cycle path', () => {

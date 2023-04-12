@@ -1,26 +1,17 @@
 import { useCodeMirrorPreview } from '@app/components/editor/hooks/useCodeMirrorPreview';
 import { ComponentEventHandlersProps } from '@app/components/editor/sidebar/inspector/ComponentEventHandlers';
 import { BaseInspectorFieldProps } from '@app/components/editor/sidebar/inspector/components/BaseInspector';
-import {
-  EVENT_HANDLER_EVENT_CONFIGS,
-  EVENT_HANDLER_CONFIGS,
-} from '@app/constants';
-import { RenderResult, within } from '@testing-library/react';
+import { EVENT_HANDLER_EVENT_CONFIGS, EVENT_HANDLER_CONFIGS } from '@app/constants';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import _ from 'lodash';
 
-export const validateSection = (result: RenderResult, title: string) => {
-  expect(result.getByText(title, { selector: 'h6' })).toBeTruthy();
+export const validateSection = (title: string) => {
+  expect(screen.getByText(title, { selector: 'h6' })).toBeTruthy();
 };
 
-const getFieldContainer = (
-  result: RenderResult,
-  title: string | undefined,
-  label: string
-) => {
-  const section = title
-    ? within(result.getByTestId(`inspector-section-${title}`))
-    : result;
+const getFieldContainer = (title: string | undefined, label: string) => {
+  const section = title ? within(screen.getByTestId(`inspector-section-${title}`)) : screen;
   const container = label ? within(section.getByTestId(label)) : section;
   return container;
 };
@@ -36,15 +27,10 @@ type BaseValidateProps<T extends keyof BaseInspectorFieldProps['data']> = {
 type ValidateEnumFieldProps = BaseValidateProps<'enum'>;
 
 export const validateEnumField = async (
-  result: RenderResult,
   sectionTitle: string | undefined,
   { label, value, field, onChange, data: { options } }: ValidateEnumFieldProps
 ) => {
-  const container = getFieldContainer(
-    result,
-    sectionTitle,
-    `inspector-enum-${label}`
-  );
+  const container = getFieldContainer(sectionTitle, `inspector-enum-${label}`);
 
   expect(container.getByText(label, { selector: 'label' })).toBeTruthy();
 
@@ -62,9 +48,7 @@ export const validateEnumField = async (
     if (value === option.value) {
       expect(onChange).not.toHaveBeenCalled();
     } else {
-      expect(onChange).toHaveBeenCalledWith(
-        expect.objectContaining({ [field]: option.value })
-      );
+      expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ [field]: option.value }));
     }
 
     onChange.mockClear();
@@ -74,15 +58,10 @@ export const validateEnumField = async (
 type ValidateTextFieldProps = BaseValidateProps<'text'>;
 
 export const validateTextField = async (
-  result: RenderResult,
   sectionTitle: string | undefined,
   { label, value, field, onChange, data: { type } }: ValidateTextFieldProps
 ) => {
-  const container = getFieldContainer(
-    result,
-    sectionTitle,
-    `inspector-text-${label}`
-  );
+  const container = getFieldContainer(sectionTitle, `inspector-text-${label}`);
 
   expect(container.getByText(label, { selector: 'label' })).toBeTruthy();
 
@@ -110,15 +89,10 @@ export const validateTextField = async (
 type ValidateSelectFieldProps = BaseValidateProps<'select'>;
 
 export const validateSelectField = async (
-  result: RenderResult,
   sectionTitle: string | undefined,
   { label, value, field, onChange, data: { options } }: ValidateSelectFieldProps
 ) => {
-  const container = getFieldContainer(
-    result,
-    sectionTitle,
-    `inspector-select-${label}`
-  );
+  const container = getFieldContainer(sectionTitle, `inspector-select-${label}`);
 
   expect(container.getByText(label, { selector: 'label' })).toBeTruthy();
   expect(container.getByDisplayValue(value)).toBeTruthy();
@@ -132,14 +106,12 @@ export const validateSelectField = async (
     // NOTE: We have to look in the result object, because the options render outside of
     // the given container.
     // eslint-disable-next-line no-await-in-loop
-    await userEvent.click(result.getByRole('option', { name: option.label }));
+    await userEvent.click(screen.getByRole('option', { name: option.label }));
 
     if (value === option.value) {
       expect(onChange).not.toHaveBeenCalled();
     } else {
-      expect(onChange).toHaveBeenCalledWith(
-        expect.objectContaining({ [field]: option.value })
-      );
+      expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ [field]: option.value }));
 
       onChange.mockClear();
     }
@@ -149,15 +121,10 @@ export const validateSelectField = async (
 type ValidateSwitchFieldProps = BaseValidateProps<'switch'>;
 
 export const validateSwitchField = async (
-  result: RenderResult,
   sectionTitle: string | undefined,
   { label, value, field, onChange }: ValidateSwitchFieldProps
 ) => {
-  const container = getFieldContainer(
-    result,
-    sectionTitle,
-    `inspector-switch-${label}`
-  );
+  const container = getFieldContainer(sectionTitle, `inspector-switch-${label}`);
 
   const element = container.getByLabelText(label);
   if (value) {
@@ -167,9 +134,7 @@ export const validateSwitchField = async (
   }
 
   await userEvent.click(element);
-  expect(onChange).toHaveBeenCalledWith(
-    expect.objectContaining({ [field]: !value })
-  );
+  expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ [field]: !value }));
 
   onChange.mockClear();
 };
@@ -182,19 +147,12 @@ type ValidateComponentEventHandlersProps = Omit<
 };
 
 export const validateComponentEventHandlers = async (
-  result: RenderResult,
   sectionTitle: string | undefined,
   { eventHandlers, eventOptions, onChange }: ValidateComponentEventHandlersProps
 ) => {
-  const container = getFieldContainer(
-    result,
-    sectionTitle,
-    'inspector-event-handlers'
-  );
+  const container = getFieldContainer(sectionTitle, 'inspector-event-handlers');
 
-  expect(
-    container.getByText('Event handlers', { selector: 'label' })
-  ).toBeTruthy();
+  expect(container.getByText('Event handlers', { selector: 'label' })).toBeTruthy();
 
   await userEvent.click(
     container.getByText(
@@ -203,18 +161,14 @@ export const validateComponentEventHandlers = async (
       EVENT_HANDLER_EVENT_CONFIGS[eventHandlers[0].event].label
     )
   );
-  const editor = within(result.getByTestId('event-handler-editor'));
+  const editor = within(screen.getByTestId('event-handler-editor'));
 
   await userEvent.click(editor.getByLabelText('Event'));
-  const options = result.getAllByRole('option');
-  expect(options.map((option) => option.getAttribute('data-value'))).toEqual(
-    eventOptions
-  );
+  const options = screen.getAllByRole('option');
+  expect(options.map((option) => option.getAttribute('data-value'))).toEqual(eventOptions);
 
   await userEvent.click(editor.getByLabelText('Effect'));
-  await userEvent.click(
-    result.getByRole('option', { name: EVENT_HANDLER_CONFIGS.url.label })
-  );
+  await userEvent.click(screen.getByRole('option', { name: EVENT_HANDLER_CONFIGS.url.label }));
   expect(onChange).toHaveBeenCalledWith([
     _.merge(eventHandlers[0], {
       data: {

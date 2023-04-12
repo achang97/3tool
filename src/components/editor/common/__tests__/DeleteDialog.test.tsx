@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DeleteDialog } from '../DeleteDialog';
 
@@ -20,7 +20,7 @@ describe('DeleteDialog', () => {
   });
 
   it('does not render dialog if isOpen is false', () => {
-    const result = render(
+    render(
       <DeleteDialog
         name={mockName}
         onClose={mockHandleClose}
@@ -28,31 +28,31 @@ describe('DeleteDialog', () => {
         isOpen={false}
       />
     );
-    expect(result.queryByTestId(dialogId)).toBeNull();
+    expect(screen.queryByTestId(dialogId)).toBeNull();
   });
 
   it('renders description in confirmation dialog', async () => {
-    const result = render(
+    render(
       <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
-    expect(result.getByText(`Are you sure you want to delete ${mockName}?`));
+    expect(screen.getByText(`Are you sure you want to delete ${mockName}?`));
   });
 
   it('renders list of dependent fields in confirmation dialog', async () => {
-    const result = render(
+    render(
       <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
-    expect(result.getByTestId(dialogContentId)).toHaveTextContent(
+    expect(screen.getByTestId(dialogContentId)).toHaveTextContent(
       'You will need to manually delete the following JavaScript expression references: textInput1.text, table1.data'
     );
   });
 
   it('closes confirmation dialog on Cancel click', async () => {
-    const result = render(
+    render(
       <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
 
-    await userEvent.click(result.getByText('Cancel'));
+    await userEvent.click(screen.getByText('Cancel'));
     expect(mockHandleDelete).not.toHaveBeenCalled();
     expect(mockHandleClose).toHaveBeenCalled();
   });
@@ -60,11 +60,11 @@ describe('DeleteDialog', () => {
   it('closes dialog after successful deletion on Confirm click', async () => {
     mockHandleDelete.mockImplementation(() => true);
 
-    const result = render(
+    render(
       <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
 
-    await userEvent.click(result.getByText('Confirm'));
+    await userEvent.click(screen.getByText('Confirm'));
     expect(mockHandleDelete).toHaveBeenCalled();
     expect(mockHandleClose).toHaveBeenCalled();
   });
@@ -72,11 +72,11 @@ describe('DeleteDialog', () => {
   it('does not close dialog after failed deletion on Confirm click', async () => {
     mockHandleDelete.mockImplementation(() => false);
 
-    const result = render(
+    render(
       <DeleteDialog name={mockName} onClose={mockHandleClose} onDelete={mockHandleDelete} isOpen />
     );
 
-    await userEvent.click(result.getByText('Confirm'));
+    await userEvent.click(screen.getByText('Confirm'));
     expect(mockHandleDelete).toHaveBeenCalled();
     expect(mockHandleClose).not.toHaveBeenCalled();
   });
