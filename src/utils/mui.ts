@@ -67,7 +67,8 @@ const { palette } = createTheme({
   palette: {
     divider: '#CDD6E1',
     primary: {
-      main: '#7850F0',
+      main: '#1890FF',
+      dark: '#1168B9',
     },
     secondary: {
       main: '#DFE3E8',
