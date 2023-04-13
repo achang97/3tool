@@ -14,10 +14,6 @@ jest.mock('@app/redux/services/users', () => ({
   useGetMyUserQuery: jest.fn(),
 }));
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(),
-}));
-
 describe('AuthRedirectProvider', () => {
   beforeEach(() => {
     jest.clearAllMocks();

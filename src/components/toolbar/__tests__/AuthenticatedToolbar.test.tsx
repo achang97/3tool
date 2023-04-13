@@ -62,7 +62,7 @@ describe('AuthenticatedToolbar', () => {
 
     const settingsNav = await screen.findByTestId('authenticated-toolbar-settings');
 
-    expect(settingsNav.getAttribute('href')).toEqual('/settings');
+    expect(settingsNav.getAttribute('href')).toEqual('/settings/team');
     expect(settingsNav).toHaveTextContent('Settings');
   });
 

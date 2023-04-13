@@ -5,6 +5,13 @@ import type {} from '@mui/x-data-grid/themeAugmentation';
 import type {} from '@mui/lab/themeAugmentation';
 import { CSSProperties } from 'react';
 
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    subtitle3: true;
+    body3: true;
+  }
+}
+
 declare module '@mui/material/styles' {
   interface Theme {
     opacity: {
@@ -24,6 +31,9 @@ declare module '@mui/material/styles' {
 
     customSubtitle1: CSSProperties;
     customSubtitle2: CSSProperties;
+
+    subtitle3: CSSProperties;
+    body3: CSSProperties;
   }
 
   // allow configuration using `createTheme`
@@ -36,6 +46,9 @@ declare module '@mui/material/styles' {
 
     customSubtitle1?: CSSProperties;
     customSubtitle2?: CSSProperties;
+
+    subtitle3?: CSSProperties;
+    body3?: CSSProperties;
   }
 
   interface GreyscalePalette {
@@ -155,6 +168,16 @@ export const theme = extendTheme({
       fontWeight: 400,
       fontSize: '0.75rem',
       lineHeight: 1.25,
+    },
+    subtitle3: {
+      fontWeight: 500,
+      fontSize: '0.875rem',
+      lineHeight: 1.2142,
+    },
+    body3: {
+      fontWeight: 400,
+      fontSize: '0.875rem',
+      lineHeight: 1.2142,
     },
   },
   components: {

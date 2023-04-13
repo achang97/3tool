@@ -69,7 +69,7 @@ export const AuthenticatedToolbar = () => {
           <MenuItem
             icon={<Tune fontSize="inherit" />}
             label="Settings"
-            href="/settings"
+            href="/settings/team"
             testId="authenticated-toolbar-settings"
           />
           <MenuItem

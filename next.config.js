@@ -2,6 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   optimizeFonts: false,
+  redirects: async () => {
+    return [
+      {
+        source: '/settings',
+        destination: '/settings/team',
+        permanent: true,
+      },
+    ]
+  },
+
 };
 
 module.exports = nextConfig;

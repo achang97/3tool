@@ -2,14 +2,7 @@ import { screen, render, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CreateToolThumbnail } from '../CreateToolThumbnail';
 
-const mockPush = jest.fn();
 const mockCreateTool = jest.fn();
-
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({
-    push: mockPush,
-  })),
-}));
 
 jest.mock('@app/redux/services/tools', () => ({
   useCreateToolMutation: jest.fn(() => [mockCreateTool, {}]),

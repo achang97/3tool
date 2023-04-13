@@ -7,7 +7,6 @@ import { ToolEditorToolbar } from '../ToolEditorToolbar';
 
 const mockDispatch = jest.fn();
 const mockUpdateTool = jest.fn();
-const mockReload = jest.fn();
 
 jest.mock('@app/redux/hooks', () => ({
   useAppSelector: jest.fn(),
@@ -18,12 +17,6 @@ jest.mock('@app/components/editor/hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
     tool: mockTool,
     updateTool: mockUpdateTool,
-  })),
-}));
-
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({
-    reload: mockReload,
   })),
 }));
 

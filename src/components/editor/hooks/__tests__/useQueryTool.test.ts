@@ -6,10 +6,6 @@ import { useQueryTool } from '../useQueryTool';
 
 const mockPush = jest.fn();
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(),
-}));
-
 jest.mock('@app/redux/services/tools');
 
 describe('useQueryTool', () => {

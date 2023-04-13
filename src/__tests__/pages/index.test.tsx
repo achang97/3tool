@@ -16,10 +16,6 @@ const mockTools: Tool[] = [
   },
 ];
 
-jest.mock('next/router', () => ({
-  useRouter: jest.fn(() => ({})),
-}));
-
 jest.mock('@app/redux/services/tools', () => ({
   ...jest.requireActual('@app/redux/services/tools'),
   useGetToolsQuery: jest.fn(() => ({ data: mockTools })),

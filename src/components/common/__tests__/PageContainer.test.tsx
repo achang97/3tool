@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { screen, render } from '@testing-library/react';
 import { PageContainer } from '../PageContainer';
+import { SideNavProps } from '../SideNav';
 
 jest.mock('@mui/material', () => {
   const ActualMui = jest.requireActual('@mui/material');
@@ -29,5 +30,19 @@ describe('PageContainer', () => {
       expect.objectContaining({ sx: expect.objectContaining(mockSx) }),
       {}
     );
+  });
+
+  it('renders SideNav if sideNavConfig prop is passed', () => {
+    const sideNavConfig: SideNavProps['config'] = [
+      {
+        heading: 'Settings',
+        items: [{ type: 'link', children: 'Team', href: '/settings/team' }],
+      },
+    ];
+    render(<PageContainer sideNavConfig={sideNavConfig}>{mockChildren}</PageContainer>);
+
+    expect(screen.getByRole('heading', { name: /settings/i })).toBeVisible();
+    expect(screen.getByRole('link', { name: /team/i })).toBeVisible();
+    expect(screen.getByRole('link', { name: /team/i })).toHaveAttribute('href', '/settings/team');
   });
 });

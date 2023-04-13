@@ -1,12 +1,14 @@
-import { Box, SxProps } from '@mui/material';
 import { ReactNode } from 'react';
+import { Box, Stack, SxProps } from '@mui/material';
+import { SideNav, SideNavProps } from './SideNav';
 
 type PageContainerProps = {
   children: ReactNode;
+  sideNavConfig?: SideNavProps['config'];
   sx?: SxProps;
 };
 
-export const PageContainer = ({ children, sx }: PageContainerProps) => {
+export const PageContainer = ({ children, sideNavConfig, sx }: PageContainerProps) => {
   return (
     <Box
       sx={{
@@ -17,7 +19,10 @@ export const PageContainer = ({ children, sx }: PageContainerProps) => {
         ...sx,
       }}
     >
-      {children}
+      <Stack spacing={4} direction="row" sx={{ height: '100%' }}>
+        {sideNavConfig && <SideNav config={sideNavConfig} />}
+        <Box sx={{ flex: 1 }}>{children}</Box>
+      </Stack>
     </Box>
   );
 };

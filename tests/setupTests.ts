@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 import 'whatwg-fetch';
 import moment from 'moment-timezone';
+import { NextRouter } from 'next/router';
 
 global.fetch = jest.fn();
 
@@ -35,3 +36,11 @@ document.createRange = () => {
 };
 
 moment.tz.setDefault('Etc/UTC');
+
+jest.mock('next/router', () => ({
+  useRouter: jest.fn<Partial<NextRouter>, []>(() => ({
+    query: {},
+    push: jest.fn(),
+    reload: jest.fn(),
+  })),
+}));
