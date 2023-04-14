@@ -30,7 +30,14 @@ describe('InspectorTextField', () => {
 
   it('renders label', () => {
     const mockLabel = 'label';
-    render(<InspectorTextField label={mockLabel} name={mockName} onChange={mockHandleChange} />);
+    render(
+      <InspectorTextField
+        label={mockLabel}
+        type="string"
+        name={mockName}
+        onChange={mockHandleChange}
+      />
+    );
     expect(screen.getByText(mockLabel)).toBeTruthy();
   });
 
@@ -39,7 +46,7 @@ describe('InspectorTextField', () => {
       tool: mockTool,
       dataDepCycles: {},
     }));
-    render(<InspectorTextField name={mockName} onChange={mockHandleChange} />);
+    render(<InspectorTextField type="string" name={mockName} onChange={mockHandleChange} />);
     expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
   });
 
@@ -50,10 +57,14 @@ describe('InspectorTextField', () => {
         [mockName]: ['1', '2'],
       },
     }));
-    const result = render(<InspectorTextField name={mockName} onChange={mockHandleChange} />);
+    const result = render(
+      <InspectorTextField type="string" name={mockName} onChange={mockHandleChange} />
+    );
     expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
 
-    result.rerender(<InspectorTextField name={mockName} onChange={mockHandleChange} value="1" />);
+    result.rerender(
+      <InspectorTextField type="string" name={mockName} onChange={mockHandleChange} value="1" />
+    );
     expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
   });
 
@@ -65,12 +76,18 @@ describe('InspectorTextField', () => {
       },
     }));
     const result = render(
-      <InspectorTextField name={mockName} onChange={mockHandleChange} isAutosaved />
+      <InspectorTextField type="string" name={mockName} onChange={mockHandleChange} isAutosaved />
     );
     expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
 
     result.rerender(
-      <InspectorTextField name={mockName} onChange={mockHandleChange} value="1" isAutosaved />
+      <InspectorTextField
+        type="string"
+        name={mockName}
+        onChange={mockHandleChange}
+        value="1"
+        isAutosaved
+      />
     );
     expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Dependency Cycle Found: 1 → 2', {
       variant: 'error',

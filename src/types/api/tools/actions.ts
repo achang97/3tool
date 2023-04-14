@@ -13,15 +13,34 @@ export enum ActionEvent {
 
 export type TransformableData<T = {}> = {
   transformer: string;
+  transformerEnabled: boolean;
+} & T;
+
+export type LoopableData<T = {}> = {
+  loopElements: string;
+  loopEnabled: boolean;
 } & T;
 
 type JavascriptData = TransformableData<{
   code: string;
 }>;
 
-type SmartContractBaseData = TransformableData<{
-  smartContractId: string;
-}>;
+export type SmartContractBaseDataFunction = {
+  name: string;
+  args: string[];
+  payableAmount: string;
+};
+
+export type SmartContractBaseData = TransformableData<
+  LoopableData<{
+    smartContractId: string;
+    freeform: boolean;
+    freeformAddress: string;
+    freeformChainId: string;
+    freeformAbiId: string;
+    functions: SmartContractBaseDataFunction[];
+  }>
+>;
 
 type SmartContractReadData = SmartContractBaseData;
 type SmartContractWriteData = SmartContractBaseData;

@@ -14,9 +14,9 @@ import { useCallback, useState, useRef, useMemo } from 'react';
 type Event = ActionEvent | ComponentEvent;
 
 export type InspectorEventHandlersProps = {
-  label: string;
+  label?: string;
   placeholder: string;
-  name: string;
+  name?: string;
   eventHandlers: EventHandler[];
   eventOptions: Event[];
   onChange: (eventHandlers: EventHandler[]) => void;
@@ -109,7 +109,7 @@ export const InspectorEventHandlers = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }} data-testid={testId}>
-      <FormFieldLabel label={label} sx={{ marginBottom: 0.5 }} />
+      {label && <FormFieldLabel label={label} />}
       <DataGrid
         rows={rows}
         columns={columns}

@@ -1,7 +1,8 @@
 import { useAppSelector } from '@app/redux/hooks';
-import { screen, render } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
+import { render } from '@tests/utils/renderWithContext';
 import { Editor } from '../Editor';
 
 jest.mock('../hooks/useActiveTool', () => ({

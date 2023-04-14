@@ -1,19 +1,27 @@
 import { FormControlLabel, Switch } from '@mui/material';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, ReactNode, useCallback } from 'react';
 
 type InspectorSwitchProps = {
-  label?: string;
+  label?: ReactNode;
   checked?: boolean;
-  onChange: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+  onChange: (checked: boolean) => void;
+  testId?: string;
 };
 
-export const InspectorSwitch = ({ onChange, label, checked }: InspectorSwitchProps) => {
+export const InspectorSwitch = ({ onChange, label, checked, testId }: InspectorSwitchProps) => {
+  const handleCheckedChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      onChange(e.target.checked);
+    },
+    [onChange]
+  );
+
   return (
     <FormControlLabel
-      data-testid={`inspector-switch-${label}`}
+      data-testid={testId ?? `inspector-switch-${label}`}
       componentsProps={{ typography: { variant: 'body2' } }}
       sx={{ marginX: 0, marginY: 0.5 }}
-      control={<Switch checked={checked} onChange={onChange} size="small" />}
+      control={<Switch checked={checked} onChange={handleCheckedChange} size="small" />}
       label={label}
     />
   );

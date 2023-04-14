@@ -1,26 +1,34 @@
 import { ActionResult } from '@app/constants';
 import { Action, ActionType } from '@app/types';
 import { useCallback } from 'react';
-import { asyncEvalWithArgs } from '../utils/eval';
 import { useActionHandleResult } from './useActionHandleResult';
-import { useEvalArgs } from './useEvalArgs';
+import { useActionJavascriptExecute } from './useActionJavascriptExecute';
+import { useActionSmartContractExecute } from './useActionSmartContractExecute';
+import { useActionTransformer } from './useActionTransformer';
 
 export const useActionExecute = () => {
-  // NOTE: We need to use the dynamicEvalArgs to evaluate other action types in the future.
-  const { staticEvalArgs } = useEvalArgs();
+  const executeJavascript = useActionJavascriptExecute();
+  const transformData = useActionTransformer();
+  const { readSmartContract, writeSmartContract } = useActionSmartContractExecute();
   const handleResult = useActionHandleResult();
 
   const executeAction = useCallback(
     async (action: Action): Promise<ActionResult> => {
+      const actionData = action.data[action.type];
+
       let data: unknown;
       try {
         switch (action.type) {
           case ActionType.Javascript: {
-            data = await asyncEvalWithArgs(
-              action.data.javascript?.code ?? '',
-              staticEvalArgs,
-              true
-            );
+            data = await executeJavascript(action.data.javascript?.code ?? '');
+            break;
+          }
+          case ActionType.SmartContractRead: {
+            data = await readSmartContract(action.data.smartContractRead);
+            break;
+          }
+          case ActionType.SmartContractWrite: {
+            data = await writeSmartContract(action.data.smartContractWrite);
             break;
           }
           default:
@@ -28,11 +36,15 @@ export const useActionExecute = () => {
             break;
         }
 
-        const transformer = action.data[action.type]?.transformer;
-        if (transformer) {
-          data = await asyncEvalWithArgs(transformer, { ...staticEvalArgs, data }, true);
+        if (actionData) {
+          data = await transformData(actionData, data);
         }
+
+        // eslint-disable-next-line no-console
+        console.log(`[Success] ${action.name}:`, data);
       } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(`[Error] ${action.name}:`, e);
         return {
           data,
           error: (e as Error).message,
@@ -41,7 +53,7 @@ export const useActionExecute = () => {
 
       return { data };
     },
-    [staticEvalArgs]
+    [executeJavascript, transformData, readSmartContract, writeSmartContract]
   );
 
   const execute = useCallback(

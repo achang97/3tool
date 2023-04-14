@@ -24,6 +24,9 @@ type EditorState = {
   focusedAction?: Action;
   actionView: ActionViewType;
   isActionViewMaximized: boolean;
+  focusedActionState: {
+    smartContractFunctionIndex: number;
+  };
 
   // General
   isPreview: boolean;
@@ -34,6 +37,9 @@ const initialState: EditorState = {
   actionView: ActionViewType.General,
   isActionViewMaximized: false,
   isPreview: false,
+  focusedActionState: {
+    smartContractFunctionIndex: 0,
+  },
 };
 
 export const editorSlice = createSlice({
@@ -76,6 +82,7 @@ export const editorSlice = createSlice({
     // Actions
     focusAction: (state, action: PayloadAction<Action>) => {
       state.focusedAction = action.payload;
+      state.focusedActionState = initialState.focusedActionState;
       state.actionView = ActionViewType.General;
     },
     blurAction: (state) => {
@@ -83,6 +90,12 @@ export const editorSlice = createSlice({
     },
     updateFocusedAction: (state, action: PayloadAction<RecursivePartial<Action>>) => {
       _.mergeWith(state.focusedAction, action.payload, overwriteArrayMergeCustomizer);
+    },
+    updateFocusedActionState: (
+      state,
+      action: PayloadAction<Partial<EditorState['focusedActionState']>>
+    ) => {
+      _.merge(state.focusedActionState, action.payload);
     },
     setActionView: (state, action: PayloadAction<ActionViewType>) => {
       state.actionView = action.payload;
@@ -110,6 +123,7 @@ export const {
   focusAction,
   blurAction,
   updateFocusedAction,
+  updateFocusedActionState,
   setActionView,
   setIsActionViewMaximized,
   setIsPreview,

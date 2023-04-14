@@ -1,12 +1,5 @@
 import { COMPONENT_DATA_TEMPLATES } from '@app/constants';
-import {
-  ActionType,
-  ComponentType,
-  Resource,
-  ResourceType,
-  Tool,
-  User,
-} from '@app/types';
+import { ActionType, ComponentType, Resource, ResourceType, Tool, User } from '@app/types';
 
 export const mockValidAddresses = [
   '0xf33Cb58287017175CADf990c9e4733823704aA86',
@@ -88,6 +81,7 @@ export const mockTool: Tool = {
       type: ActionType.Javascript,
       data: {
         javascript: {
+          transformerEnabled: true,
           code: 'return 1',
           transformer: '',
         },

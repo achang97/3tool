@@ -20,10 +20,16 @@ describe('FormFieldLabel', () => {
     expect(screen.getByText(mockLabel)).toBeTruthy();
   });
 
+  it('renders end adornment', () => {
+    const mockEndAdornment = 'End Adornment';
+    render(<FormFieldLabel label={mockLabel} endAdornment={mockEndAdornment} />);
+    expect(screen.getByText(mockEndAdornment)).toBeTruthy();
+  });
+
   it('renders tooltip on hover', async () => {
     render(<FormFieldLabel label={mockLabel} tooltip={mockTooltip} />);
 
-    await userEvent.hover(screen.getByTestId('form-field-label-help'));
+    await userEvent.hover(screen.getByTestId('help-tooltip-icon'));
     expect(await screen.findByText(mockTooltip)).toBeTruthy();
   });
 

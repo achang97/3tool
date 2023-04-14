@@ -26,6 +26,7 @@ export const Editor = () => {
           flexDirection: 'column',
           flex: 1,
           position: 'relative',
+          minWidth: 0,
         }}
       >
         <EditorCanvas isEditable />

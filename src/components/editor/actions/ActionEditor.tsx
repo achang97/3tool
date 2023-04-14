@@ -1,9 +1,9 @@
 import { setActionView, updateFocusedAction } from '@app/redux/features/editorSlice';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { Action, ActionType, ActionViewType } from '@app/types';
+import { Action, ActionType, ActionViewType, BaseActionEditorProps } from '@app/types';
 import { TabContext, TabPanel } from '@mui/lab';
 import { Box, Tab, Tabs } from '@mui/material';
-import { useMemo, useCallback, SyntheticEvent } from 'react';
+import { useMemo, useCallback, SyntheticEvent, FC } from 'react';
 import { useActionCycleListener } from '../hooks/useActionCycleListener';
 import { EditorToolbar } from './editor/common/EditorToolbar';
 import { SaveRunButton } from './editor/common/SaveRunButton';
@@ -14,6 +14,14 @@ import { ResponseHandlerEditor } from './editor/responseHandler/ResponseHandlerE
 
 type ActionEditorProps = {
   action: Action;
+};
+
+const ACTION_EDITOR_MAP: {
+  [KeyType in ActionType]: FC<BaseActionEditorProps<KeyType>>;
+} = {
+  [ActionType.Javascript]: JavascriptEditor,
+  [ActionType.SmartContractRead]: SmartContractEditor,
+  [ActionType.SmartContractWrite]: SmartContractEditor,
 };
 
 export const ActionEditor = ({ action }: ActionEditorProps) => {
@@ -37,18 +45,15 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
   );
 
   const typedEditor = useMemo(() => {
-    switch (action.type) {
-      case ActionType.Javascript: {
-        return <JavascriptEditor data={action.data.javascript} onDataChange={handleUpdateData} />;
-      }
-      // NOTE: We use a switch / case here instead of the map pattern in ComponentInspector.tsx
-      // due to the SmartContractEditor needing to support 2 unique types and data objects.
-      case ActionType.SmartContractRead:
-      case ActionType.SmartContractWrite:
-        return <SmartContractEditor />;
-      default:
-        return null;
-    }
+    const TypedEditor = ACTION_EDITOR_MAP[action.type];
+    return (
+      <TypedEditor
+        type={action.type}
+        // @ts-ignore We know that this accesses the correct data key
+        data={action.data[action.type]}
+        onDataChange={handleUpdateData}
+      />
+    );
   }, [action.data, action.type, handleUpdateData]);
 
   const tabs = useMemo(
@@ -60,11 +65,11 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
       },
       {
         label: 'Response Handler',
-        panel: <ResponseHandlerEditor name={action.name} eventHandlers={action.eventHandlers} />,
+        panel: <ResponseHandlerEditor eventHandlers={action.eventHandlers} />,
         value: ActionViewType.ResponseHandler,
       },
     ],
-    [action.eventHandlers, action.name, typedEditor]
+    [action.eventHandlers, typedEditor]
   );
 
   return (

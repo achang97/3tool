@@ -6,7 +6,6 @@ import userEvent from '@testing-library/user-event';
 import { render } from '@tests/utils/renderWithContext';
 import { ResponseHandlerEditor } from '../ResponseHandlerEditor';
 
-const mockName = 'name';
 const mockDispatch = jest.fn();
 
 jest.mock('@app/redux/hooks', () => ({
@@ -35,12 +34,12 @@ describe('ResponseHandlerEditor', () => {
 
   describe('general', () => {
     it('does not render event column', () => {
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
+      render(<ResponseHandlerEditor eventHandlers={[]} />);
       expect(screen.queryByText('Event')).toBeNull();
     });
 
     it('does not render column headers', () => {
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
+      render(<ResponseHandlerEditor eventHandlers={[]} />);
 
       expect(getSuccessContainer().getByText('Effect')).not.toBeVisible();
       expect(getErrorContainer().getByText('Effect')).not.toBeVisible();
@@ -64,7 +63,7 @@ describe('ResponseHandlerEditor', () => {
           data: {},
         },
       ];
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={mockEventHandlers} />);
+      render(<ResponseHandlerEditor eventHandlers={mockEventHandlers} />);
 
       const container = getErrorContainer();
       await userEvent.click(container.getByText('utils.openUrl()'));
@@ -90,14 +89,14 @@ describe('ResponseHandlerEditor', () => {
 
   describe('success handlers', () => {
     it('renders label', () => {
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
+      render(<ResponseHandlerEditor eventHandlers={[]} />);
       const container = getSuccessContainer();
 
       expect(container.getByText('Success handlers')).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
+      render(<ResponseHandlerEditor eventHandlers={[]} />);
       const container = getSuccessContainer();
 
       expect(
@@ -110,7 +109,6 @@ describe('ResponseHandlerEditor', () => {
     it('renders success handlers', () => {
       render(
         <ResponseHandlerEditor
-          name={mockName}
           eventHandlers={[
             {
               event: ActionEvent.Success,
@@ -126,7 +124,7 @@ describe('ResponseHandlerEditor', () => {
     });
 
     it('creates new success handler', async () => {
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
+      render(<ResponseHandlerEditor eventHandlers={[]} />);
       const container = getSuccessContainer();
 
       await userEvent.click(container.getByText('Add event handler'));
@@ -148,7 +146,6 @@ describe('ResponseHandlerEditor', () => {
     it('shows Success as the only event option', async () => {
       render(
         <ResponseHandlerEditor
-          name={mockName}
           eventHandlers={[
             {
               event: ActionEvent.Success,
@@ -171,14 +168,14 @@ describe('ResponseHandlerEditor', () => {
 
   describe('error handlers', () => {
     it('renders label', () => {
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
+      render(<ResponseHandlerEditor eventHandlers={[]} />);
       const container = getErrorContainer();
 
       expect(container.getByText('Error handlers')).toBeTruthy();
     });
 
     it('renders placeholder', () => {
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
+      render(<ResponseHandlerEditor eventHandlers={[]} />);
       const container = getErrorContainer();
 
       expect(
@@ -191,7 +188,6 @@ describe('ResponseHandlerEditor', () => {
     it('renders error handlers', () => {
       render(
         <ResponseHandlerEditor
-          name={mockName}
           eventHandlers={[
             {
               event: ActionEvent.Error,
@@ -207,7 +203,7 @@ describe('ResponseHandlerEditor', () => {
     });
 
     it('creates new error handler', async () => {
-      render(<ResponseHandlerEditor name={mockName} eventHandlers={[]} />);
+      render(<ResponseHandlerEditor eventHandlers={[]} />);
       const container = getErrorContainer();
 
       await userEvent.click(container.getByText('Add event handler'));
@@ -229,7 +225,6 @@ describe('ResponseHandlerEditor', () => {
     it('shows Error as the only event option', async () => {
       render(
         <ResponseHandlerEditor
-          name={mockName}
           eventHandlers={[
             {
               event: ActionEvent.Error,

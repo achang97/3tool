@@ -1,6 +1,6 @@
 import BaseCodeMirror from '@uiw/react-codemirror';
 import { ViewUpdate } from '@codemirror/view';
-import { useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { FormFieldLabel } from '@app/components/common/FormFieldLabel';
 import { useIsFocused } from '@app/hooks/useIsFocused';
@@ -10,7 +10,7 @@ import { useCodeMirrorPreview } from '../hooks/useCodeMirrorPreview';
 import { useCodeMirrorProps } from '../hooks/useCodeMirrorProps';
 
 export type CodeMirrorProps = {
-  label?: string;
+  label?: ReactNode;
   value?: string;
   placeholder?: string;
   onChange: (value: string, viewUpdate: ViewUpdate) => void;

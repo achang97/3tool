@@ -120,11 +120,7 @@ export const BaseInspector = ({
 
       if (field.data.switch) {
         return (
-          <InspectorSwitch
-            label={field.label}
-            checked={field.value}
-            onChange={(e) => handleUpdateField(e.target.checked)}
-          />
+          <InspectorSwitch label={field.label} checked={field.value} onChange={handleUpdateField} />
         );
       }
 

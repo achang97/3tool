@@ -21,6 +21,7 @@ import editorReducer, {
   setActionView,
   setIsActionViewMaximized,
   setIsPreview,
+  updateFocusedActionState,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -33,6 +34,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       };
       const state = editorReducer(initialState, startCreateComponentDrag(mockComponent));
       expect(state.newComponent).toEqual(mockComponent);
@@ -44,6 +48,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
         newComponent: {
           name: 'name',
           type: ComponentType.Button,
@@ -63,6 +70,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       };
       const state = editorReducer(initialState, startMoveComponentDrag(mockComponentName));
       expect(state.movingComponentName).toEqual(mockComponentName);
@@ -74,6 +84,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
         movingComponentName: 'name',
       };
       const state = editorReducer(initialState, endMoveComponentDrag());
@@ -90,6 +103,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       };
       const state = editorReducer(initialState, focusComponent(mockComponentName));
       expect(state.focusedComponentName).toEqual(mockComponentName);
@@ -102,6 +118,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
         focusedComponentName: 'name',
       };
       const state = editorReducer(initialState, blurComponent());
@@ -115,6 +134,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
         focusedComponentName: 'name',
       };
       const state = editorReducer(initialState, focusToolSettings());
@@ -130,6 +152,9 @@ describe('editorSlice', () => {
           actionView: ActionViewType.General,
           isActionViewMaximized: false,
           isPreview: false,
+          focusedActionState: {
+            smartContractFunctionIndex: 0,
+          },
           focusedComponentName: 'name',
         };
         const state = editorReducer(initialState, setSidebarView(sidebarView));
@@ -139,7 +164,7 @@ describe('editorSlice', () => {
   });
 
   describe('actions', () => {
-    it('focusAction: sets action view to general and focused action', () => {
+    it('focusAction: sets action view to general, focuses action, and resets action state', () => {
       const mockAction = {
         name: 'action1',
         type: ActionType.Javascript,
@@ -150,10 +175,16 @@ describe('editorSlice', () => {
         actionView: ActionViewType.ResponseHandler,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 1,
+        },
       };
       const state = editorReducer(initialState, focusAction(mockAction));
       expect(state.focusedAction).toEqual(mockAction);
       expect(state.actionView).toEqual(ActionViewType.General);
+      expect(state.focusedActionState).toEqual({
+        smartContractFunctionIndex: 0,
+      });
     });
 
     it('blurAction: sets focused action to undefined', () => {
@@ -162,6 +193,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.ResponseHandler,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
         focusedAction: {
           name: 'action1',
           type: ActionType.Javascript,
@@ -178,6 +212,9 @@ describe('editorSlice', () => {
           actionView: ActionViewType.General,
           isActionViewMaximized: false,
           isPreview: false,
+          focusedActionState: {
+            smartContractFunctionIndex: 0,
+          },
           focusedAction: {
             name: 'action1',
             type: ActionType.Javascript,
@@ -203,6 +240,9 @@ describe('editorSlice', () => {
           actionView: ActionViewType.General,
           isActionViewMaximized: false,
           isPreview: false,
+          focusedActionState: {
+            smartContractFunctionIndex: 0,
+          },
           focusedAction: {
             name: 'action1',
             type: ActionType.Javascript,
@@ -220,6 +260,23 @@ describe('editorSlice', () => {
       });
     });
 
+    it('updateFocusedActionState: updates focused action state', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
+      };
+      const state = editorReducer(
+        initialState,
+        updateFocusedActionState({ smartContractFunctionIndex: 1 })
+      );
+      expect(state.focusedActionState.smartContractFunctionIndex).toEqual(1);
+    });
+
     it('setActionView: sets action view to payload type', () => {
       const mockActionViewType = ActionViewType.ResponseHandler;
 
@@ -228,6 +285,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       };
       const state = editorReducer(initialState, setActionView(ActionViewType.ResponseHandler));
       expect(state.actionView).toEqual(mockActionViewType);
@@ -239,6 +299,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       };
       const state = editorReducer(initialState, setIsActionViewMaximized(true));
       expect(state.isActionViewMaximized).toEqual(true);
@@ -252,6 +315,9 @@ describe('editorSlice', () => {
         actionView: ActionViewType.General,
         isActionViewMaximized: false,
         isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       };
       const state = editorReducer(initialState, setIsPreview(true));
       expect(state.isPreview).toEqual(true);

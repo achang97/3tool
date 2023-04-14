@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { JSXElementConstructor, ReactElement } from 'react';
 import {
   render as baseRender,
   renderHook as baseRenderHook,
@@ -11,27 +11,31 @@ import {
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from '@app/redux/store';
-import { ThemeProvider } from '@mui/material';
 import { theme } from '@app/utils/mui';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
+import { wagmiClient } from '@app/utils/wallet';
+import { WagmiConfig } from 'wagmi';
 
-export const render = (
-  ui: ReactElement,
-  options?: RenderOptions
-): RenderResult => {
+const getCustomWrapper = (
+  Wrapper?: JSXElementConstructor<{
+    children: ReactElement<any, string | JSXElementConstructor<any>>;
+  }>
+) => {
+  return ({ children }: { children: ReactElement }) => (
+    <Provider store={store}>
+      <CssVarsProvider theme={theme}>
+        <WagmiConfig client={wagmiClient}>
+          {Wrapper ? <Wrapper>{children}</Wrapper> : children}
+        </WagmiConfig>
+      </CssVarsProvider>
+    </Provider>
+  );
+};
+
+export const render = (ui: ReactElement, options?: RenderOptions): RenderResult => {
   return baseRender(ui, {
     ...options,
-    wrapper: ({ children }: { children: ReactElement }) => (
-      <Provider store={store}>
-        <CssVarsProvider theme={theme}>
-          {options?.wrapper ? (
-            <options.wrapper>{children}</options.wrapper>
-          ) : (
-            children
-          )}
-        </CssVarsProvider>
-      </Provider>
-    ),
+    wrapper: getCustomWrapper(options?.wrapper),
   });
 };
 
@@ -47,16 +51,6 @@ export const renderHook = <
 ): RenderHookResult<Result, Props> => {
   return baseRenderHook(renderFn, {
     ...options,
-    wrapper: ({ children }: { children: ReactElement }) => (
-      <Provider store={store}>
-        <CssVarsProvider theme={theme}>
-          {options?.wrapper ? (
-            <options.wrapper>{children}</options.wrapper>
-          ) : (
-            children
-          )}
-        </CssVarsProvider>
-      </Provider>
-    ),
+    wrapper: getCustomWrapper(options?.wrapper),
   });
 };

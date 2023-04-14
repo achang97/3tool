@@ -1,21 +1,13 @@
 import { EVENT_HANDLER_DATA_TYPES } from '@app/constants';
-import { EventHandler, EventHandlerType, FieldType } from '@app/types';
+import { EventHandler, EventHandlerType } from '@app/types';
 import { useCallback } from 'react';
-import { evalDynamicExpression } from '../utils/eval';
 import { utils } from '../utils/public';
 import { useActionMethods } from './useActionMethods';
-import { useEvalArgs } from './useEvalArgs';
+import { useEvalDynamicValue } from './useEvalDynamicValue';
 
 export const useEventHandlerExecute = () => {
   const actionMethods = useActionMethods();
-  const { dynamicEvalArgs } = useEvalArgs();
-
-  const evalValue = useCallback(
-    (value: string, fieldType: FieldType) => {
-      return evalDynamicExpression(value, fieldType, dynamicEvalArgs);
-    },
-    [dynamicEvalArgs]
-  );
+  const evalDynamicValue = useEvalDynamicValue();
 
   const executeAction = useCallback(
     (data: EventHandler['data']['action']) => {
@@ -35,10 +27,10 @@ export const useEventHandlerExecute = () => {
         return;
       }
       const { url, newTab } = data;
-      const { value: evalUrl } = evalValue(url, EVENT_HANDLER_DATA_TYPES.url.url);
+      const evalUrl = evalDynamicValue(url, EVENT_HANDLER_DATA_TYPES.url.url);
       utils.openUrl(evalUrl?.toString() ?? '', { newTab });
     },
-    [evalValue]
+    [evalDynamicValue]
   );
 
   const executeEventHandler = useCallback(

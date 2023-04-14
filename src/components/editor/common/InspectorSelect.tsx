@@ -8,9 +8,16 @@ type InspectorSelectProps = Omit<SelectProps, 'onChange'> & {
     label: string;
     value: any;
   }[];
+  testId?: string;
 };
 
-export const InspectorSelect = ({ options, onChange, label, ...rest }: InspectorSelectProps) => {
+export const InspectorSelect = ({
+  options,
+  onChange,
+  label,
+  testId,
+  ...rest
+}: InspectorSelectProps) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value);
@@ -19,11 +26,8 @@ export const InspectorSelect = ({ options, onChange, label, ...rest }: Inspector
   );
 
   return (
-    <Box
-      data-testid={`inspector-select-${label}`}
-      sx={{ display: 'flex', flexDirection: 'column' }}
-    >
-      <Select {...rest} label={label} onChange={handleChange} size="small">
+    <Box data-testid={testId ?? `inspector-select-${label}`} sx={{ flex: 1 }}>
+      <Select {...rest} label={label} onChange={handleChange} fullWidth size="small">
         {options.map((option) => (
           <MenuItem key={option.label} value={option.value}>
             {option.label}

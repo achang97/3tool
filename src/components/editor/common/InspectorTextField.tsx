@@ -2,23 +2,31 @@ import { CodeMirror, CodeMirrorProps } from '@app/components/editor/common/CodeM
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import { useEnqueueSnackbar } from '@app/components/editor/hooks/useEnqueueSnackbar';
 import { usePrevious } from '@app/hooks/usePrevious';
+import { FieldType } from '@app/types';
 import { useEffect, useMemo } from 'react';
 
 type InspectorTextFieldProps = {
-  name: string;
-} & Omit<CodeMirrorProps, 'language'>;
+  name?: string;
+  type: FieldType;
+} & Omit<CodeMirrorProps, 'language' | 'type'>;
 
 export const InspectorTextField = ({
   name,
   value = '',
   isAutosaved,
   label,
+  testId,
   ...rest
 }: InspectorTextFieldProps) => {
   const enqueueSnackbar = useEnqueueSnackbar();
   const { dataDepCycles } = useActiveTool();
 
-  const cyclePath = useMemo(() => dataDepCycles[name], [dataDepCycles, name]);
+  const cyclePath = useMemo(() => {
+    if (!name) {
+      return undefined;
+    }
+    return dataDepCycles[name];
+  }, [dataDepCycles, name]);
   const prevValue = usePrevious(value);
 
   useEffect(() => {
@@ -42,7 +50,7 @@ export const InspectorTextField = ({
       value={value}
       language="text"
       isAutosaved={isAutosaved}
-      testId={`inspector-text-${label}`}
+      testId={testId ?? `inspector-text-${label}`}
     />
   );
 };

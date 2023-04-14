@@ -63,9 +63,7 @@ const mockResources: Resource[] = [
 
 export const resourcesHandlers = [
   rest.get('*/api/resources/:id', (req, res, ctx) => {
-    const resource = mockResources.find(
-      (currResource) => currResource._id === req.params.id
-    );
+    const resource = mockResources.find((currResource) => currResource._id === req.params.id);
 
     if (!resource) {
       return res(ctx.status(400));
@@ -78,9 +76,7 @@ export const resourcesHandlers = [
     return res(
       ctx.status(200),
       ctx.json<Resource[]>(
-        mockResources.filter(
-          (resource) => !name || resource.name.toLowerCase().includes(name)
-        )
+        mockResources.filter((resource) => !name || resource.name.toLowerCase().includes(name))
       )
     );
   }),
@@ -109,13 +105,9 @@ export const resourcesHandlers = [
     return res(ctx.status(201), ctx.json<Resource>(newResource));
   }),
   rest.put('*/api/resources/:id', async (req, res, ctx) => {
-    const body = await req.json<
-      Pick<Resource, '_id'> & Partial<Pick<Resource, 'name' | 'data'>>
-    >();
+    const body = await req.json<Pick<Resource, '_id'> & Partial<Pick<Resource, 'name' | 'data'>>>();
 
-    const resource = mockResources.find(
-      (currResource) => currResource._id === req.params.id
-    );
+    const resource = mockResources.find((currResource) => currResource._id === req.params.id);
 
     if (!resource) {
       return res(ctx.status(400));
@@ -123,8 +115,7 @@ export const resourcesHandlers = [
 
     if (
       mockResources.some(
-        (currResource) =>
-          currResource._id !== resource._id && currResource.name === body.name
+        (currResource) => currResource._id !== resource._id && currResource.name === body.name
       )
     ) {
       return res(

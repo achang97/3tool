@@ -37,7 +37,7 @@ export const CreateResourceButton = () => {
     <>
       <Button
         variant="text"
-        startIcon={<Add color="primary" />}
+        startIcon={<Add />}
         onClick={onMenuOpen}
         data-testid="create-resource-button"
       >

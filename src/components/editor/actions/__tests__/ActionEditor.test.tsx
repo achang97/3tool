@@ -2,9 +2,10 @@ import { setActionView, updateFocusedAction } from '@app/redux/features/editorSl
 import { useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType, ActionViewType } from '@app/types';
 import { within } from '@testing-library/dom';
-import { screen, render } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockTool } from '@tests/constants/data';
+import { render } from '@tests/utils/renderWithContext';
 import { useActionCycleListener } from '../../hooks/useActionCycleListener';
 import { ActionEditor } from '../ActionEditor';
 
@@ -32,6 +33,11 @@ jest.mock('@app/components/editor/hooks/useActiveTool', () => ({
   })),
 }));
 
+jest.mock('@app/redux/services/resources', () => ({
+  ...jest.requireActual('@app/redux/services/resources'),
+  useGetResourcesQuery: jest.fn(() => ({ data: [] })),
+}));
+
 jest.mock('@app/components/editor/hooks/useActionCycleListener');
 
 jest.mock('@app/redux/hooks', () => ({
@@ -44,6 +50,9 @@ describe('ActionEditor', () => {
     jest.clearAllMocks();
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       actionView: ActionViewType.General,
+      focusedActionState: {
+        smartContractFunctionIndex: 0,
+      },
     }));
   });
 
@@ -72,6 +81,9 @@ describe('ActionEditor', () => {
     it('navigates to General tab', async () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         actionView: ActionViewType.ResponseHandler,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       }));
 
       render(<ActionEditor action={mockAction} />);
@@ -82,6 +94,9 @@ describe('ActionEditor', () => {
     it('navigates to Response Handler tab', async () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         actionView: ActionViewType.General,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       }));
 
       render(<ActionEditor action={mockAction} />);
@@ -101,6 +116,9 @@ describe('ActionEditor', () => {
       async ({ type, testId }: { type: ActionType; testId: string }) => {
         (useAppSelector as jest.Mock).mockImplementation(() => ({
           actionView: ActionViewType.General,
+          focusedActionState: {
+            smartContractFunctionIndex: 0,
+          },
         }));
 
         render(<ActionEditor action={{ ...mockAction, type }} />);
@@ -113,6 +131,9 @@ describe('ActionEditor', () => {
     it('renders response handler editor', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         actionView: ActionViewType.ResponseHandler,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       }));
 
       render(<ActionEditor action={mockAction} />);
@@ -124,13 +145,14 @@ describe('ActionEditor', () => {
     it('dispatches action to update focused action', async () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         actionView: ActionViewType.General,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
       }));
 
       render(<ActionEditor action={{ ...mockAction, type: ActionType.Javascript }} />);
 
-      const input = within(screen.getByTestId('code-mirror-JS Code (JavaScript)')).getByRole(
-        'textbox'
-      );
+      const input = within(screen.getByTestId('javascript-editor-js-code')).getByRole('textbox');
 
       const mockValue = '123';
       await userEvent.type(input, mockValue);

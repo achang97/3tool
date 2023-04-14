@@ -273,7 +273,7 @@ describe('useElementFlattenFields', () => {
             parent: 'eventHandlers[0]',
             isLeaf: true,
             evalType: 'string',
-            isJavascript: false,
+            isJavascript: true,
           },
         ],
       });
@@ -363,7 +363,7 @@ describe('useElementFlattenFields', () => {
             parent: 'eventHandlers[0]',
             isLeaf: true,
             evalType: 'string',
-            isJavascript: false,
+            isJavascript: true,
           },
         ],
       });

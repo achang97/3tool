@@ -21,6 +21,19 @@ describe('InspectorEnumField', () => {
     expect(screen.getByText(mockLabel)).toBeTruthy();
   });
 
+  it('renders option with given value as pressed', () => {
+    render(
+      <InspectorEnumField
+        label={mockLabel}
+        options={mockOptions}
+        value={1}
+        onChange={mockHandleChange}
+      />
+    );
+    expect(screen.getByText('Option 1')).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText('Option 2')).toHaveAttribute('aria-pressed', 'false');
+  });
+
   it('renders options', () => {
     render(
       <InspectorEnumField label={mockLabel} options={mockOptions} onChange={mockHandleChange} />

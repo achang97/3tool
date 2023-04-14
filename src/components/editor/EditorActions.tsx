@@ -23,11 +23,11 @@ export const EditorActions = () => {
       }}
       data-testid="editor-actions"
     >
-      <Box sx={{ width: LIST_WIDTH }}>
+      <Box sx={{ width: LIST_WIDTH, flexShrink: 0 }}>
         <ActionList />
       </Box>
       <Divider orientation="vertical" />
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
         {focusedAction ? <ActionEditor action={focusedAction} /> : <ActionEditorPlaceholder />}
       </Box>
     </Box>

@@ -7,11 +7,10 @@ import _ from 'lodash';
 import { useCallback, useMemo } from 'react';
 
 type ResponseHandlerEditorProps = {
-  name: string;
   eventHandlers: EventHandler<ActionEvent>[];
 };
 
-export const ResponseHandlerEditor = ({ name, eventHandlers }: ResponseHandlerEditorProps) => {
+export const ResponseHandlerEditor = ({ eventHandlers }: ResponseHandlerEditorProps) => {
   const dispatch = useAppDispatch();
 
   const handleUpdateEventHandlers = useCallback(
@@ -43,7 +42,6 @@ export const ResponseHandlerEditor = ({ name, eventHandlers }: ResponseHandlerEd
     >
       <InspectorEventHandlers
         label="Success handlers"
-        name={name}
         eventHandlers={groupedEventHandlers[ActionEvent.Success]}
         onChange={(newEventHandlers) =>
           handleUpdateEventHandlers(ActionEvent.Success, newEventHandlers)
@@ -57,7 +55,6 @@ export const ResponseHandlerEditor = ({ name, eventHandlers }: ResponseHandlerEd
       />
       <InspectorEventHandlers
         label="Error handlers"
-        name={name}
         eventHandlers={groupedEventHandlers[ActionEvent.Error]}
         onChange={(newEventHandlers) =>
           handleUpdateEventHandlers(ActionEvent.Error, newEventHandlers)

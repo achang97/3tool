@@ -1,9 +1,15 @@
 import { Action, ActionType } from '@app/types';
-import { act, renderHook } from '@testing-library/react';
+import { act, screen, render, renderHook } from '@testing-library/react';
 import { ReactElement, useContext } from 'react';
 import { ActionQueueContext, ActionQueueElement, ActionQueueProvider } from '../ActionQueueContext';
 
 describe('ActionQueueContext', () => {
+  it('renders children', () => {
+    const mockChildren = 'children';
+    render(<ActionQueueProvider>{mockChildren}</ActionQueueProvider>);
+    expect(screen.getByText(mockChildren)).toBeTruthy();
+  });
+
   it('returns default state', () => {
     const { result } = renderHook(() => useContext(ActionQueueContext));
     expect(result.current).toEqual({

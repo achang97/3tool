@@ -5,9 +5,11 @@ import { useActionMethods } from '../useActionMethods';
 import { useActiveTool } from '../useActiveTool';
 import { useBaseEvalArgs } from '../useBaseEvalArgs';
 import { useEvalArgs } from '../useEvalArgs';
+import { useLocalEvalArgs } from '../useLocalEvalArgs';
 
 jest.mock('../useActiveTool');
 jest.mock('../useBaseEvalArgs');
+jest.mock('../useLocalEvalArgs');
 jest.mock('../useActionMethods');
 
 describe('useEvalArgs', () => {
@@ -18,6 +20,7 @@ describe('useEvalArgs', () => {
       evalDataValuesMap: {},
     }));
     (useBaseEvalArgs as jest.Mock).mockImplementation(() => ({}));
+    (useLocalEvalArgs as jest.Mock).mockImplementation(() => ({}));
   });
 
   describe('general', () => {
@@ -48,6 +51,22 @@ describe('useEvalArgs', () => {
       const { result } = renderHook(() => useEvalArgs());
       expect(result.current.dynamicEvalArgs).toMatchObject(mockElementEvalDataValuesMap);
       expect(result.current.staticEvalArgs).toMatchObject(mockElementEvalDataValuesMap);
+    });
+
+    it('overrides base args with local eval args', () => {
+      const mockLocalEvalArgs = {
+        action1: 'newData',
+      };
+      (useBaseEvalArgs as jest.Mock).mockImplementation(() => ({
+        action1: {
+          data: 'hello',
+        },
+      }));
+      (useLocalEvalArgs as jest.Mock).mockImplementation(() => mockLocalEvalArgs);
+
+      const { result } = renderHook(() => useEvalArgs());
+      expect(result.current.dynamicEvalArgs).toMatchObject(mockLocalEvalArgs);
+      expect(result.current.staticEvalArgs).toMatchObject(mockLocalEvalArgs);
     });
   });
 

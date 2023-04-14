@@ -44,7 +44,7 @@ describe('CreateActionButton', () => {
   });
 
   it.each([ActionType.Javascript, ActionType.SmartContractRead])(
-    'opens menu with available action types',
+    'opens menu with %s type',
     async (actionType: ActionType) => {
       render(<CreateActionButton />);
       await userEvent.click(screen.getByText('New'));
@@ -63,27 +63,45 @@ describe('CreateActionButton', () => {
     expect(mockUpdateTool).not.toHaveBeenCalled();
   });
 
-  it.each([ActionType.Javascript, ActionType.SmartContractRead])(
-    'creates new action with automatically generated name on menu option click',
-    async (actionType: ActionType) => {
-      render(<CreateActionButton />);
-      await userEvent.click(screen.getByText('New'));
+  // Normal action types
+  it.each([ActionType.Javascript])('creates new %s action', async (actionType: ActionType) => {
+    render(<CreateActionButton />);
+    await userEvent.click(screen.getByText('New'));
 
-      await userEvent.click(screen.getByText(ACTION_CONFIGS[actionType].label));
+    await userEvent.click(screen.getByText(ACTION_CONFIGS[actionType].label));
 
-      const newAction: Action = {
-        type: actionType,
-        name: 'action2',
-        data: {
-          [actionType]: ACTION_DATA_TEMPLATES[actionType],
-        },
-        eventHandlers: [],
-      };
-      expect(mockUpdateTool).toHaveBeenCalledWith({
-        actions: [...mockActions, newAction],
-      });
-    }
-  );
+    const newAction: Action = {
+      type: actionType,
+      name: 'action2',
+      data: {
+        [actionType]: ACTION_DATA_TEMPLATES[actionType],
+      },
+      eventHandlers: [],
+    };
+    expect(mockUpdateTool).toHaveBeenCalledWith({
+      actions: [...mockActions, newAction],
+    });
+  });
+
+  it('creates new SmartContractRead action with SmartContractRead and SmartContractWrite data', async () => {
+    render(<CreateActionButton />);
+    await userEvent.click(screen.getByText('New'));
+
+    await userEvent.click(screen.getByText(ACTION_CONFIGS[ActionType.SmartContractRead].label));
+
+    const newAction: Action = {
+      type: ActionType.SmartContractRead,
+      name: 'action2',
+      data: {
+        [ActionType.SmartContractRead]: ACTION_DATA_TEMPLATES[ActionType.SmartContractRead],
+        [ActionType.SmartContractWrite]: ACTION_DATA_TEMPLATES[ActionType.SmartContractWrite],
+      },
+      eventHandlers: [],
+    };
+    expect(mockUpdateTool).toHaveBeenCalledWith({
+      actions: [...mockActions, newAction],
+    });
+  });
 
   it('does not focus action on failed creation', async () => {
     mockUpdateTool.mockImplementation(() => mockApiErrorResponse);

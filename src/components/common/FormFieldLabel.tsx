@@ -1,13 +1,15 @@
-import { Help } from '@mui/icons-material';
-import { Box, BoxProps, InputLabel, Tooltip } from '@mui/material';
+import { Box, BoxProps, InputLabel, TextFieldProps } from '@mui/material';
+import { ReactNode } from 'react';
+import { HelpTooltip } from './HelpTooltip';
 
 export type FormFieldLabelProps = {
-  label: string;
+  label: TextFieldProps['label'];
   tooltip?: string;
+  endAdornment?: ReactNode;
   sx?: BoxProps['sx'];
 };
 
-export const FormFieldLabel = ({ label, tooltip, sx }: FormFieldLabelProps) => {
+export const FormFieldLabel = ({ label, tooltip, endAdornment, sx }: FormFieldLabelProps) => {
   return (
     <Box
       sx={{
@@ -15,22 +17,24 @@ export const FormFieldLabel = ({ label, tooltip, sx }: FormFieldLabelProps) => {
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%',
+        flex: 1,
+        marginBottom: 0.25,
         ...sx,
       }}
     >
-      <InputLabel shrink>{label}</InputLabel>
-      {tooltip && (
-        <Tooltip
-          title={tooltip}
-          sx={{
-            cursor: 'pointer',
-            fontSize: '0.9rem',
-            color: 'greyscale.icon.dark',
-          }}
-        >
-          <Help data-testid="form-field-label-help" fontSize="inherit" />
-        </Tooltip>
-      )}
+      <InputLabel shrink sx={{ flex: 1 }}>
+        {label}
+      </InputLabel>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+        }}
+      >
+        {endAdornment}
+        {tooltip && <HelpTooltip text={tooltip} />}
+      </Box>
     </Box>
   );
 };

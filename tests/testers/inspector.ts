@@ -10,15 +10,22 @@ export const validateSection = (title: string) => {
   expect(screen.getByText(title, { selector: 'h6' })).toBeTruthy();
 };
 
-const getFieldContainer = (title: string | undefined, label: string) => {
+const getFieldContainer = (title: string | undefined, label: string, testId?: string) => {
   const section = title ? within(screen.getByTestId(`inspector-section-${title}`)) : screen;
-  const container = label ? within(section.getByTestId(label)) : section;
-  return container;
+
+  if (testId) {
+    return within(section.getByTestId(testId));
+  }
+  if (label) {
+    return within(section.getByTestId(label));
+  }
+  return section;
 };
 
 type BaseValidateProps<T extends keyof BaseInspectorFieldProps['data']> = {
   field: string;
-  label: string;
+  label: string | RegExp;
+  testId?: string;
   value: any;
   onChange: jest.Mock;
   data: NonNullable<BaseInspectorFieldProps['data'][T]>;
@@ -28,9 +35,9 @@ type ValidateEnumFieldProps = BaseValidateProps<'enum'>;
 
 export const validateEnumField = async (
   sectionTitle: string | undefined,
-  { label, value, field, onChange, data: { options } }: ValidateEnumFieldProps
+  { label, value, testId, field, onChange, data: { options } }: ValidateEnumFieldProps
 ) => {
-  const container = getFieldContainer(sectionTitle, `inspector-enum-${label}`);
+  const container = getFieldContainer(sectionTitle, `inspector-enum-${label}`, testId);
 
   expect(container.getByText(label, { selector: 'label' })).toBeTruthy();
 
@@ -59,9 +66,9 @@ type ValidateTextFieldProps = BaseValidateProps<'text'>;
 
 export const validateTextField = async (
   sectionTitle: string | undefined,
-  { label, value, field, onChange, data: { type } }: ValidateTextFieldProps
+  { label, value, testId, field, onChange, data: { type } }: ValidateTextFieldProps
 ) => {
-  const container = getFieldContainer(sectionTitle, `inspector-text-${label}`);
+  const container = getFieldContainer(sectionTitle, `inspector-text-${label}`, testId);
 
   expect(container.getByText(label, { selector: 'label' })).toBeTruthy();
 
@@ -90,11 +97,11 @@ type ValidateSelectFieldProps = BaseValidateProps<'select'>;
 
 export const validateSelectField = async (
   sectionTitle: string | undefined,
-  { label, value, field, onChange, data: { options } }: ValidateSelectFieldProps
+  { label, value, testId, field, onChange, data: { options } }: ValidateSelectFieldProps
 ) => {
-  const container = getFieldContainer(sectionTitle, `inspector-select-${label}`);
+  const container = getFieldContainer(sectionTitle, `inspector-select-${label}`, testId);
 
-  expect(container.getByText(label, { selector: 'label' })).toBeTruthy();
+  expect(container.getByLabelText(label)).toBeTruthy();
   expect(container.getByDisplayValue(value)).toBeTruthy();
 
   for (let i = 0; i < options.length; i++) {
@@ -122,9 +129,9 @@ type ValidateSwitchFieldProps = BaseValidateProps<'switch'>;
 
 export const validateSwitchField = async (
   sectionTitle: string | undefined,
-  { label, value, field, onChange }: ValidateSwitchFieldProps
+  { label, value, testId, field, onChange }: ValidateSwitchFieldProps
 ) => {
-  const container = getFieldContainer(sectionTitle, `inspector-switch-${label}`);
+  const container = getFieldContainer(sectionTitle, `inspector-switch-${label}`, testId);
 
   const element = container.getByLabelText(label);
   if (value) {

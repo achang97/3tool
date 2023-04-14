@@ -2,7 +2,7 @@ import { COMPONENT_INPUT_TEMPLATES, ACTION_RESULT_TEMPLATE } from '@app/constant
 import { Action, ActionType, Component, ComponentType, Tool } from '@app/types';
 import { useAppSelector } from '@app/redux/hooks';
 import { renderHook } from '@testing-library/react';
-import { GLOBAL_LIBRARY_MAP, useBaseEvalArgs } from '../useBaseEvalArgs';
+import { GLOBAL_CONSTANTS_MAP, GLOBAL_LIBRARY_MAP, useBaseEvalArgs } from '../useBaseEvalArgs';
 
 jest.mock('@app/redux/hooks', () => ({
   useAppSelector: jest.fn(),
@@ -19,6 +19,13 @@ describe('useBaseEvalArgs', () => {
       useBaseEvalArgs({ components: [], actions: [] } as unknown as Tool)
     );
     expect(result.current).toMatchObject(GLOBAL_LIBRARY_MAP);
+  });
+
+  it('includes entries from global constants', () => {
+    const { result } = renderHook(() =>
+      useBaseEvalArgs({ components: [], actions: [] } as unknown as Tool)
+    );
+    expect(result.current).toMatchObject(GLOBAL_CONSTANTS_MAP);
   });
 
   it('includes entries from component inputs', () => {

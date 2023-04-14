@@ -4,7 +4,8 @@ import {
   COMPONENT_DATA_TYPES,
   EVENT_HANDLER_DATA_TYPES,
 } from '@app/constants';
-import { Action, Component, FieldType } from '@app/types';
+import { EVENT_HANDLER_DATA_JAVASCRIPT_FLAGS } from '@app/constants/eventHandlers/javascriptFlags';
+import { Action, Component, EventHandler, FieldType } from '@app/types';
 import _ from 'lodash';
 import { useCallback } from 'react';
 import { getElementData, isAction } from '../utils/elements';
@@ -27,9 +28,9 @@ export type FlatElement = {
 
 export const useElementFlattenFields = ({ includePrefix, onlyLeaves }: HookArgs) => {
   const getFlattenOptions = useCallback(
-    (element: Action | Component) => {
+    (prefix: string) => {
       return {
-        prefix: includePrefix ? element.name : '',
+        prefix: includePrefix ? prefix : '',
         onlyLeaves,
       };
     },
@@ -38,17 +39,18 @@ export const useElementFlattenFields = ({ includePrefix, onlyLeaves }: HookArgs)
 
   const extendFieldsWithEvalType = useCallback(
     (
-      element: Action | Component,
+      prefix: string,
       fields: FlatField[],
-      evalTypes: Record<string, unknown>,
-      javascriptFlags: Record<string, unknown> = {}
+      typeMaps: {
+        evalTypes: Record<string, unknown>;
+        javascriptFlags?: Record<string, unknown>;
+      }
     ) => {
-      const { prefix } = getFlattenOptions(element);
       return fields.map((field) => {
-        const fieldKey = prefix ? field.name.split(`${prefix}.`)[1] : field.name;
+        const fieldKey = includePrefix ? field.name.split(`${prefix}.`)[1] : field.name;
 
-        const evalType = _.get(evalTypes, fieldKey, 'any');
-        const isJavascript = _.get(javascriptFlags, fieldKey) === true;
+        const evalType = _.get(typeMaps.evalTypes, fieldKey, 'any');
+        const isJavascript = _.get(typeMaps.javascriptFlags, fieldKey) === true;
 
         return {
           ...field,
@@ -58,63 +60,63 @@ export const useElementFlattenFields = ({ includePrefix, onlyLeaves }: HookArgs)
         };
       });
     },
-    [getFlattenOptions]
+    [includePrefix]
   );
 
-  const flattenEventHandlerFields = useCallback(
+  const flattenEventHandlers = useCallback(
     (element: Action | Component) => {
-      const eventsObject = {
-        eventHandlers: element.eventHandlers.map((eventHandler) => ({
-          ..._.omit(eventHandler, 'data'),
-          ...eventHandler.data[eventHandler.type],
-        })),
-      };
-      const fields = flattenObjectFields(eventsObject, getFlattenOptions(element));
+      const createEventHandlerObject = (callback: (eventHandler: EventHandler) => void) => ({
+        eventHandlers: element.eventHandlers.map(callback),
+      });
 
-      const evalFieldTypes = {
-        eventHandlers: element.eventHandlers.map(
+      const eventsObject = createEventHandlerObject((eventHandler) => ({
+        ..._.omit(eventHandler, 'data'),
+        ...eventHandler.data[eventHandler.type],
+      }));
+      const fields = flattenObjectFields(eventsObject, getFlattenOptions(element.name));
+
+      const typeMaps = {
+        evalTypes: createEventHandlerObject(
           (eventHandler) => EVENT_HANDLER_DATA_TYPES[eventHandler.type]
         ),
+        javascriptFlags: createEventHandlerObject(
+          (eventHandler) => EVENT_HANDLER_DATA_JAVASCRIPT_FLAGS[eventHandler.type]
+        ),
       };
-      return extendFieldsWithEvalType(element, fields, evalFieldTypes);
+
+      return _.flatten(extendFieldsWithEvalType(element.name, fields, typeMaps));
     },
     [extendFieldsWithEvalType, getFlattenOptions]
   );
 
-  const getElementTypeMaps = useCallback((element: Action | Component) => {
-    if (isAction(element)) {
-      return {
-        evalTypes: ACTION_DATA_TYPES[element.type],
-        javascriptFlags: ACTION_DATA_JAVASCRIPT_FLAGS[element.type],
-      };
-    }
-
-    // isComponent(element)
-    return {
-      evalTypes: COMPONENT_DATA_TYPES[element.type],
-    };
-  }, []);
+  const flattenData = useCallback(
+    (element: Action | Component) => {
+      const data = getElementData(element);
+      const typeMaps = isAction(element)
+        ? {
+            evalTypes: ACTION_DATA_TYPES[element.type],
+            javascriptFlags: ACTION_DATA_JAVASCRIPT_FLAGS[element.type],
+          }
+        : {
+            evalTypes: COMPONENT_DATA_TYPES[element.type],
+          };
+      const fields = flattenObjectFields(data, getFlattenOptions(element.name));
+      return extendFieldsWithEvalType(element.name, fields, typeMaps);
+    },
+    [extendFieldsWithEvalType, getFlattenOptions]
+  );
 
   const flattenElement = useCallback(
     <T extends Action | Component>(element: T): FlatElement => {
-      const data = getElementData(element);
-      const typeMaps = getElementTypeMaps(element);
-      const fields = flattenObjectFields(data, getFlattenOptions(element));
-
-      const dataFields = extendFieldsWithEvalType(
-        element,
-        fields,
-        typeMaps.evalTypes,
-        typeMaps.javascriptFlags
-      );
-      const eventHandlerFields = _.flatten(flattenEventHandlerFields(element));
+      const dataFields = flattenData(element);
+      const eventHandlerFields = flattenEventHandlers(element);
 
       return {
         name: element.name,
         fields: [...dataFields, ...eventHandlerFields],
       };
     },
-    [getElementTypeMaps, getFlattenOptions, extendFieldsWithEvalType, flattenEventHandlerFields]
+    [flattenData, flattenEventHandlers]
   );
 
   return flattenElement;

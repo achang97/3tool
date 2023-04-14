@@ -45,7 +45,7 @@ export const CanvasDroppable = ({ isEditable }: CanvasDroppableProps) => {
         onDragStop={onDragStop}
         onDrop={onDrop}
         compactType={null}
-        preventCollision={false}
+        preventCollision
         droppingItem={droppingItem}
         isDroppable={isEditable}
         isDraggable={isEditable}

@@ -47,6 +47,10 @@ export const CreateActionButton = () => {
         },
         eventHandlers: [],
       };
+      if (type === ActionType.SmartContractRead) {
+        newAction.data[ActionType.SmartContractWrite] =
+          ACTION_DATA_TEMPLATES[ActionType.SmartContractWrite];
+      }
       const response = await updateTool({
         actions: [...tool.actions, newAction],
       });

@@ -54,6 +54,7 @@ const mockTools: Tool[] = [
         name: 'action1',
         data: {
           javascript: {
+            transformerEnabled: true,
             transformer: 'return data',
             code: "alert('hello');",
           },
@@ -119,9 +120,7 @@ export const toolsHandlers = [
     return res(ctx.status(201), ctx.json<Tool>(newTool));
   }),
   rest.put('*/api/tools/:id', async (req, res, ctx) => {
-    const body = await req.json<
-      Pick<Tool, 'name' | 'components' | 'actions'>
-    >();
+    const body = await req.json<Pick<Tool, 'name' | 'components' | 'actions'>>();
 
     const tool = mockTools.find((currTool) => currTool._id === req.params.id);
 
@@ -129,11 +128,7 @@ export const toolsHandlers = [
       return res(ctx.status(400));
     }
 
-    if (
-      mockTools.some(
-        (currTool) => currTool._id !== tool._id && currTool.name === body.name
-      )
-    ) {
+    if (mockTools.some((currTool) => currTool._id !== tool._id && currTool.name === body.name)) {
       return res(
         ctx.status(400),
         ctx.json({

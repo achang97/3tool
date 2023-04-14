@@ -41,6 +41,7 @@ export type BaseEventHandlerEditorProps<T extends EventHandlerType> = {
 };
 
 export type BaseActionEditorProps<T extends ActionType> = {
+  type: ActionType;
   data: Action['data'][T];
   onDataChange: (update: RecursivePartial<Action['data'][T]>) => void;
 };

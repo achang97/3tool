@@ -2,6 +2,7 @@ import {
   GLOBAL_LIBRARIES,
   COMPONENT_INPUT_TEMPLATES,
   ACTION_RESULT_TEMPLATE,
+  CHAIN_IDS_BY_NAME,
 } from '@app/constants';
 import { useAppSelector } from '@app/redux/hooks';
 import { Tool } from '@app/types';
@@ -15,6 +16,10 @@ export const GLOBAL_LIBRARY_MAP = _.chain(GLOBAL_LIBRARIES)
     return isModule ? readAsModule(library) : library;
   })
   .value();
+
+export const GLOBAL_CONSTANTS_MAP = {
+  chains: CHAIN_IDS_BY_NAME,
+};
 
 export const useBaseEvalArgs = (tool: Tool) => {
   const { componentInputs, actionResults } = useAppSelector((state) => state.activeTool);
@@ -37,6 +42,7 @@ export const useBaseEvalArgs = (tool: Tool) => {
     return _.merge(
       {},
       GLOBAL_LIBRARY_MAP,
+      GLOBAL_CONSTANTS_MAP,
       defaultActionResults,
       defaultComponentInputs,
       componentInputs,

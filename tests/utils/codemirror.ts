@@ -10,9 +10,7 @@ export const createCompletionContext = (
 ): CompletionContext => {
   const state = EditorState.create({
     doc,
-    extensions: isDynamic
-      ? [dynamicTextLanguage, javascript().support]
-      : [javascriptLanguage],
+    extensions: isDynamic ? [dynamicTextLanguage, javascript().support] : [javascriptLanguage],
   });
   return new CompletionContext(state, pos, false);
 };

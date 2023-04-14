@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { screen, render, renderHook, waitFor } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { ReactElement, useContext } from 'react';
@@ -31,6 +31,12 @@ describe('ActiveToolContext', () => {
 
     (useToolEvalDataMaps as jest.Mock).mockImplementation(() => ({}));
     (useToolDataDepGraph as jest.Mock).mockImplementation(() => ({}));
+  });
+
+  it('renders children', () => {
+    const mockChildren = 'children';
+    render(<ActiveToolProvider tool={mockTool}>{mockChildren}</ActiveToolProvider>);
+    expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
   it('returns default state', () => {

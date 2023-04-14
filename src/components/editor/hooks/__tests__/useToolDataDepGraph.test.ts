@@ -126,10 +126,10 @@ describe('useToolDataDepGraph', () => {
               eventHandlers: [
                 {
                   event: ComponentEvent.Click,
-                  type: EventHandlerType.Action,
+                  type: EventHandlerType.Url,
                   data: {
-                    action: {
-                      actionName: '{{ button1.text }}',
+                    url: {
+                      url: '{{ button1.text }}',
                     },
                   },
                 },
@@ -148,10 +148,10 @@ describe('useToolDataDepGraph', () => {
               eventHandlers: [
                 {
                   event: ActionEvent.Success,
-                  type: EventHandlerType.Action,
+                  type: EventHandlerType.Url,
                   data: {
-                    action: {
-                      actionName: '{{ button1.eventHandlers[0].actionName }}',
+                    url: {
+                      url: '{{ button1.eventHandlers[0].actionName }}',
                     },
                   },
                 },
@@ -165,11 +165,11 @@ describe('useToolDataDepGraph', () => {
         'action1.code',
       ]);
       expect(
-        result.current.dataDepGraph.directDependenciesOf('button1.eventHandlers[0].actionName')
+        result.current.dataDepGraph.directDependenciesOf('button1.eventHandlers[0].url')
       ).toEqual(['button1.text']);
       expect(result.current.dataDepGraph.directDependenciesOf('action1.code')).toEqual([]);
       expect(
-        result.current.dataDepGraph.directDependenciesOf('action1.eventHandlers[0].actionName')
+        result.current.dataDepGraph.directDependenciesOf('action1.eventHandlers[0].url')
       ).toEqual(['button1.eventHandlers']);
     });
   });
