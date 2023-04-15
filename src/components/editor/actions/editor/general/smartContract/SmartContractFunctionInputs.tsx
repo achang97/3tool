@@ -1,7 +1,7 @@
 import { InspectorTextField } from '@app/components/editor/common/InspectorTextField';
 import { SmartContractBaseDataFunction } from '@app/types';
 import { SmartContractAbiFunction, getAbiFieldType } from '@app/utils/abi';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { AbiType } from 'abitype';
 import _ from 'lodash';
 import { useCallback, useMemo } from 'react';
@@ -38,10 +38,7 @@ export const SmartContractFunctionInputs = ({
   );
 
   return (
-    <Box
-      sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
-      data-testid="smart-contract-function-inputs"
-    >
+    <Stack spacing={1} data-testid="smart-contract-function-inputs">
       {functionAbi?.inputs?.map((input, i) => (
         <InspectorTextField
           key={input.name}
@@ -59,6 +56,6 @@ export const SmartContractFunctionInputs = ({
           onChange={handlePayableAmountChange}
         />
       )}
-    </Box>
+    </Stack>
   );
 };

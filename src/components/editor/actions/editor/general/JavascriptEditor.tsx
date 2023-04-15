@@ -1,6 +1,6 @@
 import { CodeMirror } from '@app/components/editor/common/CodeMirror';
 import { ActionType, BaseActionEditorProps } from '@app/types';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useCallback } from 'react';
 import { EditorSection } from '../common/EditorSection';
 import { TransformerSection } from './sections/TransformerSection';
@@ -17,7 +17,7 @@ export const JavascriptEditor = ({
   );
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }} data-testid="javascript-editor">
+    <Stack spacing={1} data-testid="javascript-editor">
       <EditorSection title="JS Code">
         <CodeMirror
           value={data?.code}
@@ -28,6 +28,6 @@ export const JavascriptEditor = ({
         />
       </EditorSection>
       <TransformerSection data={data} onDataChange={onDataChange} />
-    </Box>
+    </Stack>
   );
 };

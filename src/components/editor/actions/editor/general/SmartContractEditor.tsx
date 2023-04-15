@@ -1,5 +1,5 @@
 import { ActionType, BaseActionEditorProps, SmartContractBaseData } from '@app/types';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { LoopEvalArgsProvider } from '@app/components/editor/contexts/LoopEvalArgsProvider';
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
@@ -49,10 +49,7 @@ export const SmartContractEditor = ({ type, data, onDataChange }: SmartContractE
   );
 
   return (
-    <Box
-      sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
-      data-testid="smart-contract-editor"
-    >
+    <Stack spacing={1} data-testid="smart-contract-editor">
       <LoopSection data={data} onDataChange={onDataChange} />
       <LoopEvalArgsProvider data={data}>
         <EditorSection title="Resource">
@@ -69,6 +66,6 @@ export const SmartContractEditor = ({ type, data, onDataChange }: SmartContractE
         </EditorSection>
       </LoopEvalArgsProvider>
       <TransformerSection data={data} onDataChange={onDataChange} />
-    </Box>
+    </Stack>
   );
 };

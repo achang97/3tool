@@ -1,5 +1,5 @@
 import { useAppSelector } from '@app/redux/hooks';
-import { Box, Divider } from '@mui/material';
+import { Box, Divider, Stack } from '@mui/material';
 import { ActionEditor } from './actions/ActionEditor';
 import { ActionEditorPlaceholder } from './actions/ActionEditorPlaceholder';
 import { ActionList } from './actions/ActionList';
@@ -12,10 +12,10 @@ export const EditorActions = () => {
   const { focusedAction, isActionViewMaximized } = useAppSelector((state) => state.editor);
 
   return (
-    <Box
+    <Stack
+      direction="row"
       sx={{
         height: isActionViewMaximized ? MAXIMIZED_HEIGHT : MINIMIZED_HEIGHT,
-        display: 'flex',
         boxShadow: 3,
         flexShrink: 0,
         // NOTE: Removes the overlapping shadow on the right side of the container.
@@ -30,6 +30,6 @@ export const EditorActions = () => {
       <Box sx={{ flex: 1, minWidth: 0 }}>
         {focusedAction ? <ActionEditor action={focusedAction} /> : <ActionEditorPlaceholder />}
       </Box>
-    </Box>
+    </Stack>
   );
 };

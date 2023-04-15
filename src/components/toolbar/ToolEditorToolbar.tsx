@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { Box, Button, IconButton } from '@mui/material';
+import { Button, IconButton, Stack } from '@mui/material';
 import { Tune } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { focusToolSettings, setIsPreview } from '@app/redux/features/editorSlice';
@@ -51,14 +51,14 @@ export const ToolEditorToolbar = () => {
 
   const right = useMemo(() => {
     return (
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Stack direction="row" spacing={1}>
         <IconButton onClick={handleSettingsClick} data-testid="tool-editor-toolbar-settings-button">
           <Tune />
         </IconButton>
         <Button color="secondary" size="small" onClick={handlePreviewClick}>
           {isPreview ? 'Editor' : 'Preview'}
         </Button>
-      </Box>
+      </Stack>
     );
   }, [handlePreviewClick, handleSettingsClick, isPreview]);
 

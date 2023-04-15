@@ -1,8 +1,7 @@
 import { ChangeEvent, useCallback } from 'react';
-import { Checkbox, Collapse, FormControlLabel, TextField } from '@mui/material';
+import { Checkbox, Collapse, FormControlLabel, Stack, TextField } from '@mui/material';
 import { ResourceType } from '@app/types';
 import { BaseResourceFormProps } from '@app/types/resources';
-import { FormContainer } from '../common/FormContainer';
 import { AbiTextField } from './AbiTextField';
 
 export const AbiForm = ({
@@ -40,7 +39,7 @@ export const AbiForm = ({
   );
 
   return (
-    <FormContainer testId="abi-form">
+    <Stack spacing={1} data-testid="abi-form">
       <TextField
         label="Name"
         placeholder="Enter ABI name"
@@ -70,6 +69,6 @@ export const AbiForm = ({
           fullWidth
         />
       </Collapse>
-    </FormContainer>
+    </Stack>
   );
 };

@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { COMPONENT_CONFIGS } from '@app/constants';
 import Image from 'next/image';
 import {
@@ -87,10 +87,7 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
   }, [component, debouncedHandleUpdateData, debouncedHandleUpdateEventHandlers]);
 
   return (
-    <Box
-      data-testid="component-inspector"
-      sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-    >
+    <Stack data-testid="component-inspector" sx={{ height: '100%' }}>
       <InspectorHeader
         icon={
           <Image
@@ -110,6 +107,6 @@ export const ComponentInspector = ({ component }: ComponentInspectorProps) => {
           <DeleteComponentButton name={component.name} />
         </InspectorSection>
       </Box>
-    </Box>
+    </Stack>
   );
 };

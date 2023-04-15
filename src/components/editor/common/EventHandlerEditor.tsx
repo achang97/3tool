@@ -10,7 +10,7 @@ import {
   EventHandler,
   EventHandlerType,
 } from '@app/types';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { FC, useCallback, useMemo } from 'react';
 import {
   BaseInspector,
@@ -125,14 +125,9 @@ export const EventHandlerEditor = ({
   }, [effectEditor, eventHandler, eventOptions]);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 1,
-        width: EVENT_HANDLER_EDITOR_WIDTH,
-        gap: 1,
-      }}
+    <Stack
+      spacing={1}
+      sx={{ padding: 1, width: EVENT_HANDLER_EDITOR_WIDTH }}
       data-testid="event-handler-editor"
     >
       <BaseInspector
@@ -141,6 +136,6 @@ export const EventHandlerEditor = ({
         onChange={handleChange}
         isAutosaved={isAutosaved}
       />
-    </Box>
+    </Stack>
   );
 };

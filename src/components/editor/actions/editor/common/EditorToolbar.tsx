@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '@mui/material';
+import { BoxProps, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 
 type EditorToolbarProps = {
@@ -8,9 +8,9 @@ type EditorToolbarProps = {
 
 export const EditorToolbar = ({ children, sx }: EditorToolbarProps) => {
   return (
-    <Box
+    <Stack
+      direction="row"
       sx={{
-        display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         borderBottom: 1,
@@ -20,6 +20,6 @@ export const EditorToolbar = ({ children, sx }: EditorToolbarProps) => {
       }}
     >
       {children}
-    </Box>
+    </Stack>
   );
 };

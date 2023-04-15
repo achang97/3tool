@@ -6,7 +6,7 @@ import { focusAction } from '@app/redux/features/editorSlice';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { Action } from '@app/types';
 import { MoreVert } from '@mui/icons-material';
-import { Box, IconButton, Menu } from '@mui/material';
+import { Box, IconButton, Menu, Stack } from '@mui/material';
 import Image from 'next/image';
 import { useCallback, useMemo, useState } from 'react';
 import { DeleteDialog } from '../../common/DeleteDialog';
@@ -61,9 +61,9 @@ export const ActionListItem = ({ action }: ActionListItemProps) => {
 
   return (
     <>
-      <Box
+      <Stack
+        direction="row"
         sx={{
-          display: 'flex',
           alignItems: 'center',
           backgroundColor: isFocused ? 'greyscale.offwhite.main' : undefined,
           borderRadius: 1,
@@ -100,7 +100,7 @@ export const ActionListItem = ({ action }: ActionListItemProps) => {
         <Menu anchorEl={menuAnchor} open={isMenuOpen} onClose={onMenuClose} onClick={onMenuClose}>
           <MenuItem onClick={handleDeleteDialogOpen} color="error.main" label="Delete" />
         </Menu>
-      </Box>
+      </Stack>
       <DeleteDialog
         name={action.name}
         isOpen={isDeleteDialogOpen}

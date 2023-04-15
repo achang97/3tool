@@ -2,7 +2,7 @@ import {
   EditableTextField,
   EditableTextFieldProps,
 } from '@app/components/common/EditableTextField';
-import { Box, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 type InspectorHeaderProps = {
@@ -20,9 +20,9 @@ export const InspectorHeader = ({
   subtitle,
 }: InspectorHeaderProps) => {
   return (
-    <Box
+    <Stack
+      direction="row"
       sx={{
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingX: 1.5,
@@ -31,15 +31,7 @@ export const InspectorHeader = ({
         borderColor: 'divider',
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          flex: 1,
-          minWidth: 0,
-        }}
-      >
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'center', flex: 1, minWidth: 0 }}>
         {icon}
         <EditableTextField
           value={title}
@@ -50,12 +42,12 @@ export const InspectorHeader = ({
           TextFieldProps={{ size: 'small' }}
           height={35}
         />
-      </Box>
+      </Stack>
       {subtitle && (
         <Typography variant="caption" sx={{ whiteSpace: 'nowrap', marginLeft: 0.5 }}>
           {subtitle}
         </Typography>
       )}
-    </Box>
+    </Stack>
   );
 };

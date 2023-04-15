@@ -6,7 +6,7 @@ import { EventHandlerData } from '@app/components/editor/utils/eventHandlers';
 import { EVENT_HANDLER_DATA_TEMPLATES } from '@app/constants';
 import { ActionEvent, ComponentEvent, EventHandler, EventHandlerType } from '@app/types';
 import { Add } from '@mui/icons-material';
-import { Box, Button, Menu, MenuProps } from '@mui/material';
+import { Button, Menu, MenuProps, Stack } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import _ from 'lodash';
 import { useCallback, useState, useRef, useMemo } from 'react';
@@ -108,7 +108,7 @@ export const InspectorEventHandlers = ({
   );
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column' }} data-testid={testId}>
+    <Stack data-testid={testId}>
       {label && <FormFieldLabel label={label} />}
       <DataGrid
         rows={rows}
@@ -153,6 +153,6 @@ export const InspectorEventHandlers = ({
           />
         )}
       </Menu>
-    </Box>
+    </Stack>
   );
 };

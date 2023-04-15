@@ -1,10 +1,9 @@
-import { Box, CircularProgress } from '@mui/material';
+import { CircularProgress, Stack } from '@mui/material';
 
 export const FullscreenLoader = () => {
   return (
-    <Box
+    <Stack
       sx={{
-        display: 'flex',
         width: '100%',
         height: '100%',
         alignItems: 'center',
@@ -12,6 +11,6 @@ export const FullscreenLoader = () => {
       }}
     >
       <CircularProgress data-testid="fullscreen-loader" />
-    </Box>
+    </Stack>
   );
 };

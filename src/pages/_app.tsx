@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { Toolbar } from '@app/components/toolbar/Toolbar';
 import { theme } from '@app/utils/mui';
@@ -48,19 +48,17 @@ const App = ({ Component, ...rest }: AppProps) => {
           <CssVarsProvider theme={theme}>
             <WagmiConfig client={wagmiClient}>
               <AuthRedirectProvider>
-                <Box
+                <Stack
                   sx={{
                     backgroundColor: 'background.paper',
                     height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
                   }}
                 >
                   <Toolbar />
                   <Box sx={{ flex: 1, overflowY: 'scroll' }}>
                     <Component {...props.pageProps} />
                   </Box>
-                </Box>
+                </Stack>
                 <ConnectWalletModal />
               </AuthRedirectProvider>
             </WagmiConfig>

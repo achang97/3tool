@@ -1,6 +1,6 @@
 import { HelpTooltip } from '@app/components/common/HelpTooltip';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
-import { Box, Collapse, IconButton, Switch, Typography } from '@mui/material';
+import { Box, Collapse, IconButton, Stack, Switch, Typography } from '@mui/material';
 import { ChangeEvent, ReactNode, useCallback, useMemo, useState } from 'react';
 
 type EditorSectionProps = {
@@ -49,9 +49,9 @@ export const EditorSection = ({
 
   return (
     <Box data-testid={testId}>
-      <Box
+      <Stack
+        direction="row"
         sx={{
-          display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           marginBottom: 1,
@@ -63,7 +63,7 @@ export const EditorSection = ({
         }}
         onClick={handleToggleSection}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Stack direction="row" sx={{ alignItems: 'center' }}>
           {isEnabledToggleable && (
             <Switch checked={isEnabled} onChange={handleToggleEnabled} size="small" />
           )}
@@ -71,7 +71,7 @@ export const EditorSection = ({
             {title}
           </Typography>
           {tooltip && <HelpTooltip text={tooltip} />}
-        </Box>
+        </Stack>
         <IconButton
           size="small"
           sx={{
@@ -85,18 +85,11 @@ export const EditorSection = ({
             <ArrowDropDown data-testid="editor-section-arrow-down" />
           )}
         </IconButton>
-      </Box>
+      </Stack>
       <Collapse in={isVisible}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            paddingBottom: 1,
-            gap: 1,
-          }}
-        >
+        <Stack spacing={1} sx={{ paddingBottom: 1 }}>
           {children}
-        </Box>
+        </Stack>
       </Collapse>
     </Box>
   );

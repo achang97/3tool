@@ -1,5 +1,5 @@
 import { useLoginMutation } from '@app/redux/services/auth';
-import { Box, Button, TextField } from '@mui/material';
+import { Button, Stack, TextField } from '@mui/material';
 import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { ApiErrorMessage } from '../common/ApiErrorMessage';
 
@@ -26,7 +26,7 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={handleLogin} data-testid="login-form">
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+      <Stack spacing={1}>
         <TextField
           type="email"
           label="Email"
@@ -45,7 +45,7 @@ export const LoginForm = () => {
         />
         {error && <ApiErrorMessage error={error} />}
         <Button type="submit">Login</Button>
-      </Box>
+      </Stack>
     </form>
   );
 };

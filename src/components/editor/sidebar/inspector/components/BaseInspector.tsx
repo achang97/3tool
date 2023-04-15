@@ -3,7 +3,7 @@ import { InspectorSelect } from '@app/components/editor/common/InspectorSelect';
 import { InspectorSwitch } from '@app/components/editor/common/InspectorSwitch';
 import { InspectorTextField } from '@app/components/editor/common/InspectorTextField';
 import { FieldType } from '@app/types';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { Fragment, ReactNode, useCallback } from 'react';
 import { InspectorSection } from '../InspectorSection';
 
@@ -139,7 +139,7 @@ export const BaseInspector = ({
         return <InspectorSection title={section.title}>{sectionFields}</InspectorSection>;
       }
 
-      return <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{sectionFields}</Box>;
+      return <Stack spacing={1}>{sectionFields}</Stack>;
     },
     [renderSectionField]
   );

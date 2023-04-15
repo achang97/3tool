@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import Link from 'next/link';
 import { ReactNode, useMemo } from 'react';
 
@@ -29,10 +29,8 @@ export const ThumbnailContainer = ({
 
   return (
     <Grid item xs={3} data-testid={testId} onClick={onClick} {...linkProps}>
-      <Box
+      <Stack
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           padding: 3,
           backgroundColor: 'greyscale.offwhite.dark',
@@ -41,19 +39,18 @@ export const ThumbnailContainer = ({
           height: '200px',
         }}
       >
-        <Box
+        <Stack
           sx={{
             flex: 3,
-            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '3.5rem',
           }}
         >
           {icon}
-        </Box>
+        </Stack>
         <Box sx={{ flex: 1, width: '100%' }}>{children}</Box>
-      </Box>
+      </Stack>
     </Grid>
   );
 };

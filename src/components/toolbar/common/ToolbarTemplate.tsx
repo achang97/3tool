@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import logo from '@app/resources/images/logo.svg';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,10 +14,10 @@ type ToolbarTemplateProps = {
 
 export const ToolbarTemplate = ({ left, middle, right, testId }: ToolbarTemplateProps) => {
   return (
-    <Box
+    <Stack
+      direction="row"
       sx={{
         height: '60px',
-        display: 'flex',
         flexShrink: 0,
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -37,6 +37,6 @@ export const ToolbarTemplate = ({ left, middle, right, testId }: ToolbarTemplate
       </ToolbarSection>
       <ToolbarSection sx={{ justifyContent: 'center' }}>{middle}</ToolbarSection>
       <ToolbarSection sx={{ justifyContent: 'flex-end' }}>{right}</ToolbarSection>
-    </Box>
+    </Stack>
   );
 };

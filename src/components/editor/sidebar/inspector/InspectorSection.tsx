@@ -1,5 +1,5 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
-import { Box, Collapse, IconButton, Typography } from '@mui/material';
+import { Box, Collapse, IconButton, Stack, Typography } from '@mui/material';
 import { ReactNode, useCallback, useState } from 'react';
 
 type InspectorSectionProps = {
@@ -23,9 +23,9 @@ export const InspectorSection = ({ title, children }: InspectorSectionProps) => 
       }}
       data-testid={`inspector-section-${title}`}
     >
-      <Box
+      <Stack
+        direction="row"
         sx={{
-          display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           marginBottom: 1,
@@ -43,9 +43,9 @@ export const InspectorSection = ({ title, children }: InspectorSectionProps) => 
             <ArrowDropDown data-testid="inspector-section-arrow-down" />
           )}
         </IconButton>
-      </Box>
+      </Stack>
       <Collapse in={isOpen}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>{children}</Box>
+        <Stack spacing={1}>{children}</Stack>
       </Collapse>
     </Box>
   );

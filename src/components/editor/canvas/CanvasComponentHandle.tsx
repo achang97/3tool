@@ -1,5 +1,5 @@
 import { ErrorOutline } from '@mui/icons-material';
-import { Box, SxProps, Tooltip } from '@mui/material';
+import { Box, Stack, SxProps, Tooltip } from '@mui/material';
 import { useMemo } from 'react';
 import { lineClamp } from '@app/utils/mui';
 import { ComponentEvalError } from '../hooks/useComponentEvalErrors';
@@ -33,12 +33,11 @@ export const CanvasComponentHandle = ({ name, errors }: CanvasComponentHandlePro
   }, [errors]);
 
   return (
-    <Box
+    <Stack
+      spacing={0.5}
       sx={{
         maxWidth: '100%',
-        display: 'flex',
         alignItems: 'center',
-        gap: 0.5,
         position: 'absolute',
         bottom: '100%',
         left: 0,
@@ -58,6 +57,6 @@ export const CanvasComponentHandle = ({ name, errors }: CanvasComponentHandlePro
           <ErrorOutline data-testid="canvas-component-handle-error-icon" fontSize="inherit" />
         </Tooltip>
       )}
-    </Box>
+    </Stack>
   );
 };

@@ -1,13 +1,12 @@
 import { ChangeEvent, useCallback } from 'react';
 import { CHAINS, RESOURCE_DATA_TEMPLATES } from '@app/constants';
-import { Button, MenuItem, TextField } from '@mui/material';
+import { Button, MenuItem, Stack, TextField } from '@mui/material';
 import { Resource, ResourceType } from '@app/types';
 import { Select } from '@app/components/common/Select';
 import { BaseResourceFormProps } from '@app/types/resources';
 import { useAppDispatch } from '@app/redux/hooks';
 import { pushResource } from '@app/redux/features/resourcesSlice';
 import { AddressTextField } from './AddressTextField';
-import { FormContainer } from '../common/FormContainer';
 import { useAbiResources } from '../hooks/useAbiResources';
 import { useFetchAbi } from '../hooks/useFetchAbi';
 
@@ -78,7 +77,7 @@ export const SmartContractForm = ({
   }, [dispatch, fetchedAbi, name]);
 
   return (
-    <FormContainer testId="smart-contract-form">
+    <Stack spacing={1} data-testid="smart-contract-form">
       <TextField
         label="Name"
         placeholder="Enter contract name"
@@ -129,6 +128,6 @@ export const SmartContractForm = ({
       <Button variant="text" onClick={handleAbiDialogOpen} sx={{ alignSelf: 'flex-start' }}>
         Create new ABI
       </Button>
-    </FormContainer>
+    </Stack>
   );
 };

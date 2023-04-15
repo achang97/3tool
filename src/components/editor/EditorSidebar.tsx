@@ -1,5 +1,5 @@
 import { SyntheticEvent, useCallback } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Stack, Tab, Tabs } from '@mui/material';
 import { TabContext, TabPanel } from '@mui/lab';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { SidebarViewType } from '@app/types';
@@ -34,16 +34,7 @@ export const EditorSidebar = () => {
   );
 
   return (
-    <Box
-      sx={{
-        width: WIDTH,
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        minHeight: 0,
-      }}
-      data-testid="editor-sidebar"
-    >
+    <Stack sx={{ width: WIDTH, flex: 1, minHeight: 0 }} data-testid="editor-sidebar">
       <Box
         sx={{
           borderBottom: 1,
@@ -71,6 +62,6 @@ export const EditorSidebar = () => {
           ))}
         </TabContext>
       </Box>
-    </Box>
+    </Stack>
   );
 };

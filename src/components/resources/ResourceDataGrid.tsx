@@ -1,6 +1,6 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
-import { InputAdornment, TextField, Box } from '@mui/material';
+import { InputAdornment, TextField, Stack } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { useDebouncedQuery } from '@app/hooks/useDebouncedQuery';
 import { useResourceDataGridProps } from './hooks/useResourceDataGridProps';
@@ -20,10 +20,7 @@ export const ResourceDataGrid = ({
   const { rows, columns, getRowId } = useResourceDataGridProps(resources);
 
   return (
-    <Box
-      sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}
-      data-testid="resource-data-grid"
-    >
+    <Stack sx={{ flex: 1 }} data-testid="resource-data-grid">
       <TextField
         placeholder="Search resources"
         fullWidth
@@ -50,6 +47,6 @@ export const ResourceDataGrid = ({
         disableSelectionOnClick
         disableVirtualization={__test__disableVirtualization}
       />
-    </Box>
+    </Stack>
   );
 };

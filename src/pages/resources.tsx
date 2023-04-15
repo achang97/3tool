@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { createTitle } from '@app/utils/window';
 import { PageTitle } from '@app/components/common/PageTitle';
 import { PageContainer } from '@app/components/common/PageContainer';
@@ -16,9 +16,9 @@ const Resources = () => {
       <main>
         <PageContainer>
           <Stack sx={{ height: '100%' }}>
-            <Box
+            <Stack
+              direction="row"
               sx={{
-                display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingBottom: 1,
@@ -26,7 +26,7 @@ const Resources = () => {
             >
               <PageTitle showPadding={false}>Resource Library</PageTitle>
               <CreateResourceButton />
-            </Box>
+            </Stack>
             <ResourceDataGrid />
             <ResourceModals />
           </Stack>

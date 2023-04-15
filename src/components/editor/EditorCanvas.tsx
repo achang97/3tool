@@ -1,6 +1,6 @@
 import { blurComponent, focusToolSettings } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import { useCallback, MouseEvent } from 'react';
 import { EditorApp } from './EditorApp';
 
@@ -24,15 +24,13 @@ export const EditorCanvas = ({ isEditable }: EditorCanvasProps) => {
   );
 
   return (
-    <Box
+    <Stack
       sx={{
         backgroundColor: 'greyscale.offwhite.main',
         paddingX: 4,
         paddingTop: 1,
         paddingBottom: 2,
         height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
         overflowY: 'auto',
       }}
       onClick={handleCanvasClick}
@@ -58,6 +56,6 @@ export const EditorCanvas = ({ isEditable }: EditorCanvasProps) => {
       >
         <EditorApp isEditable={isEditable} />
       </Box>
-    </Box>
+    </Stack>
   );
 };

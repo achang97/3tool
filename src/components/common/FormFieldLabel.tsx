@@ -1,4 +1,4 @@
-import { Box, BoxProps, InputLabel, TextFieldProps } from '@mui/material';
+import { Box, BoxProps, InputLabel, Stack, TextFieldProps } from '@mui/material';
 import { ReactNode } from 'react';
 import { HelpTooltip } from './HelpTooltip';
 
@@ -25,16 +25,10 @@ export const FormFieldLabel = ({ label, tooltip, endAdornment, sx }: FormFieldLa
       <InputLabel shrink sx={{ flex: 1 }}>
         {label}
       </InputLabel>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-        }}
-      >
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
         {endAdornment}
         {tooltip && <HelpTooltip text={tooltip} />}
-      </Box>
+      </Stack>
     </Box>
   );
 };

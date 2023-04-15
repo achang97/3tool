@@ -1,7 +1,7 @@
 import { SMART_CONTRACT_BASE_DATA_FUNCTION_TEMPLATE } from '@app/constants';
 import { SmartContractBaseData, SmartContractBaseDataFunction } from '@app/types';
 import { Add, Close } from '@mui/icons-material';
-import { Box, Button, IconButton, Tab, Tabs } from '@mui/material';
+import { Button, IconButton, Stack, Tab, Tabs } from '@mui/material';
 import _ from 'lodash';
 import { SyntheticEvent, useCallback } from 'react';
 
@@ -75,14 +75,9 @@ export const SmartContractFunctionTabs = ({
   );
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        marginBottom: 0.25,
-        minWidth: 0,
-      }}
+    <Stack
+      direction="row"
+      sx={{ justifyContent: 'flex-end', alignItems: 'center', marginBottom: 0.25, minWidth: 0 }}
       data-testid="smart-contract-function-tabs"
     >
       {functions.length > 1 && (
@@ -98,6 +93,6 @@ export const SmartContractFunctionTabs = ({
       <Button size="small" variant="text" startIcon={<Add />} onClick={handleFunctionAdd}>
         Add function
       </Button>
-    </Box>
+    </Stack>
   );
 };

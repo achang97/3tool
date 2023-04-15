@@ -1,4 +1,4 @@
-import { Box, SxProps } from '@mui/material';
+import { Stack, SxProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 type ToolbarSectionProps = {
@@ -8,16 +8,8 @@ type ToolbarSectionProps = {
 
 export const ToolbarSection = ({ sx, children }: ToolbarSectionProps) => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flex: 1,
-        alignItems: 'center',
-        height: '100%',
-        ...sx,
-      }}
-    >
+    <Stack direction="row" sx={{ flex: 1, alignItems: 'center', height: '100%', ...sx }}>
       {children}
-    </Box>
+    </Stack>
   );
 };

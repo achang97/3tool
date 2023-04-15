@@ -1,11 +1,11 @@
 import { ConnectWalletButton } from '@app/components/common/ConnectWalletButton';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 
 export const CanvasToolbar = () => {
   return (
-    <Box
+    <Stack
+      direction="row"
       sx={{
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
         paddingX: 2,
@@ -16,6 +16,6 @@ export const CanvasToolbar = () => {
       data-testid="canvas-toolbar"
     >
       <ConnectWalletButton />
-    </Box>
+    </Stack>
   );
 };

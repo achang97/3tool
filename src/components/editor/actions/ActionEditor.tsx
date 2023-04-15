@@ -2,7 +2,7 @@ import { setActionView, updateFocusedAction } from '@app/redux/features/editorSl
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType, ActionViewType, BaseActionEditorProps } from '@app/types';
 import { TabContext, TabPanel } from '@mui/lab';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Stack, Tab, Tabs } from '@mui/material';
 import { useMemo, useCallback, SyntheticEvent, FC } from 'react';
 import { useActionCycleListener } from '../hooks/useActionCycleListener';
 import { EditorToolbar } from './editor/common/EditorToolbar';
@@ -73,15 +73,7 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
   );
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        height: '100%',
-      }}
-      data-testid="action-editor"
-    >
+    <Stack sx={{ flex: 1, height: '100%' }} data-testid="action-editor">
       <EditorToolbar>
         <Tabs value={actionView} onChange={handleTabChange} sx={{ minHeight: 0 }}>
           {tabs.map((tab) => (
@@ -93,10 +85,10 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
             />
           ))}
         </Tabs>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+        <Stack direction="row" spacing={0.25} sx={{ alignItems: 'center' }}>
           <SaveRunButton type={action.type} />
           <SizeControlButton />
-        </Box>
+        </Stack>
       </EditorToolbar>
       <TabContext value={actionView}>
         {tabs.map((tab) => (
@@ -115,6 +107,6 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
           </TabPanel>
         ))}
       </TabContext>
-    </Box>
+    </Stack>
   );
 };

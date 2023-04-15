@@ -1,4 +1,4 @@
-import { Box, Typography, MenuItem as BaseMenuItem, BoxProps } from '@mui/material';
+import { Typography, MenuItem as BaseMenuItem, BoxProps, Stack } from '@mui/material';
 import Link from 'next/link';
 import { ReactNode, useMemo } from 'react';
 
@@ -24,18 +24,12 @@ export const MenuItem = ({ icon, label, color, onClick, href, testId }: MenuItem
 
   return (
     <BaseMenuItem {...linkProps} onClick={onClick} sx={{ color }} data-testid={testId}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1.5,
-        }}
-      >
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
         {icon}
         <Typography variant="body2" color="inherit">
           {label}
         </Typography>
-      </Box>
+      </Stack>
     </BaseMenuItem>
   );
 };

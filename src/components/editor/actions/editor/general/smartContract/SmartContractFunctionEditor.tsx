@@ -1,5 +1,5 @@
 import { ActionType, BaseActionEditorProps, SmartContractBaseDataFunction } from '@app/types';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import _ from 'lodash';
 import { useCallback, useMemo } from 'react';
 import { filterAbiFunctions } from '@app/utils/abi';
@@ -61,7 +61,7 @@ export const SmartContractFunctionEditor = ({
         />
       )}
       {activeFunction && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Stack spacing={1}>
           <SmartContractFunctionSelect
             type={type}
             abiFunctions={abiFunctions}
@@ -74,7 +74,7 @@ export const SmartContractFunctionEditor = ({
             activeFunction={activeFunction}
             onActiveFunctionChange={handleUpdateActiveFunction}
           />
-        </Box>
+        </Stack>
       )}
     </Box>
   );

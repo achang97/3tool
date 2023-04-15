@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { WebAssetOff } from '@mui/icons-material';
 import { createTitle } from '@app/utils/window';
 import Link from 'next/link';
@@ -11,11 +11,9 @@ const Error404 = () => {
         <title>{createTitle('404 Error')}</title>
       </Head>
       <main>
-        <Box
+        <Stack
           sx={{
             height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
@@ -42,7 +40,7 @@ const Error404 = () => {
           >
             404
           </Typography>
-        </Box>
+        </Stack>
       </main>
     </>
   );

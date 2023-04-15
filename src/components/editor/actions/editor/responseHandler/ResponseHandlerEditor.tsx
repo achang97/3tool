@@ -2,7 +2,7 @@ import { InspectorEventHandlers } from '@app/components/editor/common/InspectorE
 import { updateFocusedAction } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
 import { ActionEvent, EventHandler } from '@app/types';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import _ from 'lodash';
 import { useCallback, useMemo } from 'react';
 
@@ -36,10 +36,7 @@ export const ResponseHandlerEditor = ({ eventHandlers }: ResponseHandlerEditorPr
   }, [eventHandlers]);
 
   return (
-    <Box
-      data-testid="response-handler-editor"
-      sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
-    >
+    <Stack spacing={1} data-testid="response-handler-editor">
       <InspectorEventHandlers
         label="Success handlers"
         eventHandlers={groupedEventHandlers[ActionEvent.Success]}
@@ -66,6 +63,6 @@ export const ResponseHandlerEditor = ({ eventHandlers }: ResponseHandlerEditorPr
         hideEventColumn
         testId="action-error-handlers"
       />
-    </Box>
+    </Stack>
   );
 };

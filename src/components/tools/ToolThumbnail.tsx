@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { lineClamp } from '@app/utils/mui';
 import { UserAvatar } from '@app/components/common/UserAvatar';
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { GridViewRounded } from '@mui/icons-material';
 import moment from 'moment';
 import { stringToColor } from '@app/utils/styles';
@@ -27,13 +27,7 @@ export const ToolThumbnail = ({ id, name, updatedAt, creatorUser }: ToolThumbnai
       }
       href={`/tools/${id}`}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
+      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <Box>
           <Typography variant="subtitle1" sx={lineClamp(1)}>
             {name}
@@ -43,7 +37,7 @@ export const ToolThumbnail = ({ id, name, updatedAt, creatorUser }: ToolThumbnai
           </Typography>
         </Box>
         <UserAvatar user={creatorUser} sx={{ marginLeft: 1 }} />
-      </Box>
+      </Stack>
     </ThumbnailContainer>
   );
 };

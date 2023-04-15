@@ -4,7 +4,7 @@ import { updateFocusedAction } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
 import { ActionType, SmartContractBaseDataFunction } from '@app/types';
 import { SmartContractAbiFunction } from '@app/utils/abi';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useCallback } from 'react';
 
 type SmartContractFunctionSelectProps = {
@@ -47,8 +47,10 @@ export const SmartContractFunctionSelect = ({
   );
 
   return (
-    <Box
-      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{ alignItems: 'center' }}
       data-testid="smart-contract-function-select"
     >
       <InspectorEnumField
@@ -72,6 +74,6 @@ export const SmartContractFunctionSelect = ({
           'data-testid': 'smart-contract-function-select-function-select',
         }}
       />
-    </Box>
+    </Stack>
   );
 };

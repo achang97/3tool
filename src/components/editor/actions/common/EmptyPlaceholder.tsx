@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 type EmptyPlaceholderProps = {
@@ -7,9 +7,8 @@ type EmptyPlaceholderProps = {
 
 export const EmptyPlaceholder = ({ children }: EmptyPlaceholderProps) => {
   return (
-    <Box
+    <Stack
       sx={{
-        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 4,
@@ -18,7 +17,7 @@ export const EmptyPlaceholder = ({ children }: EmptyPlaceholderProps) => {
         height: '100%',
       }}
     >
-      <Typography variant="body2"> {children} </Typography>
-    </Box>
+      <Typography variant="body2">{children}</Typography>
+    </Stack>
   );
 };

@@ -6,7 +6,7 @@ import { InspectorTextField } from '@app/components/editor/common/InspectorTextF
 import { useAbiResources } from '@app/components/resources/hooks/useAbiResources';
 import { SmartContractBaseData } from '@app/types';
 import { ACTION_DATA_TYPES } from '@app/constants';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 
 type SmartContractResourceEditorProps = {
   data: SmartContractBaseData | undefined;
@@ -54,10 +54,7 @@ export const SmartContractResourceEditor = ({
   );
 
   return (
-    <Box
-      sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
-      data-testid="smart-contract-resource-editor"
-    >
+    <Stack spacing={1} data-testid="smart-contract-resource-editor">
       <ToggleableInspectorField
         dynamicType={ACTION_DATA_TYPES.smartContractRead.freeformAddress}
         isDynamic={data?.freeform}
@@ -99,6 +96,6 @@ export const SmartContractResourceEditor = ({
           />
         </>
       )}
-    </Box>
+    </Stack>
   );
 };
