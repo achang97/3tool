@@ -1,12 +1,13 @@
 import { useLoginMutation } from '@app/redux/services/auth';
-import { Button, Stack, TextField } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import { LoadingButton } from '@mui/lab';
 import { ApiErrorMessage } from '../common/ApiErrorMessage';
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [login, { error }] = useLoginMutation();
+  const [login, { error, isLoading }] = useLoginMutation();
 
   const handleEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -44,7 +45,9 @@ export const LoginForm = () => {
           required
         />
         {error && <ApiErrorMessage error={error} />}
-        <Button type="submit">Login</Button>
+        <LoadingButton type="submit" loading={isLoading}>
+          Login
+        </LoadingButton>
       </Stack>
     </form>
   );

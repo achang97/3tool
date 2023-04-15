@@ -3,6 +3,7 @@ import { mockUser } from '@tests/constants/data';
 import { Tool } from '@app/types';
 import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
+import { useGetToolsQuery } from '@app/redux/services/tools';
 
 const mockTools: Tool[] = [
   {
@@ -18,17 +19,24 @@ const mockTools: Tool[] = [
 
 jest.mock('@app/redux/services/tools', () => ({
   ...jest.requireActual('@app/redux/services/tools'),
-  useGetToolsQuery: jest.fn(() => ({ data: mockTools })),
+  useGetToolsQuery: jest.fn(),
 }));
 
 describe('Home', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (useGetToolsQuery as jest.Mock).mockImplementation(() => ({ data: mockTools }));
   });
 
   it('renders page title', () => {
     render(<ToolsPage />);
     expect(screen.getByText('Tools')).toBeTruthy();
+  });
+
+  it('renders loader', () => {
+    (useGetToolsQuery as jest.Mock).mockImplementation(() => ({ isLoading: true }));
+    render(<ToolsPage />);
+    expect(screen.getByTestId('fullscreen-loader')).toBeTruthy();
   });
 
   it('renders create tool thumbnail', async () => {

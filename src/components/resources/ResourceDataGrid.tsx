@@ -13,7 +13,7 @@ export const ResourceDataGrid = ({
   __test__disableVirtualization = process.env.NODE_ENV === 'test',
 }: ResourceDataGridProps) => {
   const { query, debouncedQuery, handleQueryChange } = useDebouncedQuery();
-  const { data: resources } = useGetResourcesQuery(debouncedQuery, {
+  const { data: resources, isLoading } = useGetResourcesQuery(debouncedQuery, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -42,6 +42,7 @@ export const ResourceDataGrid = ({
       <DataGrid
         rows={rows}
         columns={columns}
+        loading={isLoading}
         getRowId={getRowId}
         disableColumnMenu
         disableSelectionOnClick
