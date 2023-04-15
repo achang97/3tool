@@ -34,7 +34,7 @@ export const EditorSidebar = () => {
   );
 
   return (
-    <Stack sx={{ width: WIDTH, flex: 1, minHeight: 0 }} data-testid="editor-sidebar">
+    <Stack sx={{ width: WIDTH, minHeight: 0 }} data-testid="editor-sidebar">
       <Box
         sx={{
           borderBottom: 1,

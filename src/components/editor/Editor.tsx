@@ -14,19 +14,13 @@ export const Editor = () => {
     return elementNames.join('|');
   }, [elementNames]);
 
-  if (isPreview) {
-    return <EditorCanvas isEditable={false} />;
-  }
-
   return (
     <Stack direction="row" sx={{ flex: 1, minHeight: 0 }} data-testid="editor">
       <Stack sx={{ flex: 1, position: 'relative', minWidth: 0 }}>
-        <EditorCanvas isEditable />
-        <EditorActions />
+        <EditorCanvas isEditable={!isPreview} />
+        {!isPreview && <EditorActions />}
       </Stack>
-      <Stack key={rerenderKey}>
-        <EditorSidebar />
-      </Stack>
+      {!isPreview && <EditorSidebar key={rerenderKey} />}
     </Stack>
   );
 };
