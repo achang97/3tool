@@ -1,6 +1,12 @@
 import { Action, SmartContractBaseData, SmartContractBaseDataFunction } from '@app/types';
 import { filterAbiFunctions, getAbiFieldType } from '@app/utils/abi';
-import { prepareWriteContract, readContract, readContracts, writeContract } from '@wagmi/core';
+import {
+  prepareWriteContract,
+  readContract,
+  readContracts,
+  waitForTransaction,
+  writeContract,
+} from '@wagmi/core';
 import { AbiType } from 'abitype';
 import { ethers } from 'ethers';
 import { useCallback } from 'react';
@@ -96,8 +102,9 @@ export const useActionSmartContractExecute = () => {
 
         const preparedConfig = await prepareWriteContract(config);
         // @ts-ignore preparedConfig has unknown as AbiParameter type
-        const result = await writeContract(preparedConfig);
-        return { hash: result.hash };
+        const writeResult = await writeContract(preparedConfig);
+        const writeReceipt = await waitForTransaction(writeResult);
+        return writeReceipt;
       });
     },
     [loop, evalDynamicValue, getWagmiConfig]

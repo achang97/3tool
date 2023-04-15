@@ -1,6 +1,12 @@
 import { ResourceType, SmartContractBaseData } from '@app/types';
 import { mainnet } from 'wagmi';
-import { prepareWriteContract, readContract, readContracts, writeContract } from '@wagmi/core';
+import {
+  prepareWriteContract,
+  readContract,
+  readContracts,
+  writeContract,
+  waitForTransaction,
+} from '@wagmi/core';
 import { ethers } from 'ethers';
 import { renderHook } from '@testing-library/react';
 import { useActionSmartContractExecute } from '../useActionSmartContractExecute';
@@ -192,12 +198,14 @@ describe('useActionSmartContractExecute', () => {
   });
 
   describe('writeSmartContract', () => {
-    const mockWriteResult = { hash: '123', extra: '123' };
     const mockPrepareWriteResult = 'prepare write';
+    const mockWriteResult = { hash: '123' };
+    const mockWriteCompletedReceipt = { transactionHash: '123', gasUsed: '1' };
 
     beforeEach(() => {
       (prepareWriteContract as jest.Mock).mockImplementation(() => mockPrepareWriteResult);
       (writeContract as jest.Mock).mockImplementation(() => mockWriteResult);
+      (waitForTransaction as jest.Mock).mockImplementation(() => mockWriteCompletedReceipt);
     });
 
     it('returns undefined if data is not defined', async () => {
@@ -229,7 +237,8 @@ describe('useActionSmartContractExecute', () => {
         signer: mockSigner,
       });
       expect(writeContract).toHaveBeenCalledWith(mockPrepareWriteResult);
-      expect(writeResult).toEqual({ hash: mockWriteResult.hash });
+      expect(waitForTransaction).toHaveBeenCalledWith(mockWriteResult);
+      expect(writeResult).toEqual(mockWriteCompletedReceipt);
     });
 
     it('calls write function with evaluated payable amount', async () => {
@@ -258,7 +267,8 @@ describe('useActionSmartContractExecute', () => {
         signer: mockSigner,
       });
       expect(writeContract).toHaveBeenCalledWith(mockPrepareWriteResult);
-      expect(writeResult).toEqual({ hash: mockWriteResult.hash });
+      expect(waitForTransaction).toHaveBeenCalledWith(mockWriteResult);
+      expect(writeResult).toEqual(mockWriteCompletedReceipt);
     });
 
     it('returns looped array of results', async () => {
@@ -279,6 +289,7 @@ describe('useActionSmartContractExecute', () => {
 
       expect(prepareWriteContract).toHaveBeenCalledTimes(2);
       expect(writeContract).toHaveBeenCalledTimes(2);
+      expect(waitForTransaction).toHaveBeenCalledTimes(2);
 
       expect(prepareWriteContract).toHaveBeenCalledWith({
         abi: mockAbi,
@@ -298,8 +309,8 @@ describe('useActionSmartContractExecute', () => {
       });
 
       expect(writeResult).toEqual([
-        { element: 'hello', data: { hash: mockWriteResult.hash } },
-        { element: 'world', data: { hash: mockWriteResult.hash } },
+        { element: 'hello', data: mockWriteCompletedReceipt },
+        { element: 'world', data: mockWriteCompletedReceipt },
       ]);
     });
   });
