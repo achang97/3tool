@@ -19,6 +19,11 @@ jest.mock('../hooks/useActiveTool', () => ({
   })),
 }));
 
+jest.mock('@app/redux/services/resources', () => ({
+  ...jest.requireActual('@app/redux/services/resources'),
+  useGetResourcesQuery: jest.fn(() => ({ data: [] })),
+}));
+
 jest.mock('@app/redux/hooks', () => ({
   ...jest.requireActual('@app/redux/hooks'),
   useAppDispatch: jest.fn(() => mockDispatch),

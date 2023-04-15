@@ -1,5 +1,6 @@
 import { ActionType } from '@app/types';
 import { renderHook } from '@testing-library/react';
+import { useGetResourcesQuery } from '@app/redux/services/resources';
 import { useActionMountExecute } from '../useActionMountExecute';
 import { useActiveTool } from '../useActiveTool';
 
@@ -11,12 +12,30 @@ jest.mock('../useActionExecute', () => ({
   useActionExecute: jest.fn(() => mockExecuteAction),
 }));
 
+jest.mock('@app/redux/services/resources', () => ({
+  useGetResourcesQuery: jest.fn(),
+}));
+
 describe('useActionMountExecute', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('executes all read actions on mount', () => {
+  it('does not execute if resources have not loaded', () => {
+    const mockActions = [{ type: ActionType.SmartContractRead }];
+    (useActiveTool as jest.Mock).mockImplementation(() => ({
+      tool: {
+        actions: mockActions,
+      },
+    }));
+    (useGetResourcesQuery as jest.Mock).mockImplementation(() => ({}));
+    const { result } = renderHook(() => useActionMountExecute());
+
+    expect(mockExecuteAction).not.toHaveBeenCalled();
+    expect(result.current).toEqual(false);
+  });
+
+  it('executes all read actions on resource load', () => {
     const mockActions = [
       { type: ActionType.Javascript },
       { type: ActionType.SmartContractRead },
@@ -27,10 +46,13 @@ describe('useActionMountExecute', () => {
         actions: mockActions,
       },
     }));
-    renderHook(() => useActionMountExecute());
+    (useGetResourcesQuery as jest.Mock).mockImplementation(() => ({ data: [] }));
+
+    const { result } = renderHook(() => useActionMountExecute());
 
     expect(mockExecuteAction).toHaveBeenCalledTimes(1);
     expect(mockExecuteAction).toHaveBeenCalledWith(mockActions[1]);
+    expect(result.current).toEqual(true);
   });
 
   it('does not execute again on action update', () => {
@@ -44,6 +66,8 @@ describe('useActionMountExecute', () => {
         ],
       },
     }));
+    (useGetResourcesQuery as jest.Mock).mockImplementation(() => ({ data: [] }));
+
     const { rerender } = renderHook(() => useActionMountExecute());
     expect(mockExecuteAction).toHaveBeenCalledTimes(1);
 

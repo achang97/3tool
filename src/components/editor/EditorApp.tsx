@@ -1,21 +1,22 @@
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { CanvasDroppable } from './canvas/CanvasDroppable';
 import { CanvasToolbar } from './canvas/CanvasToolbar';
 import { useActionMountExecute } from './hooks/useActionMountExecute';
 import { useActionQueueExecutor } from './hooks/useActionQueueExecutor';
+import { FullscreenLoader } from '../common/FullscreenLoader';
 
 type EditorAppProps = {
   isEditable: boolean;
 };
 
 export const EditorApp = ({ isEditable }: EditorAppProps) => {
-  useActionMountExecute();
+  const hasExecuted = useActionMountExecute();
   useActionQueueExecutor();
 
   return (
-    <Box data-testid="editor-app">
+    <Stack sx={{ height: '100%' }} data-testid="editor-app">
       <CanvasToolbar />
-      <CanvasDroppable isEditable={isEditable} />
-    </Box>
+      {!hasExecuted ? <FullscreenLoader /> : <CanvasDroppable isEditable={isEditable} />}
+    </Stack>
   );
 };
