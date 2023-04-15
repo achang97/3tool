@@ -8,9 +8,21 @@ import { Editor } from '@app/components/editor/Editor';
 import { ActionQueueProvider } from '@app/components/editor/contexts/ActionQueueContext';
 import { FullscreenLoader } from '@app/components/common/FullscreenLoader';
 import { useQueryTool } from '@app/components/editor/hooks/useQueryTool';
+import { useEffect } from 'react';
+import { useAppDispatch } from '@app/redux/hooks';
+import { resetEditor } from '@app/redux/features/editorSlice';
+import { resetActiveTool } from '@app/redux/features/activeToolSlice';
 
 const EditorPage = () => {
   const tool = useQueryTool();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetEditor());
+      dispatch(resetActiveTool());
+    };
+  }, [dispatch]);
 
   return (
     <>

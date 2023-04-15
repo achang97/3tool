@@ -2,6 +2,7 @@ import activeToolReducer, {
   renameActionResult,
   renameComponentInput,
   resetActionResult,
+  resetActiveTool,
   resetComponentInput,
   setActionResult,
   setComponentInput,
@@ -95,6 +96,18 @@ describe('activeToolSlice', () => {
       );
       expect(state.actionResults[mockPrevName]).toBeUndefined();
       expect(state.actionResults[mockNewName]).toEqual(mockResult);
+    });
+  });
+
+  it('resetActiveTool: resets state back to initial state', () => {
+    const initialState = {
+      actionResults: { test: { data: '1' } },
+      componentInputs: { test: '1' },
+    };
+    const state = activeToolReducer(initialState, resetActiveTool());
+    expect(state).toEqual({
+      componentInputs: {},
+      actionResults: {},
     });
   });
 });

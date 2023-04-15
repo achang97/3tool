@@ -108,6 +108,9 @@ export const editorSlice = createSlice({
     setIsPreview: (state, action: PayloadAction<boolean>) => {
       state.isPreview = action.payload;
     },
+    resetEditor: () => {
+      return initialState;
+    },
   },
 });
 
@@ -127,6 +130,7 @@ export const {
   setActionView,
   setIsActionViewMaximized,
   setIsPreview,
+  resetEditor,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

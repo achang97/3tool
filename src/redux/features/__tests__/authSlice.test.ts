@@ -23,11 +23,7 @@ describe('authSlice', () => {
       refreshToken: 'refreshToken',
     };
     const state = authReducer(initialState, logout());
-    expect(state).toEqual({
-      user: undefined,
-      accessToken: undefined,
-      refreshToken: undefined,
-    });
+    expect(state).toEqual({});
   });
 
   it('/auth/login fulfilled: sets tokens and user', async () => {

@@ -17,10 +17,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(logout, (state) => {
-      state.accessToken = undefined;
-      state.refreshToken = undefined;
-      state.user = undefined;
+    builder.addCase(logout, () => {
+      return initialState;
     });
     builder.addCase(setTokens, (state, action) => {
       state.accessToken = action.payload.accessToken;

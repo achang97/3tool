@@ -45,6 +45,11 @@ export const activeToolSlice = createSlice({
       state.actionResults[action.payload.newName] = state.actionResults[action.payload.prevName];
       delete state.actionResults[action.payload.prevName];
     },
+
+    // Reset
+    resetActiveTool: () => {
+      return initialState;
+    },
   },
 });
 
@@ -55,6 +60,7 @@ export const {
   setActionResult,
   resetActionResult,
   renameActionResult,
+  resetActiveTool,
 } = activeToolSlice.actions;
 
 export default activeToolSlice.reducer;

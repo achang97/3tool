@@ -22,6 +22,7 @@ import editorReducer, {
   setIsActionViewMaximized,
   setIsPreview,
   updateFocusedActionState,
+  resetEditor,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -321,6 +322,28 @@ describe('editorSlice', () => {
       };
       const state = editorReducer(initialState, setIsPreview(true));
       expect(state.isPreview).toEqual(true);
+    });
+
+    it('resetEditor: sets state back to initial state', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Inspector,
+        actionView: ActionViewType.ResponseHandler,
+        isActionViewMaximized: true,
+        isPreview: true,
+        focusedActionState: {
+          smartContractFunctionIndex: 1,
+        },
+      };
+      const state = editorReducer(initialState, resetEditor());
+      expect(state).toEqual({
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
+      });
     });
   });
 });
