@@ -106,6 +106,32 @@ const mockTools: Tool[] = [
         },
         eventHandlers: [],
       },
+      {
+        type: ActionType.SmartContractRead,
+        name: 'action3',
+        data: {
+          smartContractRead: {
+            transformer:
+              '// insert your code here\n// example: return formatDataAsArray(data).filter(row => row.quantity > 20)\nreturn data',
+            transformerEnabled: false,
+            loopElements: '// insert your code here\nreturn [];',
+            loopEnabled: false,
+            smartContractId: '',
+            freeform: false,
+            freeformAddress: '',
+            freeformAbiId: '',
+            freeformChainId: '',
+            functions: [
+              {
+                name: '',
+                args: [],
+                payableAmount: '',
+              },
+            ],
+          },
+        },
+        eventHandlers: [],
+      },
     ],
   },
   {

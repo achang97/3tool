@@ -32,7 +32,7 @@ describe('useActionMountExecute', () => {
     const { result } = renderHook(() => useActionMountExecute());
 
     expect(mockExecuteAction).not.toHaveBeenCalled();
-    expect(result.current).toEqual(false);
+    expect(result.current.isLoading).toEqual(true);
   });
 
   it('executes all read actions on resource load', () => {
@@ -52,7 +52,7 @@ describe('useActionMountExecute', () => {
 
     expect(mockExecuteAction).toHaveBeenCalledTimes(1);
     expect(mockExecuteAction).toHaveBeenCalledWith(mockActions[1]);
-    expect(result.current).toEqual(true);
+    expect(result.current.isLoading).toEqual(false);
   });
 
   it('does not execute again on action update', () => {

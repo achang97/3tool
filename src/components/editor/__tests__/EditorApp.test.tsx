@@ -21,6 +21,11 @@ jest.mock('../hooks/useActiveTool', () => ({
 }));
 
 describe('EditorApp', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useActionMountExecute as jest.Mock).mockImplementation(() => ({}));
+  });
+
   it('starts action queue executor', () => {
     render(<EditorApp isEditable />);
     expect(useActionQueueExecutor as jest.Mock).toHaveBeenCalled();
@@ -37,14 +42,14 @@ describe('EditorApp', () => {
   });
 
   it('renders loader instead of droppable canvas if actions have not executed', () => {
-    (useActionMountExecute as jest.Mock).mockImplementation(() => false);
+    (useActionMountExecute as jest.Mock).mockImplementation(() => ({ isLoading: true }));
     render(<EditorApp isEditable />);
     expect(screen.getByTestId('fullscreen-loader')).toBeTruthy();
     expect(screen.queryByTestId('canvas-droppable')).toBeNull();
   });
 
   it('renders droppable canvas if actions have executed', () => {
-    (useActionMountExecute as jest.Mock).mockImplementation(() => true);
+    (useActionMountExecute as jest.Mock).mockImplementation(() => ({ isLoading: false }));
     render(<EditorApp isEditable />);
     expect(screen.queryByTestId('fullscreen-loader')).toBeNull();
     expect(screen.getByTestId('canvas-droppable')).toBeTruthy();

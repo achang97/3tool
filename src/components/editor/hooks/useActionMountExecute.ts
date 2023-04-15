@@ -1,26 +1,32 @@
 import { ACTION_CONFIGS } from '@app/constants';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
 import { useActionExecute } from './useActionExecute';
 import { useActiveTool } from './useActiveTool';
 
-export const useActionMountExecute = () => {
+type HookReturnType = {
+  isLoading: boolean;
+};
+
+export const useActionMountExecute = (): HookReturnType => {
   const { tool } = useActiveTool();
   const { data: resources } = useGetResourcesQuery('');
 
   const executeAction = useActionExecute();
-  const [hasExecuted, setHasExecuted] = useState(false);
+  const hasExecuted = useRef(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const readActions = useMemo(() => {
     return tool.actions.filter((action) => ACTION_CONFIGS[action.type].mode === 'read');
   }, [tool]);
 
   useEffect(() => {
-    if (!hasExecuted && resources) {
+    if (!hasExecuted.current && resources) {
+      hasExecuted.current = true;
+      setIsLoading(false);
       readActions.forEach((action) => executeAction(action));
-      setHasExecuted(true);
     }
   }, [executeAction, readActions, resources, hasExecuted]);
 
-  return hasExecuted;
+  return { isLoading };
 };
