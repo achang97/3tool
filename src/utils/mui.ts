@@ -80,6 +80,7 @@ const { palette } = createTheme({
   palette: {
     divider: '#CDD6E1',
     primary: {
+      light: '#C5E3FF',
       main: '#1890FF',
       dark: '#1168B9',
     },

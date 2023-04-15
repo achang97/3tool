@@ -27,6 +27,13 @@ describe('LoopSection', () => {
     expect(screen.getByText('return []')).toBeTruthy();
   });
 
+  it('renders helper text', () => {
+    render(<LoopSection onDataChange={mockHandleDataChange} />);
+    expect(screen.getByTestId('loop-section-helper-text')).toHaveTextContent(
+      'Use the code block above to return an array of data objects. Then, use {{ element }} anywhere in this action to reference the current value that is being looped over.'
+    );
+  });
+
   it('renders loop elements value', () => {
     const mockLoopElements = 'asdf';
     render(
