@@ -23,10 +23,6 @@ jest.mock('@app/components/editor/hooks/useToolElementNames', () => ({
   })),
 }));
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 describe('EventHandlerEditor', () => {
   describe('event', () => {
     it('renders select', async () => {

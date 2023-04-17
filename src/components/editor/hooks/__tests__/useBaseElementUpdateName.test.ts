@@ -26,7 +26,7 @@ jest.mock('../useToolElementNames', () => ({
   useToolElementNames: jest.fn(() => ({ elementNames: mockElementNames })),
 }));
 
-jest.mock('../useEnqueueSnackbar', () => ({
+jest.mock('@app/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
 

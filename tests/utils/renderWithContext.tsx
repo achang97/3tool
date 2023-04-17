@@ -15,6 +15,7 @@ import { theme } from '@app/utils/mui';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { wagmiClient } from '@app/utils/wallet';
 import { WagmiConfig } from 'wagmi';
+import { AppSnackbarProvider } from '@app/components/common/AppSnackbarProvider';
 
 const getCustomWrapper = (
   Wrapper?: JSXElementConstructor<{
@@ -25,7 +26,9 @@ const getCustomWrapper = (
     <Provider store={store}>
       <CssVarsProvider theme={theme}>
         <WagmiConfig client={wagmiClient}>
-          {Wrapper ? <Wrapper>{children}</Wrapper> : children}
+          <AppSnackbarProvider>
+            {Wrapper ? <Wrapper>{children}</Wrapper> : children}
+          </AppSnackbarProvider>
         </WagmiConfig>
       </CssVarsProvider>
     </Provider>

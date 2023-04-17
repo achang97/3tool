@@ -9,7 +9,7 @@ const mockHandleChange = jest.fn();
 
 const mockEnqueueSnackbar = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
+jest.mock('@app/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
 

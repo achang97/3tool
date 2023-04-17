@@ -23,10 +23,6 @@ jest.mock('../../hooks/useActiveTool', () => ({
   })),
 }));
 
-jest.mock('../../hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 describe('Inspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();

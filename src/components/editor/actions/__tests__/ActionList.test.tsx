@@ -23,9 +23,6 @@ const mockActions = [
 ] as unknown as Action[];
 
 jest.mock('../../hooks/useActiveTool');
-jest.mock('../../hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
 
 describe('ActionList', () => {
   beforeEach(() => {

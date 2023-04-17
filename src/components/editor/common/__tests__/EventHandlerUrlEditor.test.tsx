@@ -7,10 +7,6 @@ import { EventHandlerUrlEditor } from '../EventHandlerUrlEditor';
 const mockName = 'name';
 const mockHandleDataChange = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview');
 
 describe('EventHandlerUrlEditor', () => {

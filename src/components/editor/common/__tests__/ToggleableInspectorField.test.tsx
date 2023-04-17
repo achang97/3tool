@@ -18,10 +18,6 @@ const mockChildren = jest.fn(
   )
 );
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 describe('ToggleableInspectorField', () => {
   describe('dynamic input', () => {
     it('displays form field label with tooltip', async () => {

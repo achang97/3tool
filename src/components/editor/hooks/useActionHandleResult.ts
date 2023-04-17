@@ -3,7 +3,7 @@ import { setActionResult } from '@app/redux/features/activeToolSlice';
 import { useAppDispatch } from '@app/redux/hooks';
 import { Action, ActionEvent, EventHandler } from '@app/types';
 import { useCallback } from 'react';
-import { useEnqueueSnackbar } from './useEnqueueSnackbar';
+import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
 import { useEventHandlerExecute } from './useEventHandlerExecute';
 
 export const useActionHandleResult = () => {

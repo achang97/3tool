@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
+import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
 import { useActiveTool } from './useActiveTool';
-import { useEnqueueSnackbar } from './useEnqueueSnackbar';
 
 export const useActionCycleListener = (name: string) => {
   const enqueueSnackbar = useEnqueueSnackbar();

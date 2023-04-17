@@ -4,7 +4,7 @@ import { useActiveTool } from '../useActiveTool';
 
 const mockEnqueueSnackbar = jest.fn();
 
-jest.mock('../useEnqueueSnackbar', () => ({
+jest.mock('@app/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
 

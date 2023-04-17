@@ -16,10 +16,6 @@ jest.mock('../hooks/useActiveTool', () => ({
   })),
 }));
 
-jest.mock('../hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 jest.mock('@app/redux/hooks', () => ({
   useAppSelector: jest.fn(),
   useAppDispatch: jest.fn(() => jest.fn()),

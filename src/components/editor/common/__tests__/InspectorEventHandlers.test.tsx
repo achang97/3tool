@@ -20,10 +20,6 @@ const mockPlaceholder = 'placeholder';
 const mockEventOptions: ComponentEvent[] = [ComponentEvent.Click, ComponentEvent.Submit];
 const mockHandleChange = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 describe('InspectorEventHandlers', () => {
   beforeEach(() => {
     jest.clearAllMocks();

@@ -13,10 +13,6 @@ jest.mock('@app/redux/hooks', () => ({
   useAppSelector: jest.fn(() => ({})),
 }));
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 describe('ResponseHandlerEditor', () => {
   const getSuccessContainer = () => {
     const container = within(screen.getByTestId('action-success-handlers'));

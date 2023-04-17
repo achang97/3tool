@@ -51,10 +51,6 @@ jest.mock('@app/components/resources/hooks/useAbiResources', () => ({
   useAbiResources: jest.fn(() => mockAbiResources),
 }));
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview');
 
 describe('SmartContractResourceEditor', () => {

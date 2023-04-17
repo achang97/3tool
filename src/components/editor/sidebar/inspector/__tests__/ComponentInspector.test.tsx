@@ -1,8 +1,9 @@
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
 import { COMPONENT_CONFIGS, COMPONENT_DATA_TEMPLATES } from '@app/constants';
 import { Component, ComponentEvent, ComponentType, EventHandlerType } from '@app/types';
-import { screen, render, waitFor, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { render } from '@tests/utils/renderWithContext';
 import { DepGraph } from 'dependency-graph';
 import { ComponentInspector } from '../ComponentInspector';
 
@@ -35,10 +36,6 @@ jest.mock('../../../hooks/useComponentUpdateName', () => ({
 
 jest.mock('../../../hooks/useComponentDelete', () => ({
   useComponentDelete: jest.fn(() => mockDeleteComponent),
-}));
-
-jest.mock('../../../hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
 }));
 
 jest.mock('@app/redux/hooks', () => ({

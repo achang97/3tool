@@ -1,6 +1,6 @@
 import { useSnackbar, OptionsObject } from 'notistack';
 import { useCallback } from 'react';
-import { Snackbar, SnackbarProps } from '../common/Snackbar';
+import { Snackbar, SnackbarProps } from '../components/common/Snackbar';
 
 export const useEnqueueSnackbar = () => {
   const { enqueueSnackbar } = useSnackbar();

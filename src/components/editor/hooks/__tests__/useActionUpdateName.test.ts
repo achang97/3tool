@@ -1,8 +1,8 @@
 import { renameActionResult } from '@app/redux/features/activeToolSlice';
 import { focusAction } from '@app/redux/features/editorSlice';
 import { Action, ActionType, Component } from '@app/types';
-import { renderHook } from '@testing-library/react';
 import { mockApiErrorResponse } from '@tests/constants/api';
+import { renderHook } from '@tests/utils/renderWithContext';
 import { useActionUpdateName } from '../useActionUpdateName';
 
 const mockPrevName = 'action1';
@@ -19,10 +19,6 @@ const mockActions = [
 
 const mockDispatch = jest.fn();
 const mockUpdateTool = jest.fn();
-
-jest.mock('../useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
 
 jest.mock('../useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({

@@ -25,10 +25,6 @@ jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', ()
   useCodeMirrorJavascriptAutocomplete: jest.fn(() => []),
 }));
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 describe('TableInspector', () => {
   beforeEach(() => {
     jest.clearAllMocks();

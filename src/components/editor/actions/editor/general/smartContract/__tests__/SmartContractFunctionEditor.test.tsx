@@ -38,10 +38,6 @@ jest.mock('@app/components/editor/hooks/useActionSmartContract', () => ({
   })),
 }));
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 jest.mock('@app/components/editor/hooks/useCodeMirrorPreview');
 
 describe('SmartContractFunctionEditor', () => {

@@ -4,11 +4,11 @@ import { ReactNode } from 'react';
 const DURATION_MS = 3000;
 const MAX_SNACK = 3;
 
-type ToolSnackbarProviderProps = {
+type AppSnackbarProviderProps = {
   children: ReactNode;
 };
 
-export const ToolSnackbarProvider = ({ children }: ToolSnackbarProviderProps) => {
+export const AppSnackbarProvider = ({ children }: AppSnackbarProviderProps) => {
   return (
     <SnackbarProvider
       autoHideDuration={DURATION_MS}

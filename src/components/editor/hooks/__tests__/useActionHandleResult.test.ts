@@ -32,7 +32,7 @@ jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => mockDispatch),
 }));
 
-jest.mock('../useEnqueueSnackbar', () => ({
+jest.mock('@app/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
 

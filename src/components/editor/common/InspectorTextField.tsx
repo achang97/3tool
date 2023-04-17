@@ -1,6 +1,6 @@
 import { CodeMirror, CodeMirrorProps } from '@app/components/editor/common/CodeMirror';
 import { useActiveTool } from '@app/components/editor/hooks/useActiveTool';
-import { useEnqueueSnackbar } from '@app/components/editor/hooks/useEnqueueSnackbar';
+import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
 import { usePrevious } from '@app/hooks/usePrevious';
 import { FieldType } from '@app/types';
 import { useEffect, useMemo } from 'react';

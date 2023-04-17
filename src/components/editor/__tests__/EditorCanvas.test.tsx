@@ -29,10 +29,6 @@ jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => mockDispatch),
 }));
 
-jest.mock('../hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 describe('EditorCanvas', () => {
   beforeEach(() => {
     jest.clearAllMocks();

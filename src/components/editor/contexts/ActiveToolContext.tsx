@@ -3,13 +3,13 @@ import { ApiResponse, Tool } from '@app/types';
 import { isSuccessfulApiResponse, parseApiError } from '@app/utils/api';
 import { DepGraph } from 'dependency-graph';
 import React, { useCallback, createContext, ReactNode, useMemo, useState, useEffect } from 'react';
+import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
 import {
   useToolEvalDataMaps,
   ToolEvalDataMap,
   ToolEvalDataValuesMap,
 } from '../hooks/useToolEvalDataMaps';
 import { useToolDataDepGraph } from '../hooks/useToolDataDepGraph';
-import { useEnqueueSnackbar } from '../hooks/useEnqueueSnackbar';
 
 const DEFAULT_STATE = {
   tool: {} as Tool,

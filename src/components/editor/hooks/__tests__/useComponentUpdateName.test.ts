@@ -2,8 +2,8 @@ import { renameComponentInput } from '@app/redux/features/activeToolSlice';
 import { focusAction, focusComponent } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType, Component, ComponentType } from '@app/types';
-import { renderHook } from '@testing-library/react';
 import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
+import { renderHook } from '@tests/utils/renderWithContext';
 import { useComponentUpdateName } from '../useComponentUpdateName';
 
 const mockPrevName = 'button1';
@@ -27,10 +27,6 @@ const mockUpdateTool = jest.fn();
 const mockUpdateElementReference = jest.fn((element) => ({
   ...element,
   newField: 'test',
-}));
-
-jest.mock('../useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
 }));
 
 jest.mock('../useToolUpdateReference', () => ({

@@ -23,10 +23,6 @@ jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', ()
   })),
 }));
 
-jest.mock('@app/components/editor/hooks/useEnqueueSnackbar', () => ({
-  useEnqueueSnackbar: jest.fn(() => jest.fn()),
-}));
-
 jest.mock('@app/components/editor/hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
     tool: mockTool,

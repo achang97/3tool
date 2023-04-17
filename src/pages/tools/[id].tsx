@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
 import { createTitle } from '@app/utils/window';
-import { ToolSnackbarProvider } from '@app/components/editor/contexts/ToolSnackbarProvider';
 import { ActiveToolProvider } from '@app/components/editor/contexts/ActiveToolContext';
 import { ActionQueueProvider } from '@app/components/editor/contexts/ActionQueueContext';
 import { PageContainer } from '@app/components/common/PageContainer';
@@ -29,16 +28,14 @@ const ToolViewer = () => {
       </Head>
       <main>
         {tool ? (
-          <ToolSnackbarProvider>
-            <ActiveToolProvider tool={tool}>
-              <ActionQueueProvider>
-                <PageContainer sx={{ padding: 0 }}>
-                  <ToolViewerToolbar />
-                  <EditorApp isEditable={false} />
-                </PageContainer>
-              </ActionQueueProvider>
-            </ActiveToolProvider>
-          </ToolSnackbarProvider>
+          <ActiveToolProvider tool={tool}>
+            <ActionQueueProvider>
+              <PageContainer sx={{ padding: 0 }}>
+                <ToolViewerToolbar />
+                <EditorApp isEditable={false} />
+              </PageContainer>
+            </ActionQueueProvider>
+          </ActiveToolProvider>
         ) : (
           <FullscreenLoader />
         )}

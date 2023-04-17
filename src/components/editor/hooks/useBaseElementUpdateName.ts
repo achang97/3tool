@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 import { ApiSuccessResponse, Tool } from '@app/types';
 import { isSuccessfulApiResponse } from '@app/utils/api';
 import { validateVariableName } from '@app/utils/namespace';
+import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
 import { useActiveTool } from './useActiveTool';
 import { ReferenceUpdate, useToolUpdateReference } from './useToolUpdateReference';
-import { useEnqueueSnackbar } from './useEnqueueSnackbar';
 import { useToolElementNames } from './useToolElementNames';
 
 type HookArgs = {

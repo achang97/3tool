@@ -18,6 +18,7 @@ import '@app/styles/globals.css';
 import '@app/styles/react-grid-layout.css';
 import '@app/styles/codemirror.css';
 import { PersistGate } from 'redux-persist/integration/react';
+import { AppSnackbarProvider } from '@app/components/common/AppSnackbarProvider';
 
 // Start MSW on the server
 if (MSW_API) {
@@ -47,20 +48,22 @@ const App = ({ Component, ...rest }: AppProps) => {
         <PersistGate loading={null} persistor={persistor}>
           <CssVarsProvider theme={theme}>
             <WagmiConfig client={wagmiClient}>
-              <AuthRedirectProvider>
-                <Stack
-                  sx={{
-                    backgroundColor: 'background.paper',
-                    height: '100%',
-                  }}
-                >
-                  <Toolbar />
-                  <Box sx={{ flex: 1, overflowY: 'scroll' }}>
-                    <Component {...props.pageProps} />
-                  </Box>
-                </Stack>
-                <ConnectWalletModal />
-              </AuthRedirectProvider>
+              <AppSnackbarProvider>
+                <AuthRedirectProvider>
+                  <Stack
+                    sx={{
+                      backgroundColor: 'background.paper',
+                      height: '100%',
+                    }}
+                  >
+                    <Toolbar />
+                    <Box sx={{ flex: 1, overflowY: 'scroll' }}>
+                      <Component {...props.pageProps} />
+                    </Box>
+                  </Stack>
+                  <ConnectWalletModal />
+                </AuthRedirectProvider>
+              </AppSnackbarProvider>
             </WagmiConfig>
           </CssVarsProvider>
         </PersistGate>
