@@ -1,4 +1,4 @@
-import { ErrorOutline } from '@mui/icons-material';
+import { DragIndicator, ErrorOutline } from '@mui/icons-material';
 import { Box, Stack, SxProps, Tooltip } from '@mui/material';
 import { useMemo } from 'react';
 import { lineClamp } from '@app/utils/mui';
@@ -9,17 +9,18 @@ type CanvasComponentHandleProps = {
   errors: ComponentEvalError[];
 };
 
-export const CANVAS_COMPONENT_HANDLE_CLASSNAME = 'canvas-component-handle';
-
 export const CanvasComponentHandle = ({ name, errors }: CanvasComponentHandleProps) => {
-  const errorProps: SxProps = useMemo(() => {
-    if (errors.length === 0) {
-      return {};
+  const colorProps: SxProps = useMemo(() => {
+    if (errors.length !== 0) {
+      return {
+        backgroundColor: 'error.light',
+        color: 'error.contrastText',
+      };
     }
 
     return {
-      backgroundColor: 'error.light',
-      color: 'error.contrastText',
+      backgroundColor: 'primary.main',
+      color: 'primary.contrastText',
     };
   }, [errors]);
 
@@ -34,7 +35,8 @@ export const CanvasComponentHandle = ({ name, errors }: CanvasComponentHandlePro
 
   return (
     <Stack
-      spacing={0.5}
+      direction="row"
+      spacing={0.25}
       sx={{
         maxWidth: '100%',
         alignItems: 'center',
@@ -43,14 +45,13 @@ export const CanvasComponentHandle = ({ name, errors }: CanvasComponentHandlePro
         left: 0,
         fontSize: '.7rem',
         padding: 0.25,
-        marginBottom: 0.25,
         borderRadius: '2px',
-        cursor: 'default',
-        ...errorProps,
+        cursor: 'move',
+        ...colorProps,
       }}
-      className={CANVAS_COMPONENT_HANDLE_CLASSNAME}
       data-testid="canvas-component-handle"
     >
+      <DragIndicator fontSize="inherit" />
       <Box sx={{ ...lineClamp(1), display: 'block' }}>{name}</Box>
       {errorMessage && (
         <Tooltip title={errorMessage} placement="top">

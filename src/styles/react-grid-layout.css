@@ -60,7 +60,7 @@
 
 /* Dragging */
 .react-grid-item.react-grid-item-dragging {
-  visibility: hidden;
+  opacity: 0;
 }
 
 .react-grid-item.react-grid-item-dragging ~ .react-grid-item.react-grid-placeholder {
