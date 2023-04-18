@@ -50,11 +50,17 @@ describe('useActionIsEditing', () => {
   });
 
   it('returns false if there are no changes to type, data, or event handlers', () => {
+    const mockedActionCopy = _.cloneDeep(mockAction);
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       focusedAction: {
-        ..._.cloneDeep(mockAction),
+        ...mockedActionCopy,
         id: 'id',
         _id: 'id',
+        eventHandlers: mockedActionCopy.eventHandlers.map((eventHandler, i) => ({
+          ...eventHandler,
+          id: i,
+          _id: i,
+        })),
       },
     }));
     const { result } = renderHook(() => useActionIsEditing());

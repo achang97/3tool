@@ -13,7 +13,12 @@ export const useActionIsEditing = () => {
   }, [focusedAction?.name, tool.actions]);
 
   const parseAction = useCallback((action: Action | undefined) => {
-    return JSON.parse(JSON.stringify(_.pick(action, ['type', 'data', 'eventHandlers'])));
+    return {
+      ..._.pick(action, ['type', 'data']),
+      eventHandlers: action?.eventHandlers.map((eventHandler) =>
+        _.pick(eventHandler, ['type', 'event', 'data'])
+      ),
+    };
   }, []);
 
   const isEditing = useMemo(() => {
