@@ -1,4 +1,15 @@
-import { mainnet, goerli, sepolia, polygon, polygonMumbai } from 'wagmi/chains';
+import {
+  mainnet,
+  goerli,
+  sepolia,
+  polygon,
+  polygonMumbai,
+  optimism,
+  arbitrum,
+  fantom,
+  avalanche,
+  bsc,
+} from 'wagmi/chains';
 import _ from 'lodash';
 
 export const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY ?? '';
@@ -9,8 +20,13 @@ const CHAIN_MAP = {
   mainnet,
   goerli,
   sepolia,
+  bsc,
   polygon,
   polygonMumbai,
+  optimism,
+  arbitrum,
+  fantom,
+  avalanche,
 };
 
 export const CHAINS = Object.values(CHAIN_MAP);
