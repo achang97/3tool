@@ -2,7 +2,7 @@ import axios from 'axios';
 import { init as etherscanInit } from 'etherscan-api';
 import { Abi } from 'abitype';
 import { mainnet, goerli } from 'wagmi';
-import { CHAINS_BY_ID, ETHERSCAN_API_KEY } from '@app/constants';
+import { CHAINS_BY_ID, CHAIN_EXPLORER_URLS_BY_ID, ETHERSCAN_API_KEY } from '@app/constants';
 
 const TIMEOUT = 10_000;
 
@@ -21,6 +21,14 @@ export const ETHERSCAN_CONFIGS: Record<
     etherscanEndpoint: 'https://api-goerli.etherscan.io',
     apiKey: ETHERSCAN_API_KEY,
   },
+};
+
+export const getTransactionUrl = (chainId: number, transactionHash: string): string => {
+  const baseUrl = CHAIN_EXPLORER_URLS_BY_ID[chainId];
+  if (!baseUrl) {
+    return '';
+  }
+  return `${baseUrl}/tx/${transactionHash}`;
 };
 
 export const getContractAbi = async (address: string, chainId: number): Promise<Abi> => {

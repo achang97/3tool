@@ -7,7 +7,6 @@ const mockIcon = 'icon';
 const mockLabel = 'label';
 const mockColor = 'red';
 
-const mockHref = '/settings';
 const mockHandleClick = jest.fn();
 
 describe('MenuItem', () => {
@@ -38,10 +37,19 @@ describe('MenuItem', () => {
     expect(mockHandleClick).toHaveBeenCalled();
   });
 
-  it('adds href prop to item', async () => {
+  it('adds href and target prop to link item', async () => {
+    const mockHref = '/settings';
+    const mockTarget = '_blank';
     const result = render(
-      <MenuItem icon={mockIcon} label={mockLabel} color={mockColor} href={mockHref} />
+      <MenuItem
+        icon={mockIcon}
+        label={mockLabel}
+        color={mockColor}
+        href={mockHref}
+        target={mockTarget}
+      />
     );
     expect(result.container.firstChild).toHaveProperty('href', `${BASE_WINDOW_URL}${mockHref}`);
+    expect(result.container.firstChild).toHaveProperty('target', mockTarget);
   });
 });

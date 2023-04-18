@@ -2,7 +2,7 @@ import axios from 'axios';
 import { init as etherscanInit } from 'etherscan-api';
 import { CHAINS_BY_ID } from '@app/constants';
 import { mainnet } from 'wagmi';
-import { ETHERSCAN_CONFIGS, getContractAbi } from '../contracts';
+import { ETHERSCAN_CONFIGS, getContractAbi, getTransactionUrl } from '../contracts';
 
 const mockEtherscanClient = {
   contract: {
@@ -16,6 +16,18 @@ jest.mock('axios');
 describe('contracts', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('getTransactionUrl', () => {
+    it('returns empty string if chain id is invalid', () => {
+      const result = getTransactionUrl(-1, '123');
+      expect(result).toEqual('');
+    });
+
+    it('returns transaction url', () => {
+      const result = getTransactionUrl(mainnet.id, '123');
+      expect(result).toEqual(`${mainnet.blockExplorers.default.url}/tx/123`);
+    });
   });
 
   describe('getContractAbi', () => {

@@ -1,7 +1,8 @@
 import { ActionResult } from '@app/constants';
 import { setActionResult } from '@app/redux/features/activeToolSlice';
-import { Action, ActionEvent } from '@app/types';
-import { renderHook } from '@testing-library/react';
+import { Action, ActionEvent, ActionType } from '@app/types';
+import { render, renderHook, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useActionHandleResult } from '../useActionHandleResult';
 
 const mockEnqueueSnackbar = jest.fn();
@@ -59,8 +60,62 @@ describe('useActionHandleResult', () => {
       const { result } = renderHook(() => useActionHandleResult());
 
       result.current(mockAction, mockSuccessResult);
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(`Executed ${mockAction.name}`, {
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(`${mockAction.name} executed`, {
         variant: 'success',
+      });
+    });
+
+    describe('smart contract write', () => {
+      it('enqueues persisted snackbar with single url', async () => {
+        const { result } = renderHook(() => useActionHandleResult());
+
+        result.current(
+          { ...mockAction, type: ActionType.SmartContractWrite },
+          { data: { blockExplorerUrl: 'https://google.com' } }
+        );
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+          `${mockAction.name} executed`,
+          expect.objectContaining({
+            variant: 'success',
+            persist: true,
+          })
+        );
+
+        render(mockEnqueueSnackbar.mock.calls[0][1].action);
+        await userEvent.click(screen.getByText('View transaction'));
+        expect(window.open).toHaveBeenCalledWith('https://google.com');
+      });
+
+      it('enqueues persisted snackbar with multiple urls', async () => {
+        const { result } = renderHook(() => useActionHandleResult());
+
+        result.current(
+          { ...mockAction, type: ActionType.SmartContractWrite },
+          {
+            data: [
+              { element: 1, data: { blockExplorerUrl: 'https://google.com' } },
+              { element: 2, data: { blockExplorerUrl: 'https://yahoo.com' } },
+            ],
+          }
+        );
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+          `${mockAction.name} executed`,
+          expect.objectContaining({
+            variant: 'success',
+            persist: true,
+          })
+        );
+
+        render(mockEnqueueSnackbar.mock.calls[0][1].action);
+        await userEvent.click(screen.getByText('View transaction(s)'));
+        expect(screen.getByTestId('view-transactions-menu-option-0')).toHaveProperty(
+          'href',
+          'https://google.com/'
+        );
+        expect(screen.getByTestId('view-transactions-menu-option-1')).toHaveProperty(
+          'href',
+          'https://yahoo.com/'
+        );
       });
     });
 
@@ -78,7 +133,7 @@ describe('useActionHandleResult', () => {
       const { result } = renderHook(() => useActionHandleResult());
 
       result.current(mockAction, mockErrorResult);
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(`Failed to execute ${mockAction.name}`, {
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(`${mockAction.name} failed`, {
         variant: 'error',
       });
     });

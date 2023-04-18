@@ -79,6 +79,7 @@ describe('useActionExecute', () => {
       const { result } = renderHook(() => useActionExecute());
 
       const mockAction = {
+        name: 'action1',
         type: ActionType.SmartContractWrite,
         data: {
           smartContractWrite: {
@@ -88,7 +89,10 @@ describe('useActionExecute', () => {
       } as Action;
       const actionResult = await result.current(mockAction);
 
-      expect(mockWriteSmartContract).toHaveBeenCalledWith(mockAction.data.smartContractWrite);
+      expect(mockWriteSmartContract).toHaveBeenCalledWith(
+        mockAction.name,
+        mockAction.data.smartContractWrite
+      );
       expect(actionResult.data).toEqual(mockWriteSmartContract());
     });
   });

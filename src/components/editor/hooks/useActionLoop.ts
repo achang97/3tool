@@ -2,14 +2,21 @@ import { LoopableData } from '@app/types';
 import { useCallback } from 'react';
 import { useActionJavascriptExecute } from './useActionJavascriptExecute';
 
+export type LoopResult<T> =
+  | T
+  | {
+      element: unknown;
+      data: T;
+    }[];
+
 export const useActionLoop = () => {
   const executeJavascript = useActionJavascriptExecute();
 
   const executeLoop = useCallback(
-    async (
+    async <T = unknown>(
       loopableData: LoopableData,
-      elementCallback: (element?: unknown) => Promise<unknown>
-    ) => {
+      elementCallback: (element?: unknown) => Promise<T>
+    ): Promise<LoopResult<T>> => {
       const { loopElements, loopEnabled } = loopableData;
       if (!loopEnabled) {
         return elementCallback();

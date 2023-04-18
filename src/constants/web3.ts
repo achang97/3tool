@@ -16,3 +16,4 @@ const CHAIN_MAP = {
 export const CHAINS = Object.values(CHAIN_MAP);
 export const CHAIN_IDS_BY_NAME = _.mapValues(CHAIN_MAP, 'id');
 export const CHAINS_BY_ID = _.mapKeys(CHAIN_MAP, 'id');
+export const CHAIN_EXPLORER_URLS_BY_ID = _.mapValues(CHAINS_BY_ID, 'blockExplorers.default.url');

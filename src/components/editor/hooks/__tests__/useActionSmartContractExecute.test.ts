@@ -1,12 +1,6 @@
 import { ResourceType, SmartContractBaseData } from '@app/types';
 import { mainnet } from 'wagmi';
-import {
-  prepareWriteContract,
-  readContract,
-  readContracts,
-  writeContract,
-  waitForTransaction,
-} from '@wagmi/core';
+import { prepareWriteContract, readContract, readContracts, writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
 import { renderHook } from '@testing-library/react';
 import { useActionSmartContractExecute } from '../useActionSmartContractExecute';
@@ -32,6 +26,8 @@ const mockAbi = [
   },
 ];
 
+const mockEnqueueSnackbar = jest.fn();
+
 jest.mock('wagmi', () => ({
   ...jest.requireActual('wagmi'),
   useSigner: jest.fn(() => ({ data: mockSigner })),
@@ -42,6 +38,10 @@ jest.mock('@wagmi/core');
 jest.mock('@app/redux/hooks', () => ({
   useAppSelector: jest.fn(() => ({})),
   useAppDispatch: jest.fn(() => jest.fn()),
+}));
+
+jest.mock('@app/hooks/useEnqueueSnackbar', () => ({
+  useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
 }));
 
 jest.mock('@app/components/resources/hooks/useSmartContractResources', () => ({
@@ -198,25 +198,48 @@ describe('useActionSmartContractExecute', () => {
   });
 
   describe('writeSmartContract', () => {
+    const mockActionName = 'action1';
     const mockPrepareWriteResult = 'prepare write';
-    const mockWriteResult = { hash: '123' };
     const mockWriteCompletedReceipt = { transactionHash: '123', gasUsed: '1' };
+    const mockWriteResult = { hash: '123', wait: jest.fn(async () => mockWriteCompletedReceipt) };
 
     beforeEach(() => {
       (prepareWriteContract as jest.Mock).mockImplementation(() => mockPrepareWriteResult);
       (writeContract as jest.Mock).mockImplementation(() => mockWriteResult);
-      (waitForTransaction as jest.Mock).mockImplementation(() => mockWriteCompletedReceipt);
     });
 
     it('returns undefined if data is not defined', async () => {
       const { result } = renderHook(() => useActionSmartContractExecute());
-      const writeResult = await result.current.writeSmartContract(undefined);
+      const writeResult = await result.current.writeSmartContract(mockActionName, undefined);
       expect(writeResult).toBeUndefined();
+      expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
+    });
+
+    it('enqueues snackbar with pending message', async () => {
+      const { result } = renderHook(() => useActionSmartContractExecute());
+      await result.current.writeSmartContract(mockActionName, {
+        freeform: false,
+        smartContractId: '1',
+        functions: [
+          {
+            name: 'write',
+            args: ['hello'],
+            payableAmount: '',
+          },
+        ],
+      } as SmartContractBaseData);
+      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+        `${mockActionName} pending on-chain confirmation`,
+        {
+          variant: 'warning',
+          persist: true,
+        }
+      );
     });
 
     it('calls write function without payable amount', async () => {
       const { result } = renderHook(() => useActionSmartContractExecute());
-      const writeResult = await result.current.writeSmartContract({
+      const writeResult = await result.current.writeSmartContract(mockActionName, {
         freeform: false,
         smartContractId: '1',
         functions: [
@@ -237,13 +260,16 @@ describe('useActionSmartContractExecute', () => {
         signer: mockSigner,
       });
       expect(writeContract).toHaveBeenCalledWith(mockPrepareWriteResult);
-      expect(waitForTransaction).toHaveBeenCalledWith(mockWriteResult);
-      expect(writeResult).toEqual(mockWriteCompletedReceipt);
+      expect(mockWriteResult.wait).toHaveBeenCalled();
+      expect(writeResult).toEqual({
+        ...mockWriteCompletedReceipt,
+        blockExplorerUrl: 'https://etherscan.io/tx/123',
+      });
     });
 
     it('calls write function with evaluated payable amount', async () => {
       const { result } = renderHook(() => useActionSmartContractExecute());
-      const writeResult = await result.current.writeSmartContract({
+      const writeResult = await result.current.writeSmartContract(mockActionName, {
         freeform: false,
         smartContractId: '1',
         functions: [
@@ -267,13 +293,16 @@ describe('useActionSmartContractExecute', () => {
         signer: mockSigner,
       });
       expect(writeContract).toHaveBeenCalledWith(mockPrepareWriteResult);
-      expect(waitForTransaction).toHaveBeenCalledWith(mockWriteResult);
-      expect(writeResult).toEqual(mockWriteCompletedReceipt);
+      expect(mockWriteResult.wait).toHaveBeenCalled();
+      expect(writeResult).toEqual({
+        ...mockWriteCompletedReceipt,
+        blockExplorerUrl: 'https://etherscan.io/tx/123',
+      });
     });
 
     it('returns looped array of results', async () => {
       const { result } = renderHook(() => useActionSmartContractExecute());
-      const writeResult = await result.current.writeSmartContract({
+      const writeResult = await result.current.writeSmartContract(mockActionName, {
         loopEnabled: true,
         loopElements: 'return ["hello", "world"];',
         freeform: false,
@@ -289,7 +318,7 @@ describe('useActionSmartContractExecute', () => {
 
       expect(prepareWriteContract).toHaveBeenCalledTimes(2);
       expect(writeContract).toHaveBeenCalledTimes(2);
-      expect(waitForTransaction).toHaveBeenCalledTimes(2);
+      expect(mockWriteResult.wait).toHaveBeenCalledTimes(2);
 
       expect(prepareWriteContract).toHaveBeenCalledWith({
         abi: mockAbi,
@@ -309,8 +338,14 @@ describe('useActionSmartContractExecute', () => {
       });
 
       expect(writeResult).toEqual([
-        { element: 'hello', data: mockWriteCompletedReceipt },
-        { element: 'world', data: mockWriteCompletedReceipt },
+        {
+          element: 'hello',
+          data: { ...mockWriteCompletedReceipt, blockExplorerUrl: 'https://etherscan.io/tx/123' },
+        },
+        {
+          element: 'world',
+          data: { ...mockWriteCompletedReceipt, blockExplorerUrl: 'https://etherscan.io/tx/123' },
+        },
       ]);
     });
   });

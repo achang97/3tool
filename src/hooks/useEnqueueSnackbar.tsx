@@ -1,20 +1,35 @@
 import { useSnackbar, OptionsObject } from 'notistack';
-import { useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { Snackbar, SnackbarProps } from '../components/common/Snackbar';
 
 export const useEnqueueSnackbar = () => {
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const pushSnackbar = useCallback(
-    (message: string, options: OptionsObject & { variant: SnackbarProps['variant'] }) => {
-      enqueueSnackbar(message, {
+    (
+      message: ReactNode,
+      options: Pick<OptionsObject, 'persist'> & {
+        variant: SnackbarProps['variant'];
+        action?: ReactNode;
+      }
+    ) => {
+      return enqueueSnackbar(message, {
         ...options,
         content: (key) => {
-          return <Snackbar key={key} message={message} variant={options.variant} />;
+          return (
+            <Snackbar
+              key={key}
+              message={message}
+              variant={options.variant}
+              persist={options.persist}
+              action={options.action}
+              onClose={() => closeSnackbar(key)}
+            />
+          );
         },
       });
     },
-    [enqueueSnackbar]
+    [closeSnackbar, enqueueSnackbar]
   );
 
   return pushSnackbar;

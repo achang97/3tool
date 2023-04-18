@@ -1,16 +1,18 @@
 import { Action, SmartContractBaseData, SmartContractBaseDataFunction } from '@app/types';
 import { filterAbiFunctions, getAbiFieldType } from '@app/utils/abi';
 import {
+  SendTransactionResult,
   prepareWriteContract,
   readContract,
   readContracts,
-  waitForTransaction,
   writeContract,
 } from '@wagmi/core';
 import { AbiType } from 'abitype';
 import { ethers } from 'ethers';
 import { useCallback } from 'react';
 import { useSigner } from 'wagmi';
+import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
+import { getTransactionUrl } from '@app/utils/contracts';
 import { useActionLoop } from './useActionLoop';
 import { useEvalDynamicValue } from './useEvalDynamicValue';
 import { useActionSmartContract } from './useActionSmartContract';
@@ -20,6 +22,7 @@ export const useActionSmartContractExecute = () => {
   const { data: signer } = useSigner();
   const loop = useActionLoop();
   const evalDynamicValue = useEvalDynamicValue();
+  const enqueueSnackbar = useEnqueueSnackbar();
 
   const getWagmiConfig = useCallback(
     (
@@ -75,39 +78,75 @@ export const useActionSmartContractExecute = () => {
     [loop, getWagmiConfig]
   );
 
+  const waitForWriteReceipt = useCallback(
+    async (
+      result: SendTransactionResult & {
+        blockExplorerUrl: string;
+      }
+    ) => {
+      const txReceipt = await result.wait();
+      return {
+        ...txReceipt,
+        blockExplorerUrl: result.blockExplorerUrl,
+      };
+    },
+    []
+  );
+
   const writeSmartContract = useCallback(
-    async (data: Action['data']['smartContractWrite']) => {
+    async (name: string, data: Action['data']['smartContractWrite']) => {
       if (!data) {
         return undefined;
       }
 
-      return loop(data, async (element) => {
-        const writeFunction = data.functions[0];
+      const writeFunction = data.functions[0];
+      const writeResults = await loop<SendTransactionResult & { blockExplorerUrl: string }>(
+        data,
+        async (element) => {
+          const config: Parameters<typeof prepareWriteContract>[0] = getWagmiConfig(
+            'write',
+            data,
+            writeFunction,
+            element
+          );
 
-        const config: Parameters<typeof prepareWriteContract>[0] = getWagmiConfig(
-          'write',
-          data,
-          writeFunction,
-          element
-        );
+          if (writeFunction.payableAmount) {
+            const evalPayableAmount = evalDynamicValue(writeFunction.payableAmount, 'number', {
+              element,
+            });
+            config.overrides = {
+              value: ethers.utils.parseEther(evalPayableAmount?.toString() ?? ''),
+            };
+          }
 
-        if (writeFunction.payableAmount) {
-          const evalPayableAmount = evalDynamicValue(writeFunction.payableAmount, 'number', {
-            element,
-          });
-          config.overrides = {
-            value: ethers.utils.parseEther(evalPayableAmount?.toString() ?? ''),
+          const preparedConfig = await prepareWriteContract(config);
+          // @ts-ignore preparedConfig has unknown as AbiParameter type
+          const writeResult = await writeContract(preparedConfig);
+          return {
+            ...writeResult,
+            blockExplorerUrl: config.chainId
+              ? getTransactionUrl(config.chainId, writeResult.hash)
+              : '',
           };
         }
+      );
 
-        const preparedConfig = await prepareWriteContract(config);
-        // @ts-ignore preparedConfig has unknown as AbiParameter type
-        const writeResult = await writeContract(preparedConfig);
-        const writeReceipt = await waitForTransaction(writeResult);
-        return writeReceipt;
+      enqueueSnackbar(`${name} pending on-chain confirmation`, {
+        variant: 'warning',
+        persist: true,
       });
+
+      if (!Array.isArray(writeResults)) {
+        return waitForWriteReceipt(writeResults);
+      }
+      return Promise.all(
+        writeResults.map(async (result) => ({
+          ...result,
+          data: await waitForWriteReceipt(result.data),
+        }))
+      );
     },
-    [loop, evalDynamicValue, getWagmiConfig]
+    [loop, enqueueSnackbar, waitForWriteReceipt, getWagmiConfig, evalDynamicValue]
   );
 
   return { readSmartContract, writeSmartContract };

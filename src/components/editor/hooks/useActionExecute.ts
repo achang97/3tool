@@ -28,7 +28,7 @@ export const useActionExecute = () => {
             break;
           }
           case ActionType.SmartContractWrite: {
-            data = await writeSmartContract(action.data.smartContractWrite);
+            data = await writeSmartContract(action.name, action.data.smartContractWrite);
             break;
           }
           default:
