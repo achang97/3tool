@@ -1,5 +1,5 @@
 import { render } from '@tests/utils/renderWithContext';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { ActionType, ResourceType, SmartContractBaseData } from '@app/types';
 import { useAppSelector } from '@app/redux/hooks';
 import userEvent from '@testing-library/user-event';
@@ -46,15 +46,28 @@ describe('SmartContractEditor', () => {
     }));
   });
 
-  it('renders loop section', () => {
+  it('renders loop section', async () => {
+    mockExtendSmartContractUpdate.mockImplementation((update) => ({
+      update,
+      hasResetFunctions: false,
+    }));
     render(
       <SmartContractEditor
         type={ActionType.SmartContractRead}
-        data={{} as SmartContractBaseData}
+        data={{ loopEnabled: true } as SmartContractBaseData}
         onDataChange={mockHandleDataChange}
       />
     );
     expect(screen.getByTestId('loop-section')).toBeTruthy();
+    await userEvent.type(within(screen.getByTestId('loop-section-code')).getByRole('textbox'), '1');
+    expect(mockDispatch).toHaveBeenCalledWith(
+      updateFocusedAction({
+        data: {
+          smartContractRead: { loopElements: '1' },
+          smartContractWrite: { loopElements: '1' },
+        },
+      })
+    );
   });
 
   describe('resources', () => {
@@ -162,14 +175,30 @@ describe('SmartContractEditor', () => {
     expect(screen.getByTestId('smart-contract-function-editor')).toBeTruthy();
   });
 
-  it('renders transformer section', () => {
+  it('renders transformer section', async () => {
+    mockExtendSmartContractUpdate.mockImplementation((update) => ({
+      update,
+      hasResetFunctions: false,
+    }));
     render(
       <SmartContractEditor
         type={ActionType.SmartContractRead}
-        data={{} as SmartContractBaseData}
+        data={{ transformerEnabled: true } as SmartContractBaseData}
         onDataChange={mockHandleDataChange}
       />
     );
     expect(screen.getByTestId('transformer-section')).toBeTruthy();
+    await userEvent.type(
+      within(screen.getByTestId('transformer-section-code')).getByRole('textbox'),
+      '1'
+    );
+    expect(mockDispatch).toHaveBeenCalledWith(
+      updateFocusedAction({
+        data: {
+          smartContractRead: { transformer: '1' },
+          smartContractWrite: { transformer: '1' },
+        },
+      })
+    );
   });
 });

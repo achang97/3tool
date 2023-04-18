@@ -37,7 +37,7 @@ export const TransformerSection = ({ data, onDataChange }: TransformerSectionPro
         onChange={handleTransformerChange}
         language="javascript"
         showLineNumbers
-        testId="transformer-code"
+        testId="transformer-section-code"
       />
     </EditorSection>
   );

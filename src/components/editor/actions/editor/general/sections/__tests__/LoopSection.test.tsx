@@ -52,7 +52,7 @@ describe('LoopSection', () => {
         onDataChange={mockHandleDataChange}
       />
     );
-    expect(screen.getByTestId('loop-code')).not.toBeVisible();
+    expect(screen.getByTestId('loop-section-code')).not.toBeVisible();
   });
 
   it('calls onDataChange on loop value change', async () => {

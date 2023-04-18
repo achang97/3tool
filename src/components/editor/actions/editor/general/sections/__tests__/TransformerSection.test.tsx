@@ -47,7 +47,7 @@ describe('TransformerSection', () => {
         onDataChange={mockHandleDataChange}
       />
     );
-    expect(screen.getByTestId('transformer-code')).not.toBeVisible();
+    expect(screen.getByTestId('transformer-section-code')).not.toBeVisible();
   });
 
   it('calls onDataChange on transformer value change', async () => {

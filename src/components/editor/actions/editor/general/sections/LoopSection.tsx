@@ -40,7 +40,7 @@ export const LoopSection = ({ data, onDataChange }: LoopSectionProps) => {
         onChange={handleLoopElementsChange}
         language="javascript"
         showLineNumbers
-        testId="loop-code"
+        testId="loop-section-code"
       />
       <Stack
         direction="row"

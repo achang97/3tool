@@ -50,7 +50,7 @@ export const SmartContractEditor = ({ type, data, onDataChange }: SmartContractE
 
   return (
     <Stack spacing={1} data-testid="smart-contract-editor">
-      <LoopSection data={data} onDataChange={onDataChange} />
+      <LoopSection data={data} onDataChange={handleBaseSmartContractUpdate} />
       <LoopEvalArgsProvider data={data}>
         <EditorSection title="Resource">
           <SmartContractResourceEditor data={data} onDataChange={handleBaseSmartContractUpdate} />
@@ -65,7 +65,7 @@ export const SmartContractEditor = ({ type, data, onDataChange }: SmartContractE
           />
         </EditorSection>
       </LoopEvalArgsProvider>
-      <TransformerSection data={data} onDataChange={onDataChange} />
+      <TransformerSection data={data} onDataChange={handleBaseSmartContractUpdate} />
     </Stack>
   );
 };
