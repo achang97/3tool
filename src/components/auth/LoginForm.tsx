@@ -1,8 +1,7 @@
 import { useLoginMutation } from '@app/redux/services/auth';
-import { Stack, TextField } from '@mui/material';
-import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
-import { LoadingButton } from '@mui/lab';
-import { ApiErrorMessage } from '../common/ApiErrorMessage';
+import { TextField } from '@mui/material';
+import { ChangeEvent, useCallback, useState } from 'react';
+import { AuthContainer } from './common/AuthContainer';
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -17,38 +16,34 @@ export const LoginForm = () => {
     setPassword(e.target.value);
   }, []);
 
-  const handleLogin = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      login({ email, password });
-    },
-    [email, login, password]
-  );
+  const handleLogin = useCallback(() => {
+    login({ email, password });
+  }, [email, login, password]);
 
   return (
-    <form onSubmit={handleLogin} data-testid="login-form">
-      <Stack spacing={1}>
-        <TextField
-          type="email"
-          label="Email"
-          placeholder="Enter email"
-          value={email}
-          onChange={handleEmailChange}
-          required
-        />
-        <TextField
-          type="password"
-          label="Password"
-          placeholder="Enter password"
-          value={password}
-          onChange={handlePasswordChange}
-          required
-        />
-        {error && <ApiErrorMessage error={error} />}
-        <LoadingButton type="submit" loading={isLoading}>
-          Login
-        </LoadingButton>
-      </Stack>
-    </form>
+    <AuthContainer
+      title="Sign in"
+      onSubmit={handleLogin}
+      error={error}
+      SubmitButtonProps={{ loading: isLoading, children: 'Sign in' }}
+      testId="login-form"
+    >
+      <TextField
+        type="email"
+        label="Email"
+        placeholder="Enter email"
+        value={email}
+        onChange={handleEmailChange}
+        required
+      />
+      <TextField
+        type="password"
+        label="Password"
+        placeholder="Enter password"
+        value={password}
+        onChange={handlePasswordChange}
+        required
+      />
+    </AuthContainer>
   );
 };

@@ -1,11 +1,10 @@
-import { ApiError } from '@app/types';
+import { ApiErrorResponse } from '@app/types';
 import { parseApiError } from '@app/utils/api';
 import { Typography, TypographyProps } from '@mui/material';
-import { SerializedError } from '@reduxjs/toolkit';
 import { ForwardedRef, forwardRef, useMemo } from 'react';
 
 type ApiErrorMessageProps = {
-  error: ApiError | SerializedError;
+  error: ApiErrorResponse['error'];
   variant?: TypographyProps['variant'];
   sx?: TypographyProps['sx'];
 };

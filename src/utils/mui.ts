@@ -138,6 +138,24 @@ export const theme = extendTheme({
     button: {
       textTransform: 'none',
     },
+    h1: {
+      fontWeight: 500,
+    },
+    h2: {
+      fontWeight: 500,
+    },
+    h3: {
+      fontWeight: 600,
+    },
+    h4: {
+      fontWeight: 600,
+    },
+    h5: {
+      fontWeight: 600,
+    },
+    h6: {
+      fontWeight: 500,
+    },
     code1: {
       fontFamily: 'monospace',
       fontWeight: 400,

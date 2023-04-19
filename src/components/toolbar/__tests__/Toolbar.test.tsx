@@ -18,11 +18,11 @@ describe('Toolbar', () => {
     jest.clearAllMocks();
   });
 
-  it('renders unauthenticated toolbar', () => {
+  it('renders nothing if not logged in', () => {
     (useUser as jest.Mock).mockImplementation(() => undefined);
 
-    render(<Toolbar />);
-    expect(screen.getByTestId('unauthenticated-toolbar')).toBeTruthy();
+    const result = render(<Toolbar />);
+    expect(result.container.firstChild).toBeNull();
   });
 
   it('renders nothing if on /tools/[id] route', () => {

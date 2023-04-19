@@ -15,6 +15,11 @@ describe('LoginForm', () => {
     (useLoginMutation as jest.Mock).mockImplementation(() => [mockLogin, {}]);
   });
 
+  it('renders title', () => {
+    render(<LoginForm />);
+    expect(screen.getByText('Sign in', { selector: 'h5' })).toBeTruthy();
+  });
+
   it('renders email field', () => {
     render(<LoginForm />);
     expect(screen.getByLabelText(/Email/)).toBeTruthy();
@@ -45,7 +50,7 @@ describe('LoginForm', () => {
       render(<LoginForm />);
 
       await userEvent.type(screen.getByLabelText(/Password/), 'password');
-      await userEvent.click(screen.getByText('Login'));
+      await userEvent.click(screen.getByText('Sign in', { selector: 'button' }));
 
       expect(mockLogin).not.toHaveBeenCalled();
     });
@@ -54,7 +59,7 @@ describe('LoginForm', () => {
       render(<LoginForm />);
 
       await userEvent.type(screen.getByLabelText(/Email/), 'email');
-      await userEvent.click(screen.getByText('Login'));
+      await userEvent.click(screen.getByText('Sign in', { selector: 'button' }));
 
       expect(mockLogin).not.toHaveBeenCalled();
     });
@@ -67,7 +72,7 @@ describe('LoginForm', () => {
 
       await userEvent.type(screen.getByLabelText(/Email/), mockEmail);
       await userEvent.type(screen.getByLabelText(/Password/), mockPassword);
-      await userEvent.click(screen.getByText('Login'));
+      await userEvent.click(screen.getByText('Sign in', { selector: 'button' }));
 
       expect(mockLogin).toHaveBeenCalledWith({
         email: mockEmail,

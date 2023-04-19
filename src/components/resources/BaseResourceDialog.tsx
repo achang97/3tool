@@ -1,7 +1,6 @@
-import { ApiError, Resource, ResourceType } from '@app/types';
+import { ApiErrorResponse, Resource, ResourceType } from '@app/types';
 import { LoadingButton } from '@mui/lab';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { SerializedError } from '@reduxjs/toolkit';
 import { FC, FormEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { BaseResourceFormProps } from '@app/types/resources';
 import { RESOURCE_CONFIGS } from '@app/constants';
@@ -13,7 +12,7 @@ import { validateResource } from './utils/validate';
 type BaseResourceDialogProps = {
   title: string;
   resource: Resource;
-  error?: ApiError | SerializedError;
+  error?: ApiErrorResponse['error'];
   isOpen: boolean;
   isBackButtonVisible: boolean;
   isLoading?: boolean;

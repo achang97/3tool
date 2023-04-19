@@ -24,6 +24,6 @@ export const mockApiErrorResponse = createMockApiErrorResponse({
 export const mockApiError = {
   status: 400,
   data: {
-    message: 'Error Message',
+    message: 'Error message',
   },
 };
