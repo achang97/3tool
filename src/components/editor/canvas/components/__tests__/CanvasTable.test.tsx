@@ -61,6 +61,19 @@ describe('CanvasTable', () => {
           expect(screen.getByText(mockEvalDataValues.data[0].col1)).toBeTruthy();
           expect(screen.getByText(mockEvalDataValues.data[1].col1)).toBeTruthy();
         });
+
+        it('renders rows with empty elements', () => {
+          const mockEvalDataValues = {
+            // eslint-disable-next-line no-sparse-arrays
+            data: [, { col1: 'row2-col1' }],
+          };
+          (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+            evalDataValues: mockEvalDataValues,
+          }));
+
+          render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+          expect(screen.getByText(mockEvalDataValues.data[1]!.col1)).toBeTruthy();
+        });
       });
     });
 

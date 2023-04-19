@@ -29,8 +29,11 @@ export const CanvasTable = ({
       return [];
     }
 
-    return evalDataValues.data.map((dataElem, i) => ({
-      data: dataElem,
+    // NOTE: The data array can contain "empty" elements, which cannot be iterated over
+    // and cause the resultant rows object to be invalid. To solve this issue, we create an
+    // array of the same length and rely on indices to access each data element.
+    return [...new Array(evalDataValues.data.length)].map((_item, i) => ({
+      data: evalDataValues.data?.[i],
       id: i,
     }));
   }, [evalDataValues.data]);
