@@ -1,8 +1,54 @@
 import { ApiError } from '@app/types';
 import { SerializedError } from '@reduxjs/toolkit';
-import { isSuccessfulApiResponse, parseApiError } from '../api';
+import { isApiError, isApiErrorResponse, isSerializedError, parseApiError } from '../api';
 
 describe('api', () => {
+  describe('isApiError', () => {
+    it('returns false if object does not contain data object', () => {
+      const result = isApiError({});
+      expect(result).toEqual(false);
+    });
+
+    it('returns false if object contains empty data object', () => {
+      const result = isApiError({ data: {} });
+      expect(result).toEqual(false);
+    });
+
+    it('returns true if object contains data object with message', () => {
+      const result = isApiError({ data: { message: '' } });
+      expect(result).toEqual(true);
+    });
+  });
+
+  describe('isSerializedError', () => {
+    it('returns false if object does not contain message', () => {
+      const result = isSerializedError({});
+      expect(result).toEqual(false);
+    });
+
+    it('returns true if object contains message', () => {
+      const result = isSerializedError({ message: '' });
+      expect(result).toEqual(true);
+    });
+  });
+
+  describe('isErrorApiResponse', () => {
+    it('returns false if object is neither api error nor serialized error', () => {
+      const result = isApiErrorResponse({});
+      expect(result).toEqual(false);
+    });
+
+    it('returns true if object is api error', () => {
+      const result = isApiErrorResponse({ data: { message: '' } });
+      expect(result).toEqual(true);
+    });
+
+    it('returns true if object is serialized error', () => {
+      const result = isApiErrorResponse({ message: '' });
+      expect(result).toEqual(true);
+    });
+  });
+
   describe('parseApiError', () => {
     it('parses message from SerializedError', () => {
       const mockError: SerializedError = {
@@ -30,28 +76,6 @@ describe('api', () => {
       };
       const result = parseApiError(mockError);
       expect(result).toEqual('Mock Error Message');
-    });
-  });
-
-  describe('isSuccessfulApiResponse', () => {
-    it('returns false if response is undefined', () => {
-      const result = isSuccessfulApiResponse(undefined);
-      expect(result).toEqual(false);
-    });
-
-    it('returns true if data field is in response', () => {
-      const result = isSuccessfulApiResponse({ data: 'hello' });
-      expect(result).toEqual(true);
-    });
-
-    it('returns false if data field is not in response', () => {
-      const result = isSuccessfulApiResponse({
-        error: {
-          status: 400,
-          data: { message: 'Error Message ' },
-        },
-      });
-      expect(result).toEqual(false);
     });
   });
 });

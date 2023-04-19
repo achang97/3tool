@@ -2,7 +2,6 @@ import { renameComponentInput } from '@app/redux/features/activeToolSlice';
 import { focusAction, focusComponent } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType, Component, ComponentType } from '@app/types';
-import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { renderHook } from '@tests/utils/renderWithContext';
 import { useComponentUpdateName } from '../useComponentUpdateName';
 
@@ -76,7 +75,7 @@ describe('useComponentUpdateName', () => {
   describe('side effects', () => {
     describe('error', () => {
       beforeEach(() => {
-        mockUpdateTool.mockImplementation(() => mockApiErrorResponse);
+        mockUpdateTool.mockImplementation(() => undefined);
       });
 
       it('does not focus component or rename component inputs if API call fails', async () => {
@@ -89,7 +88,7 @@ describe('useComponentUpdateName', () => {
 
     describe('success', () => {
       beforeEach(() => {
-        mockUpdateTool.mockImplementation(() => mockApiSuccessResponse);
+        mockUpdateTool.mockImplementation(() => ({}));
       });
 
       it('focuses component with new name if API call succeeds', async () => {

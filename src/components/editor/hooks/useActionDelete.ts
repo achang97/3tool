@@ -1,7 +1,6 @@
 import { resetActionResult } from '@app/redux/features/activeToolSlice';
 import { blurAction } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
-import { isSuccessfulApiResponse } from '@app/utils/api';
 import { useCallback } from 'react';
 import { useActiveTool } from './useActiveTool';
 
@@ -10,11 +9,11 @@ export const useActionDelete = (name: string) => {
   const { tool, updateTool } = useActiveTool();
 
   const handleDeleteAction = useCallback(async () => {
-    const response = await updateTool({
+    const updatedTool = await updateTool({
       actions: tool.actions.filter((currAction) => currAction.name !== name),
     });
 
-    if (!isSuccessfulApiResponse(response)) {
+    if (!updatedTool) {
       return false;
     }
 

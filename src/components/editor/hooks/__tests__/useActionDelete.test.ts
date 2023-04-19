@@ -2,7 +2,6 @@ import { resetActionResult } from '@app/redux/features/activeToolSlice';
 import { blurAction } from '@app/redux/features/editorSlice';
 import { Action } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { useActionDelete } from '../useActionDelete';
 
 const mockName = 'name';
@@ -40,7 +39,7 @@ describe('useActionDelete', () => {
 
   describe('error', () => {
     beforeEach(() => {
-      mockUpdateTool.mockImplementation(() => mockApiErrorResponse);
+      mockUpdateTool.mockImplementation(() => undefined);
     });
 
     it('returns false if deletion fails', async () => {
@@ -57,7 +56,7 @@ describe('useActionDelete', () => {
 
   describe('success', () => {
     beforeEach(() => {
-      mockUpdateTool.mockImplementation(() => mockApiSuccessResponse);
+      mockUpdateTool.mockImplementation(() => ({}));
     });
 
     it('returns true if deletion succeeds', async () => {

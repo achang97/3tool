@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { ApiSuccessResponse, Tool } from '@app/types';
-import { isSuccessfulApiResponse } from '@app/utils/api';
+import { Tool } from '@app/types';
 import { validateVariableName } from '@app/utils/namespace';
 import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
 import { useActiveTool } from './useActiveTool';
@@ -10,7 +9,7 @@ import { useToolElementNames } from './useToolElementNames';
 type HookArgs = {
   prevName: string;
   extendUpdate: (newName: string, update: ReferenceUpdate) => void;
-  onSuccess: (newName: string, response: ApiSuccessResponse<Tool>) => void;
+  onSuccess: (newName: string, updatedTool: Tool) => void;
 };
 
 export const useBaseElementUpdateName = ({ prevName, extendUpdate, onSuccess }: HookArgs) => {
@@ -49,12 +48,12 @@ export const useBaseElementUpdateName = ({ prevName, extendUpdate, onSuccess }: 
       const update = createReferenceUpdate(prevName, newName);
       extendUpdate(newName, update);
 
-      const response = await updateTool(update);
-      if (!isSuccessfulApiResponse(response)) {
+      const updatedTool = await updateTool(update);
+      if (!updatedTool) {
         return;
       }
 
-      onSuccess(newName, response);
+      onSuccess(newName, updatedTool);
     },
     [
       validateName,

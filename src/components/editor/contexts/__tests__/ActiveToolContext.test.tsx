@@ -3,6 +3,7 @@ import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { ReactElement, useContext } from 'react';
 import { Tool } from '@app/types';
+import { createMockApiErrorResponse, createMockApiSuccessResponse } from '@tests/constants/api';
 import { useToolDataDepGraph } from '../../hooks/useToolDataDepGraph';
 import {
   ToolEvalDataMap,
@@ -153,15 +154,13 @@ describe('ActiveToolContext', () => {
 
   describe('update', () => {
     const mockToolUpdate = { name: 'Updated Tool Name' };
-    const mockSuccessResponse = {
-      data: {
-        ...mockTool,
-        ...mockToolUpdate,
-      },
+    const mockNewTool = {
+      ...mockTool,
+      ...mockToolUpdate,
     };
 
     it('returns result from update tool API', async () => {
-      mockUpdateTool.mockImplementation(() => mockSuccessResponse);
+      mockUpdateTool.mockImplementation(() => createMockApiSuccessResponse(mockNewTool));
 
       const { result } = renderHook(() => useContext(ActiveToolContext), {
         wrapper: ({ children }: { children: ReactElement }) => (
@@ -176,12 +175,12 @@ describe('ActiveToolContext', () => {
           _id: mockTool._id,
           ...mockToolUpdate,
         });
-        expect(response).toEqual(mockSuccessResponse);
+        expect(response).toEqual(mockNewTool);
       });
     });
 
     it('sets active tool as tool after successful update', async () => {
-      mockUpdateTool.mockImplementation(() => mockSuccessResponse);
+      mockUpdateTool.mockImplementation(() => createMockApiSuccessResponse(mockNewTool));
 
       const { result } = renderHook(() => useContext(ActiveToolContext), {
         wrapper: ({ children }: { children: ReactElement }) => (
@@ -191,7 +190,7 @@ describe('ActiveToolContext', () => {
 
       await waitFor(async () => {
         await result.current.updateTool(mockToolUpdate);
-        expect(result.current.tool).toEqual(mockSuccessResponse.data);
+        expect(result.current.tool).toEqual(mockNewTool);
       });
     });
 
@@ -202,7 +201,7 @@ describe('ActiveToolContext', () => {
           message: 'Error Message',
         },
       };
-      mockUpdateTool.mockImplementation(() => ({ error: mockApiError }));
+      mockUpdateTool.mockImplementation(() => createMockApiErrorResponse(mockApiError));
 
       const { result } = renderHook(() => useContext(ActiveToolContext), {
         wrapper: ({ children }: { children: ReactElement }) => (

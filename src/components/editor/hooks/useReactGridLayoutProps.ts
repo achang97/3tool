@@ -6,10 +6,9 @@ import {
   startMoveComponentDrag,
 } from '@app/redux/features/editorSlice';
 import { Layout, ReactGridLayoutProps } from 'react-grid-layout';
-import { ApiResponse, Component, Tool } from '@app/types';
+import { Component } from '@app/types';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { COMPONENT_CONFIGS } from '@app/constants';
-import { isSuccessfulApiResponse } from '@app/utils/api';
 import { createNewComponent } from '../utils/components';
 import { hasLayoutMoved, hasLayoutResized } from '../utils/reactGridLayout';
 import { useActiveTool } from './useActiveTool';
@@ -78,19 +77,6 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
     dispatch(endMoveComponentDrag());
   }, [dispatch]);
 
-  const handleCreateResponse = useCallback(
-    (response: ApiResponse<Tool> | undefined, newToolComponent: Component) => {
-      dispatch(endCreateComponentDrag());
-
-      if (!isSuccessfulApiResponse(response)) {
-        return;
-      }
-
-      dispatch(focusComponent(newToolComponent.name));
-    },
-    [dispatch]
-  );
-
   const onDrop = useCallback(
     async (newLayout: Layout[]) => {
       if (!newComponent) {
@@ -105,10 +91,14 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
       );
       const newComponents = [...prevComponents, newToolComponent];
 
-      const response = await updateTool({ components: newComponents });
-      handleCreateResponse(response, newToolComponent);
+      const updatedTool = await updateTool({ components: newComponents });
+      dispatch(endCreateComponentDrag());
+      if (!updatedTool) {
+        return;
+      }
+      dispatch(focusComponent(newToolComponent.name));
     },
-    [getComponentsWithLayout, handleCreateResponse, newComponent, updateTool]
+    [dispatch, getComponentsWithLayout, newComponent, updateTool]
   );
 
   const onLayoutChange = useCallback(

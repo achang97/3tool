@@ -1,6 +1,6 @@
 import { useUpdateToolMutation } from '@app/redux/services/tools';
-import { ApiResponse, Tool } from '@app/types';
-import { isSuccessfulApiResponse, parseApiError } from '@app/utils/api';
+import { Tool } from '@app/types';
+import { parseApiError } from '@app/utils/api';
 import { DepGraph } from 'dependency-graph';
 import React, { useCallback, createContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
@@ -24,7 +24,7 @@ export type ActiveToolState = {
   tool: Tool;
   updateTool: (
     update: Partial<Pick<Tool, 'name' | 'components' | 'actions'>>
-  ) => Promise<ApiResponse<Tool> | undefined>;
+  ) => Promise<Tool | undefined>;
   dataDepGraph: DepGraph<string>;
   dataDepCycles: Record<string, string[]>;
   evalDataMap: ToolEvalDataMap;
@@ -59,20 +59,20 @@ export const ActiveToolProvider = ({ tool, children }: ActiveToolProviderProps) 
 
   const updateActiveTool = useCallback(
     async (update: Partial<Pick<Tool, 'name' | 'components' | 'actions'>>) => {
-      const response = await updateTool({
-        _id: activeTool._id,
-        ...update,
-      });
+      try {
+        const updatedTool = await updateTool({
+          _id: activeTool._id,
+          ...update,
+        }).unwrap();
 
-      if (isSuccessfulApiResponse(response)) {
-        setActiveTool(response.data);
-      } else {
-        enqueueSnackbar(parseApiError(response.error), {
+        setActiveTool(updatedTool);
+        return updatedTool;
+      } catch (e) {
+        enqueueSnackbar(parseApiError(e), {
           variant: 'error',
         });
+        return undefined;
       }
-
-      return response;
     },
     [activeTool._id, enqueueSnackbar, updateTool]
   );

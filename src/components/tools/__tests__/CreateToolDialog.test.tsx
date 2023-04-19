@@ -78,7 +78,7 @@ describe('CreateToolDialog', () => {
 
   it('navigates to /editor/:id and resets state after successful creation of tool', async () => {
     const mockNewTool = { _id: 'new-tool-id' };
-    mockCreateTool.mockImplementation(() => ({ data: mockNewTool }));
+    mockCreateTool.mockImplementation(() => ({ unwrap: () => mockNewTool }));
 
     render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 

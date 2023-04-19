@@ -1,7 +1,6 @@
 import { renameActionResult } from '@app/redux/features/activeToolSlice';
 import { focusAction } from '@app/redux/features/editorSlice';
 import { Action, ActionType, Component } from '@app/types';
-import { mockApiErrorResponse } from '@tests/constants/api';
 import { renderHook } from '@tests/utils/renderWithContext';
 import { useActionUpdateName } from '../useActionUpdateName';
 
@@ -61,7 +60,7 @@ describe('useActionUpdateName', () => {
   describe('side effects', () => {
     describe('error', () => {
       it('does not focus action if API call fails', async () => {
-        mockUpdateTool.mockImplementation(() => mockApiErrorResponse);
+        mockUpdateTool.mockImplementation(() => undefined);
 
         const { result } = renderHook(() => useActionUpdateName(mockPrevName));
         await result.current(mockNewName);
@@ -71,7 +70,7 @@ describe('useActionUpdateName', () => {
 
       it('does not focus action if API response does not include updated action', async () => {
         mockUpdateTool.mockImplementation(() => ({
-          data: { actions: [] },
+          actions: [],
         }));
 
         const { result } = renderHook(() => useActionUpdateName(mockPrevName));
@@ -90,7 +89,7 @@ describe('useActionUpdateName', () => {
 
       beforeEach(() => {
         mockUpdateTool.mockImplementation(() => ({
-          data: { actions: [mockAction] },
+          actions: [mockAction],
         }));
       });
 

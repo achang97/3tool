@@ -2,7 +2,6 @@ import { resetComponentInput } from '@app/redux/features/activeToolSlice';
 import { blurComponent } from '@app/redux/features/editorSlice';
 import { Component } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { useComponentDelete } from '../useComponentDelete';
 
 const mockName = 'name';
@@ -40,7 +39,7 @@ describe('useComponentDelete', () => {
 
   describe('error', () => {
     beforeEach(() => {
-      mockUpdateTool.mockImplementation(() => mockApiErrorResponse);
+      mockUpdateTool.mockImplementation(() => undefined);
     });
 
     it('returns false if deletion fails', async () => {
@@ -57,7 +56,7 @@ describe('useComponentDelete', () => {
 
   describe('success', () => {
     beforeEach(() => {
-      mockUpdateTool.mockImplementation(() => mockApiSuccessResponse);
+      mockUpdateTool.mockImplementation(() => ({}));
     });
 
     it('returns true if deletion succeeds', async () => {

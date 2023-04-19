@@ -1,5 +1,5 @@
 import { useCreateToolMutation } from '@app/redux/services/tools';
-import { isSuccessfulApiResponse, parseApiError } from '@app/utils/api';
+import { parseApiError } from '@app/utils/api';
 import { LoadingButton } from '@mui/lab';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -25,15 +25,16 @@ export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => 
   const handleCreateTool = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const response = await createTool({ name });
 
-      if (!isSuccessfulApiResponse(response)) {
-        return;
+      try {
+        const newTool = await createTool({ name }).unwrap();
+
+        onClose();
+        setName('');
+        push(`/editor/${newTool._id}`);
+      } catch {
+        // Do nothing
       }
-
-      onClose();
-      setName('');
-      push(`/editor/${response.data._id}`);
     },
     [createTool, name, onClose, push]
   );

@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { popResource, updateResource } from '@app/redux/features/resourcesSlice';
 import { Resource, ResourceType } from '@app/types';
 import { mainnet } from 'wagmi';
+import { createMockApiSuccessResponse } from '@tests/constants/api';
 import { ResourceModals } from '../ResourceModals';
 
 const mockDispatch = jest.fn();
@@ -132,9 +133,12 @@ describe('ResourceModals', () => {
   });
 
   it('sets abi field on smart contract modal if abi was successfully created', async () => {
-    mockCreateResource.mockImplementation(() => ({
-      data: { type: ResourceType.Abi, _id: 'newId' },
-    }));
+    mockCreateResource.mockImplementation(() =>
+      createMockApiSuccessResponse({
+        type: ResourceType.Abi,
+        _id: 'newId',
+      })
+    );
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       resourceStack: [
         {

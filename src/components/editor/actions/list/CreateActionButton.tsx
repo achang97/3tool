@@ -4,11 +4,10 @@ import { useCallback } from 'react';
 import Image from 'next/image';
 import _ from 'lodash';
 import { ACTION_CONFIGS, ACTION_DATA_TEMPLATES } from '@app/constants';
-import { Action, ActionType, ApiResponse, Tool } from '@app/types';
+import { Action, ActionType } from '@app/types';
 import { useMenuState } from '@app/hooks/useMenuState';
 import { useAppDispatch } from '@app/redux/hooks';
 import { focusAction } from '@app/redux/features/editorSlice';
-import { isSuccessfulApiResponse } from '@app/utils/api';
 import { MenuItem } from '@app/components/common/MenuItem';
 import { useActiveTool } from '../../hooks/useActiveTool';
 import { createNameWithPrefix } from '../../utils/elements';
@@ -21,17 +20,6 @@ export const CreateActionButton = () => {
   const dispatch = useAppDispatch();
   const { isMenuOpen, menuAnchor, onMenuOpen, onMenuClose } = useMenuState();
   const confirmDiscard = useActionConfirmDiscard();
-
-  const handleCreateResponse = useCallback(
-    (response: ApiResponse<Tool> | undefined, newAction: Action) => {
-      if (!isSuccessfulApiResponse(response)) {
-        return;
-      }
-
-      dispatch(focusAction(newAction));
-    },
-    [dispatch]
-  );
 
   const handleCreateAction = useCallback(
     async (type: ActionType) => {
@@ -51,13 +39,16 @@ export const CreateActionButton = () => {
         newAction.data[ActionType.SmartContractWrite] =
           ACTION_DATA_TEMPLATES[ActionType.SmartContractWrite];
       }
-      const response = await updateTool({
+
+      const updatedTool = await updateTool({
         actions: [...tool.actions, newAction],
       });
-
-      handleCreateResponse(response, newAction);
+      if (!updatedTool) {
+        return;
+      }
+      dispatch(focusAction(newAction));
     },
-    [confirmDiscard, handleCreateResponse, tool.actions, updateTool]
+    [confirmDiscard, dispatch, tool.actions, updateTool]
   );
 
   return (

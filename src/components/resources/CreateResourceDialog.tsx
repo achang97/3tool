@@ -1,7 +1,6 @@
 import { useCreateResourceMutation } from '@app/redux/services/resources';
 import { Resource } from '@app/types';
 import { useCallback } from 'react';
-import { isSuccessfulApiResponse } from '@app/utils/api';
 import _ from 'lodash';
 import { BaseResourceDialog } from './BaseResourceDialog';
 
@@ -25,14 +24,16 @@ export const CreateResourceDialog = ({
   const [createResource, { isLoading, error }] = useCreateResourceMutation();
 
   const handleCreateResource = useCallback(async () => {
-    const response = await createResource(_.omit(resource, ['_id', 'createdAt', 'updatedAt']));
+    try {
+      const newResource = await createResource(
+        _.omit(resource, ['_id', 'createdAt', 'updatedAt'])
+      ).unwrap();
 
-    if (!isSuccessfulApiResponse(response)) {
-      return;
+      onCreate(newResource);
+      onClose();
+    } catch {
+      // Do nothing
     }
-
-    onCreate(response.data);
-    onClose();
   }, [createResource, resource, onCreate, onClose]);
 
   return (

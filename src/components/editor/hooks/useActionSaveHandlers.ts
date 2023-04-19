@@ -1,13 +1,12 @@
 import { useAppSelector } from '@app/redux/hooks';
 import { useCallback } from 'react';
-import { isSuccessfulApiResponse } from '@app/utils/api';
-import { ApiResponse, Tool } from '@app/types';
+import { Tool } from '@app/types';
 import { useActiveTool } from './useActiveTool';
 import { useActionExecute } from './useActionExecute';
 
 type HookReturnType = {
   executeAction: () => void;
-  saveAction: () => Promise<ApiResponse<Tool> | undefined>;
+  saveAction: () => Promise<Tool | undefined>;
   saveAndExecuteAction: () => Promise<void>;
 };
 
@@ -33,7 +32,7 @@ export const useActionSaveHandlers = (): HookReturnType => {
 
   const saveAndExecuteAction = useCallback(async () => {
     const response = await saveAction();
-    if (!isSuccessfulApiResponse(response)) {
+    if (!response) {
       return;
     }
     executeAction();

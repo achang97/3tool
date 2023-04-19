@@ -1,14 +1,22 @@
-import { ApiErrorResponse, ApiSuccessResponse } from '@app/types';
-
-export const mockApiSuccessResponse: ApiSuccessResponse = {
-  data: {},
+export const createMockApiSuccessResponse = <T>(data: T) => {
+  return {
+    unwrap: () => data,
+  };
 };
 
-export const mockApiErrorResponse: ApiErrorResponse = {
-  error: {
-    status: 400,
-    data: {
-      message: 'Error Message',
+export const createMockApiErrorResponse = (error: unknown) => {
+  return {
+    unwrap: () => {
+      throw error as Error;
     },
-  },
+  };
 };
+
+export const mockApiSuccessResponse = createMockApiSuccessResponse({});
+
+export const mockApiErrorResponse = createMockApiErrorResponse({
+  status: 400,
+  data: {
+    message: 'Error Message',
+  },
+});

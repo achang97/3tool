@@ -4,7 +4,6 @@ import { focusAction } from '@app/redux/features/editorSlice';
 import { Action, ActionType } from '@app/types';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { CreateActionButton } from '../CreateActionButton';
 
 const mockDispatch = jest.fn();
@@ -104,7 +103,7 @@ describe('CreateActionButton', () => {
   });
 
   it('does not focus action on failed creation', async () => {
-    mockUpdateTool.mockImplementation(() => mockApiErrorResponse);
+    mockUpdateTool.mockImplementation(() => undefined);
     render(<CreateActionButton />);
 
     await userEvent.click(screen.getByText('New'));
@@ -114,7 +113,7 @@ describe('CreateActionButton', () => {
   });
 
   it('focuses action on successful creation', async () => {
-    mockUpdateTool.mockImplementation(() => mockApiSuccessResponse);
+    mockUpdateTool.mockImplementation(() => ({}));
     render(<CreateActionButton />);
 
     await userEvent.click(screen.getByText('New'));

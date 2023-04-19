@@ -2,7 +2,7 @@ import { focusAction } from '@app/redux/features/editorSlice';
 import { renameActionResult } from '@app/redux/features/activeToolSlice';
 import { useAppDispatch } from '@app/redux/hooks';
 import { useCallback } from 'react';
-import { ApiSuccessResponse, Tool } from '@app/types';
+import { Tool } from '@app/types';
 import { useBaseElementUpdateName } from './useBaseElementUpdateName';
 import { ReferenceUpdate } from './useToolUpdateReference';
 
@@ -20,8 +20,8 @@ export const useActionUpdateName = (prevName: string) => {
   );
 
   const handleSuccess = useCallback(
-    (newName: string, response: ApiSuccessResponse<Tool>) => {
-      const updatedAction = response.data.actions.find((action) => action.name === newName);
+    (newName: string, updatedTool: Tool) => {
+      const updatedAction = updatedTool.actions.find((action) => action.name === newName);
 
       if (!updatedAction) {
         return;

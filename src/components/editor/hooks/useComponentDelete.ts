@@ -1,7 +1,6 @@
 import { resetComponentInput } from '@app/redux/features/activeToolSlice';
 import { blurComponent } from '@app/redux/features/editorSlice';
 import { useAppDispatch } from '@app/redux/hooks';
-import { isSuccessfulApiResponse } from '@app/utils/api';
 import { useCallback } from 'react';
 import { useActiveTool } from './useActiveTool';
 
@@ -10,11 +9,11 @@ export const useComponentDelete = (name: string) => {
   const { tool, updateTool } = useActiveTool();
 
   const handleDeleteComponent = useCallback(async () => {
-    const response = await updateTool({
+    const updatedTool = await updateTool({
       components: tool.components.filter((currComponent) => currComponent.name !== name),
     });
 
-    if (!isSuccessfulApiResponse(response)) {
+    if (!updatedTool) {
       return false;
     }
 

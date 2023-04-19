@@ -8,7 +8,6 @@ import {
 import { useAppSelector } from '@app/redux/hooks';
 import { Component, ComponentType } from '@app/types';
 import { renderHook } from '@testing-library/react';
-import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { mockComponentLayout } from '@tests/constants/data';
 import { Layout } from 'react-grid-layout';
 import { createNewComponent } from '../../utils/components';
@@ -193,7 +192,7 @@ describe('useReactGridLayoutProps', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         newComponent: mockNewComponent,
       }));
-      mockUpdateTool.mockImplementation(() => mockApiSuccessResponse);
+      mockUpdateTool.mockImplementation(() => ({}));
 
       const { result } = renderHook(() => useReactGridLayoutProps());
 
@@ -212,7 +211,7 @@ describe('useReactGridLayoutProps', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         newComponent: mockNewComponent,
       }));
-      mockUpdateTool.mockImplementation(() => mockApiErrorResponse);
+      mockUpdateTool.mockImplementation(() => undefined);
 
       const { result } = renderHook(() => useReactGridLayoutProps());
 

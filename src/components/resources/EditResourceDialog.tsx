@@ -1,7 +1,6 @@
 import { useUpdateResourceMutation } from '@app/redux/services/resources';
 import { Resource } from '@app/types';
 import { useCallback } from 'react';
-import { isSuccessfulApiResponse } from '@app/utils/api';
 import { BaseResourceDialog } from './BaseResourceDialog';
 
 type EditResourceDialogProps = {
@@ -22,13 +21,12 @@ export const EditResourceDialog = ({
   const [updateResource, { isLoading, error }] = useUpdateResourceMutation();
 
   const handleUpdateResource = useCallback(async () => {
-    const response = await updateResource(resource);
-
-    if (!isSuccessfulApiResponse(response)) {
-      return;
+    try {
+      await updateResource(resource).unwrap();
+      onClose();
+    } catch {
+      // Do nothing
     }
-
-    onClose();
   }, [updateResource, resource, onClose]);
 
   return (

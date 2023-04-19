@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
-import { mockApiErrorResponse, mockApiSuccessResponse } from '@tests/constants/api';
 import { validateVariableName } from '@app/utils/namespace';
+import { mockTool } from '@tests/constants/data';
 import { ReferenceUpdate } from '../useToolUpdateReference';
 import { useBaseElementUpdateName } from '../useBaseElementUpdateName';
 
@@ -107,7 +107,7 @@ describe('useBaseElementUpdateName', () => {
   describe('side effects', () => {
     describe('error', () => {
       beforeEach(() => {
-        mockUpdateTool.mockImplementation(() => mockApiErrorResponse);
+        mockUpdateTool.mockImplementation(() => undefined);
       });
 
       it('does not call onSuccess if API call fails', async () => {
@@ -125,7 +125,7 @@ describe('useBaseElementUpdateName', () => {
 
     describe('success', () => {
       beforeEach(() => {
-        mockUpdateTool.mockImplementation(() => mockApiSuccessResponse);
+        mockUpdateTool.mockImplementation(() => mockTool);
       });
 
       it('calls onSuccess with new name and response if API call succeeds', async () => {
@@ -137,7 +137,7 @@ describe('useBaseElementUpdateName', () => {
           })
         );
         await result.current(mockNewName);
-        expect(mockHandleSuccess).toHaveBeenCalledWith(mockNewName, mockApiSuccessResponse);
+        expect(mockHandleSuccess).toHaveBeenCalledWith(mockNewName, mockTool);
       });
     });
   });
