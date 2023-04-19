@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
 import { render } from '@tests/utils/renderWithContext';
 import { mockSmartContractResource } from '@tests/constants/data';
+import { mockApiError } from '@tests/constants/api';
 import { ResourceDataGrid } from '../ResourceDataGrid';
 
 const mockResources: Resource[] = [
@@ -15,10 +16,15 @@ const mockResources: Resource[] = [
 
 jest.mock('@app/redux/services/resources', () => ({
   ...jest.requireActual('@app/redux/services/resources'),
-  useGetResourcesQuery: jest.fn(() => ({ data: mockResources })),
+  useGetResourcesQuery: jest.fn(),
 }));
 
 describe('ResourceDataGrid', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useGetResourcesQuery as jest.Mock).mockImplementation(() => ({ data: mockResources }));
+  });
+
   it('queries resources with input value', async () => {
     render(<ResourceDataGrid />);
 
@@ -49,5 +55,17 @@ describe('ResourceDataGrid', () => {
     expect(screen.getByText(mockResources[0].name)).toBeTruthy();
     expect(screen.getByText(`(${mockResources[0].data.smartContract?.address})`)).toBeTruthy();
     expect(screen.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
+  });
+
+  it('renders empty placeholder', () => {
+    (useGetResourcesQuery as jest.Mock).mockImplementation(() => ({ data: [] }));
+    render(<ResourceDataGrid />);
+    expect(screen.getByText('No resources')).toBeTruthy();
+  });
+
+  it('renders error', () => {
+    (useGetResourcesQuery as jest.Mock).mockImplementation(() => ({ error: mockApiError }));
+    render(<ResourceDataGrid />);
+    expect(screen.getByText(mockApiError.data.message)).toBeTruthy();
   });
 });

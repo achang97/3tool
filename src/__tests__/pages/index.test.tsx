@@ -4,6 +4,7 @@ import { Tool } from '@app/types';
 import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import { useGetToolsQuery } from '@app/redux/services/tools';
+import { mockApiError } from '@tests/constants/api';
 
 const mockTools: Tool[] = [
   {
@@ -37,6 +38,12 @@ describe('Home', () => {
     (useGetToolsQuery as jest.Mock).mockImplementation(() => ({ isLoading: true }));
     render(<ToolsPage />);
     expect(screen.getByTestId('fullscreen-loader')).toBeTruthy();
+  });
+
+  it('renders error', () => {
+    (useGetToolsQuery as jest.Mock).mockImplementation(() => ({ error: mockApiError }));
+    render(<ToolsPage />);
+    expect(screen.getByText(mockApiError.data.message)).toBeTruthy();
   });
 
   it('renders create tool thumbnail', async () => {

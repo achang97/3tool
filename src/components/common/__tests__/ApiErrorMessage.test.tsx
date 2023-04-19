@@ -1,13 +1,7 @@
 import { screen, render } from '@testing-library/react';
 import { Typography } from '@mui/material';
+import { mockApiError } from '@tests/constants/api';
 import { ApiErrorMessage } from '../ApiErrorMessage';
-
-const mockApiError = {
-  status: 400,
-  data: {
-    message: 'Error message',
-  },
-};
 
 jest.mock('@mui/material', () => {
   const ActualMui = jest.requireActual('@mui/material');
@@ -25,6 +19,16 @@ describe('ApiErrorMessage', () => {
   it('renders error', () => {
     render(<ApiErrorMessage error={mockApiError} />);
     expect(screen.getByText(mockApiError.data.message)).toBeTruthy();
+  });
+
+  it('passes default body2 variant to Typography', () => {
+    render(<ApiErrorMessage error={mockApiError} />);
+    expect(Typography).toHaveBeenCalledWith(expect.objectContaining({ variant: 'body2' }), {});
+  });
+
+  it('passes custom variant to Typography', () => {
+    render(<ApiErrorMessage error={mockApiError} variant="inherit" />);
+    expect(Typography).toHaveBeenCalledWith(expect.objectContaining({ variant: 'inherit' }), {});
   });
 
   it('passes sx to Typography', () => {

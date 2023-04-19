@@ -3,7 +3,11 @@ import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { ReactElement, useContext } from 'react';
 import { Tool } from '@app/types';
-import { createMockApiErrorResponse, createMockApiSuccessResponse } from '@tests/constants/api';
+import {
+  createMockApiErrorResponse,
+  createMockApiSuccessResponse,
+  mockApiError,
+} from '@tests/constants/api';
 import { useToolDataDepGraph } from '../../hooks/useToolDataDepGraph';
 import {
   ToolEvalDataMap,
@@ -195,12 +199,6 @@ describe('ActiveToolContext', () => {
     });
 
     it('displays error snackbar if update fails', async () => {
-      const mockApiError = {
-        status: 400,
-        data: {
-          message: 'Error Message',
-        },
-      };
       mockUpdateTool.mockImplementation(() => createMockApiErrorResponse(mockApiError));
 
       const { result } = renderHook(() => useContext(ActiveToolContext), {

@@ -6,17 +6,18 @@ import { ForwardedRef, forwardRef, useMemo } from 'react';
 
 type ApiErrorMessageProps = {
   error: ApiError | SerializedError;
+  variant?: TypographyProps['variant'];
   sx?: TypographyProps['sx'];
 };
 
 export const ApiErrorMessage = forwardRef(
-  ({ error, sx }: ApiErrorMessageProps, ref: ForwardedRef<HTMLSpanElement>) => {
+  ({ error, variant = 'body2', sx }: ApiErrorMessageProps, ref: ForwardedRef<HTMLSpanElement>) => {
     const errorMessage = useMemo(() => {
       return parseApiError(error);
     }, [error]);
 
     return (
-      <Typography ref={ref} color="error" variant="body2" sx={{ textAlign: 'center', ...sx }}>
+      <Typography ref={ref} color="error" variant={variant} sx={{ textAlign: 'center', ...sx }}>
         {errorMessage}
       </Typography>
     );
