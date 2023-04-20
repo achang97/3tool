@@ -56,7 +56,7 @@ export const AuthContainer = ({
           boxShadow: 3,
         }}
       >
-        <Link href="/">
+        <Link href="/" style={{ alignSelf: 'flex-start' }}>
           <Image src={logo} alt="Elixir logo" style={{ height: '40px' }} />
         </Link>
         <Stack sx={{ marginY: 3 }} spacing={1}>
