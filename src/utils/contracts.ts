@@ -1,27 +1,9 @@
 import axios from 'axios';
 import { init as etherscanInit } from 'etherscan-api';
 import { Abi } from 'abitype';
-import { mainnet, goerli } from 'wagmi';
-import { CHAINS_BY_ID, CHAIN_EXPLORER_URLS_BY_ID, ETHERSCAN_API_KEY } from '@app/constants';
+import { CHAINS_BY_ID, CHAIN_EXPLORER_URLS_BY_ID, CHAIN_APIS_BY_ID } from '@app/constants';
 
 const TIMEOUT = 10_000;
-
-export const ETHERSCAN_CONFIGS: Record<
-  number,
-  {
-    etherscanEndpoint: string;
-    apiKey: string;
-  }
-> = {
-  [mainnet.id]: {
-    etherscanEndpoint: 'https://api.etherscan.io',
-    apiKey: ETHERSCAN_API_KEY,
-  },
-  [goerli.id]: {
-    etherscanEndpoint: 'https://api-goerli.etherscan.io',
-    apiKey: ETHERSCAN_API_KEY,
-  },
-};
 
 export const getTransactionUrl = (chainId: number, transactionHash: string): string => {
   const baseUrl = CHAIN_EXPLORER_URLS_BY_ID[chainId];
@@ -32,14 +14,14 @@ export const getTransactionUrl = (chainId: number, transactionHash: string): str
 };
 
 export const getContractAbi = async (address: string, chainId: number): Promise<Abi> => {
-  const config = ETHERSCAN_CONFIGS[chainId];
-
-  if (!config) {
+  if (!Object.keys(CHAIN_APIS_BY_ID).includes(chainId.toString())) {
     throw new Error(`Invalid chainId ${chainId}`);
   }
 
+  const config = CHAIN_APIS_BY_ID[chainId as keyof typeof CHAIN_APIS_BY_ID];
+
   const client = axios.create({
-    baseURL: config.etherscanEndpoint,
+    baseURL: config.apiUrl,
     timeout: TIMEOUT,
   });
   const etherscanClient = etherscanInit(

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { init as etherscanInit } from 'etherscan-api';
-import { CHAINS_BY_ID } from '@app/constants';
+import { CHAINS_BY_ID, CHAIN_APIS_BY_ID } from '@app/constants';
 import { mainnet } from 'wagmi';
-import { ETHERSCAN_CONFIGS, getContractAbi, getTransactionUrl } from '../contracts';
+import { getContractAbi, getTransactionUrl } from '../contracts';
 
 const mockEtherscanClient = {
   contract: {
@@ -50,7 +50,7 @@ describe('contracts', () => {
       await getContractAbi('0x123', mainnet.id);
 
       expect(etherscanInit as jest.Mock).toHaveBeenCalledWith(
-        ETHERSCAN_CONFIGS[mainnet.id].apiKey,
+        CHAIN_APIS_BY_ID[mainnet.id].apiKey,
         CHAINS_BY_ID[mainnet.id].network,
         expect.any(Number),
         mockAxiosClient
