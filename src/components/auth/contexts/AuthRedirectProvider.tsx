@@ -8,7 +8,7 @@ type AuthRedirectProviderProps = {
   children: ReactNode;
 };
 
-const UNAUTHED_ROUTES = ['/login'];
+const UNAUTHED_ROUTES = ['/login', '/acceptInvite', '/forgotPassword', '/resetPassword'];
 
 export const AuthRedirectProvider = ({ children }: AuthRedirectProviderProps) => {
   const user = useUser();

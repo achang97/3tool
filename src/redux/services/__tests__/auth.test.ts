@@ -1,6 +1,11 @@
-import { act } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
-import { useLoginMutation, useLogoutMutation } from '../auth';
+import {
+  useApplyForgotPasswordMutation,
+  useForgotPasswordMutation,
+  useLoginMutation,
+  useLogoutMutation,
+} from '../auth';
 
 const mockResponse = new Response('response');
 
@@ -48,6 +53,57 @@ describe('resources', () => {
           url: '/auth/logout',
         })
       );
+    });
+  });
+
+  describe('useForgotPasswordMutation', () => {
+    it('calls fetch to POST /auth/forgotPassword', async () => {
+      const mockBody = {
+        email: 'email@test.com',
+      };
+
+      const { result } = renderHook(() => useForgotPasswordMutation());
+      const [submitForgotPassword] = result.current;
+
+      await act(async () => {
+        await submitForgotPassword(mockBody);
+      });
+
+      await waitFor(() => {
+        expect(fetch).toHaveBeenCalledWith(
+          expect.objectContaining({
+            method: 'POST',
+            url: '/auth/forgotPassword',
+            _bodyInit: JSON.stringify(mockBody),
+          })
+        );
+      });
+    });
+  });
+
+  describe('useApplyForgotPassword', () => {
+    it('calls fetch to POST /auth/forgotPassword/apply', async () => {
+      const mockBody = {
+        forgotPasswordToken: 'forgotPasswordToken',
+        password: 'password',
+      };
+
+      const { result } = renderHook(() => useApplyForgotPasswordMutation());
+      const [applyForgotPassword] = result.current;
+
+      await act(async () => {
+        await applyForgotPassword(mockBody);
+      });
+
+      await waitFor(() => {
+        expect(fetch).toHaveBeenCalledWith(
+          expect.objectContaining({
+            method: 'POST',
+            url: '/auth/forgotPassword/apply',
+            _bodyInit: JSON.stringify(mockBody),
+          })
+        );
+      });
     });
   });
 });

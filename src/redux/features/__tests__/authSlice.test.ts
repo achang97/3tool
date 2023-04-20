@@ -26,28 +26,38 @@ describe('authSlice', () => {
     expect(state).toEqual({});
   });
 
-  it('/auth/login fulfilled: sets tokens and user', async () => {
-    const loginAction = {
-      type: 'authApi/executeMutation/fulfilled',
-      payload: {
-        user: mockUser,
-        accessToken: 'accessToken',
-        refreshToken: 'refreshToken',
-      },
-      meta: {
-        arg: {
-          endpointName: authApi.endpoints.login.name,
-        },
-      },
-    };
-    const initialState = {};
-    const state = authReducer(initialState, loginAction);
-    expect(state.accessToken).toEqual(loginAction.payload.accessToken);
-    expect(state.refreshToken).toEqual(loginAction.payload.refreshToken);
-    expect(state.user).toEqual(loginAction.payload.user);
+  describe('login', () => {
+    it.each`
+      actionType    | endpointName
+      ${'authApi'}  | ${authApi.endpoints.login.name}
+      ${'authApi'}  | ${authApi.endpoints.applyForgotPassword.name}
+      ${'usersApi'} | ${usersApi.endpoints.acceptInvite.name}
+    `(
+      '$endpointName fulfilled: sets tokens and user',
+      async ({ actionType, endpointName }: { actionType: string; endpointName: string }) => {
+        const action = {
+          type: `${actionType}/executeMutation/fulfilled`,
+          payload: {
+            user: mockUser,
+            accessToken: 'accessToken',
+            refreshToken: 'refreshToken',
+          },
+          meta: {
+            arg: {
+              endpointName,
+            },
+          },
+        };
+        const initialState = {};
+        const state = authReducer(initialState, action);
+        expect(state.accessToken).toEqual(action.payload.accessToken);
+        expect(state.refreshToken).toEqual(action.payload.refreshToken);
+        expect(state.user).toEqual(action.payload.user);
+      }
+    );
   });
 
-  it('/users/me fulfilled: sets user', async () => {
+  it('/auth/forgotPassword/apply fulfilled: sets tokens and user', async () => {
     const getMyUserAction = {
       type: 'usersApi/executeQuery/fulfilled',
       payload: mockUser,

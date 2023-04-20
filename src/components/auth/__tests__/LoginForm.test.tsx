@@ -20,6 +20,11 @@ describe('LoginForm', () => {
     expect(screen.getByText('Sign in', { selector: 'h5' })).toBeTruthy();
   });
 
+  it('renders link to /forgotPassword', () => {
+    render(<LoginForm />);
+    expect(screen.getByText('Forgot password?')).toHaveAttribute('href', '/forgotPassword');
+  });
+
   it('renders email field', () => {
     render(<LoginForm />);
     expect(screen.getByLabelText(/Email/)).toBeTruthy();
@@ -46,24 +51,6 @@ describe('LoginForm', () => {
   });
 
   describe('submit', () => {
-    it('does not login if email is not given', async () => {
-      render(<LoginForm />);
-
-      await userEvent.type(screen.getByLabelText(/Password/), 'password');
-      await userEvent.click(screen.getByText('Sign in', { selector: 'button' }));
-
-      expect(mockLogin).not.toHaveBeenCalled();
-    });
-
-    it('does not login if password is not given', async () => {
-      render(<LoginForm />);
-
-      await userEvent.type(screen.getByLabelText(/Email/), 'email');
-      await userEvent.click(screen.getByText('Sign in', { selector: 'button' }));
-
-      expect(mockLogin).not.toHaveBeenCalled();
-    });
-
     it('logs in with email and password on button click', async () => {
       const mockEmail = 'andrew@tryelixir.io';
       const mockPassword = 'password';

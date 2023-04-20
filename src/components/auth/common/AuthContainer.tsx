@@ -5,6 +5,7 @@ import logo from '@app/resources/images/logo.svg';
 import { LoadingButton, LoadingButtonProps } from '@mui/lab';
 import { ApiErrorResponse } from '@app/types';
 import { ApiErrorMessage } from '@app/components/common/ApiErrorMessage';
+import Link from 'next/link';
 
 type AuthContainerProps = {
   title: string;
@@ -55,8 +56,10 @@ export const AuthContainer = ({
           boxShadow: 3,
         }}
       >
-        <Image src={logo} alt="Elixir logo" style={{ height: '40px' }} />
-        <Stack sx={{ marginTop: 4, marginBottom: 2 }}>
+        <Link href="/">
+          <Image src={logo} alt="Elixir logo" style={{ height: '40px' }} />
+        </Link>
+        <Stack sx={{ marginY: 3 }} spacing={1}>
           <Typography variant="h5">{title}</Typography>
           <Typography variant="body2">{subtitle}</Typography>
         </Stack>

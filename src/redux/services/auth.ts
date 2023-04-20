@@ -27,7 +27,36 @@ export const authApi = createApi({
         method: 'POST',
       }),
     }),
+    forgotPassword: builder.mutation<void, { email: string }>({
+      query: (body) => ({
+        url: '/auth/forgotPassword',
+        method: 'POST',
+        body,
+      }),
+    }),
+    applyForgotPassword: builder.mutation<
+      {
+        user: User;
+        accessToken: string;
+        refreshToken: string;
+      },
+      {
+        forgotPasswordToken: string;
+        password: string;
+      }
+    >({
+      query: (body) => ({
+        url: '/auth/forgotPassword/apply',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation } = authApi;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useForgotPasswordMutation,
+  useApplyForgotPasswordMutation,
+} = authApi;

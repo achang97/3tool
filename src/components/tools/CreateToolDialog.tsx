@@ -65,13 +65,7 @@ export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => 
         </form>
       </DialogContent>
       <DialogActions>
-        <LoadingButton
-          type="submit"
-          form={FORM_ID}
-          loading={isLoading}
-          fullWidth
-          disabled={!name || isLoading}
-        >
+        <LoadingButton type="submit" form={FORM_ID} loading={isLoading} fullWidth>
           Create tool
         </LoadingButton>
       </DialogActions>

@@ -1,6 +1,7 @@
 import { useLoginMutation } from '@app/redux/services/auth';
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { ChangeEvent, useCallback, useState } from 'react';
+import Link from 'next/link';
 import { AuthContainer } from './common/AuthContainer';
 
 export const LoginForm = () => {
@@ -44,6 +45,9 @@ export const LoginForm = () => {
         onChange={handlePasswordChange}
         required
       />
+      <Button variant="text" sx={{ alignSelf: 'flex-start' }}>
+        <Link href="/forgotPassword">Forgot password?</Link>
+      </Button>
     </AuthContainer>
   );
 };

@@ -42,7 +42,7 @@ describe('CreateToolDialog', () => {
     render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     const submitButton = screen.getByText('Create tool');
-    expect(() => userEvent.click(submitButton)).rejects.toThrow(/pointer-events: none/);
+    await userEvent.click(submitButton);
 
     expect(mockCreateTool).not.toHaveBeenCalled();
   });

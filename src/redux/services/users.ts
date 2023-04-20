@@ -10,7 +10,26 @@ export const usersApi = createApi({
     getMyUser: builder.query<User, void>({
       query: () => '/users/me',
     }),
+    acceptInvite: builder.mutation<
+      {
+        user: User;
+        accessToken: string;
+        refreshToken: string;
+      },
+      {
+        inviteToken: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+      }
+    >({
+      query: (body) => ({
+        url: '/users/invite/accept',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetMyUserQuery } = usersApi;
+export const { useGetMyUserQuery, useAcceptInviteMutation } = usersApi;
