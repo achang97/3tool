@@ -1,5 +1,14 @@
 import { COMPONENT_DATA_TEMPLATES } from '@app/constants';
-import { ActionType, ComponentType, Resource, ResourceType, Tool, User } from '@app/types';
+import {
+  ActionType,
+  ComponentType,
+  InviteStatus,
+  Resource,
+  ResourceType,
+  Tool,
+  User,
+  UserInvite,
+} from '@app/types';
 
 export const mockValidAddresses = [
   '0xf33Cb58287017175CADf990c9e4733823704aA86',
@@ -21,6 +30,35 @@ export const mockUser: User = {
     isEditor: true,
     isViewer: true,
   },
+};
+
+export const mockEditorRoleUser: User = {
+  _id: 'user_2',
+  email: 'akshay@tryelixir.io',
+  firstName: 'Akshay',
+  lastName: 'Ramaswamy',
+  companyId: '123',
+  state: {
+    isPasswordSet: true,
+  },
+  roles: {
+    isAdmin: false,
+    isEditor: true,
+    isViewer: false,
+  },
+};
+
+export const mockPendingUserInvite: UserInvite = {
+  _id: 'invite_1',
+  email: 'chetan@@tryelixir.io',
+  companyId: 'company_1',
+  status: InviteStatus.Pending,
+  roles: {
+    isAdmin: false,
+    isEditor: true,
+    isViewer: true,
+  },
+  inviterUserId: 'user_1',
 };
 
 export const mockSmartContractResource: Resource = {

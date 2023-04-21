@@ -20,6 +20,7 @@ import { authApi } from './services/auth';
 import { toolsApi } from './services/tools';
 import { resourcesApi } from './services/resources';
 import { usersApi } from './services/users';
+import { companiesApi } from './services/companies';
 
 const authPersistConfig = {
   key: 'auth',
@@ -36,6 +37,7 @@ export const store = configureStore({
     [toolsApi.reducerPath]: toolsApi.reducer,
     [resourcesApi.reducerPath]: resourcesApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
+    [companiesApi.reducerPath]: companiesApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     const middlewareConfig = {
@@ -48,6 +50,7 @@ export const store = configureStore({
       toolsApi.middleware,
       resourcesApi.middleware,
       usersApi.middleware,
+      companiesApi.middleware,
     ];
 
     const middleware = getDefaultMiddleware(middlewareConfig).concat(...apiMiddlewares);

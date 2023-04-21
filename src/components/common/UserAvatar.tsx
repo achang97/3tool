@@ -3,16 +3,29 @@ import { stringToColor } from '@app/utils/styles';
 import { Avatar, SxProps, Tooltip } from '@mui/material';
 import { useMemo } from 'react';
 
-type UserAvatarProps = {
+type AvatarWithUser = {
   user: User;
-  sx?: SxProps;
-  size?: number;
+  email?: never;
 };
 
-export const UserAvatar = ({ user, sx, size = 30 }: UserAvatarProps) => {
+type AvatarWithEmail = {
+  user?: never;
+  email: string;
+};
+
+type UserAvatarProps = {
+  sx?: SxProps;
+  size?: number;
+} & (AvatarWithUser | AvatarWithEmail);
+
+/**
+ * Pass either `user` or `email` as props to `UserAvatar`. You cannot pass both the props simultaneously.
+ * `fullName` will be generated based on the prop that is passed.
+ */
+export const UserAvatar = ({ user, email, sx, size = 30 }: UserAvatarProps) => {
   const fullName = useMemo(() => {
-    return `${user.firstName} ${user.lastName}`;
-  }, [user.firstName, user.lastName]);
+    return user ? `${user.firstName} ${user.lastName}` : email;
+  }, [user, email]);
 
   const backgroundColor = useMemo(() => {
     return stringToColor(fullName);
@@ -28,7 +41,7 @@ export const UserAvatar = ({ user, sx, size = 30 }: UserAvatarProps) => {
           ...sx,
         }}
       >
-        {fullName[0]}
+        {fullName[0].toUpperCase()}
       </Avatar>
     </Tooltip>
   );

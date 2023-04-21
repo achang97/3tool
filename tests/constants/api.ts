@@ -1,14 +1,12 @@
 export const createMockApiSuccessResponse = <T>(data: T) => {
   return {
-    unwrap: () => data,
+    unwrap: () => Promise.resolve(data),
   };
 };
 
 export const createMockApiErrorResponse = (error: unknown) => {
   return {
-    unwrap: () => {
-      throw error as Error;
-    },
+    unwrap: () => Promise.reject(error),
   };
 };
 

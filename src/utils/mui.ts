@@ -293,10 +293,20 @@ export const theme = extendTheme({
         },
       },
     },
+    MuiDialogContent: {
+      defaultProps: {
+        dividers: true,
+      },
+      styleOverrides: {
+        dividers: {
+          borderBottom: 'none',
+        },
+      },
+    },
     MuiDialogActions: {
       styleOverrides: {
         root: {
-          padding: '8px 24px',
+          padding: '12px 24px',
         },
       },
     },
@@ -310,6 +320,28 @@ export const theme = extendTheme({
           notched: false,
         },
       },
+    },
+    MuiSelect: {
+      defaultProps: {
+        MenuProps: {
+          PaperProps: {
+            sx: { marginTop: 1 },
+          },
+        },
+      },
+      variants: [
+        {
+          props: { variant: 'filled' },
+          style: {
+            '&.MuiFilledInput-root': {
+              borderRadius: '8px',
+              '& .MuiFilledInput-input': {
+                paddingTop: '4px',
+              },
+            },
+          },
+        },
+      ],
     },
     MuiInputLabel: {
       styleOverrides: {

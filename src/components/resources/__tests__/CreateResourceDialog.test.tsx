@@ -119,7 +119,7 @@ describe('CreateResourceDialog', () => {
       />
     );
     await userEvent.click(screen.getByText('Save'));
-    expect(mockHandleCreate).toHaveBeenCalledWith(mockApiSuccessResponse.unwrap());
+    expect(mockHandleCreate).toHaveBeenCalledWith(await mockApiSuccessResponse.unwrap());
     expect(mockHandleClose).toHaveBeenCalled();
   });
 

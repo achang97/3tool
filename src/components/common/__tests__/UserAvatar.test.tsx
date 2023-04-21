@@ -24,17 +24,35 @@ describe('UserAvatar', () => {
     MockAvatar.mockClear();
   });
 
-  it('renders first letter of name', () => {
-    render(<UserAvatar user={mockUser} />);
+  describe('When user prop is passed', () => {
+    it('renders first letter of name', () => {
+      render(<UserAvatar user={mockUser} />);
 
-    expect(screen.getByText(mockUser.firstName[0])).toBeTruthy();
+      expect(screen.getByText(mockUser.firstName[0])).toBeTruthy();
+    });
+
+    it('shows tooltip of full name on hover', async () => {
+      render(<UserAvatar user={mockUser} />);
+
+      await userEvent.hover(screen.getByText(mockUser.firstName[0]));
+      expect(await screen.findByText(`${mockUser.firstName} ${mockUser.lastName}`)).toBeTruthy();
+    });
   });
 
-  it('shows tooltip of full name on hover', async () => {
-    render(<UserAvatar user={mockUser} />);
+  describe('When email prop is passed', () => {
+    const email = 'example@gmail.com';
+    it('renders first letter of email', () => {
+      render(<UserAvatar email={email} />);
 
-    await userEvent.hover(screen.getByText(mockUser.firstName[0]));
-    expect(await screen.findByText(`${mockUser.firstName} ${mockUser.lastName}`)).toBeTruthy();
+      expect(screen.getByText(email[0].toUpperCase())).toBeTruthy();
+    });
+
+    it('shows tooltip of email on hover', async () => {
+      render(<UserAvatar email={email} />);
+
+      await userEvent.hover(screen.getByText(email[0].toUpperCase()));
+      expect(await screen.findByText(`${email}`)).toBeTruthy();
+    });
   });
 
   it('uses default size of 30', () => {

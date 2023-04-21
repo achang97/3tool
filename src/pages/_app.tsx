@@ -62,7 +62,7 @@ const App = ({ Component, ...rest }: AppProps) => {
                     }}
                   >
                     <Toolbar />
-                    <Box sx={{ flex: 1, overflowY: 'scroll' }}>
+                    <Box sx={{ flex: 1, overflowY: 'auto' }}>
                       <Component {...props.pageProps} />
                     </Box>
                   </Stack>

@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { createTitle } from '@app/utils/window';
 import { SideNavProps } from '@app/components/common/SideNav';
 import { PageContainer } from '@app/components/common/PageContainer';
-import { PageTitle } from '../common/PageTitle';
 
 const sideNavConfig: SideNavProps['config'] = [
   {
@@ -28,10 +27,7 @@ export const SettingsPageLayout = ({ children, title }: SettingsPageLayoutProps)
         <title>{createTitle(`Settings | ${title}`)}</title>
       </Head>
       <main>
-        <PageContainer sideNavConfig={sideNavConfig}>
-          <PageTitle>{title}</PageTitle>
-          {children}
-        </PageContainer>
+        <PageContainer sideNavConfig={sideNavConfig}>{children}</PageContainer>
       </main>
     </>
   );
