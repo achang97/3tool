@@ -1,6 +1,8 @@
 import { ACTION_CONFIGS } from '@app/constants';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
+import { EventHandlerType } from '@app/types';
+import _ from 'lodash';
 import { useActionExecute } from './useActionExecute';
 import { useActiveTool } from './useActiveTool';
 
@@ -16,17 +18,27 @@ export const useActionMountExecute = (): HookReturnType => {
   const hasExecuted = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const readActions = useMemo(() => {
-    return tool.actions.filter((action) => ACTION_CONFIGS[action.type].mode === 'read');
+  const actionsToExecute = useMemo(() => {
+    const readActions = tool.actions.filter(
+      (action) => ACTION_CONFIGS[action.type].mode === 'read'
+    );
+    const readEventHandlerActions = _.flatten(
+      readActions.map((action) => {
+        return action.eventHandlers
+          .filter((eventHandler) => eventHandler.type === EventHandlerType.Action)
+          .map((eventHandler) => eventHandler.data.action?.actionName);
+      })
+    );
+    return readActions.filter((action) => !readEventHandlerActions.includes(action.name));
   }, [tool]);
 
   useEffect(() => {
     if (!hasExecuted.current && resources) {
       hasExecuted.current = true;
       setIsLoading(false);
-      readActions.forEach((action) => executeAction(action));
+      actionsToExecute.forEach((action) => executeAction(action));
     }
-  }, [executeAction, readActions, resources, hasExecuted]);
+  }, [executeAction, actionsToExecute, resources, hasExecuted]);
 
   return { isLoading };
 };

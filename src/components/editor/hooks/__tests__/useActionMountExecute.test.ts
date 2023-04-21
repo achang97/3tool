@@ -1,4 +1,4 @@
-import { ActionType } from '@app/types';
+import { ActionType, EventHandlerType } from '@app/types';
 import { renderHook } from '@testing-library/react';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
 import { useActionMountExecute } from '../useActionMountExecute';
@@ -22,7 +22,9 @@ describe('useActionMountExecute', () => {
   });
 
   it('does not execute if resources have not loaded', () => {
-    const mockActions = [{ type: ActionType.SmartContractRead }];
+    const mockActions = [
+      { name: 'action1', type: ActionType.SmartContractRead, eventHandlers: [] },
+    ];
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: {
         actions: mockActions,
@@ -35,11 +37,26 @@ describe('useActionMountExecute', () => {
     expect(result.current.isLoading).toEqual(true);
   });
 
-  it('executes all read actions on resource load', () => {
+  it('executes read actions not in event handler chains on resource load', () => {
     const mockActions = [
-      { type: ActionType.Javascript },
-      { type: ActionType.SmartContractRead },
-      { type: ActionType.SmartContractWrite },
+      { name: 'action1', type: ActionType.Javascript, eventHandlers: [] },
+      { name: 'action2', type: ActionType.SmartContractRead, eventHandlers: [] },
+      { name: 'action3', type: ActionType.SmartContractWrite, eventHandlers: [] },
+      {
+        name: 'action4',
+        type: ActionType.SmartContractRead,
+        eventHandlers: [
+          { type: EventHandlerType.Action, data: { action: { actionName: 'action5' } } },
+        ],
+      },
+      {
+        name: 'action5',
+        type: ActionType.SmartContractRead,
+        eventHandlers: [
+          { type: EventHandlerType.Action, data: { action: { actionName: 'action6' } } },
+        ],
+      },
+      { name: 'action6', type: ActionType.SmartContractRead, eventHandlers: [] },
     ];
     (useActiveTool as jest.Mock).mockImplementation(() => ({
       tool: {
@@ -50,8 +67,10 @@ describe('useActionMountExecute', () => {
 
     const { result } = renderHook(() => useActionMountExecute());
 
-    expect(mockExecuteAction).toHaveBeenCalledTimes(1);
+    // action2, action4
+    expect(mockExecuteAction).toHaveBeenCalledTimes(2);
     expect(mockExecuteAction).toHaveBeenCalledWith(mockActions[1]);
+    expect(mockExecuteAction).toHaveBeenCalledWith(mockActions[3]);
     expect(result.current.isLoading).toEqual(false);
   });
 
@@ -60,8 +79,9 @@ describe('useActionMountExecute', () => {
       tool: {
         actions: [
           {
-            type: ActionType.SmartContractRead,
             name: 'Old Action',
+            type: ActionType.SmartContractRead,
+            eventHandlers: [],
           },
         ],
       },
@@ -75,8 +95,9 @@ describe('useActionMountExecute', () => {
       tool: {
         actions: [
           {
-            type: ActionType.SmartContractRead,
             name: 'New Action',
+            type: ActionType.SmartContractRead,
+            eventHandlers: [],
           },
         ],
       },
