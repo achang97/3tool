@@ -2,7 +2,7 @@ import { DragEvent, ReactNode, useCallback, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 import { ComponentType } from '@app/types';
 import { useAppSelector, useAppDispatch } from '@app/redux/hooks';
-import { startCreateComponentDrag, endCreateComponentDrag } from '@app/redux/features/editorSlice';
+import { startCreateComponentDrag, stopCreateComponentDrag } from '@app/redux/features/editorSlice';
 import { createNameWithPrefix } from '../../utils/elements';
 import { useToolElementNames } from '../../hooks/useToolElementNames';
 
@@ -38,7 +38,7 @@ export const DraggableComponent = ({ label, icon, type }: DraggableComponentProp
   );
 
   const handleDragEnd = useCallback(() => {
-    dispatch(endCreateComponentDrag());
+    dispatch(stopCreateComponentDrag());
   }, [dispatch]);
 
   const isDragging = useMemo(() => type === newComponent?.type, [type, newComponent]);

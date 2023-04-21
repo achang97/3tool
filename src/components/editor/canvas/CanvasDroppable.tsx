@@ -16,8 +16,16 @@ type CanvasDroppableProps = {
 export const CanvasDroppable = ({ isEditable }: CanvasDroppableProps) => {
   const { tool } = useActiveTool();
 
-  const { onLayoutChange, onDrag, onDragStop, onDrop, layout, droppingItem } =
-    useReactGridLayoutProps();
+  const {
+    onLayoutChange,
+    onResizeStart,
+    onResizeStop,
+    onDrag,
+    onDragStop,
+    onDrop,
+    layout,
+    droppingItem,
+  } = useReactGridLayoutProps();
 
   const gridChildren = useMemo(() => {
     return tool.components.map((component) => (
@@ -40,6 +48,8 @@ export const CanvasDroppable = ({ isEditable }: CanvasDroppableProps) => {
         resizeHandles={['s', 'e', 'se']}
         layouts={{ lg: layout }}
         onLayoutChange={onLayoutChange}
+        onResizeStart={onResizeStart}
+        onResizeStop={onResizeStop}
         onDrag={onDrag}
         onDragStop={onDragStop}
         onDrop={onDrop}

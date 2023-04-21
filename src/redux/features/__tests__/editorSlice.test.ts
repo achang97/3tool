@@ -8,9 +8,9 @@ import {
 } from '@app/types';
 import editorReducer, {
   startCreateComponentDrag,
-  endCreateComponentDrag,
+  stopCreateComponentDrag,
   startMoveComponentDrag,
-  endMoveComponentDrag,
+  stopMoveComponentDrag,
   focusComponent,
   blurComponent,
   focusToolSettings,
@@ -23,6 +23,8 @@ import editorReducer, {
   setIsPreview,
   updateFocusedActionState,
   resetEditor,
+  startResizeComponent,
+  stopResizeComponent,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -43,7 +45,7 @@ describe('editorSlice', () => {
       expect(state.newComponent).toEqual(mockComponent);
     });
 
-    it('endCreateComponentDrag: unsets new component', () => {
+    it('stopCreateComponentDrag: unsets new component', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
@@ -57,7 +59,7 @@ describe('editorSlice', () => {
           type: ComponentType.Button,
         },
       };
-      const state = editorReducer(initialState, endCreateComponentDrag());
+      const state = editorReducer(initialState, stopCreateComponentDrag());
       expect(state.newComponent).toBeUndefined();
     });
   });
@@ -79,7 +81,7 @@ describe('editorSlice', () => {
       expect(state.movingComponentName).toEqual(mockComponentName);
     });
 
-    it('endMoveComponentDrag: unsets moving component name', () => {
+    it('stopMoveComponentDrag: unsets moving component name', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
@@ -90,8 +92,41 @@ describe('editorSlice', () => {
         },
         movingComponentName: 'name',
       };
-      const state = editorReducer(initialState, endMoveComponentDrag());
+      const state = editorReducer(initialState, stopMoveComponentDrag());
       expect(state.movingComponentName).toBeUndefined();
+    });
+  });
+
+  describe('resize', () => {
+    it('startResizeComponent: sets resizing component name', () => {
+      const mockComponentName = 'name';
+
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
+      };
+      const state = editorReducer(initialState, startResizeComponent(mockComponentName));
+      expect(state.resizingComponentName).toEqual(mockComponentName);
+    });
+
+    it('stopResizeComponent: unsets resizing component name', () => {
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        isActionViewMaximized: false,
+        isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
+        resizingComponentName: 'name',
+      };
+      const state = editorReducer(initialState, stopResizeComponent());
+      expect(state.resizingComponentName).toBeUndefined();
     });
   });
 

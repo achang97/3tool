@@ -1,9 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import {
-  endCreateComponentDrag,
-  endMoveComponentDrag,
+  stopCreateComponentDrag,
+  stopMoveComponentDrag,
+  stopResizeComponent,
   focusComponent,
   startMoveComponentDrag,
+  startResizeComponent,
 } from '@app/redux/features/editorSlice';
 import { Layout, ReactGridLayoutProps } from 'react-grid-layout';
 import { Component } from '@app/types';
@@ -16,6 +18,8 @@ import { useActiveTool } from './useActiveTool';
 type CustomReactGridLayoutProps = {
   onDrag: (_layout: Layout[], _oldComponent: Layout, component: Layout) => void;
   onDragStop: () => void;
+  onResizeStart: (_layout: Layout[], _oldComponent: Layout, component: Layout) => void;
+  onResizeStop: () => void;
   onLayoutChange: (newLayout: Layout[]) => void;
   onDrop: (newLayout: Layout[]) => Promise<void>;
   layout: Layout[];
@@ -63,8 +67,19 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
     };
   }, [newComponent]);
 
+  const onResizeStart = useCallback(
+    (_layout: Layout[], _oldComponent: Layout, component: Layout) => {
+      dispatch(startResizeComponent(component.i));
+    },
+    [dispatch]
+  );
+
+  const onResizeStop = useCallback(() => {
+    dispatch(stopResizeComponent());
+  }, [dispatch]);
+
   const onDrag = useCallback(
-    (_layout: Layout[], oldComponent: Layout, component: Layout) => {
+    (_layout: Layout[], _oldComponent: Layout, component: Layout) => {
       if (!newComponent && !movingComponentName) {
         dispatch(startMoveComponentDrag(component.i));
         dispatch(focusComponent(component.i));
@@ -74,7 +89,7 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
   );
 
   const onDragStop = useCallback(() => {
-    dispatch(endMoveComponentDrag());
+    dispatch(stopMoveComponentDrag());
   }, [dispatch]);
 
   const onDrop = useCallback(
@@ -92,7 +107,7 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
       const newComponents = [...prevComponents, newToolComponent];
 
       const updatedTool = await updateTool({ components: newComponents });
-      dispatch(endCreateComponentDrag());
+      dispatch(stopCreateComponentDrag());
       if (!updatedTool) {
         return;
       }
@@ -132,6 +147,8 @@ export const useReactGridLayoutProps = (): CustomReactGridLayoutProps => {
   return {
     layout,
     droppingItem,
+    onResizeStart,
+    onResizeStop,
     onDrag,
     onDragStop,
     onDrop,

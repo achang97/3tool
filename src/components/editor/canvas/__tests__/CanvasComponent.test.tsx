@@ -171,6 +171,72 @@ describe('CanvasComponent', () => {
       });
     });
 
+    describe('resizing', () => {
+      it('assigns "react-grid-item-resizing" class if name is equal to resizing component name', () => {
+        (useAppSelector as jest.Mock).mockImplementation(() => ({
+          componentInputs: {},
+          resizingComponentName: mockComponent.name,
+        }));
+        render(
+          <CanvasComponent component={mockComponent} isEditable>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = screen.getByText(mockChildren);
+        expect(component).toHaveClass('react-grid-item-resizing');
+      });
+
+      it('does not assign "react-grid-item-resizing" class if name is not equal to resizing component name', () => {
+        render(
+          <CanvasComponent component={mockComponent} isEditable>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = screen.getByText(mockChildren);
+        expect(component).not.toHaveClass('react-grid-item-resizing');
+      });
+    });
+
+    describe('preview', () => {
+      it('assigns "react-grid-item-preview" class if moving a component', () => {
+        (useAppSelector as jest.Mock).mockImplementation(() => ({
+          componentInputs: {},
+          movingComponentName: 'name',
+        }));
+        render(
+          <CanvasComponent component={mockComponent} isEditable>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = screen.getByText(mockChildren);
+        expect(component).toHaveClass('react-grid-item-preview');
+      });
+
+      it('assigns "react-grid-item-preview" class if resizing a component', () => {
+        (useAppSelector as jest.Mock).mockImplementation(() => ({
+          componentInputs: {},
+          resizingComponentName: 'name',
+        }));
+        render(
+          <CanvasComponent component={mockComponent} isEditable>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = screen.getByText(mockChildren);
+        expect(component).toHaveClass('react-grid-item-preview');
+      });
+
+      it('does not assign "react-grid-item-preview" class if neither resizing nor moving', () => {
+        render(
+          <CanvasComponent component={mockComponent} isEditable>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = screen.getByText(mockChildren);
+        expect(component).not.toHaveClass('react-grid-item-preview');
+      });
+    });
+
     describe('hovered', () => {
       it('assigns "react-grid-item-hovered" class if hovered over component', async () => {
         render(

@@ -1,9 +1,11 @@
 import { COMPONENT_CONFIGS } from '@app/constants';
 import {
-  endCreateComponentDrag,
-  endMoveComponentDrag,
+  stopCreateComponentDrag,
+  stopMoveComponentDrag,
   focusComponent,
   startMoveComponentDrag,
+  stopResizeComponent,
+  startResizeComponent,
 } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { Component, ComponentType } from '@app/types';
@@ -118,6 +120,24 @@ describe('useReactGridLayoutProps', () => {
     });
   });
 
+  describe('onResizeStart', () => {
+    it('dispatches action to start resizing', () => {
+      const { result } = renderHook(() => useReactGridLayoutProps());
+
+      result.current.onResizeStart([], {} as Layout, mockLayout);
+      expect(mockDispatch).toHaveBeenCalledWith(startResizeComponent(mockLayout.i));
+    });
+  });
+
+  describe('onResizeEnd', () => {
+    it('dispatches action to stop resizing', () => {
+      const { result } = renderHook(() => useReactGridLayoutProps());
+
+      result.current.onResizeStop();
+      expect(mockDispatch).toHaveBeenCalledWith(stopResizeComponent());
+    });
+  });
+
   describe('onDrag', () => {
     it('does nothing if creating new component', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
@@ -160,7 +180,7 @@ describe('useReactGridLayoutProps', () => {
       const { result } = renderHook(() => useReactGridLayoutProps());
 
       result.current.onDragStop();
-      expect(mockDispatch).toHaveBeenCalledWith(endMoveComponentDrag());
+      expect(mockDispatch).toHaveBeenCalledWith(stopMoveComponentDrag());
     });
   });
 
@@ -185,7 +205,7 @@ describe('useReactGridLayoutProps', () => {
       const { result } = renderHook(() => useReactGridLayoutProps());
 
       await result.current.onDrop([mockLayout]);
-      expect(mockDispatch).toHaveBeenCalledWith(endCreateComponentDrag());
+      expect(mockDispatch).toHaveBeenCalledWith(stopCreateComponentDrag());
     });
 
     it('calls updateTool with new component and focuses component on success', async () => {

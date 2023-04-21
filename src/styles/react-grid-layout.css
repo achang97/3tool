@@ -2,6 +2,7 @@
   --resize-handler-size: 8px;
   --outline-hover: 1px solid var(--mui-palette-primary-light);
   --outline-focus: 1px solid var(--mui-palette-primary-main);
+  --outline-preview: 1px dashed var(--mui-palette-primary-light);
   --background-grid: var(--mui-palette-background-paper);
   --background-placeholder: var(--mui-palette-greyscale-offwhite-dark);
 }
@@ -49,12 +50,12 @@
 }
 
 /* Resizing */
-.react-grid-item.resizing ~ .react-grid-item.react-grid-placeholder,
-.react-grid-item.resizing > *:first-child {
+.react-grid-item-resizing ~ .react-grid-item.react-grid-placeholder,
+.react-grid-item-resizing > *:first-child {
   visibility: hidden;
 }
 
-.react-grid-item.resizing {
+.react-grid-item-resizing {
   background: var(--background-placeholder);
 }
 
@@ -65,6 +66,11 @@
 
 .react-grid-item.react-grid-item-dragging ~ .react-grid-item.react-grid-placeholder {
   outline: var(--outline-focus);
+}
+
+/* Preview: when other element is being dragged or resized  */
+.react-grid-item-preview {
+  outline: var(--outline-preview);
 }
 
 /* Resizeable Handles */

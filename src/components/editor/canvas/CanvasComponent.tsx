@@ -42,7 +42,9 @@ export const CanvasComponent = forwardRef(
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const dispatch = useAppDispatch();
-    const { movingComponentName, focusedComponentName } = useAppSelector((state) => state.editor);
+    const { movingComponentName, focusedComponentName, resizingComponentName } = useAppSelector(
+      (state) => state.editor
+    );
     const eventHandlerCallbacks = useComponentEventHandlerCallbacks(component.eventHandlers);
 
     const errors = useComponentEvalErrors(component);
@@ -55,6 +57,10 @@ export const CanvasComponent = forwardRef(
     const isDragging = useMemo(() => {
       return component.name === movingComponentName;
     }, [component.name, movingComponentName]);
+
+    const isResizing = useMemo(() => {
+      return component.name === resizingComponentName;
+    }, [component.name, resizingComponentName]);
 
     const typedComponent = useMemo(() => {
       const TypedComponent = CANVAS_COMPONENT_MAP[component.type];
@@ -88,11 +94,27 @@ export const CanvasComponent = forwardRef(
       if (isDragging) {
         classes.push('react-grid-item-dragging');
       }
+      if (isResizing) {
+        classes.push('react-grid-item-resizing');
+      }
+      if (movingComponentName || resizingComponentName) {
+        classes.push('react-grid-item-preview');
+      }
       if (errors.length !== 0) {
         classes.push('react-grid-item-error');
       }
       return classes.join(' ');
-    }, [className, errors.length, isDragging, isEditable, isFocused, isHovered]);
+    }, [
+      className,
+      errors.length,
+      isDragging,
+      isEditable,
+      isFocused,
+      isHovered,
+      isResizing,
+      movingComponentName,
+      resizingComponentName,
+    ]);
 
     return (
       <Box

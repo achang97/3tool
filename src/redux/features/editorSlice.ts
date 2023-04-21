@@ -15,6 +15,7 @@ type EditorState = {
 
   // Reposition
   movingComponentName?: string;
+  resizingComponentName?: string;
   focusedComponentName?: string;
 
   // Sidebar
@@ -50,7 +51,7 @@ export const editorSlice = createSlice({
     startCreateComponentDrag: (state, action: PayloadAction<NewComponent>) => {
       state.newComponent = action.payload;
     },
-    endCreateComponentDrag: (state) => {
+    stopCreateComponentDrag: (state) => {
       state.newComponent = undefined;
     },
 
@@ -58,8 +59,16 @@ export const editorSlice = createSlice({
     startMoveComponentDrag: (state, action: PayloadAction<string>) => {
       state.movingComponentName = action.payload;
     },
-    endMoveComponentDrag: (state) => {
+    stopMoveComponentDrag: (state) => {
       state.movingComponentName = undefined;
+    },
+
+    // Resize
+    startResizeComponent: (state, action: PayloadAction<string>) => {
+      state.resizingComponentName = action.payload;
+    },
+    stopResizeComponent: (state) => {
+      state.resizingComponentName = undefined;
     },
 
     // Sidebar
@@ -116,9 +125,11 @@ export const editorSlice = createSlice({
 
 export const {
   startCreateComponentDrag,
-  endCreateComponentDrag,
+  stopCreateComponentDrag,
   startMoveComponentDrag,
-  endMoveComponentDrag,
+  stopMoveComponentDrag,
+  startResizeComponent,
+  stopResizeComponent,
   focusComponent,
   blurComponent,
   focusToolSettings,
