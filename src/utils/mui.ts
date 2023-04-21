@@ -4,6 +4,7 @@ import { gridClasses } from '@mui/x-data-grid';
 import type {} from '@mui/x-data-grid/themeAugmentation';
 import type {} from '@mui/lab/themeAugmentation';
 import { CSSProperties } from 'react';
+import { baseFont } from '@app/styles/font';
 
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
@@ -121,20 +122,7 @@ export const theme = extendTheme({
     borderRadius: 12,
   },
   typography: {
-    fontFamily: [
-      'Rubik',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      'Segoe UI',
-      'Roboto',
-      'Oxygen',
-      'Ubuntu',
-      'Cantarell',
-      'Fira Sans',
-      'Droid Sans',
-      'Helvetica Neue',
-      'sans-serif',
-    ].join(','),
+    fontFamily: baseFont,
     button: {
       textTransform: 'none',
     },

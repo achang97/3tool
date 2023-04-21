@@ -3,6 +3,7 @@ import { Web3Modal } from '@web3modal/react';
 import { WALLETCONNECT_PROJECT_ID } from '@app/constants';
 import { ethereumClient } from '@app/utils/wallet';
 import { useTheme } from '@mui/material';
+import { baseFont } from '@app/styles/font';
 import { ConnectWalletModal } from '../ConnectWalletModal';
 
 jest.mock('@web3modal/react', () => ({
@@ -55,7 +56,7 @@ describe('ConnectWalletModal', () => {
     expect(Web3Modal).toHaveBeenCalledWith(
       expect.objectContaining({
         themeVariables: {
-          '--w3m-font-family': 'Rubik',
+          '--w3m-font-family': baseFont,
           '--w3m-accent-color': mockPrimaryMainColor,
           '--w3m-background-color': mockPrimaryMainColor,
         },

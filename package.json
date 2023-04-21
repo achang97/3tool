@@ -35,7 +35,7 @@
     "@mui/lab": "^5.0.0-alpha.112",
     "@mui/material": "^5.11.2",
     "@mui/x-data-grid": "^5.17.17",
-    "@next/font": "13.0.7",
+    "@next/font": "^13.0.7",
     "@reduxjs/toolkit": "^1.9.1",
     "@safe-global/safe-core-sdk": "^3.2.1",
     "@safe-global/safe-core-sdk-types": "^1.7.0",

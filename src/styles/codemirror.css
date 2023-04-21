@@ -41,7 +41,7 @@
 }
 
 .cm-editor .cm-content {
-  font-family: 'Rubik';
+  font-family: var(--font-base);
   margin: 0;
   padding: 5px 0;
 }

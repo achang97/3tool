@@ -19,6 +19,7 @@ import '@app/styles/react-grid-layout.css';
 import '@app/styles/codemirror.css';
 import { PersistGate } from 'redux-persist/integration/react';
 import { AppSnackbarProvider } from '@app/components/common/AppSnackbarProvider';
+import { baseFont } from '@app/styles/font';
 
 // Start MSW on the server
 if (MSW_API) {
@@ -42,7 +43,11 @@ const App = ({ Component, ...rest }: AppProps) => {
   return (
     <>
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>{`
+          :root {
+            --font-base: ${baseFont};
+          }
+        `}</style>
       </Head>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

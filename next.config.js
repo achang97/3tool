@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  optimizeFonts: false,
   redirects: async () => {
     return [
       {
@@ -9,9 +8,8 @@ const nextConfig = {
         destination: '/settings/team',
         permanent: true,
       },
-    ]
+    ];
   },
-
 };
 
 module.exports = nextConfig;
