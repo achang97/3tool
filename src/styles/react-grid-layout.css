@@ -2,7 +2,7 @@
   --resize-handler-size: 8px;
   --outline-hover: 1px solid var(--mui-palette-primary-light);
   --outline-focus: 1px solid var(--mui-palette-primary-main);
-  --outline-preview: 1px dashed var(--mui-palette-primary-light);
+  --outline-preview: 1px dashed var(--mui-palette-primary-main);
   --background-grid: var(--mui-palette-background-paper);
   --background-placeholder: var(--mui-palette-greyscale-offwhite-dark);
 }
