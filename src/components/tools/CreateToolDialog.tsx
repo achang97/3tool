@@ -55,7 +55,6 @@ export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => 
             value={name}
             onChange={handleNameChange}
             fullWidth
-            required
             error={!!errorMessage}
             helperText={errorMessage}
             inputProps={{
@@ -65,7 +64,7 @@ export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => 
         </form>
       </DialogContent>
       <DialogActions>
-        <LoadingButton type="submit" form={FORM_ID} loading={isLoading} fullWidth>
+        <LoadingButton type="submit" form={FORM_ID} loading={isLoading} disabled={!name} fullWidth>
           Create tool
         </LoadingButton>
       </DialogActions>

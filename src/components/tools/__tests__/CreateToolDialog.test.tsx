@@ -38,13 +38,11 @@ describe('CreateToolDialog', () => {
     expect(screen.getByText('Create new tool')).toBeTruthy();
   });
 
-  it('does not call API to create tool if no tool name is provided', async () => {
+  it('disables button to create tool if no tool name is provided', async () => {
     render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
     const submitButton = screen.getByText('Create tool');
-    await userEvent.click(submitButton);
-
-    expect(mockCreateTool).not.toHaveBeenCalled();
+    expect(submitButton).toBeDisabled();
   });
 
   it('calls API to create tool on submit click', async () => {
