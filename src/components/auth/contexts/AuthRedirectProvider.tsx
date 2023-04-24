@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useMemo } from 'react';
 import { FullscreenLoader } from '@app/components/common/FullscreenLoader';
-import { useUser } from '@app/hooks/useUser';
+import { useSignedInUser } from '@app/hooks/useSignedInUser';
 import { useRouter } from 'next/router';
 import { useGetMyUserQuery } from '@app/redux/services/users';
 
@@ -11,7 +11,7 @@ type AuthRedirectProviderProps = {
 const UNAUTHED_ROUTES = ['/login', '/acceptInvite', '/forgotPassword', '/resetPassword'];
 
 export const AuthRedirectProvider = ({ children }: AuthRedirectProviderProps) => {
-  const user = useUser();
+  const user = useSignedInUser();
 
   // Refresh the current user if authed
   useGetMyUserQuery(undefined, { skip: !user });

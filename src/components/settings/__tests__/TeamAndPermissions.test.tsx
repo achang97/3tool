@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
 import userEvent from '@testing-library/user-event';
-import { useUser } from '@app/hooks/useUser';
+import { useSignedInUser } from '@app/hooks/useSignedInUser';
 import { mockEditorRoleUser, mockUser, mockPendingUserInvite } from '@tests/constants/data';
 import {
   useGetCompanyUsersQuery,
@@ -9,13 +9,12 @@ import {
   useUpdateCompanyUserMutation,
 } from '@app/redux/services/companies';
 import { mockApiError } from '@tests/constants/api';
-import { User } from '@app/types';
-import { TeamAndPermissions } from '../TeamAndPermissions';
+import { User, Role } from '@app/types';
 import { getUserRolesFlags } from '../utils/userRoleConversion';
-import { Role } from '../utils/types';
+import { TeamAndPermissions } from '../TeamAndPermissions';
 
-jest.mock('@app/hooks/useUser');
-jest.mocked(useUser).mockImplementation(() => mockUser);
+jest.mock('@app/hooks/useSignedInUser');
+jest.mocked(useSignedInUser).mockImplementation(() => mockUser);
 
 jest.mock('@app/redux/services/companies', () => ({
   __esModule: true,
@@ -112,7 +111,7 @@ describe('TeamAndPermissions', () => {
 
     it('disables the UserRole Select for the signed-in user if the signed-in user is an Admin as well', () => {
       const adminUser: User = { ...mockUser, roles: { ...mockUser.roles, isAdmin: true } };
-      jest.mocked(useUser).mockReturnValue(adminUser);
+      jest.mocked(useSignedInUser).mockReturnValue(adminUser);
       (useGetCompanyUsersQuery as jest.Mock).mockReturnValue({ data: [adminUser] });
       render(<TeamAndPermissions />);
 

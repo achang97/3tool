@@ -16,9 +16,9 @@ import React, { FormEvent, useState } from 'react';
 import { Add, EmailOutlined, PersonOutline } from '@mui/icons-material';
 import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
 import { useSendCompanyInviteMutation } from '@app/redux/services/companies';
-import { Role } from './utils/types';
-import { UserRoleSelect } from './UserRoleSelect';
+import { Role } from '@app/types/users';
 import { getUserRolesFlags } from './utils/userRoleConversion';
+import { UserRoleSelect } from './UserRoleSelect';
 import { ApiErrorMessage } from '../common/ApiErrorMessage';
 
 const DEFAULT_ROLE = Role.Editor;

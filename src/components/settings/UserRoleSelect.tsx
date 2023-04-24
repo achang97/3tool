@@ -1,6 +1,6 @@
 import React from 'react';
 import { MenuItem, Select, SelectProps } from '@mui/material';
-import { Role } from './utils/types';
+import { Role } from '@app/types/users';
 
 const ROLE_OPTIONS = [
   { id: Role.Admin, name: 'Admin' },

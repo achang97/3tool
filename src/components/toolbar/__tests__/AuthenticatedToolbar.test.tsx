@@ -8,8 +8,8 @@ import { AuthenticatedToolbar } from '../AuthenticatedToolbar';
 
 const mockLogout = jest.fn();
 
-jest.mock('@app/hooks/useUser', () => ({
-  useUser: jest.fn(() => mockUser),
+jest.mock('@app/hooks/useSignedInUser', () => ({
+  useSignedInUser: jest.fn(() => mockUser),
 }));
 
 jest.mock('@app/hooks/useLogout', () => ({

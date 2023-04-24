@@ -1,5 +1,4 @@
-import { User } from '@app/types';
-import { Role } from './types';
+import { User, Role } from '@app/types';
 
 export const getUserRole = (user: User) => {
   if (user.roles.isAdmin) return Role.Admin;

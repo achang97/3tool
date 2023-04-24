@@ -1,8 +1,8 @@
 import { render } from '@tests/utils/renderWithContext';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Role } from '@app/types/users';
 import { UserRoleSelect } from '../UserRoleSelect';
-import { Role } from '../utils/types';
 
 describe('UserRoleSelect', () => {
   it('renders UserRoleSelect with correct options', async () => {
@@ -28,7 +28,7 @@ describe('UserRoleSelect', () => {
 
     expect(mockHandleChange).toHaveBeenCalledWith(
       expect.objectContaining({ target: { value: Role.Admin } }),
-      expect.objectContaining({})
+      expect.any(Object)
     );
   });
 });

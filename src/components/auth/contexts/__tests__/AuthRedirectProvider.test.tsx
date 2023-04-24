@@ -1,6 +1,6 @@
 import { screen, render } from '@testing-library/react';
 import { useRouter } from 'next/router';
-import { useUser } from '@app/hooks/useUser';
+import { useSignedInUser } from '@app/hooks/useSignedInUser';
 import { mockUser } from '@tests/constants/data';
 import { useGetMyUserQuery } from '@app/redux/services/users';
 import { AuthRedirectProvider } from '../AuthRedirectProvider';
@@ -8,7 +8,7 @@ import { AuthRedirectProvider } from '../AuthRedirectProvider';
 const mockChildren = 'children';
 const mockPush = jest.fn();
 
-jest.mock('@app/hooks/useUser');
+jest.mock('@app/hooks/useSignedInUser');
 
 jest.mock('@app/redux/services/users', () => ({
   useGetMyUserQuery: jest.fn(),
@@ -30,7 +30,7 @@ describe('AuthRedirectProvider', () => {
 
   describe('authenticated', () => {
     beforeEach(() => {
-      (useUser as jest.Mock).mockImplementation(() => mockUser);
+      (useSignedInUser as jest.Mock).mockImplementation(() => mockUser);
     });
 
     it('renders children if on authed route', () => {
@@ -60,7 +60,7 @@ describe('AuthRedirectProvider', () => {
 
   describe('unauthenticated', () => {
     beforeEach(() => {
-      (useUser as jest.Mock).mockImplementation(() => undefined);
+      (useSignedInUser as jest.Mock).mockImplementation(() => undefined);
     });
 
     it('renders children if on unauthed route', () => {

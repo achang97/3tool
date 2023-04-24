@@ -4,11 +4,11 @@ import { TeamAndPermissions } from '@app/components/settings/TeamAndPermissions'
 import { PageTitle } from '@app/components/common/PageTitle';
 import { InviteCompanyUserButton } from '@app/components/settings/InviteCompanyUserButton';
 import { Stack } from '@mui/material';
-import { useUser } from '@app/hooks/useUser';
+import { useSignedInUserHasRole } from '@app/hooks/useSignedInUserHasRole';
+import { Role } from '@app/types';
 
 const Team = () => {
-  const signedInUser = useUser();
-  const isSignedInUserAdmin = signedInUser?.roles.isAdmin;
+  const isSignedInUserAdmin = useSignedInUserHasRole(Role.Admin);
 
   return (
     <SettingsPageLayout title="Team & Permissions">

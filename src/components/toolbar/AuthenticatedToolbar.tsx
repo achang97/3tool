@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMenuState } from '@app/hooks/useMenuState';
 import { MenuItem } from '@app/components/common/MenuItem';
-import { useUser } from '@app/hooks/useUser';
+import { useSignedInUser } from '@app/hooks/useSignedInUser';
 import { useLogout } from '@app/hooks/useLogout';
 import { ToolbarTemplate } from './common/ToolbarTemplate';
 
@@ -16,7 +16,7 @@ const AUTHENTICATED_LINKS = [
 ];
 
 export const AuthenticatedToolbar = () => {
-  const user = useUser();
+  const user = useSignedInUser();
   const logout = useLogout();
   const { pathname } = useRouter();
 

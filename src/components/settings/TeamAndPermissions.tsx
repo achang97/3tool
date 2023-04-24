@@ -5,20 +5,20 @@ import {
   useUpdateCompanyUserMutation,
   useGetPendingCompanyInvitesQuery,
 } from '@app/redux/services/companies';
-import { User } from '@app/types';
+import { User, Role } from '@app/types';
 import { parseApiError } from '@app/utils/api';
 import { useEnqueueSnackbar } from '@app/hooks/useEnqueueSnackbar';
-import { useUser } from '@app/hooks/useUser';
-import { UserAvatar } from '../common/UserAvatar';
-import { Role } from './utils/types';
-import { UserRoleSelect } from './UserRoleSelect';
+import { useSignedInUser } from '@app/hooks/useSignedInUser';
+import { useSignedInUserHasRole } from '@app/hooks/useSignedInUserHasRole';
 import { getUserRolesFlags, getUserRole } from './utils/userRoleConversion';
+import { UserAvatar } from '../common/UserAvatar';
+import { UserRoleSelect } from './UserRoleSelect';
 import { TeamMemberRow } from './TeamMemberRow';
 import { FullscreenLoader } from '../common/FullscreenLoader';
 
 export const TeamAndPermissions = () => {
-  const signedInUser = useUser();
-  const isSignedInUserAdmin = signedInUser?.roles.isAdmin;
+  const signedInUser = useSignedInUser();
+  const isSignedInUserAdmin = useSignedInUserHasRole(Role.Admin);
 
   const getCompanyUsersQuery = useGetCompanyUsersQuery();
   const getPendingCompanyInvitesQuery = useGetPendingCompanyInvitesQuery(undefined, {
@@ -75,7 +75,7 @@ export const TeamAndPermissions = () => {
             {user.firstName} {user.lastName}
           </Typography>
           <UserRoleSelect
-            disabled={isSignedInUserAdmin && user._id === signedInUser._id}
+            disabled={isSignedInUserAdmin && user._id === signedInUser?._id}
             value={getUserRole(user)}
             onChange={(e) => handleRoleChange(e, user)}
             variant="filled"

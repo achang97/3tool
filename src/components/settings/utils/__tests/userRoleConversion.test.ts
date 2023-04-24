@@ -1,5 +1,4 @@
-import { User } from '@app/types';
-import { Role } from '../types';
+import { User, Role } from '@app/types';
 import { getUserRole, getUserRolesFlags } from '../userRoleConversion';
 
 describe('userRoleConversion', () => {
