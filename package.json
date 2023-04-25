@@ -41,6 +41,7 @@
     "@safe-global/safe-core-sdk-types": "^1.7.0",
     "@safe-global/safe-ethers-lib": "^1.7.0",
     "@safe-global/safe-service-client": "^1.4.0",
+    "@segment/analytics-next": "^1.51.6",
     "@uiw/react-codemirror": "^4.19.4",
     "@wagmi/core": "^0.10.9",
     "@web3modal/ethereum": "^2.2.2",

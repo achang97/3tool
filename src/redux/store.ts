@@ -21,6 +21,7 @@ import { toolsApi } from './services/tools';
 import { resourcesApi } from './services/resources';
 import { usersApi } from './services/users';
 import { companiesApi } from './services/companies';
+import { identifyMiddleware } from './middleware/identifyMiddleware';
 
 const authPersistConfig = {
   key: 'auth',
@@ -53,7 +54,10 @@ export const store = configureStore({
       companiesApi.middleware,
     ];
 
-    const middleware = getDefaultMiddleware(middlewareConfig).concat(...apiMiddlewares);
+    const middleware = getDefaultMiddleware(middlewareConfig).concat(
+      ...apiMiddlewares,
+      identifyMiddleware
+    );
 
     return middleware;
   },
