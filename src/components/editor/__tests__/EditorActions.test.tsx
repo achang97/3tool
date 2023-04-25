@@ -40,6 +40,7 @@ describe('EditorActions', () => {
   it('renders action editor if action is focused', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       focusedAction: mockTool.actions[0],
+      actionResults: {},
     }));
     render(<EditorActions />);
     expect(screen.getByTestId('action-editor')).toBeTruthy();

@@ -1,8 +1,8 @@
-import { useActionIsEditing } from '@app/components/editor/hooks/useActionIsEditing';
+import { useActionFocusedState } from '@app/components/editor/hooks/useActionFocusedState';
 import { useActionSaveHandlers } from '@app/components/editor/hooks/useActionSaveHandlers';
 import { ACTION_CONFIGS } from '@app/constants';
 import { ActionType } from '@app/types';
-import { Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { useMemo } from 'react';
 
 type SaveRunButtonProps = {
@@ -10,7 +10,7 @@ type SaveRunButtonProps = {
 };
 
 export const SaveRunButton = ({ type }: SaveRunButtonProps) => {
-  const isEditing = useActionIsEditing();
+  const { isEditing, isLoading } = useActionFocusedState();
   const { saveAction, executeAction, saveAndExecuteAction } = useActionSaveHandlers();
 
   const mode = useMemo(() => {
@@ -40,8 +40,13 @@ export const SaveRunButton = ({ type }: SaveRunButtonProps) => {
   }, [executeAction, isEditing, mode, saveAction, saveAndExecuteAction]);
 
   return (
-    <Button size="small" onClick={buttonProps.onClick} data-testid="save-run-button">
+    <LoadingButton
+      size="small"
+      loading={isLoading}
+      onClick={buttonProps.onClick}
+      data-testid="save-run-button"
+    >
       {buttonProps.text}
-    </Button>
+    </LoadingButton>
   );
 };

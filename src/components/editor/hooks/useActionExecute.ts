@@ -1,6 +1,8 @@
 import { ActionResult } from '@app/constants';
 import { Action, ActionType } from '@app/types';
 import { useCallback } from 'react';
+import { useAppDispatch } from '@app/redux/hooks';
+import { startActionExecute } from '@app/redux/features/activeToolSlice';
 import { useActionHandleResult } from './useActionHandleResult';
 import { useActionJavascriptExecute } from './useActionJavascriptExecute';
 import { useActionSmartContractExecute } from './useActionSmartContractExecute';
@@ -15,6 +17,7 @@ export const useActionExecute = () => {
   const handleResult = useActionHandleResult();
   const track = useToolAnalyticsTrack();
   const mode = useToolMode();
+  const dispatch = useAppDispatch();
 
   const executeAction = useCallback(
     async (action: Action): Promise<ActionResult> => {
@@ -54,19 +57,26 @@ export const useActionExecute = () => {
         console.log(`[Error] ${action.name}:`, e);
       }
 
-      return { data, error, runtime: Date.now() - startTime };
+      return {
+        data,
+        error,
+        isLoading: false,
+        runtime: Date.now() - startTime,
+      };
     },
     [executeJavascript, transformData, readSmartContract, writeSmartContract]
   );
 
   const execute = useCallback(
     async (action: Action) => {
+      dispatch(startActionExecute(action.name));
       track('Action Start', {
         mode,
         actionType: action.type,
         actionId: action._id,
         actionName: action.name,
       });
+
       const result = await executeAction(action);
 
       track('Action Complete', {
@@ -81,7 +91,7 @@ export const useActionExecute = () => {
 
       return result;
     },
-    [executeAction, handleResult, mode, track]
+    [dispatch, executeAction, handleResult, mode, track]
   );
 
   return execute;

@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
-import { useActionIsEditing } from './useActionIsEditing';
+import { useActionFocusedState } from './useActionFocusedState';
 
 export const useActionConfirmDiscard = () => {
-  const isEditingFocusedAction = useActionIsEditing();
+  const { isEditing } = useActionFocusedState();
 
   const handleConfirmDiscard = useCallback(() => {
-    if (!isEditingFocusedAction) {
+    if (!isEditing) {
       return true;
     }
 
@@ -13,7 +13,7 @@ export const useActionConfirmDiscard = () => {
     return window.confirm(
       "You didn't save your action. Are you sure you want to discard your changes?"
     );
-  }, [isEditingFocusedAction]);
+  }, [isEditing]);
 
   return handleConfirmDiscard;
 };

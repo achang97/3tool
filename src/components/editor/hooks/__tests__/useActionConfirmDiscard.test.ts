@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react';
 import { useActionConfirmDiscard } from '../useActionConfirmDiscard';
-import { useActionIsEditing } from '../useActionIsEditing';
+import { useActionFocusedState } from '../useActionFocusedState';
 
-jest.mock('../useActionIsEditing');
+jest.mock('../useActionFocusedState');
 
 describe('useActionConfirmDiscard', () => {
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('useActionConfirmDiscard', () => {
   });
 
   it('does not ask for user confirmation if not editing', () => {
-    (useActionIsEditing as jest.Mock).mockImplementation(() => false);
+    (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: false }));
 
     const { result } = renderHook(() => useActionConfirmDiscard());
 
@@ -19,7 +19,7 @@ describe('useActionConfirmDiscard', () => {
   });
 
   it('shows confirmation alert if editing', () => {
-    (useActionIsEditing as jest.Mock).mockImplementation(() => true);
+    (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: true }));
     (window.confirm as jest.Mock).mockImplementation(() => true);
 
     const { result } = renderHook(() => useActionConfirmDiscard());
@@ -30,7 +30,7 @@ describe('useActionConfirmDiscard', () => {
   });
 
   it('returns true if user confirms in alert', () => {
-    (useActionIsEditing as jest.Mock).mockImplementation(() => true);
+    (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: true }));
     (window.confirm as jest.Mock).mockImplementation(() => true);
 
     const { result } = renderHook(() => useActionConfirmDiscard());
@@ -38,7 +38,7 @@ describe('useActionConfirmDiscard', () => {
   });
 
   it('returns false if user cancels in alert', () => {
-    (useActionIsEditing as jest.Mock).mockImplementation(() => true);
+    (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: true }));
     (window.confirm as jest.Mock).mockImplementation(() => false);
 
     const { result } = renderHook(() => useActionConfirmDiscard());

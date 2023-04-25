@@ -12,8 +12,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { DeleteDialog } from '../../common/DeleteDialog';
 import { useActionConfirmDiscard } from '../../hooks/useActionConfirmDiscard';
 import { useActionDelete } from '../../hooks/useActionDelete';
-import { useActionIsEditing } from '../../hooks/useActionIsEditing';
 import { useActionUpdateName } from '../../hooks/useActionUpdateName';
+import { useActionFocusedState } from '../../hooks/useActionFocusedState';
 
 type ActionListItemProps = {
   action: Action;
@@ -30,7 +30,7 @@ export const ActionListItem = ({ action }: ActionListItemProps) => {
 
   const handleUpdateActionName = useActionUpdateName(action.name);
   const handleDeleteAction = useActionDelete(action.name);
-  const isEditingFocusedAction = useActionIsEditing();
+  const { isEditing } = useActionFocusedState();
   const confirmDiscard = useActionConfirmDiscard();
 
   const isFocused = useMemo(() => {
@@ -38,8 +38,8 @@ export const ActionListItem = ({ action }: ActionListItemProps) => {
   }, [focusedAction, action.name]);
 
   const isNameEditable = useMemo(() => {
-    return isFocused && !isEditingFocusedAction;
-  }, [isEditingFocusedAction, isFocused]);
+    return isFocused && !isEditing;
+  }, [isEditing, isFocused]);
 
   const handleFocusClick = useCallback(() => {
     if (isFocused) {

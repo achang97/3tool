@@ -1,5 +1,5 @@
 import { useActionConfirmDiscard } from '@app/components/editor/hooks/useActionConfirmDiscard';
-import { useActionIsEditing } from '@app/components/editor/hooks/useActionIsEditing';
+import { useActionFocusedState } from '@app/components/editor/hooks/useActionFocusedState';
 import { focusAction } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { Action, ActionType } from '@app/types';
@@ -29,7 +29,7 @@ jest.mock('../../../hooks/useElementDependentFields', () => ({
   useElementDependentFields: jest.fn(() => mockDependents),
 }));
 
-jest.mock('../../../hooks/useActionIsEditing');
+jest.mock('../../../hooks/useActionFocusedState');
 jest.mock('../../../hooks/useActionConfirmDiscard');
 
 jest.mock('@app/redux/hooks', () => ({
@@ -49,7 +49,7 @@ describe('ActionListItem', () => {
     jest.clearAllMocks();
     (useAppSelector as jest.Mock).mockImplementation(() => ({}));
     (useActionConfirmDiscard as jest.Mock).mockImplementation(() => () => true);
-    (useActionIsEditing as jest.Mock).mockImplementation(() => false);
+    (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: false }));
   });
 
   it('renders name', () => {
@@ -117,7 +117,7 @@ describe('ActionListItem', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         focusedAction: mockAction,
       }));
-      (useActionIsEditing as jest.Mock).mockImplementation(() => true);
+      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: true }));
 
       render(<ActionListItem action={mockAction} />);
       await userEvent.click(screen.getByText(mockAction.name));
@@ -137,7 +137,7 @@ describe('ActionListItem', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         focusedAction: mockAction,
       }));
-      (useActionIsEditing as jest.Mock).mockImplementation(() => false);
+      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: false }));
 
       render(<ActionListItem action={mockAction} />);
       await userEvent.hover(screen.getByText(mockAction.name));
@@ -148,7 +148,7 @@ describe('ActionListItem', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         focusedAction: mockAction,
       }));
-      (useActionIsEditing as jest.Mock).mockImplementation(() => true);
+      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: true }));
 
       render(<ActionListItem action={mockAction} />);
       await userEvent.hover(screen.getByTestId(editableDisabledIconId));
@@ -161,7 +161,7 @@ describe('ActionListItem', () => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         focusedAction: mockAction,
       }));
-      (useActionIsEditing as jest.Mock).mockImplementation(() => false);
+      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: false }));
 
       render(<ActionListItem action={mockAction} />);
       await userEvent.click(screen.getByText(mockAction.name));

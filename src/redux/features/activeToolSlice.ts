@@ -34,6 +34,12 @@ export const activeToolSlice = createSlice({
     },
 
     // Action Results
+    startActionExecute: (state, action: PayloadAction<string>) => {
+      state.actionResults[action.payload] = {
+        ...state.actionResults[action.payload],
+        isLoading: true,
+      };
+    },
     setActionResult: (state, action: PayloadAction<{ name: string; result: ActionResult }>) => {
       const { name, result } = action.payload;
       state.actionResults[name] = result;
@@ -57,6 +63,7 @@ export const {
   setComponentInput,
   resetComponentInput,
   renameComponentInput,
+  startActionExecute,
   setActionResult,
   resetActionResult,
   renameActionResult,

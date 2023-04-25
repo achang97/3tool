@@ -6,6 +6,7 @@ import activeToolReducer, {
   resetComponentInput,
   setActionResult,
   setComponentInput,
+  startActionExecute,
 } from '../activeToolSlice';
 
 describe('activeToolSlice', () => {
@@ -55,6 +56,21 @@ describe('activeToolSlice', () => {
   });
 
   describe('action results', () => {
+    it('startActionExecute: sets isLoading field to true', () => {
+      const mockName = 'name';
+      const initialState = {
+        actionResults: {
+          [mockName]: { data: 'data' },
+        },
+        componentInputs: {},
+      };
+      const state = activeToolReducer(initialState, startActionExecute(mockName));
+      expect(state.actionResults[mockName]).toEqual({
+        isLoading: true,
+        data: 'data',
+      });
+    });
+
     it('setActionResult: sets result value for given action name', () => {
       const mockName = 'name';
       const mockResult = { data: 'data' };

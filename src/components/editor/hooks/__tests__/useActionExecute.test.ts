@@ -1,6 +1,6 @@
-import { ActionResult } from '@app/constants';
 import { Action, ActionType } from '@app/types';
 import { renderHook } from '@testing-library/react';
+import { startActionExecute } from '@app/redux/features/activeToolSlice';
 import { useActionExecute } from '../useActionExecute';
 import { useEvalArgs } from '../useEvalArgs';
 
@@ -9,6 +9,7 @@ const mockReadSmartContract = jest.fn();
 const mockWriteSmartContract = jest.fn();
 const mockTransformData = jest.fn();
 const mockTrack = jest.fn();
+const mockDispatch = jest.fn();
 
 const consoleLogSpy = jest.spyOn(console, 'log');
 const dateNowSpy = jest.spyOn(Date, 'now');
@@ -38,6 +39,10 @@ jest.mock('../useToolAnalyticsTrack', () => ({
 
 jest.mock('../useToolMode', () => ({
   useToolMode: jest.fn(() => mockMode),
+}));
+
+jest.mock('@app/redux/hooks', () => ({
+  useAppDispatch: jest.fn(() => mockDispatch),
 }));
 
 describe('useActionExecute', () => {
@@ -148,7 +153,7 @@ describe('useActionExecute', () => {
   });
 
   describe('error', () => {
-    it('returns error message', async () => {
+    it('returns object with error message', async () => {
       const { result } = renderHook(() => useActionExecute());
 
       const actionResult = await result.current({
@@ -189,7 +194,27 @@ describe('useActionExecute', () => {
     });
   });
 
-  describe('runtime', () => {
+  describe('general', () => {
+    it('dispatches action to start execution', async () => {
+      const { result } = renderHook(() => useActionExecute());
+      await result.current({
+        name: 'action1',
+        type: ActionType.Javascript,
+        data: { javascript: { code: 'return 1' } },
+      } as Action);
+      expect(mockDispatch).toHaveBeenCalledWith(startActionExecute('action1'));
+    });
+
+    it('returns isLoading as false', async () => {
+      const { result } = renderHook(() => useActionExecute());
+
+      const actionResult = await result.current({
+        type: ActionType.Javascript,
+        data: { javascript: { code: 'return 1' } },
+      } as Action);
+      expect(actionResult.isLoading).toEqual(false);
+    });
+
     it('returns runtime in milliseconds', async () => {
       const { result } = renderHook(() => useActionExecute());
 
@@ -216,12 +241,12 @@ describe('useActionExecute', () => {
       } as Action;
       await result.current(mockAction);
 
-      const mockResult: ActionResult = {
+      expect(mockHandleActionResult).toHaveBeenCalledWith(mockAction, {
         data: undefined,
         error: 'asdf is not defined',
         runtime: expect.any(Number),
-      };
-      expect(mockHandleActionResult).toHaveBeenCalledWith(mockAction, mockResult);
+        isLoading: false,
+      });
     });
   });
 

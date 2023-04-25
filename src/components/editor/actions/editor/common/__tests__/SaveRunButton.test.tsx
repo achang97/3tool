@@ -1,4 +1,4 @@
-import { useActionIsEditing } from '@app/components/editor/hooks/useActionIsEditing';
+import { useActionFocusedState } from '@app/components/editor/hooks/useActionFocusedState';
 import { ActionType } from '@app/types';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -8,7 +8,7 @@ const mockSaveAction = jest.fn();
 const mockExecuteAction = jest.fn();
 const mockSaveAndExecuteAction = jest.fn();
 
-jest.mock('@app/components/editor/hooks/useActionIsEditing');
+jest.mock('@app/components/editor/hooks/useActionFocusedState');
 
 jest.mock('@app/components/editor/hooks/useActionSaveHandlers', () => ({
   useActionSaveHandlers: jest.fn(() => ({
@@ -25,7 +25,7 @@ describe('SaveRunButton', () => {
 
   describe('run', () => {
     beforeEach(() => {
-      (useActionIsEditing as jest.Mock).mockImplementation(() => false);
+      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: false }));
     });
 
     it('displays "Run" text if not editing', () => {
@@ -42,7 +42,7 @@ describe('SaveRunButton', () => {
 
   describe('save', () => {
     beforeEach(() => {
-      (useActionIsEditing as jest.Mock).mockImplementation(() => true);
+      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: true }));
     });
 
     it('displays "Save" text if editing and in write mode', () => {
@@ -59,7 +59,7 @@ describe('SaveRunButton', () => {
 
   describe('save & run', () => {
     beforeEach(() => {
-      (useActionIsEditing as jest.Mock).mockImplementation(() => true);
+      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: true }));
     });
 
     it('displays "Save & Run" text if editing and in read mode', () => {
@@ -71,6 +71,14 @@ describe('SaveRunButton', () => {
       render(<SaveRunButton type={ActionType.SmartContractRead} />);
       await userEvent.click(screen.getByText('Save & Run'));
       expect(mockSaveAndExecuteAction).toHaveBeenCalled();
+    });
+  });
+
+  describe('loading', () => {
+    it('renders disabled button if loading', () => {
+      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isLoading: true }));
+      render(<SaveRunButton type={ActionType.SmartContractRead} />);
+      expect(screen.getByTestId('save-run-button')).toBeDisabled();
     });
   });
 });
