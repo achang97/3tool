@@ -46,6 +46,7 @@ type SmartContractReadData = SmartContractBaseData;
 type SmartContractWriteData = SmartContractBaseData;
 
 export type Action = {
+  _id?: string;
   name: string;
   type: ActionType;
   eventHandlers: EventHandler<ActionEvent>[];

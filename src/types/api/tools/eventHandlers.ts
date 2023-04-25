@@ -19,6 +19,7 @@ export type UrlData = {
 };
 
 export type EventHandler<T = any> = {
+  _id?: string;
   event: T;
   type: EventHandlerType;
   data: {

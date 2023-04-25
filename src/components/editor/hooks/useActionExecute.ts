@@ -5,18 +5,24 @@ import { useActionHandleResult } from './useActionHandleResult';
 import { useActionJavascriptExecute } from './useActionJavascriptExecute';
 import { useActionSmartContractExecute } from './useActionSmartContractExecute';
 import { useActionTransformer } from './useActionTransformer';
+import { useToolAnalyticsTrack } from './useToolAnalyticsTrack';
+import { useToolMode } from './useToolMode';
 
 export const useActionExecute = () => {
   const executeJavascript = useActionJavascriptExecute();
   const transformData = useActionTransformer();
   const { readSmartContract, writeSmartContract } = useActionSmartContractExecute();
   const handleResult = useActionHandleResult();
+  const track = useToolAnalyticsTrack();
+  const mode = useToolMode();
 
   const executeAction = useCallback(
     async (action: Action): Promise<ActionResult> => {
+      const startTime = Date.now();
       const actionData = action.data[action.type];
 
       let data: unknown;
+      let error: string | undefined;
       try {
         switch (action.type) {
           case ActionType.Javascript: {
@@ -43,26 +49,39 @@ export const useActionExecute = () => {
         // eslint-disable-next-line no-console
         console.log(`[Success] ${action.name}:`, data);
       } catch (e) {
+        error = (e as Error).message;
         // eslint-disable-next-line no-console
         console.log(`[Error] ${action.name}:`, e);
-        return {
-          data,
-          error: (e as Error).message,
-        };
       }
 
-      return { data };
+      return { data, error, runtime: Date.now() - startTime };
     },
     [executeJavascript, transformData, readSmartContract, writeSmartContract]
   );
 
   const execute = useCallback(
     async (action: Action) => {
+      track('Action Start', {
+        mode,
+        actionType: action.type,
+        actionId: action._id,
+        actionName: action.name,
+      });
       const result = await executeAction(action);
+
+      track('Action Complete', {
+        mode,
+        actionType: action.type,
+        actionId: action._id,
+        actionName: action.name,
+        runtime: result.runtime,
+        result: result.error ? 'failure' : 'success',
+      });
       handleResult(action, result);
+
       return result;
     },
-    [executeAction, handleResult]
+    [executeAction, handleResult, mode, track]
   );
 
   return execute;

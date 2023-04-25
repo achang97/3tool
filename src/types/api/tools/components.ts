@@ -9,6 +9,7 @@ export enum ComponentType {
 }
 
 export type Component = {
+  _id?: string;
   name: string;
   type: ComponentType;
   layout: {
