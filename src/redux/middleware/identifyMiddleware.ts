@@ -17,6 +17,7 @@ const identify = (user: User) => {
     },
     companyId: user.companyId,
   });
+  analytics.track('Sign In');
 };
 
 identifyListenerMiddleware.startListening({

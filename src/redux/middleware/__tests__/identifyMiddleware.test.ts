@@ -45,6 +45,7 @@ describe('identifyMiddleware', () => {
           },
           companyId: mockUser.companyId,
         });
+        expect(analytics.track).toHaveBeenCalledWith('Sign In');
       }
     );
   });
@@ -69,6 +70,7 @@ describe('identifyMiddleware', () => {
         },
         companyId: mockUser.companyId,
       });
+      expect(analytics.track).toHaveBeenCalledWith('Sign In');
     });
   });
 
