@@ -1,15 +1,16 @@
 import React from 'react';
 import { SettingsPageLayout } from '@app/components/settings/SettingsPageLayout';
-import { Typography } from '@mui/material';
 import { PageTitle } from '@app/components/common/PageTitle';
+import { UpdateUserName } from '@app/components/settings/UpdateUserName';
+import { Divider, Stack } from '@mui/material';
 
 const Account = () => {
   return (
     <SettingsPageLayout title="Account information">
       <PageTitle>Account information</PageTitle>
-      <Typography variant="h2" component="div" sx={{ marginTop: '100px', textAlign: 'center' }}>
-        Work in Progress
-      </Typography>
+      <Stack spacing={2} divider={<Divider />}>
+        <UpdateUserName />
+      </Stack>
     </SettingsPageLayout>
   );
 };

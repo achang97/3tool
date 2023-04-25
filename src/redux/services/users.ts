@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { User } from '@app/types';
 import { baseQueryWithReauth } from './common/baseQuery';
+import { companiesApi } from './companies';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -9,6 +10,7 @@ export const usersApi = createApi({
   endpoints: (builder) => ({
     getMyUser: builder.query<User, void>({
       query: () => '/users/me',
+      providesTags: ['Users'],
     }),
     acceptInvite: builder.mutation<
       {
@@ -29,7 +31,26 @@ export const usersApi = createApi({
         body,
       }),
     }),
+    updateMyUser: builder.mutation<
+      User,
+      Partial<Pick<User, 'firstName' | 'lastName'> & { password: string }>
+    >({
+      query: (body) => ({
+        url: `/users/me`,
+        method: 'PUT',
+        body,
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(companiesApi.util.invalidateTags(['CompanyUsers']));
+        } catch {
+          /* empty */
+        }
+      },
+      invalidatesTags: ['Users'],
+    }),
   }),
 });
 
-export const { useGetMyUserQuery, useAcceptInviteMutation } = usersApi;
+export const { useGetMyUserQuery, useAcceptInviteMutation, useUpdateMyUserMutation } = usersApi;

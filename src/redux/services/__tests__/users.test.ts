@@ -1,6 +1,6 @@
 import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@tests/utils/renderWithContext';
-import { useAcceptInviteMutation, useGetMyUserQuery } from '../users';
+import { useAcceptInviteMutation, useGetMyUserQuery, useUpdateMyUserMutation } from '../users';
 
 const mockResponse = new Response('response');
 
@@ -46,6 +46,33 @@ describe('users', () => {
           expect.objectContaining({
             method: 'POST',
             url: '/users/invite/accept',
+            _bodyInit: JSON.stringify(mockBody),
+          })
+        );
+      });
+    });
+  });
+
+  describe('useUpdateMyUserMutation', () => {
+    it('calls fetch to PUT /users/me', async () => {
+      const mockBody = {
+        password: 'password',
+        firstName: 'Andrew',
+        lastName: 'Chang',
+      };
+
+      const { result } = renderHook(() => useUpdateMyUserMutation());
+      const [updateMyUser] = result.current;
+
+      await act(async () => {
+        await updateMyUser(mockBody);
+      });
+
+      await waitFor(() => {
+        expect(fetch).toHaveBeenCalledWith(
+          expect.objectContaining({
+            method: 'PUT',
+            url: '/users/me',
             _bodyInit: JSON.stringify(mockBody),
           })
         );
