@@ -28,8 +28,9 @@ export const ThumbnailContainer = ({
   }, [href]);
 
   return (
-    <Grid item xs={3} data-testid={testId} onClick={onClick} {...linkProps}>
+    <Grid item xs={3} data-testid={testId}>
       <Stack
+        data-testid="thumbnail-container-content"
         sx={{
           alignItems: 'center',
           padding: 3,
@@ -38,6 +39,8 @@ export const ThumbnailContainer = ({
           cursor: 'pointer',
           height: '200px',
         }}
+        onClick={onClick}
+        {...linkProps}
       >
         <Stack
           sx={{

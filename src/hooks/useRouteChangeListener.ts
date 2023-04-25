@@ -27,10 +27,10 @@ export const useRouteChangeListener = () => {
         return { name: 'Team Settings' };
       case '/settings/account':
         return { name: 'Account Settings' };
-      case '/tools/[id]':
-        return { name: 'App View', properties: { toolId: query.id } };
-      case '/editor/[id]':
-        return { name: 'App Editor', properties: { toolId: query.id } };
+      case '/tools/[id]/[name]':
+        return { name: 'App View', properties: { toolId: query.id, toolName: query.name } };
+      case '/editor/[id]/[name]':
+        return { name: 'App Editor', properties: { toolId: query.id, toolName: query.name } };
       default:
         return null;
     }

@@ -37,11 +37,14 @@ describe('ThumbnailContainer', () => {
 
   it('adds href prop to item', async () => {
     const mockHref = '/test';
-    const result = render(
+    render(
       <ThumbnailContainer icon={mockIcon} href={mockHref}>
         {mockChildren}
       </ThumbnailContainer>
     );
-    expect(result.container.firstChild).toHaveProperty('href', `${BASE_WINDOW_URL}${mockHref}`);
+    expect(screen.getByTestId('thumbnail-container-content')).toHaveProperty(
+      'href',
+      `${BASE_WINDOW_URL}${mockHref}`
+    );
   });
 });

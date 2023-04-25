@@ -10,8 +10,10 @@ import { FullscreenLoader } from '@app/components/common/FullscreenLoader';
 import { useQueryTool } from '@app/components/editor/hooks/useQueryTool';
 import { useAppDispatch } from '@app/redux/hooks';
 import { resetActiveTool } from '@app/redux/features/activeToolSlice';
+import { useRouter } from 'next/router';
 
 const ToolViewer = () => {
+  const { query } = useRouter();
   const tool = useQueryTool();
   const dispatch = useAppDispatch();
 
@@ -24,7 +26,7 @@ const ToolViewer = () => {
   return (
     <>
       <Head>
-        <title>{createTitle(tool?.name ?? 'Tool Viewer')}</title>
+        <title>{createTitle(query.name?.toString() ?? 'Tool Viewer')}</title>
       </Head>
       <main>
         {tool ? (

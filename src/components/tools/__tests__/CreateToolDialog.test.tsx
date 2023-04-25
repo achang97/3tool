@@ -75,7 +75,7 @@ describe('CreateToolDialog', () => {
   });
 
   it('navigates to /editor/:id and resets state after successful creation of tool', async () => {
-    const mockNewTool = { _id: 'new-tool-id' };
+    const mockNewTool = { _id: 'new-tool-id', name: 'new name' };
     mockCreateTool.mockImplementation(() => ({ unwrap: () => mockNewTool }));
 
     render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
@@ -86,7 +86,9 @@ describe('CreateToolDialog', () => {
     const submitButton = screen.getByText('Create tool');
     await userEvent.click(submitButton);
 
-    expect(mockPush).toHaveBeenCalledWith(`/editor/${mockNewTool._id}`);
+    expect(mockPush).toHaveBeenCalledWith(
+      `/editor/${mockNewTool._id}/${encodeURIComponent(mockNewTool.name)}`
+    );
     expect(mockHandleClose).toHaveBeenCalled();
   });
 

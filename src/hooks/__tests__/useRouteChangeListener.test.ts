@@ -12,18 +12,18 @@ describe('useRouteChangeListener', () => {
   });
 
   it.each`
-    pathname               | query               | name                  | properties
-    ${'/login'}            | ${undefined}        | ${'Login'}            | ${undefined}
-    ${'/forgotPassword'}   | ${undefined}        | ${'Forgot Password'}  | ${undefined}
-    ${'/resetPassword'}    | ${undefined}        | ${'Reset Password'}   | ${undefined}
-    ${'/acceptInvite'}     | ${undefined}        | ${'Accept Invite'}    | ${undefined}
-    ${'/'}                 | ${undefined}        | ${'Dashboard'}        | ${undefined}
-    ${'/404'}              | ${undefined}        | ${'404'}              | ${undefined}
-    ${'/resources'}        | ${undefined}        | ${'Resources'}        | ${undefined}
-    ${'/settings/team'}    | ${undefined}        | ${'Team Settings'}    | ${undefined}
-    ${'/settings/account'} | ${undefined}        | ${'Account Settings'} | ${undefined}
-    ${'/tools/[id]'}       | ${{ id: 'toolId' }} | ${'App View'}         | ${{ toolId: 'toolId' }}
-    ${'/editor/[id]'}      | ${{ id: 'toolId' }} | ${'App Editor'}       | ${{ toolId: 'toolId' }}
+    pathname                 | query                             | name                  | properties
+    ${'/login'}              | ${undefined}                      | ${'Login'}            | ${undefined}
+    ${'/forgotPassword'}     | ${undefined}                      | ${'Forgot Password'}  | ${undefined}
+    ${'/resetPassword'}      | ${undefined}                      | ${'Reset Password'}   | ${undefined}
+    ${'/acceptInvite'}       | ${undefined}                      | ${'Accept Invite'}    | ${undefined}
+    ${'/'}                   | ${undefined}                      | ${'Dashboard'}        | ${undefined}
+    ${'/404'}                | ${undefined}                      | ${'404'}              | ${undefined}
+    ${'/resources'}          | ${undefined}                      | ${'Resources'}        | ${undefined}
+    ${'/settings/team'}      | ${undefined}                      | ${'Team Settings'}    | ${undefined}
+    ${'/settings/account'}   | ${undefined}                      | ${'Account Settings'} | ${undefined}
+    ${'/tools/[id]/[name]'}  | ${{ id: 'toolId', name: 'Tool' }} | ${'App View'}         | ${{ toolId: 'toolId', toolName: 'Tool' }}
+    ${'/editor/[id]/[name]'} | ${{ id: 'toolId', name: 'Tool' }} | ${'App Editor'}       | ${{ toolId: 'toolId', toolName: 'Tool' }}
   `(
     'calls analytics.page with $name name',
     ({

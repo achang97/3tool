@@ -11,8 +11,10 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '@app/redux/hooks';
 import { resetEditor } from '@app/redux/features/editorSlice';
 import { resetActiveTool } from '@app/redux/features/activeToolSlice';
+import { useRouter } from 'next/router';
 
 const EditorPage = () => {
+  const { query } = useRouter();
   const tool = useQueryTool();
   const dispatch = useAppDispatch();
 
@@ -26,7 +28,7 @@ const EditorPage = () => {
   return (
     <>
       <Head>
-        <title>{createTitle(`${tool?.name ?? ''} | Editor `)}</title>
+        <title>{createTitle(`${query.name} | Editor `)}</title>
       </Head>
       <main>
         {tool ? (

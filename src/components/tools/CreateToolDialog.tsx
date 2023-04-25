@@ -31,7 +31,7 @@ export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => 
 
         onClose();
         setName('');
-        push(`/editor/${newTool._id}`);
+        push(`/editor/${newTool._id}/${encodeURIComponent(newTool.name)}`);
       } catch {
         // Do nothing
       }

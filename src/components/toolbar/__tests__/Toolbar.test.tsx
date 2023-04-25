@@ -25,20 +25,20 @@ describe('Toolbar', () => {
     expect(result.container.firstChild).toBeNull();
   });
 
-  it('renders nothing if on /tools/[id] route', () => {
+  it('renders nothing if on /tools/[id]/[name] route', () => {
     (useSignedInUser as jest.Mock).mockImplementation(() => mockUser);
     (useRouter as jest.Mock).mockImplementation(() => ({
-      pathname: '/tools/[id]',
+      pathname: '/tools/[id]/[name]',
     }));
 
     const result = render(<Toolbar />);
     expect(result.container.firstChild).toBeNull();
   });
 
-  it('renders nothing if on /editor/[id] route', () => {
+  it('renders nothing if on /editor/[id]/[name] route', () => {
     (useSignedInUser as jest.Mock).mockImplementation(() => mockUser);
     (useRouter as jest.Mock).mockImplementation(() => ({
-      pathname: '/editor/[id]',
+      pathname: '/editor/[id]/[name]',
       query: {},
     }));
 

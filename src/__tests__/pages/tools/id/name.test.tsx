@@ -1,5 +1,5 @@
 import { useQueryTool } from '@app/components/editor/hooks/useQueryTool';
-import Tool from '@app/pages/tools/[id]';
+import Tool from '@app/pages/tools/[id]/[name]';
 import { mockTool } from '@tests/constants/data';
 import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
@@ -34,7 +34,7 @@ jest.mock('@app/redux/hooks', () => ({
 
 jest.mock('@app/components/editor/hooks/useQueryTool');
 
-describe('Tools/Id', () => {
+describe('Tools/Id/Name', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

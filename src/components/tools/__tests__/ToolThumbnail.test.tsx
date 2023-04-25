@@ -59,7 +59,7 @@ describe('ToolThumbnail', () => {
   });
 
   it('navigates to /tools/:id route on click', () => {
-    const result = render(
+    render(
       <ToolThumbnail
         id={mockId}
         name={mockName}
@@ -67,10 +67,9 @@ describe('ToolThumbnail', () => {
         creatorUser={mockCreator}
       />
     );
-
-    expect(result.container.firstChild).toHaveProperty(
+    expect(screen.getByTestId('thumbnail-container-content')).toHaveProperty(
       'href',
-      `${BASE_WINDOW_URL}/tools/${mockId}`
+      `${BASE_WINDOW_URL}/tools/${mockId}/${encodeURIComponent(mockName)}`
     );
   });
 });

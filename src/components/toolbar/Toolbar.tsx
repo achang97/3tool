@@ -6,7 +6,7 @@ export const Toolbar = () => {
   const user = useSignedInUser();
   const { pathname } = useRouter();
 
-  if (!user || pathname === '/tools/[id]' || pathname === '/editor/[id]') {
+  if (!user || pathname === '/tools/[id]/[name]' || pathname === '/editor/[id]/[name]') {
     return null;
   }
 

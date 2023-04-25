@@ -25,7 +25,7 @@ export const ToolThumbnail = ({ id, name, updatedAt, creatorUser }: ToolThumbnai
       icon={
         <GridViewRounded fontSize="inherit" sx={{ transform: 'rotate(45deg)', color: iconColor }} />
       }
-      href={`/tools/${id}`}
+      href={`/tools/${id}/${encodeURIComponent(name)}`}
     >
       <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <Box>
