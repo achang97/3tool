@@ -114,6 +114,15 @@ describe('CanvasTable', () => {
       render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
       expect(screen.getByText(mockEvalDataValues.emptyMessage)).toBeTruthy();
     });
+
+    it('loading: renders loader if loading', () => {
+      const mockEvalDataValues = { loading: true };
+      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+        evalDataValues: mockEvalDataValues,
+      }));
+      render(<CanvasTable name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
+      expect(screen.getByRole('progressbar')).toBeTruthy();
+    });
   });
 
   describe('user input', () => {

@@ -79,6 +79,7 @@ export const CanvasTable = ({
         columns={columns}
         rows={rows}
         checkboxSelection={evalDataValues.multiselect}
+        loading={evalDataValues.loading}
         onSelectionModelChange={handleRowSelectionChange}
         components={{
           NoRowsOverlay,

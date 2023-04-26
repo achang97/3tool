@@ -68,6 +68,7 @@ type TableData = {
   data: string;
   emptyMessage: string;
   multiselect: string;
+  loading: string;
   // NOTE: Currently only using this for testing
   columnHeaderNames: Record<string, string>;
   columnHeadersByIndex: string[];

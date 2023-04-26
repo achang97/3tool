@@ -45,6 +45,7 @@ const TABLE_DATA_TYPES: ComponentDataType<ComponentType.Table> = {
   data: 'array',
   emptyMessage: 'string',
   multiselect: 'boolean',
+  loading: 'boolean',
   columnHeaderNames: 'nested',
   columnHeadersByIndex: 'nested',
 };
@@ -103,6 +104,7 @@ type TableEvalData = {
   data: unknown[];
   emptyMessage: string;
   multiselect: boolean;
+  loading: boolean;
   // NOTE: Currently only using this for testing
   columnHeaderNames: Record<string, unknown>;
   columnHeadersByIndex: unknown[];

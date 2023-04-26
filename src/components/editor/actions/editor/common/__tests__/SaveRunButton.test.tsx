@@ -75,10 +75,10 @@ describe('SaveRunButton', () => {
   });
 
   describe('loading', () => {
-    it('renders disabled button if loading', () => {
+    it('renders loading button if loading', () => {
       (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isLoading: true }));
       render(<SaveRunButton type={ActionType.SmartContractRead} />);
-      expect(screen.getByTestId('save-run-button')).toBeDisabled();
+      expect(screen.getByRole('progressbar')).toBeTruthy();
     });
   });
 });

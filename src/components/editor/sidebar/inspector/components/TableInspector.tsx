@@ -52,6 +52,21 @@ export const TableInspector = ({
           },
         ],
       },
+      {
+        title: 'Interaction',
+        fields: [
+          {
+            field: 'loading',
+            label: 'Loading',
+            value: data?.loading,
+            data: {
+              text: {
+                type: DATA_TYPES.loading,
+              },
+            },
+          },
+        ],
+      },
     ];
   }, [data]);
 

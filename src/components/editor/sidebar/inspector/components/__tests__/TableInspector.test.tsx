@@ -9,6 +9,7 @@ const mockData: Component['data']['table'] = {
   data: '[1]',
   emptyMessage: 'Empty Message',
   multiselect: 'multiselect',
+  loading: 'true',
   columnHeaderNames: {},
   columnHeadersByIndex: [],
 };
@@ -116,6 +117,41 @@ describe('TableInspector', () => {
         value: mockData.multiselect,
         onChange: mockHandleDataChange,
         data: { type: COMPONENT_DATA_TYPES.table.multiselect },
+      });
+    });
+  });
+
+  describe('Interaction', () => {
+    it('renders "Interaction" title', () => {
+      render(
+        <TableInspector
+          name={mockName}
+          data={mockData}
+          eventHandlers={mockEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
+        />
+      );
+      validateSection('Interaction');
+    });
+
+    it('loading: renders "Loading" text field', async () => {
+      render(
+        <TableInspector
+          name={mockName}
+          data={mockData}
+          eventHandlers={mockEventHandlers}
+          onDataChange={mockHandleDataChange}
+          onEventHandlersChange={mockHandleEventHandlersChange}
+        />
+      );
+
+      await validateTextField('Interaction', {
+        field: 'loading',
+        label: 'Loading',
+        value: mockData.loading,
+        onChange: mockHandleDataChange,
+        data: { type: COMPONENT_DATA_TYPES.table.loading },
       });
     });
   });

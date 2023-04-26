@@ -66,6 +66,7 @@ const TABLE_DATA_TEMPLATE: ComponentDataTemplate<ComponentType.Table> = {
 }]`.trim(),
   emptyMessage: 'No rows found',
   multiselect: '',
+  loading: '',
   columnHeaderNames: {},
   columnHeadersByIndex: [],
 };
