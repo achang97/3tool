@@ -18,18 +18,49 @@ describe('validate', () => {
         data: {
           smartContract: {
             address: 'asdf',
+            abiId: '1',
+            chainId: 1,
           },
         },
       } as Resource);
       expect(result).toEqual(false);
     });
 
-    it('returns trie if address is  a valid hex address', () => {
+    it('returns false if abi id is empty', () => {
       const result = validateResource({
         type: ResourceType.SmartContract,
         data: {
           smartContract: {
             address: mockValidAddress,
+            abiId: '',
+            chainId: 1,
+          },
+        },
+      } as Resource);
+      expect(result).toEqual(false);
+    });
+
+    it('returns false if chain id is empty', () => {
+      const result = validateResource({
+        type: ResourceType.SmartContract,
+        data: {
+          smartContract: {
+            address: mockValidAddress,
+            abiId: '1',
+          },
+        },
+      } as Resource);
+      expect(result).toEqual(false);
+    });
+
+    it('returns true if all fields are valid', () => {
+      const result = validateResource({
+        type: ResourceType.SmartContract,
+        data: {
+          smartContract: {
+            address: mockValidAddress,
+            abiId: '1',
+            chainId: 1,
           },
         },
       } as Resource);

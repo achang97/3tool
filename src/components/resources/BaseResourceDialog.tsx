@@ -51,15 +51,16 @@ export const BaseResourceDialog = ({
     }
   }, [error]);
 
+  const isFormComplete = useMemo(() => {
+    return validateResource(resource);
+  }, [resource]);
+
   const handleSubmit = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      if (!validateResource(resource)) {
-        return;
-      }
       onSubmit();
     },
-    [resource, onSubmit]
+    [onSubmit]
   );
 
   const handleNameChange = useCallback(
@@ -106,7 +107,7 @@ export const BaseResourceDialog = ({
             Go back
           </Button>
         )}
-        <LoadingButton type="submit" form={FORM_ID} loading={isLoading}>
+        <LoadingButton type="submit" form={FORM_ID} loading={isLoading} disabled={!isFormComplete}>
           Save
         </LoadingButton>
       </DialogActions>

@@ -249,8 +249,7 @@ describe('BaseResourceDialog', () => {
           testId={mockTestId}
         />
       );
-      await userEvent.click(screen.getByText('Save'));
-      expect(mockHandleSubmit).not.toHaveBeenCalled();
+      expect(screen.getByText('Save')).toBeDisabled();
     });
 
     it('calls onSubmit on Save button click', async () => {

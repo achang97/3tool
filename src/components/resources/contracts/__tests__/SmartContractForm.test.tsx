@@ -218,34 +218,6 @@ describe('SmartContractForm', () => {
       expect(screen.getByText('Select contract ABI')).toBeTruthy();
     });
 
-    it('renders "No created ABIs" placeholder', () => {
-      (useAbiResources as jest.Mock).mockImplementation(() => []);
-      render(
-        <SmartContractForm
-          name=""
-          // @ts-ignore Intentionally passing in undefined
-          data={{ address: '', chainId: undefined, abiId: '' }}
-          onDataChange={mockHandleDataChange}
-          onNameChange={mockHandleNameChange}
-        />
-      );
-      expect(screen.getByText('No created ABIs')).toBeTruthy();
-    });
-
-    it('disables select when there are no abis', () => {
-      (useAbiResources as jest.Mock).mockImplementation(() => []);
-      render(
-        <SmartContractForm
-          name=""
-          // @ts-ignore Intentionally passing in undefined
-          data={{ address: '', chainId: undefined, abiId: '' }}
-          onDataChange={mockHandleDataChange}
-          onNameChange={mockHandleNameChange}
-        />
-      );
-      expect(screen.getByTestId('smart-contract-form-abi-select')).toBeDisabled();
-    });
-
     it('renders value', () => {
       render(
         <SmartContractForm
@@ -287,6 +259,7 @@ describe('SmartContractForm', () => {
         />
       );
 
+      await userEvent.click(screen.getByLabelText(/^ABI/));
       await userEvent.click(screen.getByText('Create new ABI'));
       expect(mockDispatch).toHaveBeenCalledWith(
         pushResource({

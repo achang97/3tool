@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback } from 'react';
 import { CHAINS, RESOURCE_DATA_TEMPLATES } from '@app/constants';
-import { Button, MenuItem, Stack, TextField } from '@mui/material';
+import { Divider, MenuItem, Stack, TextField } from '@mui/material';
 import { Resource, ResourceType } from '@app/types';
 import { Select } from '@app/components/common/Select';
 import { BaseResourceFormProps } from '@app/types/resources';
@@ -110,8 +110,7 @@ export const SmartContractForm = ({
       />
       <Select
         value={data?.abiId}
-        placeholder={abis.length === 0 ? 'No created ABIs' : 'Select contract ABI'}
-        disabled={abis.length === 0}
+        placeholder="Select contract ABI"
         label="ABI"
         onChange={handleAbiChange}
         required
@@ -124,10 +123,11 @@ export const SmartContractForm = ({
             {abi.name}
           </MenuItem>
         ))}
+        {abis.length !== 0 && <Divider />}
+        <MenuItem onClick={handleAbiDialogOpen} sx={{ color: 'primary.main' }}>
+          Create new ABI
+        </MenuItem>
       </Select>
-      <Button variant="text" onClick={handleAbiDialogOpen} sx={{ alignSelf: 'flex-start' }}>
-        Create new ABI
-      </Button>
     </Stack>
   );
 };

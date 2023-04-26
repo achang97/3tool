@@ -6,7 +6,7 @@ export const validateResource = (resource: Resource): boolean => {
   switch (resource.type) {
     case ResourceType.SmartContract: {
       const data = resource.data.smartContract;
-      return !!data && isAddress(data.address);
+      return Boolean(data && isAddress(data.address) && data.abiId && data.chainId);
     }
     case ResourceType.Abi: {
       const data = resource.data.abi;
