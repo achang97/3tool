@@ -15,7 +15,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { AppSnackbarProvider } from '@app/components/common/AppSnackbarProvider';
 import { baseFont } from '@app/styles/font';
 import { useMockServiceWorkers } from '@app/hooks/useMockServiceWorkers';
-import { useRouteChangeListener } from '@app/hooks/useRouteChangeListener';
 
 import '@app/styles/globals.css';
 import '@app/styles/react-grid-layout.css';
@@ -27,7 +26,6 @@ const App = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper.useWrappedStore(rest);
 
   useMockServiceWorkers();
-  useRouteChangeListener();
 
   return (
     <>

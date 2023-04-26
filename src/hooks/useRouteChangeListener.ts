@@ -1,9 +1,10 @@
-import { analytics } from '@app/analytics';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
+import { useAnalytics } from './useAnalytics';
 
 export const useRouteChangeListener = () => {
   const { pathname, query } = useRouter();
+  const analytics = useAnalytics();
 
   const pageParams = useMemo(() => {
     switch (pathname) {
@@ -41,5 +42,5 @@ export const useRouteChangeListener = () => {
       return;
     }
     analytics.page(undefined, pageParams.name, pageParams.properties);
-  }, [pageParams]);
+  }, [analytics, pageParams]);
 };

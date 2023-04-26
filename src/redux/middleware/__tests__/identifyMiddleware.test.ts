@@ -45,7 +45,7 @@ describe('identifyMiddleware', () => {
           },
           companyId: mockUser.companyId,
         });
-        expect(analytics.track).toHaveBeenCalledWith('Sign In');
+        expect(analytics.track).toHaveBeenCalledWith('Sign In', { companyId: mockUser.companyId });
       }
     );
   });
@@ -70,7 +70,7 @@ describe('identifyMiddleware', () => {
         },
         companyId: mockUser.companyId,
       });
-      expect(analytics.track).toHaveBeenCalledWith('Sign In');
+      expect(analytics.track).toHaveBeenCalledWith('Sign In', { companyId: mockUser.companyId });
     });
   });
 

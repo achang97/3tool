@@ -1,8 +1,9 @@
-import { analytics } from '@app/analytics';
 import { useCallback } from 'react';
+import { useAnalytics } from '@app/hooks/useAnalytics';
 import { useActiveTool } from './useActiveTool';
 
 export const useToolAnalyticsTrack = () => {
+  const analytics = useAnalytics();
   const { tool } = useActiveTool();
 
   const track = useCallback(
@@ -18,7 +19,7 @@ export const useToolAnalyticsTrack = () => {
         ...rest
       );
     },
-    [tool._id, tool.name]
+    [analytics, tool._id, tool.name]
   );
 
   return track;

@@ -1,9 +1,12 @@
 import { renderHook } from '@testing-library/react';
-import { analytics } from '@app/analytics';
 import { mockTool } from '@tests/constants/data';
 import { useToolAnalyticsTrack } from '../useToolAnalyticsTrack';
 
-jest.mock('@app/analytics');
+const mockAnalytics = { track: jest.fn() };
+
+jest.mock('@app/hooks/useAnalytics', () => ({
+  useAnalytics: jest.fn(() => mockAnalytics),
+}));
 
 jest.mock('../useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
@@ -23,7 +26,7 @@ describe('useToolAnalyticsTrack', () => {
 
     const { result } = renderHook(() => useToolAnalyticsTrack());
     expect(result.current(mockEvent, mockProperties, mockOptions));
-    expect(analytics.track).toHaveBeenCalledWith(
+    expect(mockAnalytics.track).toHaveBeenCalledWith(
       mockEvent,
       { ...mockProperties, toolId: mockTool._id, toolName: mockTool.name },
       mockOptions

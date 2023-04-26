@@ -3,6 +3,7 @@ import { FullscreenLoader } from '@app/components/common/FullscreenLoader';
 import { useSignedInUser } from '@app/hooks/useSignedInUser';
 import { useRouter } from 'next/router';
 import { useGetMyUserQuery } from '@app/redux/services/users';
+import { useRouteChangeListener } from '@app/hooks/useRouteChangeListener';
 
 type AuthRedirectProviderProps = {
   children: ReactNode;
@@ -12,11 +13,13 @@ const UNAUTHED_ROUTES = ['/login', '/acceptInvite', '/forgotPassword', '/resetPa
 
 export const AuthRedirectProvider = ({ children }: AuthRedirectProviderProps) => {
   const user = useSignedInUser();
+  const { pathname, push } = useRouter();
+
+  // Log route changes
+  useRouteChangeListener();
 
   // Refresh the current user if authed
   useGetMyUserQuery(undefined, { skip: !user });
-
-  const { pathname, push } = useRouter();
 
   const shouldRedirectToLogin = useMemo(() => {
     return !user && !UNAUTHED_ROUTES.includes(pathname);

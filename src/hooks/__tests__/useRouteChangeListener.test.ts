@@ -1,10 +1,14 @@
 import { renderHook } from '@testing-library/react';
 import { useRouter } from 'next/router';
-import { analytics } from '@app/analytics';
 import { useRouteChangeListener } from '../useRouteChangeListener';
 
+const mockAnalytics = { page: jest.fn() };
+
 jest.mock('next/router');
-jest.mock('@app/analytics');
+
+jest.mock('../useAnalytics', () => ({
+  useAnalytics: jest.fn(() => mockAnalytics),
+}));
 
 describe('useRouteChangeListener', () => {
   beforeEach(() => {
@@ -42,7 +46,7 @@ describe('useRouteChangeListener', () => {
         query,
       }));
       renderHook(() => useRouteChangeListener());
-      expect(analytics.page).toHaveBeenCalledWith(undefined, name, properties);
+      expect(mockAnalytics.page).toHaveBeenCalledWith(undefined, name, properties);
     }
   );
 
@@ -51,6 +55,6 @@ describe('useRouteChangeListener', () => {
       pathname: '/invalid',
     }));
     renderHook(() => useRouteChangeListener());
-    expect(analytics.page).not.toHaveBeenCalled();
+    expect(mockAnalytics.page).not.toHaveBeenCalled();
   });
 });
