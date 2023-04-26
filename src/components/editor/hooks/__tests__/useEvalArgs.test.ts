@@ -62,7 +62,7 @@ describe('useEvalArgs', () => {
           data: 'hello',
         },
       }));
-      (useLocalEvalArgs as jest.Mock).mockImplementation(() => mockLocalEvalArgs);
+      (useLocalEvalArgs as jest.Mock).mockImplementation(() => ({ args: mockLocalEvalArgs }));
 
       const { result } = renderHook(() => useEvalArgs());
       expect(result.current.dynamicEvalArgs).toMatchObject(mockLocalEvalArgs);

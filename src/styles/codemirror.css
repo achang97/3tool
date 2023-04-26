@@ -19,7 +19,7 @@
   border-radius: var(--mui-shape-borderRadius);
 }
 
-.dynamic-focused .cm-editor {
+.cm-editor-dynamic-focused .cm-editor {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -57,14 +57,14 @@
 }
 
 /* Error */
-.dynamic-error .cm-editor {
+.cm-editor-error .cm-editor {
   border-color: var(--mui-palette-error-light);
 }
 
-.dynamic-error .cm-editor.cm-focused {
+.cm-editor-error .cm-editor.cm-focused {
   outline-color: var(--mui-palette-error-light);
 }
 
-.dynamic-error .cm-editor:not(.cm-focused):hover {
+.cm-editor-error .cm-editor:not(.cm-focused):hover {
   border-color: var(--mui-palette-error-light);
 }

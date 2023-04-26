@@ -14,28 +14,37 @@ export const DEBOUNCE_TIME_MS = 1000;
 export const LoopEvalArgsProvider = ({ data, children }: LoopEvalArgsProviderProps) => {
   const executeJavascript = useActionJavascriptExecute();
   const [args, setArgs] = useState({});
+  const [error, setError] = useState('');
 
-  const loadElement = useCallback(
-    async (loopableData?: LoopableData) => {
-      if (!loopableData?.loopEnabled) {
-        setArgs({});
-        return;
-      }
-
-      let evalLoopElements: unknown;
-      try {
-        evalLoopElements = await executeJavascript(loopableData.loopElements);
-      } catch {
-        evalLoopElements = {};
-      }
-
+  const evalLoopCode = useCallback(
+    async (loopElements: string) => {
+      const evalLoopElements = await executeJavascript(loopElements);
       if (!Array.isArray(evalLoopElements)) {
-        setArgs({});
-        return;
+        throw new Error(
+          `Expected value of type array, received value of type '${typeof evalLoopElements}'`
+        );
       }
-      setArgs({ element: evalLoopElements[0] });
+      return evalLoopElements;
     },
     [executeJavascript]
+  );
+
+  const loadElement = useCallback(
+    async (loopableData: LoopableData | undefined) => {
+      if (!loopableData?.loopEnabled) {
+        return;
+      }
+
+      try {
+        const loopElements = await evalLoopCode(loopableData.loopElements);
+        setArgs({ element: loopElements[0] });
+        setError('');
+      } catch (e) {
+        setArgs({});
+        setError((e as Error).message);
+      }
+    },
+    [evalLoopCode]
   );
 
   const debouncedLoadElement = useMemo(() => {
@@ -46,5 +55,9 @@ export const LoopEvalArgsProvider = ({ data, children }: LoopEvalArgsProviderPro
     debouncedLoadElement(data);
   }, [debouncedLoadElement, data]);
 
-  return <LocalEvalArgsProvider args={args}>{children}</LocalEvalArgsProvider>;
+  return (
+    <LocalEvalArgsProvider args={args} error={error}>
+      {children}
+    </LocalEvalArgsProvider>
+  );
 };

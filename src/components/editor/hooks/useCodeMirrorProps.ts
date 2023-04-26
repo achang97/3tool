@@ -26,7 +26,6 @@ type HookReturnType = {
   basicSetup: BasicSetupOptions;
   extensions: Extension[];
   className: string;
-  isDynamic: boolean;
 };
 
 export const useCodeMirrorProps = ({
@@ -77,16 +76,12 @@ export const useCodeMirrorProps = ({
   }, [javascriptAutocomplete, language]);
 
   const className = useMemo(() => {
-    if (!isDynamic) {
-      return '';
-    }
-
     const classes = [];
-    if (isFocused) {
-      classes.push('dynamic-focused');
+    if (isDynamic && isFocused) {
+      classes.push('cm-editor-dynamic-focused');
     }
     if (hasError) {
-      classes.push('dynamic-error');
+      classes.push('cm-editor-error');
     }
     return classes.join(' ');
   }, [hasError, isDynamic, isFocused]);
@@ -95,6 +90,5 @@ export const useCodeMirrorProps = ({
     basicSetup,
     extensions,
     className,
-    isDynamic,
   };
 };

@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
+import { useLocalEvalArgs } from '@app/components/editor/hooks/useLocalEvalArgs';
 import { LoopSection } from '../LoopSection';
 
 const mockHandleDataChange = jest.fn();
@@ -12,9 +13,12 @@ jest.mock('@app/components/editor/hooks/useCodeMirrorJavascriptAutocomplete', ()
   })),
 }));
 
+jest.mock('@app/components/editor/hooks/useLocalEvalArgs');
+
 describe('LoopSection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (useLocalEvalArgs as jest.Mock).mockImplementation(() => ({}));
   });
 
   it('renders section label', () => {
@@ -32,6 +36,13 @@ describe('LoopSection', () => {
     expect(screen.getByTestId('loop-section-helper-text')).toHaveTextContent(
       'Use the code block above to return an array of data objects. Then, use {{ element }} anywhere in this action to reference the current value that is being looped over.'
     );
+  });
+
+  it('renders error', () => {
+    const mockError = 'error';
+    (useLocalEvalArgs as jest.Mock).mockImplementation(() => ({ error: mockError }));
+    render(<LoopSection onDataChange={mockHandleDataChange} />);
+    expect(screen.getByText(mockError)).toBeTruthy();
   });
 
   it('renders loop elements value', () => {

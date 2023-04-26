@@ -129,23 +129,8 @@ describe('useCodeMirrorProps', () => {
   });
 
   describe('className', () => {
-    describe('not dynamic', () => {
-      it('returns empty string', () => {
-        const { result } = renderHook(() =>
-          useCodeMirrorProps({
-            language: 'javascript',
-            isDynamic: false,
-            isFocused: true,
-            hasError: true,
-            showLineNumbers: true,
-          })
-        );
-        expect(result.current.className).toEqual('');
-      });
-    });
-
-    describe('dynamic', () => {
-      it('includes "dynamic-focused" class if focused', () => {
+    describe('focused', () => {
+      it('includes "cm-editor-dynamic-focused" class if dynamic and focused', () => {
         const { result } = renderHook(() =>
           useCodeMirrorProps({
             language: 'text',
@@ -155,10 +140,23 @@ describe('useCodeMirrorProps', () => {
             showLineNumbers: true,
           })
         );
-        expect(result.current.className).toMatch('dynamic-focused');
+        expect(result.current.className).toMatch('cm-editor-dynamic-focused');
       });
 
-      it('does not include "dynamic-focused" class if not focused', () => {
+      it('does not include "cm-editor-dynamic-focused" class if not dynamic', () => {
+        const { result } = renderHook(() =>
+          useCodeMirrorProps({
+            language: 'text',
+            isDynamic: false,
+            isFocused: true,
+            hasError: true,
+            showLineNumbers: true,
+          })
+        );
+        expect(result.current.className).not.toMatch('cm-editor-dynamic-focused');
+      });
+
+      it('does not include "cm-editor-dynamic-focused" class if not focused', () => {
         const { result } = renderHook(() =>
           useCodeMirrorProps({
             language: 'text',
@@ -168,10 +166,12 @@ describe('useCodeMirrorProps', () => {
             showLineNumbers: true,
           })
         );
-        expect(result.current.className).not.toMatch('dynamic-focused');
+        expect(result.current.className).not.toMatch('cm-editor-dynamic-focused');
       });
+    });
 
-      it('includes "dynamic-error" class if error', () => {
+    describe('error', () => {
+      it('includes "cm-editor-error" class if error', () => {
         const { result } = renderHook(() =>
           useCodeMirrorProps({
             language: 'text',
@@ -181,10 +181,10 @@ describe('useCodeMirrorProps', () => {
             showLineNumbers: true,
           })
         );
-        expect(result.current.className).toMatch('dynamic-error');
+        expect(result.current.className).toMatch('cm-editor-error');
       });
 
-      it('does not include "dynamic-error" class if error', () => {
+      it('does not include "cm-editor-error" class if error', () => {
         const { result } = renderHook(() =>
           useCodeMirrorProps({
             language: 'text',
@@ -194,7 +194,7 @@ describe('useCodeMirrorProps', () => {
             showLineNumbers: true,
           })
         );
-        expect(result.current.className).not.toMatch('dynamic-error');
+        expect(result.current.className).not.toMatch('cm-editor-error');
       });
     });
   });

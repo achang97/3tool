@@ -9,7 +9,7 @@ import { useLocalEvalArgs } from './useLocalEvalArgs';
 export const useEvalArgs = () => {
   const { tool, evalDataValuesMap } = useActiveTool();
   const baseEvalArgs = useBaseEvalArgs(tool);
-  const localEvalArgs = useLocalEvalArgs();
+  const { args: localEvalArgs } = useLocalEvalArgs();
 
   const actionMethods = useActionMethods();
 

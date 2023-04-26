@@ -3,19 +3,17 @@ import { useContext } from 'react';
 import { LocalEvalArgsContext } from '../../contexts/LocalEvalArgsContext';
 import { useLocalEvalArgs } from '../useLocalEvalArgs';
 
+const mockContextValue = 'context-value';
+
 jest.mock('react', () => ({
   ...jest.requireActual<typeof import('react')>('react'),
-  useContext: jest.fn(),
+  useContext: jest.fn(() => mockContextValue),
 }));
 
 describe('useLocalEvalArgs', () => {
-  it('returns args from LocalEvalArgsContext', () => {
-    const mockLocalArgs = { test: 5 };
-    (useContext as jest.Mock).mockImplementation(() => ({
-      args: mockLocalArgs,
-    }));
+  it('returns value from LocalEvalArgsContext', () => {
     const { result } = renderHook(useLocalEvalArgs);
     expect(useContext).toHaveBeenCalledWith(LocalEvalArgsContext);
-    expect(result.current).toEqual(mockLocalArgs);
+    expect(result.current).toEqual(mockContextValue);
   });
 });

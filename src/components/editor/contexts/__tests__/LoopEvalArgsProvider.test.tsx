@@ -23,7 +23,7 @@ describe('LoopEvalArgsProvider', () => {
     expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
-  it('sets args to empty object if loop is not enabled', async () => {
+  it('does nothing if loop is not enabled', async () => {
     const { result } = renderHook(() => useLocalEvalArgs(), {
       wrapper: ({ children }: { children: ReactElement }) => (
         <LoopEvalArgsProvider data={{ loopElements: '', loopEnabled: false }}>
@@ -35,7 +35,8 @@ describe('LoopEvalArgsProvider', () => {
     await act(() => {
       jest.advanceTimersByTime(DEBOUNCE_TIME_MS);
     });
-    expect(result.current).toEqual({});
+    expect(result.current.args).toEqual({});
+    expect(result.current.error).toEqual('');
   });
 
   it('sets args to empty object if loop code does not evaluate to array', async () => {
@@ -50,7 +51,10 @@ describe('LoopEvalArgsProvider', () => {
     await act(() => {
       jest.advanceTimersByTime(DEBOUNCE_TIME_MS);
     });
-    expect(result.current).toEqual({});
+    expect(result.current.args).toEqual({});
+    expect(result.current.error).toEqual(
+      "Expected value of type array, received value of type 'number'"
+    );
   });
 
   it('sets args to empty object if loop code throws error', async () => {
@@ -65,7 +69,8 @@ describe('LoopEvalArgsProvider', () => {
     await act(() => {
       jest.advanceTimersByTime(DEBOUNCE_TIME_MS);
     });
-    expect(result.current).toEqual({});
+    expect(result.current.args).toEqual({});
+    expect(result.current.error).toEqual('asdf is not defined');
   });
 
   it('sets args to first element of evaluated result of loop code', async () => {
@@ -80,6 +85,7 @@ describe('LoopEvalArgsProvider', () => {
     await act(() => {
       jest.advanceTimersByTime(DEBOUNCE_TIME_MS);
     });
-    expect(result.current).toEqual({ element: 1 });
+    expect(result.current.args).toEqual({ element: 1 });
+    expect(result.current.error).toEqual('');
   });
 });

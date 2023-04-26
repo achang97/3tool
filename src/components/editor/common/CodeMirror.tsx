@@ -18,6 +18,7 @@ export type CodeMirrorProps = {
   language: 'text' | 'javascript' | 'sql';
   isAutosaved?: boolean;
   showLineNumbers?: boolean;
+  hasError?: boolean;
   testId?: string;
 };
 
@@ -31,6 +32,7 @@ export const CodeMirror = ({
   isAutosaved,
   showLineNumbers = false,
   testId,
+  hasError,
 }: CodeMirrorProps) => {
   const [localValue, setLocalValue] = useState(value);
   const { isFocused, onFocus, onBlur } = useIsFocused();
@@ -47,7 +49,7 @@ export const CodeMirror = ({
   const { basicSetup, extensions, className } = useCodeMirrorProps({
     isFocused,
     isDynamic,
-    hasError: preview?.alertType === 'error',
+    hasError: hasError || preview?.alertType === 'error',
     showLineNumbers,
     language,
   });

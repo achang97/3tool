@@ -1,8 +1,9 @@
 import { CodeMirror } from '@app/components/editor/common/CodeMirror';
 import { LoopableData } from '@app/types';
 import { useCallback } from 'react';
-import { Stack, Typography } from '@mui/material';
+import { Alert, Typography, styled } from '@mui/material';
 import { LightbulbCircle } from '@mui/icons-material';
+import { useLocalEvalArgs } from '@app/components/editor/hooks/useLocalEvalArgs';
 import { EditorSection } from '../../common/EditorSection';
 
 type LoopSectionProps = {
@@ -10,7 +11,15 @@ type LoopSectionProps = {
   onDataChange: (update: RecursivePartial<LoopableData>) => void;
 };
 
+const StyledAlert = styled(Alert)();
+StyledAlert.defaultProps = {
+  sx: { paddingY: 0 },
+};
+
 export const LoopSection = ({ data, onDataChange }: LoopSectionProps) => {
+  // NOTE: The LoopSection component must be used within a LoopEvalArgsProvider
+  const { error } = useLocalEvalArgs();
+
   const handleLoopElementsChange = useCallback(
     (loopElements: string) => {
       onDataChange({ loopElements });
@@ -41,13 +50,10 @@ export const LoopSection = ({ data, onDataChange }: LoopSectionProps) => {
         language="javascript"
         showLineNumbers
         testId="loop-section-code"
+        hasError={!!error}
       />
-      <Stack
-        direction="row"
-        spacing={1}
-        sx={{ backgroundColor: 'primary.light', borderRadius: 1, padding: 1, alignItems: 'center' }}
-      >
-        <LightbulbCircle color="primary" />
+      {error && <StyledAlert severity="error">{error}</StyledAlert>}
+      <StyledAlert severity="info" icon={<LightbulbCircle />}>
         <Typography
           variant="body2"
           sx={{ color: 'primary.main' }}
@@ -59,7 +65,7 @@ export const LoopSection = ({ data, onDataChange }: LoopSectionProps) => {
           </Typography>
           anywhere in this action to reference the current value that is being looped over.
         </Typography>
-      </Stack>
+      </StyledAlert>
     </EditorSection>
   );
 };
