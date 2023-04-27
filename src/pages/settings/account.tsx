@@ -3,6 +3,7 @@ import { SettingsPageLayout } from '@app/components/settings/SettingsPageLayout'
 import { PageTitle } from '@app/components/common/PageTitle';
 import { UpdateUserName } from '@app/components/settings/UpdateUserName';
 import { Divider, Stack } from '@mui/material';
+import { UpdatePassword } from '@app/components/settings/UpdatePassword';
 
 const Account = () => {
   return (
@@ -10,6 +11,7 @@ const Account = () => {
       <PageTitle>Account information</PageTitle>
       <Stack spacing={2} divider={<Divider />}>
         <UpdateUserName />
+        <UpdatePassword />
       </Stack>
     </SettingsPageLayout>
   );

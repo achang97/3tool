@@ -16,11 +16,14 @@ jest.mock('@app/redux/services/users', () => ({
   useUpdateMyUserMutation: jest.fn(),
 }));
 
+const mockUpdateMyUser = jest.fn(() => mockApiSuccessResponse) as unknown as jest.MockWithArgs<
+  ReturnType<typeof useUpdateMyUserMutation>[0]
+>;
+
 describe('UpdateUserName', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    const mockUpdateMyUser = jest.fn(() => mockApiSuccessResponse);
     (useUpdateMyUserMutation as jest.Mock).mockImplementation(
       jest.fn(() => [mockUpdateMyUser, {}])
     );
@@ -100,7 +103,6 @@ describe('UpdateUserName', () => {
     });
 
     it('calls updateMyUser with updated firstName & lastName on "Save changes" button click', async () => {
-      const [mockUpdateMyUser] = useUpdateMyUserMutation();
       render(<UpdateUserName />);
 
       const firstNameTextbox = screen.getByRole('textbox', { name: /first name/i });

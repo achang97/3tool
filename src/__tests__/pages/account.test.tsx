@@ -12,4 +12,9 @@ describe('Account', () => {
     render(<Account />);
     expect(screen.getByTestId('update-user-name')).toBeVisible();
   });
+
+  it('renders UpdatePassword', () => {
+    render(<Account />);
+    expect(screen.getByTestId('update-password')).toBeVisible();
+  });
 });

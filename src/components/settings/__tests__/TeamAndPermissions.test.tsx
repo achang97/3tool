@@ -24,6 +24,10 @@ jest.mock('@app/redux/services/companies', () => ({
   useUpdateCompanyUserMutation: jest.fn(() => [jest.fn(), {}]),
 }));
 
+const mockUpdateCompanyUser = jest.fn() as jest.MockWithArgs<
+  ReturnType<typeof useUpdateCompanyUserMutation>[0]
+>;
+
 describe('TeamAndPermissions', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -31,7 +35,9 @@ describe('TeamAndPermissions', () => {
     (useGetPendingCompanyInvitesQuery as jest.Mock).mockImplementation(
       jest.fn(() => ({ data: [] }))
     );
-    (useUpdateCompanyUserMutation as jest.Mock).mockImplementation(jest.fn(() => [jest.fn(), {}]));
+    (useUpdateCompanyUserMutation as jest.Mock).mockImplementation(
+      jest.fn(() => [mockUpdateCompanyUser, {}])
+    );
   });
 
   describe('Loading', () => {
@@ -123,14 +129,12 @@ describe('TeamAndPermissions', () => {
 
     it('calls updateCompanyUser on updating UserRole', async () => {
       (useGetCompanyUsersQuery as jest.Mock).mockReturnValue({ data: [mockEditorRoleUser] });
-      (useUpdateCompanyUserMutation as jest.Mock).mockReturnValue([jest.fn(), {}]);
-      const [updateCompanyUser] = useUpdateCompanyUserMutation();
       render(<TeamAndPermissions />);
 
       await userEvent.click(screen.getByRole('button', { name: /editor/i }));
       await userEvent.click(screen.getByRole('option', { name: /viewer/i }));
 
-      expect(updateCompanyUser).toHaveBeenCalledWith<Parameters<typeof updateCompanyUser>>({
+      expect(mockUpdateCompanyUser).toHaveBeenCalledWith<Parameters<typeof mockUpdateCompanyUser>>({
         _id: mockEditorRoleUser._id,
         roles: getUserRolesFlags(Role.Viewer),
       });

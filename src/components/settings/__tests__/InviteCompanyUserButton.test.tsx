@@ -17,7 +17,9 @@ jest.mock('@app/redux/services/companies', () => ({
   useSendCompanyInviteMutation: jest.fn(),
 }));
 
-const mockSendCompanyInvite = jest.fn();
+const mockSendCompanyInvite = jest.fn() as jest.MockWithArgs<
+  ReturnType<typeof useSendCompanyInviteMutation>[0]
+>;
 const mockUseSendCompanyInviteMutation = jest.mocked(useSendCompanyInviteMutation);
 
 describe('InviteCompanyUser', () => {
@@ -101,18 +103,19 @@ describe('InviteCompanyUser', () => {
     };
 
     it('calls sendCompanyInvite function with correct params ', async () => {
-      const [sendCompanyInvite] = mockUseSendCompanyInviteMutation();
       render(<InviteCompanyUserButton />);
       await clickSendInviteButton();
 
-      expect(sendCompanyInvite).toHaveBeenCalledWith<Parameters<typeof sendCompanyInvite>>({
+      expect(mockSendCompanyInvite).toHaveBeenCalledWith<Parameters<typeof mockSendCompanyInvite>>({
         email: 'example@gmail.com',
         roles: { isAdmin: false, isEditor: false, isViewer: true },
       });
     });
 
     it('If success, shows success snackbar and closes the invite dialog', async () => {
-      mockSendCompanyInvite.mockImplementation(() => mockApiSuccessResponse);
+      mockSendCompanyInvite.mockImplementation(
+        (() => mockApiSuccessResponse) as unknown as typeof mockSendCompanyInvite
+      );
       render(<InviteCompanyUserButton />);
       await clickSendInviteButton();
 
