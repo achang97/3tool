@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { mockTool } from '@tests/constants/data';
 import { DepGraph } from 'dependency-graph';
 import { render } from '@tests/utils/renderWithContext';
-import { EditorActions, MAXIMIZED_HEIGHT, MINIMIZED_HEIGHT } from '../EditorActions';
+import { EditorActions } from '../EditorActions';
 
 jest.mock('../hooks/useActiveTool', () => ({
   useActiveTool: jest.fn(() => ({
@@ -44,27 +44,5 @@ describe('EditorActions', () => {
     }));
     render(<EditorActions />);
     expect(screen.getByTestId('action-editor')).toBeTruthy();
-  });
-
-  describe('height', () => {
-    it('renders with minimized height', () => {
-      (useAppSelector as jest.Mock).mockImplementation(() => ({
-        isActionViewMaximized: false,
-      }));
-      const result = render(<EditorActions />);
-      expect(getComputedStyle(result.container.firstChild as Element).height).toEqual(
-        MINIMIZED_HEIGHT
-      );
-    });
-
-    it('renders with maximized height', () => {
-      (useAppSelector as jest.Mock).mockImplementation(() => ({
-        isActionViewMaximized: true,
-      }));
-      const result = render(<EditorActions />);
-      expect(getComputedStyle(result.container.firstChild as Element).height).toEqual(
-        MAXIMIZED_HEIGHT
-      );
-    });
   });
 });

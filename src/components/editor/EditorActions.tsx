@@ -4,25 +4,13 @@ import { ActionEditor } from './actions/ActionEditor';
 import { ActionEditorPlaceholder } from './actions/ActionEditorPlaceholder';
 import { ActionList } from './actions/ActionList';
 
-export const MINIMIZED_HEIGHT = '250px';
-export const MAXIMIZED_HEIGHT = '80vh';
 const LIST_WIDTH = '260px';
 
 export const EditorActions = () => {
-  const { focusedAction, isActionViewMaximized } = useAppSelector((state) => state.editor);
+  const { focusedAction } = useAppSelector((state) => state.editor);
 
   return (
-    <Stack
-      direction="row"
-      sx={{
-        height: isActionViewMaximized ? MAXIMIZED_HEIGHT : MINIMIZED_HEIGHT,
-        boxShadow: 3,
-        flexShrink: 0,
-        // NOTE: Removes the overlapping shadow on the right side of the container.
-        clipPath: 'inset(-5px 0px -5px -5px)',
-      }}
-      data-testid="editor-actions"
-    >
+    <Stack direction="row" sx={{ height: '100%', flexShrink: 0 }} data-testid="editor-actions">
       <Box sx={{ width: LIST_WIDTH, flexShrink: 0 }}>
         <ActionList />
       </Box>

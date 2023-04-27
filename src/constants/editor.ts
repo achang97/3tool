@@ -38,3 +38,6 @@ export const GLOBAL_LIBRARIES: Library[] = [
     isModule: false,
   },
 ];
+
+export const ACTION_VIEW_MIN_HEIGHT = 30;
+export const ACTION_VIEW_MAX_HEIGHT = 80;

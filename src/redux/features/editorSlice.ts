@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { Action, ActionViewType, ComponentType, SidebarViewType } from '@app/types';
 import _ from 'lodash';
 import { overwriteArrayMergeCustomizer } from '@app/components/editor/utils/javascript';
+import { ACTION_VIEW_MIN_HEIGHT } from '@app/constants';
 
 type NewComponent = {
   name: string;
@@ -24,7 +25,7 @@ type EditorState = {
   // Actions
   focusedAction?: Action;
   actionView: ActionViewType;
-  isActionViewMaximized: boolean;
+  actionViewHeight: number;
   focusedActionState: {
     smartContractFunctionIndex: number;
   };
@@ -36,7 +37,7 @@ type EditorState = {
 const initialState: EditorState = {
   sidebarView: SidebarViewType.Components,
   actionView: ActionViewType.General,
-  isActionViewMaximized: false,
+  actionViewHeight: ACTION_VIEW_MIN_HEIGHT,
   isPreview: false,
   focusedActionState: {
     smartContractFunctionIndex: 0,
@@ -109,8 +110,8 @@ export const editorSlice = createSlice({
     setActionView: (state, action: PayloadAction<ActionViewType>) => {
       state.actionView = action.payload;
     },
-    setIsActionViewMaximized: (state, action: PayloadAction<boolean>) => {
-      state.isActionViewMaximized = action.payload;
+    setActionViewHeight: (state, action: PayloadAction<number>) => {
+      state.actionViewHeight = action.payload;
     },
 
     // General
@@ -139,7 +140,7 @@ export const {
   updateFocusedAction,
   updateFocusedActionState,
   setActionView,
-  setIsActionViewMaximized,
+  setActionViewHeight,
   setIsPreview,
   resetEditor,
 } = editorSlice.actions;

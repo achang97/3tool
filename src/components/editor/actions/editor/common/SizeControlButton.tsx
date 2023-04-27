@@ -1,23 +1,29 @@
-import { setIsActionViewMaximized } from '@app/redux/features/editorSlice';
+import { ACTION_VIEW_MAX_HEIGHT, ACTION_VIEW_MIN_HEIGHT } from '@app/constants';
+import { setActionViewHeight } from '@app/redux/features/editorSlice';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { Fullscreen, FullscreenExit } from '@mui/icons-material';
+import { ZoomInMap, ZoomOutMap } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const SizeControlButton = () => {
-  const { isActionViewMaximized } = useAppSelector((state) => state.editor);
+  const { actionViewHeight } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
+  const isMaxHeight = useMemo(() => {
+    return actionViewHeight === ACTION_VIEW_MAX_HEIGHT;
+  }, [actionViewHeight]);
+
   const handleClick = useCallback(() => {
-    dispatch(setIsActionViewMaximized(!isActionViewMaximized));
-  }, [dispatch, isActionViewMaximized]);
+    const newHeight = isMaxHeight ? ACTION_VIEW_MIN_HEIGHT : ACTION_VIEW_MAX_HEIGHT;
+    dispatch(setActionViewHeight(newHeight));
+  }, [dispatch, isMaxHeight]);
 
   return (
     <IconButton onClick={handleClick} size="small" data-testid="size-control-button">
-      {isActionViewMaximized ? (
-        <FullscreenExit data-testid="size-control-button-minimize" />
+      {isMaxHeight ? (
+        <ZoomInMap data-testid="size-control-button-minimize" />
       ) : (
-        <Fullscreen data-testid="size-control-button-maximize" />
+        <ZoomOutMap data-testid="size-control-button-maximize" />
       )}
     </IconButton>
   );

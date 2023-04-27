@@ -1,7 +1,8 @@
-import { setIsActionViewMaximized } from '@app/redux/features/editorSlice';
+import { setActionViewHeight } from '@app/redux/features/editorSlice';
 import { useAppSelector } from '@app/redux/hooks';
 import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ACTION_VIEW_MAX_HEIGHT, ACTION_VIEW_MIN_HEIGHT } from '@app/constants';
 import { SizeControlButton } from '../SizeControlButton';
 
 const mockDispatch = jest.fn();
@@ -14,25 +15,25 @@ jest.mock('@app/redux/hooks', () => ({
 describe('SizeControlButton', () => {
   it('renders minimize button if maximized', async () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
-      isActionViewMaximized: true,
+      actionViewHeight: ACTION_VIEW_MAX_HEIGHT,
     }));
 
     render(<SizeControlButton />);
     const icon = screen.getByTestId('size-control-button-minimize');
 
     await userEvent.click(icon);
-    expect(mockDispatch).toHaveBeenCalledWith(setIsActionViewMaximized(false));
+    expect(mockDispatch).toHaveBeenCalledWith(setActionViewHeight(ACTION_VIEW_MIN_HEIGHT));
   });
 
-  it('renders maximize button if minimized', async () => {
+  it('renders maximize button if not maximized', async () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
-      isActionViewMaximized: false,
+      actionViewHeight: ACTION_VIEW_MAX_HEIGHT - 1,
     }));
 
     render(<SizeControlButton />);
     const icon = screen.getByTestId('size-control-button-maximize');
 
     await userEvent.click(icon);
-    expect(mockDispatch).toHaveBeenCalledWith(setIsActionViewMaximized(true));
+    expect(mockDispatch).toHaveBeenCalledWith(setActionViewHeight(ACTION_VIEW_MAX_HEIGHT));
   });
 });

@@ -6,6 +6,7 @@ import {
   ComponentType,
   SidebarViewType,
 } from '@app/types';
+import { ACTION_VIEW_MIN_HEIGHT } from '@app/constants';
 import editorReducer, {
   startCreateComponentDrag,
   stopCreateComponentDrag,
@@ -19,7 +20,7 @@ import editorReducer, {
   blurAction,
   updateFocusedAction,
   setActionView,
-  setIsActionViewMaximized,
+  setActionViewHeight,
   setIsPreview,
   updateFocusedActionState,
   resetEditor,
@@ -35,7 +36,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -49,7 +50,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -71,7 +72,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -85,7 +86,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -104,7 +105,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -118,7 +119,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -137,7 +138,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -152,7 +153,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Inspector,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -168,7 +169,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -186,7 +187,7 @@ describe('editorSlice', () => {
         const initialState = {
           sidebarView: SidebarViewType.Components,
           actionView: ActionViewType.General,
-          isActionViewMaximized: false,
+          actionViewHeight: 0,
           isPreview: false,
           focusedActionState: {
             smartContractFunctionIndex: 0,
@@ -209,7 +210,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.ResponseHandler,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 1,
@@ -227,7 +228,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.ResponseHandler,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -246,7 +247,7 @@ describe('editorSlice', () => {
         const initialState = {
           sidebarView: SidebarViewType.Components,
           actionView: ActionViewType.General,
-          isActionViewMaximized: false,
+          actionViewHeight: 0,
           isPreview: false,
           focusedActionState: {
             smartContractFunctionIndex: 0,
@@ -274,7 +275,7 @@ describe('editorSlice', () => {
         const initialState = {
           sidebarView: SidebarViewType.Components,
           actionView: ActionViewType.General,
-          isActionViewMaximized: false,
+          actionViewHeight: 0,
           isPreview: false,
           focusedActionState: {
             smartContractFunctionIndex: 0,
@@ -300,7 +301,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -319,7 +320,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -329,18 +330,18 @@ describe('editorSlice', () => {
       expect(state.actionView).toEqual(mockActionViewType);
     });
 
-    it('setIsActionViewMaximized: sets action view maximized boolean to payload', () => {
+    it('setActionViewHeight: sets action view height to payload', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
         },
       };
-      const state = editorReducer(initialState, setIsActionViewMaximized(true));
-      expect(state.isActionViewMaximized).toEqual(true);
+      const state = editorReducer(initialState, setActionViewHeight(100));
+      expect(state.actionViewHeight).toEqual(100);
     });
   });
 
@@ -349,7 +350,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: 0,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
@@ -363,7 +364,7 @@ describe('editorSlice', () => {
       const initialState = {
         sidebarView: SidebarViewType.Inspector,
         actionView: ActionViewType.ResponseHandler,
-        isActionViewMaximized: true,
+        actionViewHeight: 100,
         isPreview: true,
         focusedActionState: {
           smartContractFunctionIndex: 1,
@@ -373,7 +374,7 @@ describe('editorSlice', () => {
       expect(state).toEqual({
         sidebarView: SidebarViewType.Components,
         actionView: ActionViewType.General,
-        isActionViewMaximized: false,
+        actionViewHeight: ACTION_VIEW_MIN_HEIGHT,
         isPreview: false,
         focusedActionState: {
           smartContractFunctionIndex: 0,
