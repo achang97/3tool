@@ -186,4 +186,14 @@ describe('SmartContractResourceEditor', () => {
       });
     });
   });
+
+  it('renders create resource button', () => {
+    render(
+      <SmartContractResourceEditor
+        data={{ freeform: false, smartContractId: '1' } as SmartContractBaseData}
+        onDataChange={mockHandleDataChange}
+      />
+    );
+    expect(screen.getByTestId('create-resource-button')).toBeTruthy();
+  });
 });

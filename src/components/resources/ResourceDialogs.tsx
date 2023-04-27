@@ -10,7 +10,7 @@ import { useCallback, useMemo } from 'react';
 import { EditResourceDialog } from './EditResourceDialog';
 import { CreateResourceDialog } from './CreateResourceDialog';
 
-export const ResourceModals = () => {
+export const ResourceDialogs = () => {
   const dispatch = useAppDispatch();
   const { resourceStack } = useAppSelector((state) => state.resources);
 
@@ -86,5 +86,5 @@ export const ResourceModals = () => {
     }
   }, [activeResourceElement, handleChange, handleCreate, handleDialogClose, isBackButtonVisible]);
 
-  return <Box data-testid="resource-modals">{modal}</Box>;
+  return <Box data-testid="resource-dialogs">{modal}</Box>;
 };

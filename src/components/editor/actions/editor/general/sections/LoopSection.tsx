@@ -11,7 +11,7 @@ type LoopSectionProps = {
   onDataChange: (update: RecursivePartial<LoopableData>) => void;
 };
 
-const StyledAlert = styled(Alert)();
+const StyledAlert = styled(Alert)({});
 StyledAlert.defaultProps = {
   sx: { paddingY: 0 },
 };

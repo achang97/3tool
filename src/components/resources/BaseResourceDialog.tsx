@@ -99,7 +99,7 @@ export const BaseResourceDialog = ({
         <form id={FORM_ID} onSubmit={handleSubmit}>
           {typedResourceForm}
         </form>
-        {error && <ApiErrorMessage error={error} ref={errorRef} />}
+        {error && <ApiErrorMessage sx={{ marginTop: 2 }} error={error} ref={errorRef} />}
       </DialogContent>
       <DialogActions>
         {isBackButtonVisible && (

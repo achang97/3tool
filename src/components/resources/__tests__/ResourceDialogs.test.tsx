@@ -7,7 +7,7 @@ import { popResource, updateResource } from '@app/redux/features/resourcesSlice'
 import { Resource, ResourceType } from '@app/types';
 import { mainnet } from 'wagmi';
 import { createMockApiSuccessResponse } from '@tests/constants/api';
-import { ResourceModals } from '../ResourceModals';
+import { ResourceDialogs } from '../ResourceDialogs';
 
 const mockDispatch = jest.fn();
 const mockCreateResource = jest.fn();
@@ -20,14 +20,11 @@ jest.mock('@app/redux/hooks', () => ({
 jest.mock('@app/redux/services/resources', () => ({
   ...jest.requireActual('@app/redux/services/resources'),
   useCreateResourceMutation: jest.fn(() => [mockCreateResource, {}]),
+  useGetResourcesQuery: jest.fn(() => ({ data: [] })),
 }));
 
 jest.mock('../hooks/useFetchAbi', () => ({
   useFetchAbi: jest.fn(() => ({})),
-}));
-
-jest.mock('../hooks/useAbiResources', () => ({
-  useAbiResources: jest.fn(() => []),
 }));
 
 const mockResource = {
@@ -42,7 +39,7 @@ const mockResource = {
   },
 } as Resource;
 
-describe('ResourceModals', () => {
+describe('ResourceDialogs', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useAppSelector as jest.Mock).mockImplementation(() => ({}));
@@ -56,12 +53,12 @@ describe('ResourceModals', () => {
     });
 
     it('renders create resource dialog', () => {
-      render(<ResourceModals />);
+      render(<ResourceDialogs />);
       expect(screen.getByTestId('create-resource-dialog')).toBeTruthy();
     });
 
     it('dispatches action to update resource', async () => {
-      render(<ResourceModals />);
+      render(<ResourceDialogs />);
       const mockValue = 'a';
       await userEvent.type(screen.getByLabelText(/^Name/), mockValue);
       expect(mockDispatch).toHaveBeenCalledWith(
@@ -73,7 +70,7 @@ describe('ResourceModals', () => {
     });
 
     it('dispatches action to pop resource on close', async () => {
-      render(<ResourceModals />);
+      render(<ResourceDialogs />);
       await userEvent.keyboard('[Escape]');
       expect(mockDispatch).toHaveBeenCalledWith(popResource());
     });
@@ -85,7 +82,7 @@ describe('ResourceModals', () => {
           { type: 'create', resource: mockResource },
         ],
       }));
-      render(<ResourceModals />);
+      render(<ResourceDialogs />);
       expect(screen.getByText('Go back')).toBeTruthy();
     });
   });
@@ -98,12 +95,12 @@ describe('ResourceModals', () => {
     });
 
     it('renders edit resource dialog', () => {
-      render(<ResourceModals />);
+      render(<ResourceDialogs />);
       expect(screen.getByTestId('edit-resource-dialog')).toBeTruthy();
     });
 
     it('dispatches action to update resource', async () => {
-      render(<ResourceModals />);
+      render(<ResourceDialogs />);
       const mockValue = 'a';
       await userEvent.type(screen.getByLabelText(/^Name/), mockValue);
       expect(mockDispatch).toHaveBeenCalledWith(
@@ -115,7 +112,7 @@ describe('ResourceModals', () => {
     });
 
     it('dispatches action to pop resource on close', async () => {
-      render(<ResourceModals />);
+      render(<ResourceDialogs />);
       await userEvent.keyboard('[Escape]');
       expect(mockDispatch).toHaveBeenCalledWith(popResource());
     });
@@ -127,7 +124,7 @@ describe('ResourceModals', () => {
           { type: 'edit', resource: mockResource },
         ],
       }));
-      render(<ResourceModals />);
+      render(<ResourceDialogs />);
       expect(screen.getByText('Go back')).toBeTruthy();
     });
   });
@@ -157,7 +154,7 @@ describe('ResourceModals', () => {
         },
       ],
     }));
-    render(<ResourceModals />);
+    render(<ResourceDialogs />);
     await userEvent.click(screen.getByText('Save'));
     expect(mockDispatch).toHaveBeenCalledWith(
       updateResource({
@@ -177,7 +174,7 @@ describe('ResourceModals', () => {
     (useAppSelector as jest.Mock).mockImplementation(() => ({
       resourceStack: [],
     }));
-    render(<ResourceModals />);
-    expect(screen.getByTestId('resource-modals').firstChild).toBeNull();
+    render(<ResourceDialogs />);
+    expect(screen.getByTestId('resource-dialogs').firstChild).toBeNull();
   });
 });

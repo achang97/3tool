@@ -29,6 +29,6 @@ describe('Resources', () => {
 
   it('renders resource modals', () => {
     render(<ResourcesPage />);
-    expect(screen.getByTestId('resource-modals')).toBeTruthy();
+    expect(screen.getByTestId('resource-dialogs')).toBeTruthy();
   });
 });

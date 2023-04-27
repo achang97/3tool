@@ -13,6 +13,7 @@ import { EditorActions } from './EditorActions';
 import { EditorCanvas } from './EditorCanvas';
 import { EditorSidebar } from './EditorSidebar';
 import { useToolElementNames } from './hooks/useToolElementNames';
+import { ResourceDialogs } from '../resources/ResourceDialogs';
 
 export const Editor = () => {
   const { elementNames } = useToolElementNames();
@@ -39,27 +40,30 @@ export const Editor = () => {
   );
 
   return (
-    <Stack direction="row" sx={{ flex: 1, minHeight: 0 }} data-testid="editor">
-      <PanelGroup direction="vertical" onLayout={handleLayoutChange} ref={actionPanelRef}>
-        <Panel>
-          <EditorCanvas isEditable={!isPreview} />
-        </Panel>
-        {!isPreview && (
-          <>
-            <Box sx={{ borderTop: 0.5, borderColor: 'divider' }}>
-              <PanelResizeHandle style={{ height: 5 }} />
-            </Box>
-            <Panel
-              defaultSize={ACTION_VIEW_MIN_HEIGHT}
-              minSize={ACTION_VIEW_MIN_HEIGHT}
-              maxSize={ACTION_VIEW_MAX_HEIGHT}
-            >
-              <EditorActions />
-            </Panel>
-          </>
-        )}
-      </PanelGroup>
-      {!isPreview && <EditorSidebar key={rerenderKey} />}
-    </Stack>
+    <>
+      <Stack direction="row" sx={{ flex: 1, minHeight: 0 }} data-testid="editor">
+        <PanelGroup direction="vertical" onLayout={handleLayoutChange} ref={actionPanelRef}>
+          <Panel>
+            <EditorCanvas isEditable={!isPreview} />
+          </Panel>
+          {!isPreview && (
+            <>
+              <Box sx={{ borderTop: 0.5, borderColor: 'divider' }}>
+                <PanelResizeHandle style={{ height: 5 }} />
+              </Box>
+              <Panel
+                defaultSize={ACTION_VIEW_MIN_HEIGHT}
+                minSize={ACTION_VIEW_MIN_HEIGHT}
+                maxSize={ACTION_VIEW_MAX_HEIGHT}
+              >
+                <EditorActions />
+              </Panel>
+            </>
+          )}
+        </PanelGroup>
+        {!isPreview && <EditorSidebar key={rerenderKey} />}
+      </Stack>
+      {!isPreview && <ResourceDialogs />}
+    </>
   );
 };

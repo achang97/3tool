@@ -7,6 +7,7 @@ import { useAbiResources } from '@app/components/resources/hooks/useAbiResources
 import { SmartContractBaseData } from '@app/types';
 import { ACTION_DATA_TYPES } from '@app/constants';
 import { Stack } from '@mui/material';
+import { CreateResourceButton } from '@app/components/resources/CreateResourceButton';
 
 type SmartContractResourceEditorProps = {
   data: SmartContractBaseData | undefined;
@@ -96,6 +97,7 @@ export const SmartContractResourceEditor = ({
           />
         </>
       )}
+      <CreateResourceButton size="small" sx={{ alignSelf: 'flex-start' }} />
     </Stack>
   );
 };

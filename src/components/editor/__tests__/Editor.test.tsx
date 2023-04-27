@@ -21,6 +21,11 @@ jest.mock('@app/redux/hooks', () => ({
   useAppDispatch: jest.fn(() => jest.fn()),
 }));
 
+jest.mock('@app/redux/services/resources', () => ({
+  ...jest.requireActual('@app/redux/services/resources'),
+  useGetResourcesQuery: jest.fn(() => ({ data: [] })),
+}));
+
 describe('Editor', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -31,6 +36,7 @@ describe('Editor', () => {
     beforeEach(() => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         isPreview: false,
+        resourceStack: [],
       }));
     });
 
@@ -53,12 +59,18 @@ describe('Editor', () => {
       render(<Editor />);
       expect(screen.getByTestId('editor-actions')).toBeTruthy();
     });
+
+    it('renders resource dialogs', async () => {
+      render(<Editor />);
+      expect(screen.getByTestId('resource-dialogs')).toBeTruthy();
+    });
   });
 
   describe('preview mode', () => {
     beforeEach(() => {
       (useAppSelector as jest.Mock).mockImplementation(() => ({
         isPreview: true,
+        resourceStack: [],
       }));
     });
 
@@ -80,6 +92,11 @@ describe('Editor', () => {
     it('does not render editor actions', () => {
       render(<Editor />);
       expect(screen.queryByTestId('editor-actions')).toBeNull();
+    });
+
+    it('does not render resource dialogs', () => {
+      render(<Editor />);
+      expect(screen.queryByTestId('resource-dialogs')).toBeNull();
     });
   });
 });

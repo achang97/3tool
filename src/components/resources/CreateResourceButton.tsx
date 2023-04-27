@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { Add } from '@mui/icons-material';
-import { Button, Menu } from '@mui/material';
+import { Button, ButtonProps, Menu } from '@mui/material';
 import { useMenuState } from '@app/hooks/useMenuState';
 import { Resource, ResourceType } from '@app/types';
 import { RESOURCE_CONFIGS, RESOURCE_DATA_TEMPLATES } from '@app/constants';
@@ -10,7 +10,9 @@ import { MenuItem } from '../common/MenuItem';
 
 const RESOURCES = [ResourceType.SmartContract, ResourceType.Abi];
 
-export const CreateResourceButton = () => {
+type CreateResourceButtonProps = Omit<ButtonProps, 'children'>;
+
+export const CreateResourceButton = (props: CreateResourceButtonProps) => {
   const dispatch = useAppDispatch();
   const { isMenuOpen, menuAnchor, onMenuOpen, onMenuClose } = useMenuState();
 
@@ -40,6 +42,7 @@ export const CreateResourceButton = () => {
         startIcon={<Add />}
         onClick={onMenuOpen}
         data-testid="create-resource-button"
+        {...props}
       >
         Add new resource
       </Button>
