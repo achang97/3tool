@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-grid-layout/build/ReactGridLayout.js b/node_modules/react-grid-layout/build/ReactGridLayout.js
+index 6836694..0377a15 100644
+--- a/node_modules/react-grid-layout/build/ReactGridLayout.js
++++ b/node_modules/react-grid-layout/build/ReactGridLayout.js
+@@ -173,7 +173,8 @@ var ReactGridLayout = /*#__PURE__*/function (_React$Component) {
+     _defineProperty(_assertThisInitialized(_this), "onDragStop", function (i, x, y, _ref3) {
+       var e = _ref3.e,
+           node = _ref3.node;
+-      if (!_this.state.activeDrag) return;
++      // Make sure onDragStop is always called to address this issue: https://github.com/react-grid-layout/react-grid-layout/issues/1259
++      // if (!_this.state.activeDrag) return;
+       var oldDragItem = _this.state.oldDragItem;
+       var layout = _this.state.layout;
+       var _this$props2 = _this.props,

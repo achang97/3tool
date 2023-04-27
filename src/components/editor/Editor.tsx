@@ -49,7 +49,11 @@ export const Editor = () => {
             <Box sx={{ borderTop: 0.5, borderColor: 'divider' }}>
               <PanelResizeHandle style={{ height: 5 }} />
             </Box>
-            <Panel minSize={ACTION_VIEW_MIN_HEIGHT} maxSize={ACTION_VIEW_MAX_HEIGHT}>
+            <Panel
+              defaultSize={ACTION_VIEW_MIN_HEIGHT}
+              minSize={ACTION_VIEW_MIN_HEIGHT}
+              maxSize={ACTION_VIEW_MAX_HEIGHT}
+            >
               <EditorActions />
             </Panel>
           </>
