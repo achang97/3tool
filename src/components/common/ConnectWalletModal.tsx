@@ -10,6 +10,7 @@ export const ConnectWalletModal = () => {
   return (
     <Web3Modal
       projectId={WALLETCONNECT_PROJECT_ID}
+      enableNetworkView
       ethereumClient={ethereumClient}
       themeVariables={{
         '--w3m-font-family': baseFont,
