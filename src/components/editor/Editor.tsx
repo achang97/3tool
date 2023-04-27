@@ -48,8 +48,17 @@ export const Editor = () => {
           </Panel>
           {!isPreview && (
             <>
-              <Box sx={{ borderTop: 0.5, borderColor: 'divider' }}>
-                <PanelResizeHandle style={{ height: 5 }} />
+              <Box
+                sx={{
+                  backgroundColor: 'divider',
+                  borderColor: 'divider',
+                  opacity: 0.2,
+                  borderTop: 0.25,
+                  borderBottom: 0.25,
+                  height: 3,
+                }}
+              >
+                <PanelResizeHandle style={{ height: '100%' }} />
               </Box>
               <Panel
                 defaultSize={ACTION_VIEW_MIN_HEIGHT}
