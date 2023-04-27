@@ -22,6 +22,11 @@ export const AuthenticatedToolbar = () => {
 
   const { isMenuOpen, menuAnchor, onMenuOpen, onMenuClose } = useMenuState();
 
+  const tabsValue = useMemo(
+    () => AUTHENTICATED_LINKS.find((link) => link.to === pathname)?.to ?? false,
+    [pathname]
+  );
+
   const handleLogout = useCallback(() => {
     logout();
   }, [logout]);
@@ -29,7 +34,7 @@ export const AuthenticatedToolbar = () => {
   const middle = useMemo(() => {
     return (
       <Tabs
-        value={pathname}
+        value={tabsValue}
         sx={{
           display: 'flex',
           alignItems: 'flex-end',

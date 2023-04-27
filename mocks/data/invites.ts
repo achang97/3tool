@@ -2,7 +2,7 @@ import { InviteStatus, UserInvite } from '@app/types';
 
 export const mockPendingUserInvite: UserInvite = {
   _id: 'invite_1',
-  email: 'chetan@@tryelixir.io',
+  email: 'chetan@tryelixir.io',
   companyId: 'company_1',
   status: InviteStatus.Pending,
   roles: {
