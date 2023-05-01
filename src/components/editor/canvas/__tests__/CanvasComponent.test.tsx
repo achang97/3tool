@@ -226,6 +226,22 @@ describe('CanvasComponent', () => {
         expect(component).toHaveClass('react-grid-item-preview');
       });
 
+      it('assigns "react-grid-item-preview" class if creating a new component', () => {
+        (useAppSelector as jest.Mock).mockImplementation(() => ({
+          componentInputs: {},
+          newComponent: {
+            name: 'name',
+          },
+        }));
+        render(
+          <CanvasComponent component={mockComponent} isEditable>
+            {mockChildren}
+          </CanvasComponent>
+        );
+        const component = screen.getByText(mockChildren);
+        expect(component).toHaveClass('react-grid-item-preview');
+      });
+
       it('does not assign "react-grid-item-preview" class if neither resizing nor moving', () => {
         render(
           <CanvasComponent component={mockComponent} isEditable>

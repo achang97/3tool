@@ -42,9 +42,8 @@ export const CanvasComponent = forwardRef(
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const dispatch = useAppDispatch();
-    const { movingComponentName, focusedComponentName, resizingComponentName } = useAppSelector(
-      (state) => state.editor
-    );
+    const { movingComponentName, focusedComponentName, resizingComponentName, newComponent } =
+      useAppSelector((state) => state.editor);
     const eventHandlerCallbacks = useComponentEventHandlerCallbacks(component.eventHandlers);
 
     const errors = useComponentEvalErrors(component);
@@ -97,7 +96,7 @@ export const CanvasComponent = forwardRef(
       if (isResizing) {
         classes.push('react-grid-item-resizing');
       }
-      if (movingComponentName || resizingComponentName) {
+      if (movingComponentName || resizingComponentName || newComponent) {
         classes.push('react-grid-item-preview');
       }
       if (errors.length !== 0) {
@@ -114,6 +113,7 @@ export const CanvasComponent = forwardRef(
       isResizing,
       movingComponentName,
       resizingComponentName,
+      newComponent,
     ]);
 
     return (
