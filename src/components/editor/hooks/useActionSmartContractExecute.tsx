@@ -16,6 +16,7 @@ import { getTransactionUrl } from '@app/utils/contracts';
 import { useActionLoop } from './useActionLoop';
 import { useEvalDynamicValue } from './useEvalDynamicValue';
 import { useActionSmartContract } from './useActionSmartContract';
+import { ViewTransactionsButton } from '../common/ViewTransactionsButton';
 
 export const useActionSmartContractExecute = () => {
   const getSmartContractData = useActionSmartContract();
@@ -131,12 +132,17 @@ export const useActionSmartContractExecute = () => {
         }
       );
 
+      const isLoop = Array.isArray(writeResults);
+      const txUrls = isLoop
+        ? writeResults.map((writeResult) => writeResult.data.blockExplorerUrl)
+        : [writeResults.blockExplorerUrl];
       enqueueSnackbar(`${name} pending on-chain confirmation`, {
         variant: 'warning',
         persist: true,
+        action: <ViewTransactionsButton urls={txUrls} />,
       });
 
-      if (!Array.isArray(writeResults)) {
+      if (!isLoop) {
         return waitForWriteReceipt(writeResults);
       }
       return Promise.all(

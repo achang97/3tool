@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import { store } from '@app/redux/store';
 import { theme } from '@app/utils/mui';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
-import { wagmiClient } from '@app/utils/wallet';
+import { wagmiClient } from '@app/constants/wallet';
 import { WagmiConfig } from 'wagmi';
 import { AppSnackbarProvider } from '@app/components/common/AppSnackbarProvider';
 

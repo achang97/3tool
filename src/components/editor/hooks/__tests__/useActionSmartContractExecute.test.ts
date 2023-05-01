@@ -2,7 +2,8 @@ import { ResourceType, SmartContractBaseData } from '@app/types';
 import { mainnet } from 'wagmi';
 import { prepareWriteContract, readContract, readContracts, writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
-import { renderHook } from '@testing-library/react';
+import { render, renderHook, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useActionSmartContractExecute } from '../useActionSmartContractExecute';
 
 const mockSigner = { address: '0xsigner' };
@@ -215,26 +216,76 @@ describe('useActionSmartContractExecute', () => {
       expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
     });
 
-    it('enqueues snackbar with pending message', async () => {
-      const { result } = renderHook(() => useActionSmartContractExecute());
-      await result.current.writeSmartContract(mockActionName, {
-        freeform: false,
-        smartContractId: '1',
-        functions: [
-          {
-            name: 'write',
-            args: ['hello'],
-            payableAmount: '',
-          },
-        ],
-      } as SmartContractBaseData);
-      expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
-        `${mockActionName} pending on-chain confirmation`,
-        {
-          variant: 'warning',
-          persist: true,
-        }
-      );
+    describe('snackbar', () => {
+      it('enqueues persisted snackbar with single url', async () => {
+        const { result } = renderHook(() => useActionSmartContractExecute());
+        await result.current.writeSmartContract(mockActionName, {
+          freeform: false,
+          smartContractId: '1',
+          functions: [
+            {
+              name: 'write',
+              args: ['hello'],
+              payableAmount: '',
+            },
+          ],
+        } as SmartContractBaseData);
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+          `${mockActionName} pending on-chain confirmation`,
+          expect.objectContaining({
+            variant: 'warning',
+            persist: true,
+          })
+        );
+
+        render(mockEnqueueSnackbar.mock.calls[0][1].action);
+        await userEvent.click(screen.getByText('View transaction'));
+        expect(window.open).toHaveBeenCalledWith(`https://etherscan.io/tx/${mockWriteResult.hash}`);
+      });
+
+      it('enqueues persisted snackbar with multiple urls', async () => {
+        (writeContract as jest.Mock).mockImplementationOnce(() => ({
+          hash: '1',
+          wait: jest.fn(async () => mockWriteCompletedReceipt),
+        }));
+        (writeContract as jest.Mock).mockImplementationOnce(() => ({
+          hash: '2',
+          wait: jest.fn(async () => mockWriteCompletedReceipt),
+        }));
+
+        const { result } = renderHook(() => useActionSmartContractExecute());
+        await result.current.writeSmartContract(mockActionName, {
+          loopEnabled: true,
+          loopElements: 'return [1, 2]',
+          freeform: false,
+          smartContractId: '1',
+          functions: [
+            {
+              name: 'write',
+              args: ['hello'],
+              payableAmount: '',
+            },
+          ],
+        } as SmartContractBaseData);
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+          `${mockActionName} pending on-chain confirmation`,
+          expect.objectContaining({
+            variant: 'warning',
+            persist: true,
+          })
+        );
+
+        render(mockEnqueueSnackbar.mock.calls[0][1].action);
+        await userEvent.click(screen.getByText('View transaction(s)'));
+        expect(screen.getByTestId('view-transactions-menu-option-0')).toHaveProperty(
+          'href',
+          'https://etherscan.io/tx/1'
+        );
+        expect(screen.getByTestId('view-transactions-menu-option-1')).toHaveProperty(
+          'href',
+          'https://etherscan.io/tx/2'
+        );
+      });
     });
 
     it('calls write function without payable amount', async () => {

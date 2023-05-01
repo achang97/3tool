@@ -5,7 +5,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import { Toolbar } from '@app/components/toolbar/Toolbar';
 import { theme } from '@app/utils/mui';
 import { persistor, wrapper } from '@app/redux/store';
-import { wagmiClient } from '@app/utils/wallet';
+import { wagmiClient } from '@app/constants/wallet';
 import { Provider } from 'react-redux';
 import { WagmiConfig } from 'wagmi';
 import { initFetch } from '@app/utils/global';

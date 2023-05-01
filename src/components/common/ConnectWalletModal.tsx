@@ -1,6 +1,6 @@
 import { WALLETCONNECT_PROJECT_ID } from '@app/constants';
 import { baseFont } from '@app/styles/font';
-import { ethereumClient } from '@app/utils/wallet';
+import { ethereumClient } from '@app/constants/wallet';
 import { useTheme } from '@mui/material';
 import { Web3Modal } from '@web3modal/react';
 
