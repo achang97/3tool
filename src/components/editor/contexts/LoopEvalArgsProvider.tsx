@@ -32,6 +32,8 @@ export const LoopEvalArgsProvider = ({ data, children }: LoopEvalArgsProviderPro
   const loadElement = useCallback(
     async (loopableData: LoopableData | undefined) => {
       if (!loopableData?.loopEnabled) {
+        setArgs({});
+        setError('');
         return;
       }
 

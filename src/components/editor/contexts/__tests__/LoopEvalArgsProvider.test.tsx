@@ -23,7 +23,7 @@ describe('LoopEvalArgsProvider', () => {
     expect(screen.getByText(mockChildren)).toBeTruthy();
   });
 
-  it('does nothing if loop is not enabled', async () => {
+  it('sets args to empty object if loop is not enabled', async () => {
     const { result } = renderHook(() => useLocalEvalArgs(), {
       wrapper: ({ children }: { children: ReactElement }) => (
         <LoopEvalArgsProvider data={{ loopElements: '', loopEnabled: false }}>

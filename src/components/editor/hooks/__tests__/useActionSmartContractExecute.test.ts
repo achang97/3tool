@@ -1,12 +1,19 @@
 import { ResourceType, SmartContractBaseData } from '@app/types';
 import { mainnet, useSigner } from 'wagmi';
-import { prepareWriteContract, readContract, readContracts, writeContract } from '@wagmi/core';
+import {
+  fetchSigner,
+  prepareWriteContract,
+  readContract,
+  readContracts,
+  writeContract,
+} from '@wagmi/core';
 import { ethers } from 'ethers';
 import { render, renderHook, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useActionSmartContractExecute } from '../useActionSmartContractExecute';
 
 const mockSigner = { address: '0xsigner' };
+const mockFetchedSigner = { address: '0xfetchedSigner' };
 const mockSmartContract = {
   address: '0x123',
   chainId: mainnet.id,
@@ -28,6 +35,7 @@ const mockAbi = [
 ];
 
 const mockEnqueueSnackbar = jest.fn();
+const mockSwitchNetwork = jest.fn();
 
 jest.mock('wagmi', () => ({
   ...jest.requireActual('wagmi'),
@@ -43,6 +51,10 @@ jest.mock('@app/redux/hooks', () => ({
 
 jest.mock('@app/hooks/useEnqueueSnackbar', () => ({
   useEnqueueSnackbar: jest.fn(() => mockEnqueueSnackbar),
+}));
+
+jest.mock('@app/hooks/useSwitchNetwork', () => ({
+  useSwitchNetwork: jest.fn(() => mockSwitchNetwork),
 }));
 
 jest.mock('@app/components/resources/hooks/useSmartContractResources', () => ({
@@ -75,6 +87,7 @@ describe('useActionSmartContractExecute', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useSigner as jest.Mock).mockImplementation(() => ({ data: mockSigner }));
+    (fetchSigner as jest.Mock).mockImplementation(() => mockFetchedSigner);
   });
 
   describe('readSmartContract', () => {
@@ -346,13 +359,15 @@ describe('useActionSmartContractExecute', () => {
         ],
       } as SmartContractBaseData);
 
+      expect(mockSwitchNetwork).toHaveBeenCalledWith(mockSmartContract.chainId);
+
       expect(prepareWriteContract).toHaveBeenCalledWith({
         abi: mockAbi,
         address: mockSmartContract.address,
         chainId: mockSmartContract.chainId,
         functionName: 'write',
         args: ['hello'],
-        signer: mockSigner,
+        signer: mockFetchedSigner,
       });
       expect(writeContract).toHaveBeenCalledWith(mockPrepareWriteResult);
       expect(mockWriteResult.wait).toHaveBeenCalled();
@@ -376,6 +391,8 @@ describe('useActionSmartContractExecute', () => {
         ],
       } as SmartContractBaseData);
 
+      expect(mockSwitchNetwork).toHaveBeenCalledWith(mockSmartContract.chainId);
+
       expect(prepareWriteContract).toHaveBeenCalledWith({
         abi: mockAbi,
         address: mockSmartContract.address,
@@ -385,7 +402,7 @@ describe('useActionSmartContractExecute', () => {
         overrides: {
           value: ethers.utils.parseEther('3'),
         },
-        signer: mockSigner,
+        signer: mockFetchedSigner,
       });
       expect(writeContract).toHaveBeenCalledWith(mockPrepareWriteResult);
       expect(mockWriteResult.wait).toHaveBeenCalled();
@@ -399,47 +416,57 @@ describe('useActionSmartContractExecute', () => {
       const { result } = renderHook(() => useActionSmartContractExecute());
       const writeResult = await result.current.writeSmartContract(mockActionName, {
         loopEnabled: true,
-        loopElements: 'return ["hello", "world"];',
-        freeform: false,
+        loopElements: 'return [1, 5];',
+        freeform: true,
+        freeformAbiId: '2',
+        freeformAddress: '0x123',
+        freeformChainId: '{{ element }}',
         smartContractId: '1',
         functions: [
           {
             name: 'write',
-            args: ['{{ element }}'],
+            args: ['hello'],
             payableAmount: '',
           },
         ],
       } as SmartContractBaseData);
 
+      expect(mockSwitchNetwork).toHaveBeenCalledTimes(2);
       expect(prepareWriteContract).toHaveBeenCalledTimes(2);
       expect(writeContract).toHaveBeenCalledTimes(2);
       expect(mockWriteResult.wait).toHaveBeenCalledTimes(2);
 
+      expect(mockSwitchNetwork).toHaveBeenCalledWith(1);
+      expect(mockSwitchNetwork).toHaveBeenCalledWith(5);
+
       expect(prepareWriteContract).toHaveBeenCalledWith({
         abi: mockAbi,
-        address: mockSmartContract.address,
-        chainId: mockSmartContract.chainId,
+        address: '0x123',
+        chainId: 1,
         functionName: 'write',
         args: ['hello'],
-        signer: mockSigner,
+        signer: mockFetchedSigner,
       });
       expect(prepareWriteContract).toHaveBeenCalledWith({
         abi: mockAbi,
-        address: mockSmartContract.address,
-        chainId: mockSmartContract.chainId,
+        address: '0x123',
+        chainId: 5,
         functionName: 'write',
-        args: ['world'],
-        signer: mockSigner,
+        args: ['hello'],
+        signer: mockFetchedSigner,
       });
 
       expect(writeResult).toEqual([
         {
-          element: 'hello',
+          element: 1,
           data: { ...mockWriteCompletedReceipt, blockExplorerUrl: 'https://etherscan.io/tx/123' },
         },
         {
-          element: 'world',
-          data: { ...mockWriteCompletedReceipt, blockExplorerUrl: 'https://etherscan.io/tx/123' },
+          element: 5,
+          data: {
+            ...mockWriteCompletedReceipt,
+            blockExplorerUrl: 'https://goerli.etherscan.io/tx/123',
+          },
         },
       ]);
     });
