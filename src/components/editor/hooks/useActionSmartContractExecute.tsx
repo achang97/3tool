@@ -100,6 +100,13 @@ export const useActionSmartContractExecute = () => {
         return undefined;
       }
 
+      if (!signer) {
+        enqueueSnackbar(`${name} failed. Please connect your wallet and try again.`, {
+          variant: 'error',
+        });
+        return undefined;
+      }
+
       const writeFunction = data.functions[0];
       const writeResults = await loop<SendTransactionResult & { blockExplorerUrl: string }>(
         data,

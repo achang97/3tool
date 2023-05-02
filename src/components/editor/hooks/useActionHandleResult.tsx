@@ -37,6 +37,10 @@ export const useActionHandleResult = () => {
 
       switch (action.type) {
         case ActionType.SmartContractWrite: {
+          if (!result.data) {
+            break;
+          }
+
           const txReceipts = result.data as LoopResult<
             WaitForTransactionResult & { blockExplorerUrl: string }
           >;

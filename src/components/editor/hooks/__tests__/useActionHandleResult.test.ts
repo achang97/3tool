@@ -66,6 +66,12 @@ describe('useActionHandleResult', () => {
     });
 
     describe('smart contract write', () => {
+      it('does not enqueue snackbar if data is undefined', async () => {
+        const { result } = renderHook(() => useActionHandleResult());
+        result.current({ ...mockAction, type: ActionType.SmartContractWrite }, { data: undefined });
+        expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
+      });
+
       it('enqueues persisted snackbar with single url', async () => {
         const { result } = renderHook(() => useActionHandleResult());
 

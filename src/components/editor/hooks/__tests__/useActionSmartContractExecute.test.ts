@@ -1,5 +1,5 @@
 import { ResourceType, SmartContractBaseData } from '@app/types';
-import { mainnet } from 'wagmi';
+import { mainnet, useSigner } from 'wagmi';
 import { prepareWriteContract, readContract, readContracts, writeContract } from '@wagmi/core';
 import { ethers } from 'ethers';
 import { render, renderHook, screen } from '@testing-library/react';
@@ -31,7 +31,7 @@ const mockEnqueueSnackbar = jest.fn();
 
 jest.mock('wagmi', () => ({
   ...jest.requireActual('wagmi'),
-  useSigner: jest.fn(() => ({ data: mockSigner })),
+  useSigner: jest.fn(),
 }));
 
 jest.mock('@wagmi/core');
@@ -74,6 +74,7 @@ jest.mock('@app/components/resources/hooks/useAbiResources', () => ({
 describe('useActionSmartContractExecute', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (useSigner as jest.Mock).mockImplementation(() => ({ data: mockSigner }));
   });
 
   describe('readSmartContract', () => {
@@ -214,6 +215,49 @@ describe('useActionSmartContractExecute', () => {
       const writeResult = await result.current.writeSmartContract(mockActionName, undefined);
       expect(writeResult).toBeUndefined();
       expect(mockEnqueueSnackbar).not.toHaveBeenCalled();
+    });
+
+    describe('no signer', () => {
+      beforeEach(() => {
+        (useSigner as jest.Mock).mockImplementation(() => ({ data: undefined }));
+      });
+
+      it('returns undefined if data is not defined', async () => {
+        const { result } = renderHook(() => useActionSmartContractExecute());
+        const writeResult = await result.current.writeSmartContract(mockActionName, {
+          freeform: false,
+          smartContractId: '1',
+          functions: [
+            {
+              name: 'write',
+              args: ['hello'],
+              payableAmount: '',
+            },
+          ],
+        } as SmartContractBaseData);
+        expect(writeResult).toBeUndefined();
+      });
+
+      it('enqueues error snackbar prompting user to connect wallet', async () => {
+        const { result } = renderHook(() => useActionSmartContractExecute());
+        await result.current.writeSmartContract(mockActionName, {
+          freeform: false,
+          smartContractId: '1',
+          functions: [
+            {
+              name: 'write',
+              args: ['hello'],
+              payableAmount: '',
+            },
+          ],
+        } as SmartContractBaseData);
+        expect(mockEnqueueSnackbar).toHaveBeenCalledWith(
+          `${mockActionName} failed. Please connect your wallet and try again.`,
+          expect.objectContaining({
+            variant: 'error',
+          })
+        );
+      });
     });
 
     describe('snackbar', () => {
