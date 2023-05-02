@@ -14,7 +14,7 @@ export const EditorApp = ({ isEditable }: EditorAppProps) => {
   useActionQueueExecutor();
 
   return (
-    <Stack sx={{ height: '100%' }} data-testid="editor-app">
+    <Stack sx={{ height: '100%', paddingBottom: 10 }} data-testid="editor-app">
       <CanvasToolbar />
       {isLoading ? <FullscreenLoader /> : <CanvasDroppable isEditable={isEditable} />}
     </Stack>
