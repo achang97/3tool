@@ -21,11 +21,11 @@ const Tools = () => {
   return (
     <>
       <Head>
-        <title>{createTitle('Tools')}</title>
+        <title>{createTitle('Apps')}</title>
       </Head>
       <main>
         <PageContainer>
-          <PageTitle>Tools</PageTitle>
+          <PageTitle>Apps</PageTitle>
           {isLoading && <FullscreenLoader />}
           {!isLoading && error && (
             <Stack sx={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

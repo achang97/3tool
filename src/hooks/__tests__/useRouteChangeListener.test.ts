@@ -26,7 +26,7 @@ describe('useRouteChangeListener', () => {
     ${'/resources'}          | ${undefined}                      | ${'Resources'}        | ${undefined}
     ${'/settings/team'}      | ${undefined}                      | ${'Team Settings'}    | ${undefined}
     ${'/settings/account'}   | ${undefined}                      | ${'Account Settings'} | ${undefined}
-    ${'/tools/[id]/[name]'}  | ${{ id: 'toolId', name: 'Tool' }} | ${'App View'}         | ${{ toolId: 'toolId', toolName: 'Tool' }}
+    ${'/apps/[id]/[name]'}   | ${{ id: 'toolId', name: 'Tool' }} | ${'App View'}         | ${{ toolId: 'toolId', toolName: 'Tool' }}
     ${'/editor/[id]/[name]'} | ${{ id: 'toolId', name: 'Tool' }} | ${'App Editor'}       | ${{ toolId: 'toolId', toolName: 'Tool' }}
   `(
     'calls analytics.page with $name name',

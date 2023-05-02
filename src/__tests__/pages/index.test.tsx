@@ -1,4 +1,4 @@
-import ToolsPage from '@app/pages';
+import HomePage from '@app/pages';
 import { mockUser } from '@tests/constants/data';
 import { Tool } from '@app/types';
 import { screen } from '@testing-library/react';
@@ -30,29 +30,29 @@ describe('Home', () => {
   });
 
   it('renders page title', () => {
-    render(<ToolsPage />);
-    expect(screen.getByText('Tools')).toBeTruthy();
+    render(<HomePage />);
+    expect(screen.getByText('Apps')).toBeTruthy();
   });
 
   it('renders loader', () => {
     (useGetToolsQuery as jest.Mock).mockImplementation(() => ({ isLoading: true }));
-    render(<ToolsPage />);
+    render(<HomePage />);
     expect(screen.getByTestId('fullscreen-loader')).toBeTruthy();
   });
 
   it('renders error', () => {
     (useGetToolsQuery as jest.Mock).mockImplementation(() => ({ error: mockApiError }));
-    render(<ToolsPage />);
+    render(<HomePage />);
     expect(screen.getByText(mockApiError.data.message)).toBeTruthy();
   });
 
   it('renders create tool thumbnail', async () => {
-    render(<ToolsPage />);
+    render(<HomePage />);
     expect(screen.findByTestId('create-tool-thumbnail')).toBeDefined();
   });
 
   it('renders tools', () => {
-    render(<ToolsPage />);
+    render(<HomePage />);
     expect(screen.getByText('Tool 1')).toBeTruthy();
   });
 });

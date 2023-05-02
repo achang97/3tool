@@ -43,7 +43,7 @@ export const EditorCanvas = ({ isEditable }: EditorCanvasProps) => {
           sx={{ marginBottom: 0.5, alignSelf: 'flex-start' }}
           onClick={handleToolClick}
         >
-          tool
+          app
         </Button>
       )}
       <Box

@@ -35,13 +35,13 @@ describe('CreateToolDialog', () => {
   it('renders dialog title', () => {
     render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
-    expect(screen.getByText('Create new tool')).toBeTruthy();
+    expect(screen.getByText('Create new app')).toBeTruthy();
   });
 
-  it('disables button to create tool if no tool name is provided', async () => {
+  it('disables button to create tool if no name is provided', async () => {
     render(<CreateToolDialog onClose={mockHandleClose} isOpen />);
 
-    const submitButton = screen.getByText('Create tool');
+    const submitButton = screen.getByText('Create app');
     expect(submitButton).toBeDisabled();
   });
 
@@ -53,7 +53,7 @@ describe('CreateToolDialog', () => {
     const input = screen.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, mockName);
 
-    const submitButton = screen.getByText('Create tool');
+    const submitButton = screen.getByText('Create app');
     await userEvent.click(submitButton);
 
     expect(mockCreateTool).toHaveBeenCalledWith({ name: mockName });
@@ -67,7 +67,7 @@ describe('CreateToolDialog', () => {
     const input = screen.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, 'New Tool Name');
 
-    const submitButton = screen.getByText('Create tool');
+    const submitButton = screen.getByText('Create app');
     await userEvent.click(submitButton);
 
     expect(mockPush).not.toHaveBeenCalled();
@@ -83,7 +83,7 @@ describe('CreateToolDialog', () => {
     const input = screen.getByTestId('create-tool-dialog-input');
     await userEvent.type(input, 'New Tool Name');
 
-    const submitButton = screen.getByText('Create tool');
+    const submitButton = screen.getByText('Create app');
     await userEvent.click(submitButton);
 
     expect(mockPush).toHaveBeenCalledWith(

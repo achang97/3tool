@@ -45,13 +45,13 @@ export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => 
 
   return (
     <Dialog onClose={onClose} open={isOpen} fullWidth data-testid="create-tool-dialog">
-      <DialogTitle>Create new tool</DialogTitle>
+      <DialogTitle>Create new app</DialogTitle>
       <DialogContent>
         <form id={FORM_ID} onSubmit={handleCreateTool}>
           <TextField
             variant="outlined"
-            placeholder="Enter tool name"
-            label="Tool name"
+            placeholder="Enter app name"
+            label="App name"
             value={name}
             onChange={handleNameChange}
             fullWidth
@@ -65,7 +65,7 @@ export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => 
       </DialogContent>
       <DialogActions>
         <LoadingButton type="submit" form={FORM_ID} loading={isLoading} disabled={!name} fullWidth>
-          Create tool
+          Create app
         </LoadingButton>
       </DialogActions>
     </Dialog>

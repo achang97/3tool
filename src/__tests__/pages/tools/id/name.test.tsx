@@ -1,5 +1,5 @@
 import { useQueryTool } from '@app/components/editor/hooks/useQueryTool';
-import Tool from '@app/pages/tools/[id]/[name]';
+import App from '@app/pages/apps/[id]/[name]';
 import { mockTool } from '@tests/constants/data';
 import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
@@ -34,13 +34,13 @@ jest.mock('@app/redux/hooks', () => ({
 
 jest.mock('@app/components/editor/hooks/useQueryTool');
 
-describe('Tools/Id/Name', () => {
+describe('Apps/Id/Name', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('clears state on unmount', () => {
-    const result = render(<Tool />);
+    const result = render(<App />);
     result.unmount();
     expect(mockDispatch).toHaveBeenCalledWith(resetActiveTool());
   });
@@ -48,7 +48,7 @@ describe('Tools/Id/Name', () => {
   describe('loading', () => {
     it('renders fullscreen loader', () => {
       (useQueryTool as jest.Mock).mockImplementation(() => undefined);
-      render(<Tool />);
+      render(<App />);
       expect(screen.getByTestId('fullscreen-loader')).toBeTruthy();
     });
   });
@@ -59,12 +59,12 @@ describe('Tools/Id/Name', () => {
     });
 
     it('renders tool viewer toolbar', () => {
-      render(<Tool />);
+      render(<App />);
       expect(screen.getByTestId('tool-viewer-toolbar')).toBeTruthy();
     });
 
     it('renders editor app', () => {
-      render(<Tool />);
+      render(<App />);
       expect(screen.getByTestId('editor-app')).toBeTruthy();
     });
   });

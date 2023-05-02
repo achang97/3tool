@@ -49,7 +49,7 @@ describe('EditorCanvas', () => {
   it('focuses tool settings on tool text click', async () => {
     render(<EditorCanvas isEditable />);
 
-    await userEvent.click(screen.getByText('tool'));
+    await userEvent.click(screen.getByText('app'));
     expect(mockDispatch).toHaveBeenCalledWith(focusToolSettings());
     expect(mockDispatch).not.toHaveBeenCalledWith(blurComponent());
   });

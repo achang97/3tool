@@ -18,13 +18,13 @@ describe('CreateToolThumbnail', () => {
   it('renders description', () => {
     render(<CreateToolThumbnail />);
 
-    expect(screen.getByText('New tool')).toBeTruthy();
+    expect(screen.getByText('New app')).toBeTruthy();
   });
 
   it('opens dialog on click', async () => {
     render(<CreateToolThumbnail />);
 
-    await userEvent.click(screen.getByText('New tool'));
+    await userEvent.click(screen.getByText('New app'));
 
     expect(await screen.findByTestId(createToolDialogId)).toBeTruthy();
   });
@@ -32,7 +32,7 @@ describe('CreateToolThumbnail', () => {
   it('closes dialog on blur', async () => {
     render(<CreateToolThumbnail />);
 
-    await userEvent.click(screen.getByText('New tool'));
+    await userEvent.click(screen.getByText('New app'));
     expect(await screen.findByTestId(createToolDialogId)).toBeTruthy();
 
     await userEvent.keyboard('[Escape]');

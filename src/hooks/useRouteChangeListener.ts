@@ -28,7 +28,7 @@ export const useRouteChangeListener = () => {
         return { name: 'Team Settings' };
       case '/settings/account':
         return { name: 'Account Settings' };
-      case '/tools/[id]/[name]':
+      case '/apps/[id]/[name]':
         return { name: 'App View', properties: { toolId: query.id, toolName: query.name } };
       case '/editor/[id]/[name]':
         return { name: 'App Editor', properties: { toolId: query.id, toolName: query.name } };

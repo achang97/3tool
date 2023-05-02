@@ -12,7 +12,7 @@ import { useAppDispatch } from '@app/redux/hooks';
 import { resetActiveTool } from '@app/redux/features/activeToolSlice';
 import { useRouter } from 'next/router';
 
-const ToolViewer = () => {
+const AppViewer = () => {
   const { query } = useRouter();
   const tool = useQueryTool();
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ const ToolViewer = () => {
   return (
     <>
       <Head>
-        <title>{createTitle(query.name?.toString() ?? 'Tool Viewer')}</title>
+        <title>{createTitle(query.name?.toString() ?? 'App Viewer')}</title>
       </Head>
       <main>
         {tool ? (
@@ -46,4 +46,4 @@ const ToolViewer = () => {
   );
 };
 
-export default ToolViewer;
+export default AppViewer;

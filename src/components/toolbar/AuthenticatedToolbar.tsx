@@ -11,7 +11,7 @@ import { useLogout } from '@app/hooks/useLogout';
 import { ToolbarTemplate } from './common/ToolbarTemplate';
 
 const AUTHENTICATED_LINKS = [
-  { to: '/', text: 'Tools' },
+  { to: '/', text: 'Apps' },
   { to: '/resources', text: 'Resources' },
 ];
 

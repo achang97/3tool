@@ -3,9 +3,9 @@ import { screen, render } from '@testing-library/react';
 import { ToolInspector } from '../ToolInspector';
 
 describe('ToolInspector', () => {
-  it('renders tool title', () => {
+  it('renders app title', () => {
     render(<ToolInspector />);
-    expect(screen.getByText('tool')).toBeTruthy();
+    expect(screen.getByText('app')).toBeTruthy();
   });
 
   it('renders libraries section', () => {

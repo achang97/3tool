@@ -7,7 +7,7 @@ import { InspectorSection } from './InspectorSection';
 export const ToolInspector = () => {
   return (
     <Stack data-testid="tool-inspector" sx={{ height: '100%' }}>
-      <InspectorHeader title="tool" icon={<Web />} isEditable={false} />
+      <InspectorHeader title="app" icon={<Web />} isEditable={false} />
       <Box sx={{ overflow: 'auto', minHeight: 0 }}>
         <InspectorSection title="Libraries">
           <Box>

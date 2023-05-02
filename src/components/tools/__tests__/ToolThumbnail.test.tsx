@@ -58,7 +58,7 @@ describe('ToolThumbnail', () => {
     expect(screen.getByText('Updated a month ago')).toBeTruthy();
   });
 
-  it('navigates to /tools/:id route on click', () => {
+  it('navigates to /apps/:id route on click', () => {
     render(
       <ToolThumbnail
         id={mockId}
@@ -69,7 +69,7 @@ describe('ToolThumbnail', () => {
     );
     expect(screen.getByTestId('thumbnail-container-content')).toHaveProperty(
       'href',
-      `${BASE_WINDOW_URL}/tools/${mockId}/${encodeURIComponent(mockName)}`
+      `${BASE_WINDOW_URL}/apps/${mockId}/${encodeURIComponent(mockName)}`
     );
   });
 });

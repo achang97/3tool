@@ -39,11 +39,11 @@ describe('AuthenticatedToolbar', () => {
     expect(await screen.findByTestId('authenticated-toolbar-menu')).toBeTruthy();
   });
 
-  it('renders link to Tools page', () => {
+  it('renders link to Apps page', () => {
     render(<AuthenticatedToolbar />);
 
-    const toolsNav = screen.getByText('Tools');
-    expect(toolsNav.getAttribute('href')).toEqual('/');
+    const appsNav = screen.getByText('Apps');
+    expect(appsNav.getAttribute('href')).toEqual('/');
   });
 
   it('renders link to Resources page', () => {

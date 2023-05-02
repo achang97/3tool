@@ -7,7 +7,7 @@ export const useToolMode = () => {
   const { isPreview } = useAppSelector((state) => state.editor);
 
   const mode = useMemo(() => {
-    if (pathname === '/tools/[id]/[name]') {
+    if (pathname === '/apps/[id]/[name]') {
       return 'view';
     }
     if (isPreview) {

@@ -28,7 +28,7 @@ describe('Toolbar', () => {
   it('renders nothing if on /tools/[id]/[name] route', () => {
     (useSignedInUser as jest.Mock).mockImplementation(() => mockUser);
     (useRouter as jest.Mock).mockImplementation(() => ({
-      pathname: '/tools/[id]/[name]',
+      pathname: '/apps/[id]/[name]',
     }));
 
     const result = render(<Toolbar />);

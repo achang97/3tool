@@ -23,7 +23,7 @@ export const CreateToolThumbnail = () => {
         testId="create-tool-thumbnail"
       >
         <Button startIcon={<Add fontSize="inherit" />} fullWidth>
-          New tool
+          New app
         </Button>
       </ThumbnailContainer>
       <CreateToolDialog isOpen={isDialogOpen} onClose={handleDialogClose} />

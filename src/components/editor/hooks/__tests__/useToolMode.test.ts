@@ -13,7 +13,7 @@ describe('useToolMode', () => {
   });
 
   it('returns "view" when on view route', () => {
-    (useRouter as jest.Mock).mockImplementation(() => ({ pathname: '/tools/[id]/[name]' }));
+    (useRouter as jest.Mock).mockImplementation(() => ({ pathname: '/apps/[id]/[name]' }));
     const { result } = renderHook(() => useToolMode());
     expect(result.current).toEqual('view');
   });
