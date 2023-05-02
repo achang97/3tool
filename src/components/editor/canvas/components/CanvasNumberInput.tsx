@@ -12,7 +12,7 @@ export const CanvasNumberInput = ({ name, eventHandlerCallbacks }: BaseCanvasCom
   const { evalDataValues } = useComponentEvalData<ComponentType.NumberInput>(name);
 
   const handleUpdateValue = useCallback(
-    (newValue: number) => {
+    (newValue: number | undefined) => {
       dispatch(setComponentInput({ name, input: { value: newValue } }));
     },
     [dispatch, name]
@@ -49,9 +49,8 @@ export const CanvasNumberInput = ({ name, eventHandlerCallbacks }: BaseCanvasCom
    * Side effects
    */
   useEffect(() => {
-    if (evalDataValues.defaultValue) {
-      handleUpdateValue(evalDataValues.defaultValue);
-    }
+    // We want to unset the value to undefined when the defaultValue is the empty string
+    handleUpdateValue(evalDataValues.defaultValue || undefined);
   }, [evalDataValues.defaultValue, handleUpdateValue]);
 
   return (
@@ -59,8 +58,7 @@ export const CanvasNumberInput = ({ name, eventHandlerCallbacks }: BaseCanvasCom
       data-testid="canvas-number-input"
       type="number"
       label={evalDataValues.label}
-      value={Number.isNaN(input.value) ? undefined : input.value}
-      defaultValue={evalDataValues.defaultValue}
+      value={input.value || evalDataValues.defaultValue || 0}
       placeholder={evalDataValues.placeholder}
       disabled={evalDataValues.disabled}
       required={evalDataValues.required}

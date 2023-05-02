@@ -25,17 +25,14 @@ describe('CanvasTextInput', () => {
   });
 
   describe('props', () => {
-    it('defaultValue: sets default value', () => {
+    it('defaultValue: sets value if value is not defined', () => {
       const mockEvalDataValues = { defaultValue: 'default value' };
       (useComponentEvalData as jest.Mock).mockImplementation(() => ({
         evalDataValues: mockEvalDataValues,
       }));
 
       render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
-      expect(screen.getByRole('textbox')).toHaveProperty(
-        'defaultValue',
-        mockEvalDataValues.defaultValue
-      );
+      expect(screen.getByRole('textbox')).toHaveValue(mockEvalDataValues.defaultValue);
     });
 
     it('placeholder: sets placeholder value', () => {
@@ -123,19 +120,40 @@ describe('CanvasTextInput', () => {
   });
 
   describe('side effects', () => {
-    it('defaultValue: dispatches action to reset value', () => {
-      const mockEvalDataValues = { defaultValue: 'hello' };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalDataValues: mockEvalDataValues,
-      }));
+    describe('defaultValue', () => {
+      it('resets value to default value', () => {
+        const mockEvalDataValues = { defaultValue: 'hello' };
+        (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+          evalDataValues: mockEvalDataValues,
+        }));
 
-      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
-      expect(mockDispatch).toHaveBeenCalledWith(
-        setComponentInput({
-          name: mockName,
-          input: { value: mockEvalDataValues.defaultValue },
-        })
-      );
+        render(
+          <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
+        );
+        expect(mockDispatch).toHaveBeenCalledWith(
+          setComponentInput({
+            name: mockName,
+            input: { value: mockEvalDataValues.defaultValue },
+          })
+        );
+      });
+
+      it('resets value to undefined if default value is empty string', () => {
+        const mockEvalDataValues = { defaultValue: '' };
+        (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+          evalDataValues: mockEvalDataValues,
+        }));
+
+        render(
+          <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
+        );
+        expect(mockDispatch).toHaveBeenCalledWith(
+          setComponentInput({
+            name: mockName,
+            input: { value: undefined },
+          })
+        );
+      });
     });
   });
 

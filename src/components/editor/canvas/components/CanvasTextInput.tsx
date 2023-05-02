@@ -12,7 +12,7 @@ export const CanvasTextInput = ({ name, eventHandlerCallbacks }: BaseCanvasCompo
   const { evalDataValues } = useComponentEvalData<ComponentType.TextInput>(name);
 
   const handleUpdateValue = useCallback(
-    (newValue: string) => {
+    (newValue: string | undefined) => {
       dispatch(setComponentInput({ name, input: { value: newValue } }));
     },
     [dispatch, name]
@@ -55,17 +55,15 @@ export const CanvasTextInput = ({ name, eventHandlerCallbacks }: BaseCanvasCompo
    * Side effects
    */
   useEffect(() => {
-    if (evalDataValues.defaultValue) {
-      handleUpdateValue(evalDataValues.defaultValue);
-    }
+    // We want to unset the value to undefined when the defaultValue is the empty string
+    handleUpdateValue(evalDataValues.defaultValue || undefined);
   }, [evalDataValues.defaultValue, handleUpdateValue]);
 
   return (
     <TextField
       data-testid="canvas-text-input"
       label={evalDataValues.label}
-      value={input.value}
-      defaultValue={evalDataValues.defaultValue}
+      value={input.value ?? evalDataValues.defaultValue}
       placeholder={evalDataValues.placeholder}
       disabled={evalDataValues.disabled}
       required={evalDataValues.required}

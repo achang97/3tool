@@ -25,7 +25,7 @@ describe('CanvasNumberInput', () => {
   });
 
   describe('props', () => {
-    it('defaultValue: sets default value', () => {
+    it('defaultValue: sets default value if value is not defined', () => {
       const mockEvalDataValues = { defaultValue: 2 };
       (useComponentEvalData as jest.Mock).mockImplementation(() => ({
         evalDataValues: mockEvalDataValues,
@@ -34,10 +34,7 @@ describe('CanvasNumberInput', () => {
       render(
         <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
       );
-      expect(screen.getByRole('spinbutton')).toHaveProperty(
-        'defaultValue',
-        mockEvalDataValues.defaultValue.toString()
-      );
+      expect(screen.getByRole('spinbutton')).toHaveValue(mockEvalDataValues.defaultValue);
     });
 
     it('placeholder: sets placeholder value', () => {
@@ -140,16 +137,6 @@ describe('CanvasNumberInput', () => {
         );
         expect(screen.getByRole('spinbutton')).toHaveValue(mockInputs.value);
       });
-
-      it('sets value to null if NaN', () => {
-        const mockInputs = { value: NaN };
-        (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
-
-        render(
-          <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-        );
-        expect(screen.getByRole('spinbutton')).toHaveValue(null);
-      });
     });
 
     it('dispatches action to update component inputs on change', async () => {
@@ -169,21 +156,40 @@ describe('CanvasNumberInput', () => {
   });
 
   describe('side effects', () => {
-    it('defaultValue: dispatches action to reset value', () => {
-      const mockEvalDataValues = { defaultValue: 'hello' };
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalDataValues: mockEvalDataValues,
-      }));
+    describe('defaultValue', () => {
+      it('resets value to default value', () => {
+        const mockEvalDataValues = { defaultValue: 'hello' };
+        (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+          evalDataValues: mockEvalDataValues,
+        }));
 
-      render(
-        <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
-      );
-      expect(mockDispatch).toHaveBeenCalledWith(
-        setComponentInput({
-          name: mockName,
-          input: { value: mockEvalDataValues.defaultValue },
-        })
-      );
+        render(
+          <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
+        );
+        expect(mockDispatch).toHaveBeenCalledWith(
+          setComponentInput({
+            name: mockName,
+            input: { value: mockEvalDataValues.defaultValue },
+          })
+        );
+      });
+
+      it('resets value to undefined if default value is empty string', () => {
+        const mockEvalDataValues = { defaultValue: '' };
+        (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+          evalDataValues: mockEvalDataValues,
+        }));
+
+        render(
+          <CanvasNumberInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
+        );
+        expect(mockDispatch).toHaveBeenCalledWith(
+          setComponentInput({
+            name: mockName,
+            input: { value: undefined },
+          })
+        );
+      });
     });
   });
 
