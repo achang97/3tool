@@ -4,6 +4,7 @@ import { CanvasToolbar } from './canvas/CanvasToolbar';
 import { useActionMountExecute } from './hooks/useActionMountExecute';
 import { useActionQueueExecutor } from './hooks/useActionQueueExecutor';
 import { FullscreenLoader } from '../common/FullscreenLoader';
+import { EditorAppContainer } from './EditorAppContainer';
 
 type EditorAppProps = {
   isEditable: boolean;
@@ -16,7 +17,13 @@ export const EditorApp = ({ isEditable }: EditorAppProps) => {
   return (
     <Stack sx={{ height: '100%', paddingBottom: 10 }} data-testid="editor-app">
       <CanvasToolbar />
-      {isLoading ? <FullscreenLoader /> : <CanvasDroppable isEditable={isEditable} />}
+      {isLoading ? (
+        <FullscreenLoader />
+      ) : (
+        <EditorAppContainer>
+          <CanvasDroppable isEditable={isEditable} />
+        </EditorAppContainer>
+      )}
     </Stack>
   );
 };

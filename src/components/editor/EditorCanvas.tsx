@@ -3,6 +3,7 @@ import { useAppDispatch } from '@app/redux/hooks';
 import { Box, Button, Stack } from '@mui/material';
 import { useCallback, MouseEvent } from 'react';
 import { EditorApp } from './EditorApp';
+import { EditorAppContainer } from './EditorAppContainer';
 
 type EditorCanvasProps = {
   isEditable: boolean;
@@ -36,26 +37,28 @@ export const EditorCanvas = ({ isEditable }: EditorCanvasProps) => {
       onClick={handleCanvasClick}
       data-testid="editor-canvas"
     >
-      {isEditable && (
-        <Button
-          size="small"
-          color="secondary"
-          sx={{ marginBottom: 0.5, alignSelf: 'flex-start' }}
-          onClick={handleToolClick}
+      <EditorAppContainer>
+        {isEditable && (
+          <Button
+            size="small"
+            color="secondary"
+            sx={{ marginBottom: 0.5, alignSelf: 'flex-start' }}
+            onClick={handleToolClick}
+          >
+            app
+          </Button>
+        )}
+        <Box
+          sx={{
+            borderRadius: 1,
+            backgroundColor: 'background.paper',
+            boxShadow: 4,
+            flex: 1,
+          }}
         >
-          app
-        </Button>
-      )}
-      <Box
-        sx={{
-          borderRadius: 1,
-          backgroundColor: 'background.paper',
-          boxShadow: 4,
-          flex: 1,
-        }}
-      >
-        <EditorApp isEditable={isEditable} />
-      </Box>
+          <EditorApp isEditable={isEditable} />
+        </Box>
+      </EditorAppContainer>
     </Stack>
   );
 };
