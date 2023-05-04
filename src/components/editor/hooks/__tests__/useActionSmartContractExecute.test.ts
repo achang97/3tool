@@ -333,7 +333,7 @@ describe('useActionSmartContractExecute', () => {
         );
 
         render(mockEnqueueSnackbar.mock.calls[0][1].action);
-        await userEvent.click(screen.getByText('View transaction(s)'));
+        await userEvent.click(screen.getByText('View transactions'));
         expect(screen.getByTestId('view-transactions-menu-option-0')).toHaveProperty(
           'href',
           'https://etherscan.io/tx/1'

@@ -48,7 +48,7 @@ export const ViewTransactionsButton = ({ urls }: ViewTransactionsButtonProps) =>
         </Menu>
       )}
       <Button variant="text" size="small" onClick={handleClick}>
-        View transaction{urls.length > 1 && '(s)'}
+        View {urls.length === 1 ? 'transaction' : 'transactions'}
       </Button>
     </>
   );

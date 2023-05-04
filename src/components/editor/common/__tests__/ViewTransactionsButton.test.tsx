@@ -23,7 +23,7 @@ describe('ViewTransactionsButton', () => {
 
     it('renders button to open menu with transaction options', async () => {
       render(<ViewTransactionsButton urls={mockUrls} />);
-      await userEvent.click(screen.getByText('View transaction(s)'));
+      await userEvent.click(screen.getByText('View transactions'));
 
       const option1 = screen.getByTestId('view-transactions-menu-option-0');
       expect(option1).toHaveTextContent('Transaction 1');

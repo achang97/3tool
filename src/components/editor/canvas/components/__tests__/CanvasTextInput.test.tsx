@@ -186,31 +186,49 @@ describe('CanvasTextInput', () => {
       expect(screen.getByText('Input is required')).toBeTruthy();
     });
 
-    it('renders min length error message if user input is shorter than min length', () => {
-      const mockEvalDataValues = { minLength: 2 };
-      const mockInputs = { value: 'a' };
+    it.each`
+      minLength | term
+      ${1}      | ${'character'}
+      ${2}      | ${'characters'}
+    `(
+      'renders min length $minLength error message if user input is shorter than min length',
+      ({ minLength, term }: { minLength: number; term: string }) => {
+        const mockEvalDataValues = { minLength };
+        const mockInputs = { value: '' };
 
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalDataValues: mockEvalDataValues,
-      }));
-      (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
+        (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+          evalDataValues: mockEvalDataValues,
+        }));
+        (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
-      expect(screen.getByText('Input must be at least 2 character(s)')).toBeTruthy();
-    });
+        render(
+          <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
+        );
+        expect(screen.getByText(`Input must be at least ${minLength} ${term}`)).toBeTruthy();
+      }
+    );
 
-    it('renders max length error message if user input is longer than max length', () => {
-      const mockEvalDataValues = { maxLength: 2 };
-      const mockInputs = { value: 'aaa' };
+    it.each`
+      maxLength | term
+      ${1}      | ${'character'}
+      ${2}      | ${'characters'}
+    `(
+      'renders max length $maxLength error message if user input is longer than max length',
+      ({ maxLength, term }: { maxLength: number; term: string }) => {
+        const mockEvalDataValues = { maxLength };
+        const mockInputs = { value: 'aaa' };
 
-      (useComponentEvalData as jest.Mock).mockImplementation(() => ({
-        evalDataValues: mockEvalDataValues,
-      }));
-      (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
+        (useComponentEvalData as jest.Mock).mockImplementation(() => ({
+          evalDataValues: mockEvalDataValues,
+        }));
+        (useComponentInputs as jest.Mock).mockImplementation(() => mockInputs);
 
-      render(<CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />);
-      expect(screen.getByText('Input must be at most 2 character(s)')).toBeTruthy();
-    });
+        render(
+          <CanvasTextInput name={mockName} eventHandlerCallbacks={mockEventHandlerCallbacks} />
+        );
+        expect(screen.getByText(`Input must be at most ${maxLength} ${term}`)).toBeTruthy();
+      }
+    );
 
     it('renders no error message if all conditions are met', () => {
       const mockEvalDataValues = { required: true, minLength: 1, maxLength: 2 };

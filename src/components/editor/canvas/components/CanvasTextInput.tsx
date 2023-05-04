@@ -38,14 +38,18 @@ export const CanvasTextInput = ({ name, eventHandlerCallbacks }: BaseCanvasCompo
       typeof evalDataValues.minLength === 'number' &&
       input.value.length < evalDataValues.minLength
     ) {
-      return `Input must be at least ${evalDataValues.minLength} character(s)`;
+      return `Input must be at least ${evalDataValues.minLength} ${
+        evalDataValues.minLength === 1 ? 'character' : 'characters'
+      }`;
     }
 
     if (
       typeof evalDataValues.maxLength === 'number' &&
       input.value.length > evalDataValues.maxLength
     ) {
-      return `Input must be at most ${evalDataValues.maxLength} character(s)`;
+      return `Input must be at most ${evalDataValues.maxLength} ${
+        evalDataValues.maxLength === 1 ? 'character' : 'characters'
+      }`;
     }
 
     return '';
