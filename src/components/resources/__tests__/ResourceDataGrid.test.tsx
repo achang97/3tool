@@ -1,4 +1,4 @@
-import { Resource } from '@app/types';
+import { ResourceWithLinkedActions } from '@app/types';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useGetResourcesQuery } from '@app/redux/services/resources';
@@ -7,7 +7,7 @@ import { mockSmartContractResource } from '@tests/constants/data';
 import { mockApiError } from '@tests/constants/api';
 import { ResourceDataGrid } from '../ResourceDataGrid';
 
-const mockResources: Resource[] = [
+const mockResources: ResourceWithLinkedActions[] = [
   {
     ...mockSmartContractResource,
     createdAt: '2023-01-05T02:37:30.083Z',
@@ -45,6 +45,7 @@ describe('ResourceDataGrid', () => {
     expect(screen.getByText('Type')).toBeTruthy();
     expect(screen.getByText('Resource')).toBeTruthy();
     expect(screen.getByText('Created At')).toBeTruthy();
+    expect(screen.getByText('Linked Actions')).toBeTruthy();
   });
 
   it('renders resources as rows in data grid', () => {
@@ -54,6 +55,7 @@ describe('ResourceDataGrid', () => {
     expect(screen.getByText('Smart contract')).toBeTruthy();
     expect(screen.getByText(mockResources[0].name)).toBeTruthy();
     expect(screen.getByText(`(${mockResources[0].data.smartContract?.address})`)).toBeTruthy();
+    expect(screen.getByText('0')).toBeTruthy();
     expect(screen.getByText('Jan 5, 2023 2:37 AM')).toBeTruthy();
   });
 

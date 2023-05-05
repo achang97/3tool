@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { Resource } from '@app/types';
+import { Resource, ResourceWithLinkedActions } from '@app/types';
 import { baseQueryWithReauth } from './common/baseQuery';
 
 export const resourcesApi = createApi({
@@ -7,7 +7,7 @@ export const resourcesApi = createApi({
   tagTypes: ['Resource'],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    getResources: builder.query<Resource[], string>({
+    getResources: builder.query<ResourceWithLinkedActions[], string>({
       query: (name) => `/resources?name=${name}`,
       providesTags: ['Resource'],
     }),
@@ -34,6 +34,13 @@ export const resourcesApi = createApi({
       }),
       invalidatesTags: ['Resource'],
     }),
+    deleteResource: builder.mutation<Resource, Pick<Resource, '_id'>>({
+      query: ({ _id }) => ({
+        url: `/resources/${_id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Resource'],
+    }),
   }),
 });
 
@@ -42,4 +49,5 @@ export const {
   useGetResourcesQuery,
   useCreateResourceMutation,
   useUpdateResourceMutation,
+  useDeleteResourceMutation,
 } = resourcesApi;

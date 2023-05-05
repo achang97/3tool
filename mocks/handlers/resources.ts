@@ -1,5 +1,10 @@
 import { rest } from 'msw';
-import { Resource, ResourceType } from '@app/types';
+import { Resource, ResourceType, ResourceWithLinkedActions } from '@app/types';
+import {
+  mockJavascriptAction,
+  mockSmartContractReadAction1,
+  mockSmartContractReadAction2,
+} from '@mocks/data/actions';
 import { generateRandomDate } from '../utils';
 
 const mockResources: Resource[] = [
@@ -61,6 +66,45 @@ const mockResources: Resource[] = [
   },
 ];
 
+const getMockResourcesWithLinkedActions = (): ResourceWithLinkedActions[] =>
+  mockResources.map((resource) => {
+    if (resource._id === '1')
+      return {
+        ...resource,
+        linkedActions: [
+          {
+            ...mockJavascriptAction,
+            toolId: '2',
+            toolName: 'Script Dashboard',
+          },
+        ],
+      };
+
+    if (resource._id === '2')
+      return {
+        ...resource,
+        linkedActions: [
+          {
+            ...mockJavascriptAction,
+            toolId: '1',
+            toolName: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
+          },
+          {
+            ...mockSmartContractReadAction1,
+            toolId: '1',
+            toolName: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
+          },
+          {
+            ...mockSmartContractReadAction2,
+            toolId: '1',
+            toolName: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
+          },
+        ],
+      };
+
+    return resource;
+  });
+
 export const resourcesHandlers = [
   rest.get('*/api/resources/:id', (req, res, ctx) => {
     const resource = mockResources.find((currResource) => currResource._id === req.params.id);
@@ -75,8 +119,10 @@ export const resourcesHandlers = [
     const name = req.url.searchParams.get('name')?.toLowerCase();
     return res(
       ctx.status(200),
-      ctx.json<Resource[]>(
-        mockResources.filter((resource) => !name || resource.name.toLowerCase().includes(name))
+      ctx.json<ResourceWithLinkedActions[]>(
+        getMockResourcesWithLinkedActions().filter(
+          (resource) => !name || resource.name.toLowerCase().includes(name)
+        )
       )
     );
   }),
@@ -131,5 +177,14 @@ export const resourcesHandlers = [
     resource.updatedAt = new Date().toISOString();
 
     return res(ctx.status(200), ctx.json<Resource>(resource));
+  }),
+
+  rest.delete('*/api/resources/:id', async (req, res, ctx) => {
+    const resourceIndex = mockResources.findIndex(
+      (currResource) => currResource._id === req.params.id
+    );
+    if (resourceIndex !== -1) mockResources.splice(resourceIndex, 1);
+
+    return res(ctx.delay(1000), ctx.status(200));
   }),
 ];

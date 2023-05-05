@@ -6,6 +6,7 @@ import {
   useGetResourcesQuery,
   useCreateResourceMutation,
   useUpdateResourceMutation,
+  useDeleteResourceMutation,
 } from '../resources';
 
 const mockResponse = new Response('response');
@@ -92,6 +93,26 @@ describe('resources', () => {
           method: 'PUT',
           url: `/resources/${mockId}`,
           _bodyInit: JSON.stringify(mockBody),
+        })
+      );
+    });
+  });
+
+  describe('useDeleteResourceMutation', () => {
+    it('calls fetch to DELETE /resources', async () => {
+      const mockId = '1';
+
+      const { result } = renderHook(() => useDeleteResourceMutation());
+      const [deleteResource] = result.current;
+
+      await act(async () => {
+        await deleteResource({ _id: mockId });
+      });
+
+      expect(fetch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'DELETE',
+          url: `/resources/${mockId}`,
         })
       );
     });

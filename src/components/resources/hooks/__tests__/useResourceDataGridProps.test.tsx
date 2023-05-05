@@ -67,9 +67,20 @@ describe('useResourceDataGridProps', () => {
       });
     });
 
-    it('returns actions as 4th column', () => {
+    it('returns linked actions as 4th column', () => {
       const { result } = renderHook(() => useResourceDataGridProps(mockResources));
       expect(result.current.columns[3]).toEqual({
+        field: 'linkedActions',
+        headerName: 'Linked Actions',
+        flex: 1,
+        maxWidth: 150,
+        valueGetter: expect.any(Function),
+      });
+    });
+
+    it('returns actions as 5th column', () => {
+      const { result } = renderHook(() => useResourceDataGridProps(mockResources));
+      expect(result.current.columns[4]).toEqual({
         field: 'actions',
         type: 'actions',
         getActions: expect.any(Function),
@@ -78,18 +89,17 @@ describe('useResourceDataGridProps', () => {
     });
 
     describe('getActions', () => {
-      it('returns array with edit action', async () => {
+      const mockGridRowParams = {
+        id: 1,
+        row: mockResources[0],
+      };
+
+      const getActionsSetup = () => {
         const { result } = renderHook(() => useResourceDataGridProps(mockResources));
-
-        const mockGridRowParams = {
-          id: 1,
-          row: mockResources[0],
-        };
         // @ts-ignore getActions should be defined
-        const actions = result.current.columns[3].getActions(mockGridRowParams);
-        expect(actions).toHaveLength(1);
-
-        const renderResult = render(
+        const actions = result.current.columns[4].getActions(mockGridRowParams);
+        expect(actions).toHaveLength(2);
+        return render(
           <div>
             {actions.map((action: ReactNode, i: number) => (
               // eslint-disable-next-line react/no-array-index-key
@@ -97,11 +107,27 @@ describe('useResourceDataGridProps', () => {
             ))}
           </div>
         );
+      };
+
+      it('returns array with edit action', async () => {
+        const renderResult = getActionsSetup();
 
         const editButton = renderResult.getByText('Edit');
         await userEvent.click(editButton);
+
         expect(mockDispatch).toHaveBeenCalledWith(
           pushResource({ type: 'edit', resource: mockGridRowParams.row })
+        );
+      });
+
+      it('returns array with delete action', async () => {
+        const renderResult = getActionsSetup();
+
+        const deleteButton = renderResult.getByText('Delete');
+        await userEvent.click(deleteButton);
+
+        expect(mockDispatch).toHaveBeenCalledWith(
+          pushResource({ type: 'delete', resource: mockGridRowParams.row })
         );
       });
     });

@@ -1,5 +1,5 @@
-import { Resource } from '@app/types';
-import { Edit } from '@mui/icons-material';
+import { Resource, ResourceWithLinkedActions } from '@app/types';
+import { Delete, Edit } from '@mui/icons-material';
 import {
   GridActionsCellItem,
   GridColDef,
@@ -32,9 +32,15 @@ export const useResourceDataGridProps = (resources?: Resource[]): DataGridProps 
     [dispatch]
   );
 
+  const handleDeleteDialogOpen = useCallback(
+    (resource: Resource) => {
+      dispatch(pushResource({ type: 'delete', resource }));
+    },
+    [dispatch]
+  );
+
   const getRowActions = useCallback(
     (params: GridRowParams<Resource>) => {
-      // TODO: Add delete action
       return [
         <GridActionsCellItem
           key="edit"
@@ -43,12 +49,20 @@ export const useResourceDataGridProps = (resources?: Resource[]): DataGridProps 
           onClick={() => handleEditDialogOpen(params.row)}
           showInMenu
         />,
+        <GridActionsCellItem
+          key="delete"
+          sx={{ color: 'error.main' }}
+          icon={<Delete color="error" />}
+          label="Delete"
+          onClick={() => handleDeleteDialogOpen(params.row)}
+          showInMenu
+        />,
       ];
     },
-    [handleEditDialogOpen]
+    [handleDeleteDialogOpen, handleEditDialogOpen]
   );
 
-  const columns: GridColDef<Resource>[] = useMemo(() => {
+  const columns = useMemo((): GridColDef<ResourceWithLinkedActions>[] => {
     return [
       {
         field: 'type',
@@ -70,8 +84,18 @@ export const useResourceDataGridProps = (resources?: Resource[]): DataGridProps 
         valueFormatter: formatCreatedAt,
       },
       {
+        field: 'linkedActions',
+        headerName: 'Linked Actions',
+        flex: 1,
+        maxWidth: 150,
+        valueGetter: ({ value }) => {
+          return value?.length ?? 0;
+        },
+      },
+      {
         field: 'actions',
         type: 'actions',
+        // @ts-expect-error
         getActions: getRowActions,
         flex: 0,
       },

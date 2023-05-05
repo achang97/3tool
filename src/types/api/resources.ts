@@ -1,3 +1,5 @@
+import { Action } from './tools';
+
 export enum ResourceType {
   SmartContract = 'smartContract',
   Abi = 'abi',
@@ -15,6 +17,10 @@ export type Resource = {
   };
 };
 
+export type ResourceWithLinkedActions = Resource & {
+  linkedActions?: LinkedAction[];
+};
+
 export type SmartContractData = {
   chainId: number;
   address: string;
@@ -25,4 +31,9 @@ export type AbiData = {
   isProxy: boolean;
   abi: string;
   logicAbi?: string;
+};
+
+export type LinkedAction = Action & {
+  toolName: string;
+  toolId: string;
 };

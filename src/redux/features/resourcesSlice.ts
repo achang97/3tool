@@ -4,7 +4,7 @@ import { Resource } from '@app/types';
 import _ from 'lodash';
 
 export type ResourceStackElement = {
-  type: 'create' | 'edit';
+  type: 'create' | 'edit' | 'delete';
   resource: Resource;
 };
 

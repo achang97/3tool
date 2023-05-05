@@ -3,6 +3,7 @@ import {
   ActionType,
   ComponentType,
   InviteStatus,
+  LinkedAction,
   Resource,
   ResourceType,
   Tool,
@@ -74,6 +75,24 @@ export const mockSmartContractResource: Resource = {
       abiId: '1',
     },
   },
+};
+
+export const mockLinkedActionJavascript: LinkedAction = {
+  type: ActionType.Javascript,
+  name: 'action1',
+  eventHandlers: [],
+  data: {},
+  toolId: '1',
+  toolName: 'tool1',
+};
+
+export const mockLinkedActionSmartContractRead: LinkedAction = {
+  type: ActionType.SmartContractRead,
+  name: 'action2',
+  eventHandlers: [],
+  data: {},
+  toolId: '1',
+  toolName: 'tool1',
 };
 
 export const mockProxySmartContractResource: Resource = {

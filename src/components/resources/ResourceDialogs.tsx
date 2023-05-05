@@ -9,6 +9,7 @@ import { Box } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { EditResourceDialog } from './EditResourceDialog';
 import { CreateResourceDialog } from './CreateResourceDialog';
+import { DeleteResourceDialog } from './DeleteResourceDialog';
 
 export const ResourceDialogs = () => {
   const dispatch = useAppDispatch();
@@ -79,6 +80,14 @@ export const ResourceDialogs = () => {
             isBackButtonVisible={isBackButtonVisible}
             onClose={handleDialogClose}
             onChange={handleChange}
+          />
+        );
+      case 'delete':
+        return (
+          <DeleteResourceDialog
+            resource={activeResourceElement.resource}
+            isOpen
+            onClose={handleDialogClose}
           />
         );
       default:

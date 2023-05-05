@@ -1,13 +1,11 @@
 import { rest } from 'msw';
-import {
-  ActionMethod,
-  ActionType,
-  ComponentEvent,
-  ComponentType,
-  EventHandlerType,
-  Tool,
-} from '@app/types';
+import { ActionMethod, ComponentEvent, ComponentType, EventHandlerType, Tool } from '@app/types';
 import { mockUser } from '@mocks/data/users';
+import {
+  mockJavascriptAction,
+  mockSmartContractReadAction1,
+  mockSmartContractReadAction2,
+} from '@mocks/data/actions';
 import { generateRandomDate } from '../utils';
 
 const mockTools: Tool[] = [
@@ -48,110 +46,7 @@ const mockTools: Tool[] = [
         ],
       },
     ],
-    actions: [
-      {
-        type: ActionType.Javascript,
-        name: 'action1',
-        data: {
-          javascript: {
-            transformerEnabled: true,
-            transformer: 'return data',
-            code: "alert('hello');",
-          },
-        },
-        eventHandlers: [],
-      },
-      {
-        type: ActionType.SmartContractRead,
-        name: 'action2',
-        data: {
-          smartContractRead: {
-            transformer:
-              '// insert your code here\n// example: return formatDataAsArray(data).filter(row => row.quantity > 20)\nreturn data',
-            transformerEnabled: false,
-            loopElements: '// insert your code here\nreturn [];',
-            loopEnabled: false,
-            smartContractId: '2',
-            freeform: false,
-            freeformAddress: '',
-            freeformAbiId: '',
-            freeformChainId: '',
-            functions: [
-              {
-                name: 'owner',
-                args: [],
-                payableAmount: '',
-              },
-            ],
-          },
-          smartContractWrite: {
-            transformer:
-              '// insert your code here\n// example: return formatDataAsArray(data).filter(row => row.quantity > 20)\nreturn data',
-            transformerEnabled: false,
-            loopElements: '// insert your code here\nreturn [];',
-            loopEnabled: false,
-            smartContractId: '2',
-            freeform: false,
-            freeformAddress: '',
-            freeformAbiId: '',
-            freeformChainId: '',
-            functions: [
-              {
-                name: '',
-                args: [],
-                payableAmount: '',
-              },
-            ],
-          },
-        },
-        eventHandlers: [],
-      },
-      {
-        type: ActionType.SmartContractRead,
-        name: 'action3',
-        data: {
-          smartContractRead: {
-            transformer:
-              '// insert your code here\n// example: return formatDataAsArray(data).filter(row => row.quantity > 20)\nreturn data',
-            transformerEnabled: false,
-            loopElements: '// insert your code here\nreturn [];',
-            loopEnabled: false,
-            smartContractId: '',
-            freeform: false,
-            freeformAddress: '',
-            freeformAbiId: '',
-            freeformChainId: '',
-            functions: [
-              {
-                name: '',
-                args: [],
-                payableAmount: '',
-              },
-            ],
-          },
-          smartContractWrite: {
-            transformer:
-              '// insert your code here\n// example: return formatDataAsArray(data).filter(row => row.quantity > 20)\nreturn data',
-            transformerEnabled: false,
-            loopElements: '// insert your code here\nreturn [];',
-            loopEnabled: false,
-            smartContractId: '',
-            freeform: false,
-            freeformAddress: '',
-            freeformAbiId: '',
-            freeformChainId: '',
-            functions: [
-              {
-                name: '',
-                args: [],
-                payableAmount: '',
-              },
-            ],
-          },
-        },
-        eventHandlers: [],
-      },
-    ],
+    actions: [mockJavascriptAction, mockSmartContractReadAction1, mockSmartContractReadAction2],
   },
   {
     _id: '2',
@@ -160,7 +55,7 @@ const mockTools: Tool[] = [
     updatedAt: generateRandomDate(),
     creatorUser: mockUser,
     components: [],
-    actions: [],
+    actions: [mockJavascriptAction],
   },
   {
     _id: '3',

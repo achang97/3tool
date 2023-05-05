@@ -129,6 +129,25 @@ describe('ResourceDialogs', () => {
     });
   });
 
+  describe('delete', () => {
+    beforeEach(() => {
+      (useAppSelector as jest.Mock).mockImplementation(() => ({
+        resourceStack: [{ type: 'delete', resource: mockResource }],
+      }));
+    });
+
+    it('renders delete resource dialog', () => {
+      render(<ResourceDialogs />);
+      expect(screen.getByTestId('delete-resource-dialog')).toBeTruthy();
+    });
+
+    it('dispatches action to pop resource on close', async () => {
+      render(<ResourceDialogs />);
+      await userEvent.keyboard('[Escape]');
+      expect(mockDispatch).toHaveBeenCalledWith(popResource());
+    });
+  });
+
   it('sets abi field on smart contract modal if abi was successfully created', async () => {
     mockCreateResource.mockImplementation(() =>
       createMockApiSuccessResponse({
