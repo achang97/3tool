@@ -1,6 +1,8 @@
-import { Delete } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
+import { setComponentToDelete } from '@app/redux/features/editorSlice';
+import { useKeyPress } from '@app/hooks/useKeyPress';
 import { DeleteDialog } from '../../common/DeleteDialog';
 import { useComponentDelete } from '../../hooks/useComponentDelete';
 
@@ -9,26 +11,28 @@ type DeleteComponentButtonProps = {
 };
 
 export const DeleteComponentButton = ({ name }: DeleteComponentButtonProps) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const { deletingComponentName } = useAppSelector((state) => state.editor);
+  const dispatch = useAppDispatch();
   const handleDeleteComponent = useComponentDelete(name);
 
   const handleDialogOpen = useCallback(() => {
-    setIsDialogOpen(true);
-  }, []);
+    dispatch(setComponentToDelete(name));
+  }, [dispatch, name]);
 
   const handleDialogClose = useCallback(() => {
-    setIsDialogOpen(false);
-  }, []);
+    dispatch(setComponentToDelete(undefined));
+  }, [dispatch]);
+
+  useKeyPress({ key: 'Backspace', onPress: handleDialogOpen });
 
   return (
     <>
-      <Button color="error" startIcon={<Delete />} onClick={handleDialogOpen}>
+      <Button color="error" endIcon="⌫" onClick={handleDialogOpen}>
         Delete
       </Button>
       <DeleteDialog
         name={name}
-        isOpen={isDialogOpen}
+        isOpen={!!deletingComponentName}
         onClose={handleDialogClose}
         onDelete={handleDeleteComponent}
       />

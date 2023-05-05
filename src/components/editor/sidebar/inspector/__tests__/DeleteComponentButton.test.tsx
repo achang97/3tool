@@ -1,5 +1,6 @@
-import { screen, render, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { render } from '@tests/utils/renderWithContext';
 import { DeleteComponentButton } from '../DeleteComponentButton';
 
 const mockName = 'button1';
@@ -32,6 +33,13 @@ describe('DeleteComponentButton', () => {
     render(<DeleteComponentButton name={mockName} />);
 
     await userEvent.click(screen.getByText('Delete'));
+    expect(screen.getByTestId(dialogId)).toBeTruthy();
+  });
+
+  it('opens confirmation dialog on backspace', async () => {
+    render(<DeleteComponentButton name={mockName} />);
+
+    await userEvent.keyboard('[Backspace]');
     expect(screen.getByTestId(dialogId)).toBeTruthy();
   });
 

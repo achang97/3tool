@@ -26,6 +26,7 @@ import editorReducer, {
   resetEditor,
   startResizeComponent,
   stopResizeComponent,
+  setComponentToDelete,
 } from '../editorSlice';
 
 describe('editorSlice', () => {
@@ -128,6 +129,24 @@ describe('editorSlice', () => {
       };
       const state = editorReducer(initialState, stopResizeComponent());
       expect(state.resizingComponentName).toBeUndefined();
+    });
+  });
+
+  describe('delete', () => {
+    it('setComponentToDelete: sets deleting component name', () => {
+      const mockComponentName = 'name';
+
+      const initialState = {
+        sidebarView: SidebarViewType.Components,
+        actionView: ActionViewType.General,
+        actionViewHeight: 0,
+        isPreview: false,
+        focusedActionState: {
+          smartContractFunctionIndex: 0,
+        },
+      };
+      const state = editorReducer(initialState, setComponentToDelete(mockComponentName));
+      expect(state.deletingComponentName).toEqual(mockComponentName);
     });
   });
 

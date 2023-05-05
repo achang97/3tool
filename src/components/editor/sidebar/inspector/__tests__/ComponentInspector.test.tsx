@@ -26,7 +26,6 @@ const mockComponent = mockComponents[0];
 const mockUpdateTool = jest.fn();
 const mockUpdateComponentName = jest.fn();
 const mockDeleteComponent = jest.fn();
-const mockDispatch = jest.fn();
 
 jest.mock('../../../hooks/useActiveTool');
 
@@ -36,13 +35,6 @@ jest.mock('../../../hooks/useComponentUpdateName', () => ({
 
 jest.mock('../../../hooks/useComponentDelete', () => ({
   useComponentDelete: jest.fn(() => mockDeleteComponent),
-}));
-
-jest.mock('@app/redux/hooks', () => ({
-  useAppDispatch: jest.fn(() => mockDispatch),
-  useAppSelector: jest.fn(() => ({
-    componentInputs: {},
-  })),
 }));
 
 describe('ComponentInspector', () => {

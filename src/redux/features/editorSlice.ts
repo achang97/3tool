@@ -13,6 +13,7 @@ type NewComponent = {
 type EditorState = {
   // Create new component
   newComponent?: NewComponent;
+  deletingComponentName?: string;
 
   // Reposition
   movingComponentName?: string;
@@ -70,6 +71,11 @@ export const editorSlice = createSlice({
     },
     stopResizeComponent: (state) => {
       state.resizingComponentName = undefined;
+    },
+
+    // Delete
+    setComponentToDelete: (state, action: PayloadAction<string | undefined>) => {
+      state.deletingComponentName = action.payload;
     },
 
     // Sidebar
@@ -131,6 +137,7 @@ export const {
   stopMoveComponentDrag,
   startResizeComponent,
   stopResizeComponent,
+  setComponentToDelete,
   focusComponent,
   blurComponent,
   focusToolSettings,
