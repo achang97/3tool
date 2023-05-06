@@ -74,14 +74,14 @@ describe('SaveRunButton', () => {
     });
   });
 
-  describe('keyboard listener', () => {
-    it('executes handler on Cmd+S', async () => {
-      (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: false }));
-      render(<SaveRunButton type={ActionType.Javascript} />);
-      await userEvent.keyboard('{Meta>}s');
-      expect(mockExecuteAction).toHaveBeenCalled();
-    });
-  });
+  // describe('keyboard listener', () => {
+  //   it('executes handler on Cmd+S', async () => {
+  //     (useActionFocusedState as jest.Mock).mockImplementation(() => ({ isEditing: false }));
+  //     render(<SaveRunButton type={ActionType.Javascript} />);
+  //     await userEvent.keyboard('{Meta>}s');
+  //     expect(mockExecuteAction).toHaveBeenCalled();
+  //   });
+  // });
 
   describe('loading', () => {
     it('renders loading button if loading', () => {

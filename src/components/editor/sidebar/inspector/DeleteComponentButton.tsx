@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
 import { setComponentToDelete } from '@app/redux/features/editorSlice';
-import { useKeyPress } from '@app/hooks/useKeyPress';
+// import { useKeyPress } from '@app/hooks/useKeyPress';
 import { DeleteDialog } from '../../common/DeleteDialog';
 import { useComponentDelete } from '../../hooks/useComponentDelete';
 
@@ -23,7 +23,7 @@ export const DeleteComponentButton = ({ name }: DeleteComponentButtonProps) => {
     dispatch(setComponentToDelete(undefined));
   }, [dispatch]);
 
-  useKeyPress({ key: 'Backspace', onPress: handleDialogOpen });
+  // useKeyPress({ key: 'Backspace', onPress: handleDialogOpen });
 
   return (
     <>
