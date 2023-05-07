@@ -1,11 +1,15 @@
 import { Extension } from '@codemirror/state';
 import { BasicSetupOptions } from '@uiw/react-codemirror';
 import { useMemo } from 'react';
-import { javascript, javascriptLanguage } from '@codemirror/lang-javascript';
+import { javascript, javascriptLanguage, esLint } from '@codemirror/lang-javascript';
 import { dynamicTextLanguage } from '@app/codemirror/dynamicTextLanguage';
 import { dynamicSqlLanguage, sqlLanguage } from '@app/codemirror/dynamicSqlLanguage';
 import { EditorView } from '@codemirror/view';
+import { linter } from '@codemirror/lint';
+// @ts-ignore No types for this package
+import { Linter } from 'eslint-linter-browserify';
 import { useCodeMirrorJavascriptAutocomplete } from './useCodeMirrorJavascriptAutocomplete';
+import { useCodeMirrorEslintConfig } from './useCodeMirrorEslintConfig';
 
 export const BASE_EXTENSIONS = [javascript().support, EditorView.lineWrapping];
 const BASE_SETUP_OPTIONS: BasicSetupOptions = {
@@ -36,6 +40,7 @@ export const useCodeMirrorProps = ({
   showLineNumbers,
 }: HookArgs): HookReturnType => {
   const javascriptAutocomplete = useCodeMirrorJavascriptAutocomplete(isDynamic);
+  const eslintConfig = useCodeMirrorEslintConfig();
 
   const basicSetup: BasicSetupOptions = useMemo(() => {
     if (!showLineNumbers) {
@@ -67,13 +72,24 @@ export const useCodeMirrorProps = ({
       case 'text':
         return [...baseExtensions, dynamicTextLanguage];
       case 'javascript':
-        return [...baseExtensions, javascriptLanguage];
+        return [
+          ...baseExtensions,
+          javascriptLanguage,
+          linter((view) => {
+            const results = esLint(new Linter(), eslintConfig)(view);
+            // We explicitly exclude this error message because `sourceType: module` and
+            // `globalReturn: true` are incompatible in the eslint config.
+            return results.filter(
+              (result) => result.message !== "Parsing error: 'return' outside of function"
+            );
+          }),
+        ];
       case 'sql':
         return [...baseExtensions, sqlLanguage.support, dynamicSqlLanguage];
       default:
         return baseExtensions;
     }
-  }, [javascriptAutocomplete, language]);
+  }, [javascriptAutocomplete, language, eslintConfig]);
 
   const className = useMemo(() => {
     const classes = [];

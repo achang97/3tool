@@ -15,6 +15,10 @@ jest.mock('../../hooks/useCodeMirrorJavascriptAutocomplete', () => ({
   useCodeMirrorJavascriptAutocomplete: jest.fn(() => mockJavascriptAutocomplete),
 }));
 
+jest.mock('../../hooks/useCodeMirrorEslintConfig', () => ({
+  useCodeMirrorEslintConfig: jest.fn(() => ({})),
+}));
+
 describe('useCodeMirrorProps', () => {
   describe('basicSetup', () => {
     it('returns options without line numbers if showLineNumbers is false', () => {
@@ -102,6 +106,7 @@ describe('useCodeMirrorProps', () => {
           })
         ),
         javascriptLanguage,
+        expect.anything(),
       ]);
     });
 
