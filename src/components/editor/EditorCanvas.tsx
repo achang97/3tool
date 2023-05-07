@@ -36,6 +36,7 @@ export const EditorCanvas = ({ isEditable }: EditorCanvasProps) => {
       }}
       onClick={handleCanvasClick}
       data-testid="editor-canvas"
+      id="editor-canvas"
     >
       <EditorAppContainer>
         {isEditable && (

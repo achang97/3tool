@@ -73,7 +73,7 @@ export const ActionEditor = ({ action }: ActionEditorProps) => {
   );
 
   return (
-    <Stack sx={{ flex: 1, height: '100%' }} data-testid="action-editor">
+    <Stack sx={{ flex: 1, height: '100%' }} data-testid="action-editor" id="action-editor">
       <EditorToolbar>
         <Tabs value={actionView} onChange={handleTabChange} sx={{ minHeight: 0 }}>
           {tabs.map((tab) => (

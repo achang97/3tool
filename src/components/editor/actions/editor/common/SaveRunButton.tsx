@@ -1,7 +1,7 @@
 import { useActionFocusedState } from '@app/components/editor/hooks/useActionFocusedState';
 import { useActionSaveHandlers } from '@app/components/editor/hooks/useActionSaveHandlers';
 import { ACTION_CONFIGS } from '@app/constants';
-// import { useKeyPress } from '@app/hooks/useKeyPress';
+import { useKeyPress } from '@app/hooks/useKeyPress';
 import { ActionType } from '@app/types';
 import { PlayArrow } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -47,7 +47,7 @@ export const SaveRunButton = ({ type }: SaveRunButtonProps) => {
     };
   }, [executeAction, isEditing, mode, saveAction, saveAndExecuteAction]);
 
-  // useKeyPress({ key: 's', cmdKey: true, onPress: buttonProps.onClick });
+  useKeyPress({ key: 's', cmdKey: true, onPress: buttonProps.onClick, selector: '#action-editor' });
 
   return (
     <LoadingButton

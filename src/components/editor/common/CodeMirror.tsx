@@ -1,6 +1,6 @@
 import BaseCodeMirror from '@uiw/react-codemirror';
 import { ViewUpdate } from '@codemirror/view';
-import { ReactNode, useCallback, useMemo, useState, KeyboardEvent } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { FormFieldLabel } from '@app/components/common/FormFieldLabel';
 import { useIsFocused } from '@app/hooks/useIsFocused';
@@ -62,13 +62,6 @@ export const CodeMirror = ({
     [onChange]
   );
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.ctrlKey || e.metaKey || e.altKey) {
-      return;
-    }
-    e.stopPropagation();
-  }, []);
-
   return (
     <Box sx={{ position: 'relative' }} data-testid={testId ?? `code-mirror-${label}`}>
       {label && <FormFieldLabel label={label} />}
@@ -80,7 +73,6 @@ export const CodeMirror = ({
         onFocus={onFocus}
         onBlur={onBlur}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
         className={className}
       />
       {isPreviewShown && preview && (
