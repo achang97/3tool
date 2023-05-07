@@ -5,9 +5,9 @@ name: ESLint
 
 on:
   push:
-    branches: ['master', 'staging', 'production']
+    branches: ['main', 'staging', 'production']
   pull_request:
-    branches: ['master', 'staging', 'production']
+    branches: ['main', 'staging', 'production']
 
 jobs:
   build:

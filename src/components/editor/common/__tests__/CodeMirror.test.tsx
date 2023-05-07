@@ -19,6 +19,10 @@ jest.mock('../../hooks/useCodeMirrorPreview', () => ({
   useCodeMirrorPreview: jest.fn(() => mockPreview),
 }));
 
+jest.mock('../../hooks/useCodeMirrorEslintConfig', () => ({
+  useCodeMirrorEslintConfig: jest.fn(() => ({})),
+}));
+
 jest.mock('../../hooks/useCodeMirrorJavascriptAutocomplete', () => ({
   useCodeMirrorJavascriptAutocomplete: jest.fn(() => ({
     from: 0,
