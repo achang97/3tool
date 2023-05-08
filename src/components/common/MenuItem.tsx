@@ -1,37 +1,46 @@
-import { Typography, MenuItem as BaseMenuItem, BoxProps, Stack } from '@mui/material';
+import {
+  Typography,
+  MenuItem as BaseMenuItem,
+  MenuItemProps as BaseMenuItemProps,
+  BoxProps,
+  Stack,
+} from '@mui/material';
 import Link from 'next/link';
-import { HTMLAttributeAnchorTarget, ReactNode, useMemo } from 'react';
+import { ComponentRef, forwardRef, HTMLAttributeAnchorTarget, ReactNode, useMemo } from 'react';
 
-type MenuItemProps = {
+type MenuItemProps = BaseMenuItemProps & {
   icon?: ReactNode;
   label: ReactNode;
-  onClick?: () => void;
   href?: string;
   target?: HTMLAttributeAnchorTarget;
   color?: BoxProps['color'];
   testId?: string;
 };
 
-export const MenuItem = ({ icon, label, color, onClick, href, target, testId }: MenuItemProps) => {
-  const linkProps = useMemo(() => {
-    if (!href) {
-      return {};
-    }
-    return {
-      component: Link,
-      href,
-      target,
-    };
-  }, [href, target]);
+export const MenuItem = forwardRef<ComponentRef<typeof BaseMenuItem>, MenuItemProps>(
+  ({ icon, label, color, href, target, testId, sx, ...rest }, ref) => {
+    const linkProps = useMemo(() => {
+      if (!href) {
+        return {};
+      }
+      return {
+        component: Link,
+        href,
+        target,
+      };
+    }, [href, target]);
 
-  return (
-    <BaseMenuItem {...linkProps} onClick={onClick} sx={{ color }} data-testid={testId}>
-      <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-        {icon}
-        <Typography variant="body2" color="inherit">
-          {label}
-        </Typography>
-      </Stack>
-    </BaseMenuItem>
-  );
-};
+    const sxWithColor = useMemo(() => ({ color, ...sx }), [sx, color]);
+
+    return (
+      <BaseMenuItem {...linkProps} sx={sxWithColor} data-testid={testId} {...rest} ref={ref}>
+        <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+          {icon}
+          <Typography variant="body2" color="inherit">
+            {label}
+          </Typography>
+        </Stack>
+      </BaseMenuItem>
+    );
+  }
+);
