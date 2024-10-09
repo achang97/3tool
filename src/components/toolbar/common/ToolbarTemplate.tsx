@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Box, Stack } from '@mui/material';
-import logo from '@app/resources/images/logo.svg';
+import logo from '@app/resources/images/logo.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ToolbarSection } from './ToolbarSection';
@@ -30,7 +30,7 @@ export const ToolbarTemplate = ({ left, middle, right, testId }: ToolbarTemplate
       <ToolbarSection sx={{ justifyContent: 'flex-start' }}>
         <Box sx={{ mr: 1 }}>
           <Link href="/" data-testid="toolbar-logo">
-            <Image src={logo} alt="Elixir logo" style={{ height: '40px', width: 'auto' }} />
+            <Image src={logo} alt="3Tool logo" style={{ height: '40px', width: 'auto' }} />
           </Link>
         </Box>
         {left}

@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { FormEvent, ReactNode, useCallback } from 'react';
 import Image from 'next/image';
-import logo from '@app/resources/images/logo.svg';
+import logo from '@app/resources/images/logo.png';
 import { LoadingButton, LoadingButtonProps } from '@mui/lab';
 import { ApiErrorResponse } from '@app/types';
 import { ApiErrorMessage } from '@app/components/common/ApiErrorMessage';
@@ -57,7 +57,7 @@ export const AuthContainer = ({
         }}
       >
         <Link href="/" style={{ alignSelf: 'flex-start' }}>
-          <Image src={logo} alt="Elixir logo" style={{ height: '40px' }} />
+          <Image src={logo} alt="3Tool logo" style={{ height: '40px' }} />
         </Link>
         <Stack sx={{ marginY: 3 }} spacing={1}>
           <Typography variant="h5">{title}</Typography>
