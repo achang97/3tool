@@ -1,12 +1,10 @@
 import { useRouter } from 'next/router';
-import { useSignedInUser } from '@app/hooks/useSignedInUser';
 import { AuthenticatedToolbar } from './AuthenticatedToolbar';
 
 export const Toolbar = () => {
-  const user = useSignedInUser();
   const { pathname } = useRouter();
 
-  if (!user || pathname === '/apps/[id]/[name]' || pathname === '/editor/[id]/[name]') {
+  if (pathname === '/apps/[id]/[name]' || pathname === '/editor/[id]/[name]') {
     return null;
   }
 

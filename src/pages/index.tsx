@@ -41,7 +41,6 @@ const Tools = () => {
                   id={tool._id}
                   name={tool.name}
                   updatedAt={tool.updatedAt}
-                  creatorUser={tool.creatorUser}
                 />
               ))}
             </Grid>

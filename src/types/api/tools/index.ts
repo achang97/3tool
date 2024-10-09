@@ -1,4 +1,3 @@
-import { User } from '../users';
 import { Action } from './actions';
 import { Component } from './components';
 
@@ -7,7 +6,6 @@ export type Tool = {
   name: string;
   createdAt: string;
   updatedAt: string;
-  creatorUser: User;
   components: Component[];
   actions: Action[];
 };

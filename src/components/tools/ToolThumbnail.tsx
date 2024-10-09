@@ -1,21 +1,18 @@
 import { useMemo } from 'react';
 import { lineClamp } from '@app/utils/mui';
-import { UserAvatar } from '@app/components/common/UserAvatar';
 import { Box, Stack, Typography } from '@mui/material';
 import { GridViewRounded } from '@mui/icons-material';
 import moment from 'moment';
 import { stringToColor } from '@app/utils/styles';
-import { User } from '@app/types';
 import { ThumbnailContainer } from './ThumbnailContainer';
 
 type ToolThumbnailProps = {
   id: string;
   name: string;
   updatedAt: string;
-  creatorUser: User;
 };
 
-export const ToolThumbnail = ({ id, name, updatedAt, creatorUser }: ToolThumbnailProps) => {
+export const ToolThumbnail = ({ id, name, updatedAt }: ToolThumbnailProps) => {
   const iconColor = useMemo(() => {
     return stringToColor(name);
   }, [name]);
@@ -36,7 +33,6 @@ export const ToolThumbnail = ({ id, name, updatedAt, creatorUser }: ToolThumbnai
             Updated {moment(updatedAt).fromNow()}
           </Typography>
         </Box>
-        <UserAvatar user={creatorUser} sx={{ marginLeft: 1 }} />
       </Stack>
     </ThumbnailContainer>
   );

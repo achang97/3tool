@@ -4,14 +4,11 @@ import { Box, Stack } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import { Toolbar } from '@app/components/toolbar/Toolbar';
 import { theme } from '@app/utils/mui';
-import { persistor, wrapper } from '@app/redux/store';
+import { wrapper } from '@app/redux/store';
 import { wagmiClient } from '@app/constants/wallet';
 import { Provider } from 'react-redux';
 import { WagmiConfig } from 'wagmi';
 import { initFetch } from '@app/utils/global';
-import { AuthRedirectProvider } from '@app/components/auth/contexts/AuthRedirectProvider';
-import { ConnectWalletModal } from '@app/components/common/ConnectWalletModal';
-import { PersistGate } from 'redux-persist/integration/react';
 import { AppSnackbarProvider } from '@app/components/common/AppSnackbarProvider';
 import { baseFont } from '@app/styles/font';
 import { useMockServiceWorkers } from '@app/hooks/useMockServiceWorkers';
@@ -37,28 +34,23 @@ const App = ({ Component, ...rest }: AppProps) => {
         `}</style>
       </Head>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <CssVarsProvider theme={theme}>
-            <WagmiConfig client={wagmiClient}>
-              <AppSnackbarProvider>
-                <AuthRedirectProvider>
-                  <Stack
-                    sx={{
-                      backgroundColor: 'background.paper',
-                      height: '100%',
-                    }}
-                  >
-                    <Toolbar />
-                    <Box sx={{ flex: 1, overflowY: 'auto' }}>
-                      <Component {...props.pageProps} />
-                    </Box>
-                  </Stack>
-                  <ConnectWalletModal />
-                </AuthRedirectProvider>
-              </AppSnackbarProvider>
-            </WagmiConfig>
-          </CssVarsProvider>
-        </PersistGate>
+        <CssVarsProvider theme={theme}>
+          <WagmiConfig client={wagmiClient}>
+            <AppSnackbarProvider>
+              <Stack
+                sx={{
+                  backgroundColor: 'background.paper',
+                  height: '100%',
+                }}
+              >
+                <Toolbar />
+                <Box sx={{ flex: 1, overflowY: 'auto' }}>
+                  <Component {...props.pageProps} />
+                </Box>
+              </Stack>
+            </AppSnackbarProvider>
+          </WagmiConfig>
+        </CssVarsProvider>
       </Provider>
     </>
   );

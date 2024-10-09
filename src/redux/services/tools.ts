@@ -1,47 +1,65 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Tool } from '@app/types';
-import { HYDRATE } from 'next-redux-wrapper';
-import { baseQueryWithReauth } from './common/baseQuery';
+import { getItem, setItem } from '@app/utils/storage';
+
+const defaultTools: Tool[] = [];
 
 export const toolsApi = createApi({
   reducerPath: 'toolsApi',
   tagTypes: ['Tool'],
-  baseQuery: baseQueryWithReauth,
-  extractRehydrationInfo(action, { reducerPath }) {
-    if (action.type === HYDRATE) {
-      return action.payload[reducerPath];
-    }
-    return undefined;
-  },
+  baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     getTools: builder.query<Tool[], void>({
-      query: () => '/tools',
+      queryFn: () => {
+        const tools = getItem<Tool[]>('tools') || defaultTools;
+        return { data: tools };
+      },
       providesTags: ['Tool'],
     }),
     getToolById: builder.query<Tool, string>({
-      query: (id) => `/tools/${id}`,
+      queryFn: (id) => {
+        const tools = getItem<Tool[]>('tools') || defaultTools;
+        const tool = tools.find((t) => t._id === id);
+        return tool ? { data: tool } : { error: { status: 404, data: 'Tool not found' } };
+      },
       providesTags: ['Tool'],
     }),
     createTool: builder.mutation<Tool, { name: string }>({
-      query: (body) => ({
-        url: '/tools',
-        method: 'POST',
-        body,
-      }),
+      queryFn: (newTool) => {
+        const tools = getItem<Tool[]>('tools') || defaultTools;
+        const toolWithId: Tool = {
+          ...newTool,
+          _id: Date.now().toString(),
+          components: [],
+          actions: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        const updatedTools = [...tools, toolWithId];
+        setItem('tools', updatedTools);
+        return { data: toolWithId };
+      },
       invalidatesTags: ['Tool'],
     }),
     updateTool: builder.mutation<
       Tool,
       Pick<Tool, '_id'> & Partial<Pick<Tool, 'name' | 'components' | 'actions'>>
     >({
-      query: ({ _id, ...body }) => ({
-        url: `/tools/${_id}`,
-        method: 'PUT',
-        body,
-      }),
-      // NOTE: Adding this field causes a GET to fire after every PUT in the editor, which is
-      // unnecessary (as the updated tool object is already returned from the PUT endpoint).
-      // invalidatesTags: ['Tool'],
+      queryFn: ({ _id, ...updates }) => {
+        const tools = getItem<Tool[]>('tools') || defaultTools;
+        const toolIndex = tools.findIndex((t) => t._id === _id);
+        if (toolIndex === -1) {
+          return { error: { status: 404, data: 'Tool not found' } };
+        }
+        const updatedTool = { ...tools[toolIndex], ...updates };
+        const updatedTools = [
+          ...tools.slice(0, toolIndex),
+          updatedTool,
+          ...tools.slice(toolIndex + 1),
+        ];
+        setItem('tools', updatedTools);
+        return { data: updatedTool };
+      },
     }),
   }),
 });
