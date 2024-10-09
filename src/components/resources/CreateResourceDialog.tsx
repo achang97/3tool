@@ -1,5 +1,5 @@
 import { useCreateResourceMutation } from '@app/redux/services/resources';
-import { Resource } from '@app/types';
+import { ApiErrorResponse, Resource } from '@app/types';
 import { useCallback } from 'react';
 import _ from 'lodash';
 import { BaseResourceDialog } from './BaseResourceDialog';
@@ -46,7 +46,7 @@ export const CreateResourceDialog = ({
       isOpen={isOpen}
       isBackButtonVisible={isBackButtonVisible}
       onSubmit={handleCreateResource}
-      error={error}
+      error={error as ApiErrorResponse['error']}
       isLoading={isLoading}
     />
   );

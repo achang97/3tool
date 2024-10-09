@@ -1,5 +1,4 @@
 import HomePage from '@app/pages';
-import { mockUser } from '@tests/constants/data';
 import { Tool } from '@app/types';
 import { screen } from '@testing-library/react';
 import { render } from '@tests/utils/renderWithContext';
@@ -12,7 +11,6 @@ const mockTools: Tool[] = [
     name: 'Tool 1',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    creatorUser: mockUser,
     components: [],
     actions: [],
   },

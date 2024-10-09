@@ -1,5 +1,5 @@
 import { useUpdateResourceMutation } from '@app/redux/services/resources';
-import { Resource } from '@app/types';
+import { ApiErrorResponse, Resource } from '@app/types';
 import { useCallback } from 'react';
 import { BaseResourceDialog } from './BaseResourceDialog';
 
@@ -39,7 +39,7 @@ export const EditResourceDialog = ({
       isOpen={isOpen}
       isBackButtonVisible={isBackButtonVisible}
       onSubmit={handleUpdateResource}
-      error={error}
+      error={error as ApiErrorResponse['error']}
       isLoading={isLoading}
     />
   );

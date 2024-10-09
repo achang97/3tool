@@ -27,7 +27,7 @@ const Tools = () => {
         <PageContainer>
           <PageTitle>Apps</PageTitle>
           {isLoading && <FullscreenLoader />}
-          {!isLoading && error && (
+          {!isLoading && !!error && (
             <Stack sx={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <ApiErrorMessage error={error} />
             </Stack>

@@ -115,7 +115,6 @@ export const mockTool: Tool = {
   name: 'Tool',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  creatorUser: mockUser,
   components: [
     {
       name: 'button1',

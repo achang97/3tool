@@ -40,7 +40,7 @@ export const CreateToolDialog = ({ onClose, isOpen }: CreateToolDialogProps) => 
   );
 
   const errorMessage = useMemo(() => {
-    return error && parseApiError(error);
+    return !!error && parseApiError(error);
   }, [error]);
 
   return (

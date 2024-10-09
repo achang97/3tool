@@ -1,5 +1,5 @@
 import { useDeleteResourceMutation } from '@app/redux/services/resources';
-import { ResourceWithLinkedActions } from '@app/types';
+import { ApiErrorResponse, ResourceWithLinkedActions } from '@app/types';
 import { styled, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { BaseDeleteDialog } from './BaseDeleteDialog';
@@ -49,7 +49,7 @@ export const DeleteResourceDialog = ({ resource, isOpen, onClose }: DeleteResour
       isOpen={isOpen}
       onClose={onClose}
       isLoading={isLoading}
-      error={error}
+      error={error as ApiErrorResponse['error']}
       onDelete={handleDeleteResource}
       showConfirmation={linkedActionsCount > 0}
       customBody={customBody}

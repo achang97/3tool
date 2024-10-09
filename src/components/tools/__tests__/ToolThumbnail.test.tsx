@@ -1,13 +1,10 @@
 import { screen, render } from '@testing-library/react';
-import { User } from '@app/types';
-import { mockUser } from '@tests/constants/data';
 import { BASE_WINDOW_URL } from '@tests/constants/window';
 import { ToolThumbnail } from '../ToolThumbnail';
 
 const mockId = 'mock-id';
 const mockName = 'Mock Thumbnail Name';
 const mockUpdatedAt = new Date().toISOString();
-const mockCreator: User = mockUser;
 
 describe('ToolThumbnail', () => {
   beforeEach(() => {
@@ -15,29 +12,9 @@ describe('ToolThumbnail', () => {
   });
 
   it('renders name', () => {
-    render(
-      <ToolThumbnail
-        id={mockId}
-        name={mockName}
-        updatedAt={mockUpdatedAt}
-        creatorUser={mockCreator}
-      />
-    );
+    render(<ToolThumbnail id={mockId} name={mockName} updatedAt={mockUpdatedAt} />);
 
     expect(screen.getByText(mockName)).toBeTruthy();
-  });
-
-  it('renders avatar for creatorUser', () => {
-    render(
-      <ToolThumbnail
-        id={mockId}
-        name={mockName}
-        updatedAt={mockUpdatedAt}
-        creatorUser={mockCreator}
-      />
-    );
-
-    expect(screen.getByText(mockCreator.firstName[0])).toBeTruthy();
   });
 
   it('renders date when tool was last updated', () => {
@@ -46,27 +23,13 @@ describe('ToolThumbnail', () => {
 
     Date.now = jest.fn(() => mockNow.valueOf());
 
-    render(
-      <ToolThumbnail
-        id={mockId}
-        name={mockName}
-        updatedAt={mockOneMonthAgo}
-        creatorUser={mockCreator}
-      />
-    );
+    render(<ToolThumbnail id={mockId} name={mockName} updatedAt={mockOneMonthAgo} />);
 
     expect(screen.getByText('Updated a month ago')).toBeTruthy();
   });
 
   it('navigates to /apps/:id route on click', () => {
-    render(
-      <ToolThumbnail
-        id={mockId}
-        name={mockName}
-        updatedAt={mockUpdatedAt}
-        creatorUser={mockCreator}
-      />
-    );
+    render(<ToolThumbnail id={mockId} name={mockName} updatedAt={mockUpdatedAt} />);
     expect(screen.getByTestId('thumbnail-container-content')).toHaveProperty(
       'href',
       `${BASE_WINDOW_URL}/apps/${mockId}/${encodeURIComponent(mockName)}`

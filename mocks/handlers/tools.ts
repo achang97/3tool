@@ -1,6 +1,5 @@
 import { rest } from 'msw';
 import { ActionMethod, ComponentEvent, ComponentType, EventHandlerType, Tool } from '@app/types';
-import { mockUser } from '@mocks/data/users';
 import {
   mockJavascriptAction,
   mockSmartContractReadAction1,
@@ -14,7 +13,6 @@ const mockTools: Tool[] = [
     name: 'Staking Pool - DO NOT EDIT [MULTISIG ADMINS ONLY]',
     createdAt: '2023-03-28T22:46:19.997Z',
     updatedAt: '2023-03-28T23:04:55.359Z',
-    creatorUser: mockUser,
     components: [
       {
         type: ComponentType.Button,
@@ -53,7 +51,6 @@ const mockTools: Tool[] = [
     name: 'Script Dashboard',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    creatorUser: mockUser,
     components: [],
     actions: [mockJavascriptAction],
   },
@@ -62,7 +59,6 @@ const mockTools: Tool[] = [
     name: 'Topping Up Nodes',
     createdAt: generateRandomDate(),
     updatedAt: generateRandomDate(),
-    creatorUser: mockUser,
     components: [],
     actions: [],
   },
@@ -96,7 +92,6 @@ export const toolsHandlers = [
       name: body.name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      creatorUser: mockUser,
       components: [],
       actions: [],
     };
